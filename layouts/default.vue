@@ -1,7 +1,6 @@
 <template>
     <div class="container">
-        <Nav/>
-        <Nuxt />
+      <Nuxt />
     </div>
 </template>
 
@@ -15,13 +14,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
-    
+
     body {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 1rem;
@@ -42,7 +41,7 @@ export default {
         /* max-width: 800px; */
         /* margin: 2rem auto; */
         overflow: hidden;
-        padding: 1rem 2rem;
+        /*padding: 1rem 2rem;*/
         background: #fff;
     }
 </style>
