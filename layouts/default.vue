@@ -1,11 +1,20 @@
 <template>
-    <div class="container">
-      <Nuxt />
+<!--    <div class="container">-->
+<!--    </div>-->
+  <v-app>
+    <div>
+      <Nav/>
     </div>
+    <v-content>
+      <Nuxt />
+    </v-content>
+  </v-app>
+
 </template>
 
 <script>
 import Nav from "../components/Nav.vue";
+
 
 export default {
     components:{

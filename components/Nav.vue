@@ -1,67 +1,77 @@
 <template>
-    <header class="header">
-        <h1 class="title"><span>konf</span>Air</h1>
-        <ul>
-            <li>
-                <nuxt-link to='/'>Home</nuxt-link>
-            </li>
-            <li>
-                <nuxt-link to='/jokes'>Jokes</nuxt-link>
-            </li>
-            <li>
-                <nuxt-link to='/about'>About</nuxt-link>
-            </li>
-        </ul>
-    </header>
+  <!--    <header class="header">-->
+  <!--        <h1 class="title"><span>konf</span>Air</h1>-->
+  <!--        <ul>-->
+  <!--            <li>-->
+  <!--                <nuxt-link to='/'>Home</nuxt-link>-->
+  <!--            </li>-->
+  <!--            <li>-->
+  <!--                <nuxt-link to='/jokes'>Jokes</nuxt-link>-->
+  <!--            </li>-->
+  <!--            <li>-->
+  <!--                <nuxt-link to='/about'>About</nuxt-link>-->
+  <!--            </li>-->
+  <!--        </ul>-->
+  <!--    </header>-->
+  <v-app-bar app :color=cols.KonfairPrimary>
+    <v-toolbar-title>KONFAIR</v-toolbar-title>
+  </v-app-bar>
 </template>
 
 <script>
+import colors from "../styles/colors";
+
 export default {
-    name: "Nav",
+  name: "Nav",
+  data: function () {
+    return {
+      cols: colors
+    }
+  }
 
 }
 </script>
 
 <style>
-    .title span {
-        color: #0070f3;
-        text-decoration: none;
-    }
+.title span {
+  color: #0070f3;
+  text-decoration: none;
+}
 
-    .title {
-        margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
-    }
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+}
 
-    .title,
-    .description {
-        text-align: center;
-    }
+.title,
+.description {
+  text-align: center;
+}
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px dotted #ccc;
-    }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dotted #ccc;
+}
 
-    .header .title{
-        font-size: 3rem;
-        color: #526488;
-    }
+.header .title {
+  font-size: 3rem;
+  color: #526488;
+}
 
-    .header ul {
-        display: flex;
-    }
+.header ul {
+  display: flex;
+}
 
-    .header a {
-        display: inline-block;
-        background: #333;
-        color: #fff;
-        padding: 0.3rem 1rem;
-        margin-right: 0.5rem;
-    }
+.header a {
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  padding: 0.3rem 1rem;
+  margin-right: 0.5rem;
+}
 </style>
