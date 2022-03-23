@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import colors from "../static/colors";
+import colors from "../theme/colors";
 
 export default {
   name: "LogIn",
