@@ -1,4 +1,3 @@
-
 const languages = ["English", "Danish", "Lithuanian"]
 const defaultLanguage = "English"
 
@@ -8,7 +7,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setLanguage(state, language){
+  setLanguage(state, language) {
     state.chosenLanguage = language
   },
 }
