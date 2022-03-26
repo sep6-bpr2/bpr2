@@ -1,12 +1,20 @@
 <template>
-    <div class="container">
-        <Nav/>
-        <Nuxt />
+<!--    <div class="container">-->
+<!--    </div>-->
+  <v-app>
+    <div>
+      <Nav/>
     </div>
+    <v-content>
+      <Nuxt />
+    </v-content>
+  </v-app>
+
 </template>
 
 <script>
 import Nav from "../components/Nav.vue";
+
 
 export default {
     components:{
@@ -21,7 +29,7 @@ export default {
         margin: 0;
         padding: 0;
     }
-    
+
     body {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 1rem;
@@ -42,7 +50,7 @@ export default {
         /* max-width: 800px; */
         /* margin: 2rem auto; */
         overflow: hidden;
-        padding: 1rem 2rem;
+        /*padding: 1rem 2rem;*/
         background: #fff;
     }
 </style>
