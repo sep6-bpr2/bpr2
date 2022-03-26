@@ -3,7 +3,6 @@ CREATE TABLE "KonfAir DRIFT$Item" (
     "Description" nvarchar(100),
     "Description 2" nvarchar(100),
     "Item Category Code" nvarchar(40)
-
 );
 
 CREATE TABLE "KonfAir DRIFT$Item Attribute Value Mapping" (

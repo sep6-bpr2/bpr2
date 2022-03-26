@@ -27,6 +27,8 @@
 
 <script>
 import index from './index.vue'
+
+
 export default {
   components: { index },
     
