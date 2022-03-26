@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_2_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model KonfAir_DRIFT_Item {
+  No_                String? @db.NVarChar(40)
+  Description        String? @db.NVarChar(100)
+  Description_2      String? @map("Description 2") @db.NVarChar(100)
+  Item_Category_Code String? @map("Item Category Code") @db.NVarChar(40)
+
+  @@map("KonfAir DRIFT$Item")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model KonfAir_DRIFT_Item_Atrribute_Value {
+  timestamp          Unsupported("timestamp")
+  Attribute_ID       Int?                     @map("Attribute ID")
+  ID                 Int?
+  Value              String?                  @db.NVarChar(500)
+  Numeric_Value      Decimal?                 @map("Numeric Value") @db.Decimal(17, 0)
+  Blocked            Int?                     @db.TinyInt
+  Datasheet_C        String?                  @db.NVarChar(500)
+  Vendor_Datasheet_C String?                  @map("Vendor Datasheet_C") @db.NVarChar(500)
+
+  @@map("KonfAir DRIFT$Item Atrribute Value")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model KonfAir_DRIFT_Item_Attribute {
+  timestamp       Unsupported("timestamp")
+  ID              Int?
+  Name            String?                  @db.NVarChar(500)
+  Blocked         Int?                     @db.TinyInt
+  Type            Int?
+  Unit_of_Measure String?                  @map("Unit of Measure") @db.NVarChar(60)
+
+  @@map("KonfAir DRIFT$Item Attribute")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model KonfAir_DRIFT_Item_Attribute_Value_Mapping {
+  timestamp               Unsupported("timestamp")
+  Table_ID                Int?                     @map("Table ID")
+  No_                     String?                  @db.NVarChar(40)
+  Item_Attribute_Value_ID Int?                     @map("Item Attribute Value ID")
+  Item_Attribute_ID       Int?                     @map("Item Attribute ID")
+
+  @@map("KonfAir DRIFT$Item Attribute Value Mapping")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model KonfAir_DRIFT_Item_Category {
+  timestamp               Unsupported("timestamp")
+  Code                    String?                  @db.NVarChar(40)
+  Parent_Category         String?                  @map("Parent Category") @db.NVarChar(40)
+  Description             String?                  @db.NVarChar(100)
+  Indentation             Int?
+  Presentation_Order      Int?                     @map("Presentation Order")
+  Has_Children            String?                  @map("Has Children") @db.NVarChar(40)
+  Last_Modified_Date_Time String?                  @map("Last Modified Date Time") @db.NVarChar(40)
+  Id                      String?                  @db.NVarChar(40)
+
+  @@map("KonfAir DRIFT$Item Category")
+  @@ignore
+}

@@ -1,0 +1,96 @@
+// prisma generate --schema prisma/schema1.prisma
+
+generator client {
+  	provider = "prisma-client-js"
+}
+
+datasource db {
+	provider = "sqlserver"
+	url      = env("DATABASE_1_URL")
+}
+//////////////////////////////////////////////////////////////
+model Order {
+	id				String 	@id @default(uuid())
+	articleNo		String
+	location		String
+}
+
+////////////////////////////////////////
+
+model SystemUser {
+	id      		Int       @id @default(autoincrement())
+	username    	String
+	role        	String
+	qaReports 		SystemUserQAReport[]
+}
+
+model SystemUserQAReport{
+	systemUser     	SystemUser @relation(fields: [userId], references: [id])
+	userId     		Int
+	qaReport     	QAReport @relation(fields: [QAReportId], references: [id])
+	QAReportId  	Int
+
+	@@id([userId, QAReportId])
+}
+
+model QAReport {
+	id  			Int       @id @default(autoincrement())
+	itemId     		Int
+	status 			Boolean
+	users 			SystemUserQAReport[]
+	controlPoints 	QAReportControlPoint[]
+
+}
+
+model QAReportControlPoint{
+	qaReport     		QAReport @relation(fields: [QAReportId], references: [id])
+	QAReportId     		Int
+	controlPoint     	ControlPoint @relation(fields: [ControlPointId], references: [id])
+	ControlPointId  	Int
+
+	@@id([QAReportId, ControlPointId])
+}
+////////////////////////////////////////////////////////////////////////////
+model Option {
+	id      		Int       @id @default(autoincrement())
+	value			String
+	controlPointId	Int
+	controlPoint    ControlPoint @relation(fields: [controlPointId], references: [id])
+}
+
+model ControlPoint {
+	id      		Int       @id @default(autoincrement())
+	frequency 		Int 
+	image 			String
+	tolerance 		String?
+	type			String
+	options 		Option[]
+	description 	Description[]
+	reports 		QAReportControlPoint[]
+	attributes 		AttributeControlPoint[]
+	itemCategories 	ItemCategoryControlPoint[]
+}
+
+model Description {
+	id      		Int       @id @default(autoincrement())
+	controlPointId	Int
+	controlPoint    ControlPoint @relation(fields: [controlPointId], references: [id])
+	language		String
+	description		String
+}
+
+model AttributeControlPoint{
+	attributeId     	Int
+	controlPoint     	ControlPoint @relation(fields: [ControlPointId], references: [id])
+	ControlPointId  	Int
+
+	@@id([attributeId, ControlPointId])
+}
+
+model ItemCategoryControlPoint{
+	ItemCategoryCode     		Int
+	controlPoint     	ControlPoint @relation(fields: [ControlPointId], references: [id])
+	ControlPointId  	Int
+
+	@@id([ItemCategoryCode, ControlPointId])
+}
