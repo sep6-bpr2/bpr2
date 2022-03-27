@@ -24,42 +24,7 @@ const get = (name, config) => {
 module.exports.getConnections = async () =>{
     konfairDB = await get("Konfair", "Server=localhost,1433;Database=KonfairDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
     localDB = await get("Own", "Server=localhost,1433;Database=OurDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
-    console.log("GOT THE DATA");
-    // console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
-    // console.log(await localDB.request().query('select * from "SystemUser"'))
-    // console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
 }
-
-const config1 = {
-    client: 'mssql',
-    connection: {
-        host : 'localhost',
-        port : 1433,
-        user : 'sa',
-        password : 'r00t.R00T',
-        database : 'KonfairDatabase'
-    }
-}
-
-const config2 = {
-    client: 'mssql',
-    connection: {
-        host : 'localhost',
-        port : 1433,
-        user : 'sa',
-        password : 'r00t.R00T',
-        database : 'OurDatabase'
-    }
-}
-
-// var first = 
-// var second = 
-
-
-// let konfairDB = require("knex")(config1);
-// let localDB = require("knex")(config2);
-
-// getConnections()
 
 module.exports.konfairDB = ()=>{
     return konfairDB

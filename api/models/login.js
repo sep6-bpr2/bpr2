@@ -1,11 +1,6 @@
 import { mssql, konfairDB, localDB } from '../../connections/MSSQLConnection'
 
-
-// module.exports.getConnections = async () =>{
-//     console.log('Sdasd')
-// }
 module.exports.getLogin = async (username) => {
-    // console.log(username)
     const result = await localDB()
     .request()
     .input("username", mssql.NVarChar(1000), username)
