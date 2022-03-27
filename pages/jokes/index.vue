@@ -22,6 +22,7 @@ export default {
         }
     },
     async created() {
+        console.log(this.$store.state.user)
         const config = {
             headers: {
                 'Accept': 'application/json'

@@ -1,6 +1,9 @@
 const mssql = require('mssql')
 const pools = new Map();
 
+let konfairDB;
+let localDB;
+
 const get = (name, config) => {
     if (!pools.has(name)) {
         if (!config) {
@@ -18,19 +21,51 @@ const get = (name, config) => {
     return pools.get(name);
 }
 
-async function getConnections(){
+module.exports.getConnections = async () =>{
     konfairDB = await get("Konfair", "Server=localhost,1433;Database=KonfairDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
     localDB = await get("Own", "Server=localhost,1433;Database=OurDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
-
-    console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
-    console.log(await localDB.request().query('select * from "SystemUser"'))
-    console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
+    console.log("GOT THE DATA");
+    // console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
+    // console.log(await localDB.request().query('select * from "SystemUser"'))
+    // console.log(await konfairDB.request().query('select * from "KonfAir DRIFT$Item"'))
 }
 
-let konfairDB = {}
-let localDB = {}
+const config1 = {
+    client: 'mssql',
+    connection: {
+        host : 'localhost',
+        port : 1433,
+        user : 'sa',
+        password : 'r00t.R00T',
+        database : 'KonfairDatabase'
+    }
+}
 
-getConnections()
+const config2 = {
+    client: 'mssql',
+    connection: {
+        host : 'localhost',
+        port : 1433,
+        user : 'sa',
+        password : 'r00t.R00T',
+        database : 'OurDatabase'
+    }
+}
 
-module.exports.konfairDB = konfairDB
-module.exports.localDB = localDB
+// var first = 
+// var second = 
+
+
+// let konfairDB = require("knex")(config1);
+// let localDB = require("knex")(config2);
+
+// getConnections()
+
+module.exports.konfairDB = ()=>{
+    return konfairDB
+}
+module.exports.localDB = ()=>{
+    return localDB
+}
+
+module.exports.mssql = mssql
