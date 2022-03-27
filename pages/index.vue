@@ -7,17 +7,16 @@
 <script>
 import Joke from "../components/Joke";
 export default {
-  	components: {Joke},
-  	head(){
+	components: { Joke },
+	head() {
 		return {
 			title: "About my app",
 			meta: [
 				{
 					hid: "description",
-
-				}
-			]
-		}
-	}
-}
+				},
+			],
+		};
+	},
+};
 </script>
