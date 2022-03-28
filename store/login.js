@@ -12,17 +12,22 @@ export const mutations = {
         state.chosenLanguage = language
     },
     setUser(state, user) {
-        state.user = user
+        state.user = user[0]
+    },
+    logoutUser(state) {
+        console.log("RESET USER")
+        state.user = null
     }
 }
 
 export const actions = {
-    loginUser({ commit }, { username }) {
+    loginUser({ commit, dispatch }, { username }) {
         return new Promise((resolve, reject) => {
             console.log(username)
             fetch(`api/login/${username}`).then(res => res.json()).then(result => {
                 if (result != null && result.length != 0) {
                     commit('setUser', result)
+                    dispatch('nav/loadLinks', {}, { root: true })
                     resolve(true)
                 } else {
                     resolve(false)

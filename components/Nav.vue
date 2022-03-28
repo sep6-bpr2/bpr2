@@ -3,9 +3,16 @@
 		<h1 class="title">KONFAIR</h1>
 		<ul>
 			<li v-for="link in allLinks" :key="link.id">
-				<nuxt-link to="link.link">{{link.name}}</nuxt-link>
+				<nuxt-link :to="{ path: link.link }">{{ link.name }}</nuxt-link>
 			</li>
 		</ul>
+		<nuxt-link
+			:to="{ path: '/login' }"
+			style="margin-left: auto"
+			v-if="user"
+			@click="logout"
+			>Log out</nuxt-link
+		>
 	</header>
 </template>
 
@@ -26,10 +33,18 @@ export default {
 		loadLinks() {
 			this.$store.dispatch("nav/loadLinks");
 		},
+		logout() {
+			console.log("LOGOUT HANDLER");
+
+			this.$store.dispatch("nav/logout");
+		},
 	},
 	computed: {
 		allLinks() {
 			return this.$store.state.nav.availableLinks;
+		},
+		user() {
+			return this.$store.state.login.user;
 		},
 	},
 };
@@ -65,6 +80,7 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
 }
 
 .header a:hover {

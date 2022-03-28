@@ -1,71 +1,81 @@
 <template>
-    <div>
-        <SearchJokes v-on:search-text="searchText"/>
-        <Joke v-for="joke in jokes" :key="joke.id" :id="joke.id" :joke="joke.joke"/>
-    </div>
+	<div>
+		<SearchJokes v-on:search-text="searchText" />
+		<Joke
+			v-for="joke in jokes"
+			:key="joke.id"
+			:id="joke.id"
+			:joke="joke.joke"
+		/>
+	</div>
 </template>
 
 <script>
 import axios from "axios";
-import Joke from "../../components/Joke.vue"
-import SearchJokes from "../../components/SearchJokes.vue"
-
+import Joke from "../../components/Joke.vue";
+import SearchJokes from "../../components/SearchJokes.vue";
 
 export default {
-    components: {
-        Joke,
-        SearchJokes,
-    },
-    data() {
-        return {
-            jokes: []
-        }
-    },
-    async created() {
-        console.log(this.$store.state.user)
-        const config = {
-            headers: {
-                'Accept': 'application/json'
-            }
-        }
-        try{
-            const res = await axios.get('https://icanhazdadjoke.com/search', config)
-            console.log(res.data.results)
+	components: {
+		Joke,
+		SearchJokes,
+	},
+	data() {
+		return {
+			jokes: [],
+		};
+	},
+	async created() {
+		console.log("User");
+		console.log(this.$store.state.login.user);
+		const config = {
+			headers: {
+				Accept: "application/json",
+			},
+		};
+		try {
+			const res = await axios.get(
+				"https://icanhazdadjoke.com/search",
+				config
+			);
+			console.log(res.data.results);
 
-            this.jokes = res.data.results
-        }catch(err) {
-            console.log(err)
-        }
+			this.jokes = res.data.results;
+		} catch (err) {
+			console.log(err);
+		}
+	},
+	methods: {
+		async searchText(text) {
+			const config = {
+				headers: {
+					Accept: "application/json",
+				},
+			};
+			try {
+				const res = await axios.get(
+					"https://icanhazdadjoke.com/search?term=" + text,
+					config
+				);
+				console.log(res.data.results);
 
-    },
-    methods: {
-        async searchText(text){
-            const config = {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }
-            try{
-                const res = await axios.get('https://icanhazdadjoke.com/search?term='+ text, config)
-                console.log(res.data.results)
-
-                this.jokes = res.data.results
-            }catch(err) {
-                console.log(err)
-            }
-        }
-    },
-    head() {
-        return {
-            title: "Dad jokes",
-            meta: [
-                {
-                    hid: "description",
-                    name: "description",
-                    content: "Best place for corny dad jokes"
-                }
-            ]
-        }
-    }
-}
+				this.jokes = res.data.results;
+			} catch (err) {
+				console.log(err);
+			}
+		},
+	},
+	head() {
+		return {
+			title: "Dad jokes",
+			meta: [
+				{
+					hid: "description",
+					name: "description",
+					content: "Best place for corny dad jokes",
+				},
+			],
+		};
+	},
+};
 </script>

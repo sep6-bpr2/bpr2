@@ -1,9 +1,12 @@
 const links = [
     { name: "Control Points", link: "/controlPoints", roles: ["admin"] },
-    { name: "Completed Order", link: "/completedOrders", roles: ["admin"] },
+    { name: "Completed Orders", link: "/completedOrders", roles: ["admin"] },
+    { name: "Item Categories", link: "/itemCategories", roles: ["admin"] },
+    { name: "Users", link: "/users", roles: ["admin"] },
+    { name: "Released Orders", link: "/releasedOrders", roles: ["qa employee"] },
 ]
 
-const userTemp = { username: "rokas", role: "admin" }
+// const userTemp = { username: "rokas", role: "admin" }
 
 export const state = () => ({
     availableLinks: []
@@ -13,14 +16,19 @@ export const state = () => ({
 export const mutations = {
     setLinks(state, links) {
         state.availableLinks = links
+    },
+    resetLinks(state, links) {
+        console.log("RESET LINKS")
+        state.availableLinks = []
     }
 }
 
 export const actions = {
     loadLinks({ commit, rootState }) {
         let availableLinks = []
-        let user = userTemp
-        // let user = rootState.instance.session;
+
+        let user = rootState.login.user;
+
         if (user != null) {
             for (let i = 0; i < links.length; i++) {
                 if (links[i].roles.includes(user.role)) {
@@ -31,5 +39,11 @@ export const actions = {
             }
             commit('setLinks', availableLinks)
         }
+    },
+    logout({ commit, rootState }) {
+        commit('login/logoutUser', null, { root: true })
+        commit('resetLinks', null)
+
+
     }
 }
