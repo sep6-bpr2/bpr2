@@ -3,9 +3,9 @@
 		<div>
 			<Nav />
 		</div>
-		<v-content>
+		<v-main>
 			<Nuxt />
-		</v-content>
+		</v-main>
 	</v-app>
 </template>
 

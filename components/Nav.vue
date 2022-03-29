@@ -1,18 +1,18 @@
 <template>
 	<header :color="cols.KonfairPrimary" class="header">
 		<h1 class="title">KONFAIR</h1>
-		<ul>
-			<li v-for="link in allLinks" :key="link.id">
-				<nuxt-link :to="{ path: link.link }">{{ link.name }}</nuxt-link>
-			</li>
-		</ul>
-		<nuxt-link
-			:to="{ path: '/login' }"
-			style="margin-left: auto"
-			v-if="user"
-			@click="logout"
-			>Log out</nuxt-link
-		>
+		<div>
+			<ul>
+				<li v-for="link in allLinks" :key="link.id">
+					<nuxt-link :to="{ path: link.link }">{{
+						link.name
+					}}</nuxt-link>
+				</li>
+			</ul>
+		</div>
+		<button v-on:click="logout" style="margin-left: auto" v-if="user">
+			Logout
+		</button>
 	</header>
 </template>
 
@@ -24,6 +24,7 @@ export default {
 	data: function () {
 		return {
 			cols: colors,
+			links: [],
 		};
 	},
 	created() {
@@ -34,13 +35,13 @@ export default {
 			this.$store.dispatch("nav/loadLinks");
 		},
 		logout() {
-			console.log("LOGOUT HANDLER");
-
 			this.$store.dispatch("nav/logout");
+			this.$router.push("/login");
 		},
 	},
 	computed: {
 		allLinks() {
+			this.links = this.$store.state.nav.availableLinks;
 			return this.$store.state.nav.availableLinks;
 		},
 		user() {
@@ -70,13 +71,25 @@ export default {
 
 .header ul {
 	display: flex;
+	height: 64px;
 }
 
 .header a {
 	color: #fff;
 	height: 64px;
-	width: 100px;
-	padding: 0.3rem 2rem;
+	width: 150px;
+	padding: 0.3rem 0.3rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.header button {
+	color: #fff;
+	height: 64px;
+	width: 150px;
+	padding: 0.3rem 0.3rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;

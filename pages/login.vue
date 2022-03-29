@@ -1,5 +1,5 @@
 <template>
-	<v-content>
+	<v-main>
 		<v-card width="500" class="mx-auto mt-9">
 			<v-select
 				:items="allLanguages"
@@ -42,7 +42,7 @@
 				>
 			</v-card-actions>
 		</v-card>
-	</v-content>
+	</v-main>
 </template>
 
 <script>
@@ -80,8 +80,7 @@ export default {
 					.dispatch("login/loginUser", { username: this.username })
 					.then((result) => {
 						if (result) {
-							console.log("REDIRECT");
-							this.$router.push("/jokes");
+							this.$router.push("/controlPoints");
 						}
 					});
 			}

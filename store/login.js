@@ -15,7 +15,6 @@ export const mutations = {
         state.user = user[0]
     },
     logoutUser(state) {
-        console.log("RESET USER")
         state.user = null
     }
 }
@@ -23,7 +22,6 @@ export const mutations = {
 export const actions = {
     loginUser({ commit, dispatch }, { username }) {
         return new Promise((resolve, reject) => {
-            console.log(username)
             fetch(`api/login/${username}`).then(res => res.json()).then(result => {
                 if (result != null && result.length != 0) {
                     commit('setUser', result)

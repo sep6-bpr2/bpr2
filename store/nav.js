@@ -18,7 +18,6 @@ export const mutations = {
         state.availableLinks = links
     },
     resetLinks(state, links) {
-        console.log("RESET LINKS")
         state.availableLinks = []
     }
 }
@@ -40,10 +39,8 @@ export const actions = {
             commit('setLinks', availableLinks)
         }
     },
-    logout({ commit, rootState }) {
+    logout({ commit }) {
         commit('login/logoutUser', null, { root: true })
         commit('resetLinks', null)
-
-
     }
 }
