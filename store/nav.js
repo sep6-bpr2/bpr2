@@ -6,8 +6,6 @@ const links = [
     { name: "Released Orders", link: "/releasedOrders", roles: ["qa employee"] },
 ]
 
-// const userTemp = { username: "rokas", role: "admin" }
-
 export const state = () => ({
     availableLinks: []
 })
