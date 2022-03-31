@@ -4,7 +4,13 @@
 		<div>
 			<ul>
 				<li v-for="link in allLinks" :key="link.id">
-					<nuxt-link :to="{ path: link.link }"
+					<nuxt-link
+						:to="{ path: link.link }"
+						v-bind:style="[
+							currentLinkName == link.link
+								? { 'background-color': '#555' }
+								: {},
+						]"
 						><Translate :text="link.name"
 					/></nuxt-link>
 				</li>
@@ -50,6 +56,11 @@ export default {
 		},
 		user() {
 			return this.$store.state.login.user;
+		},
+		//For handling selected page
+		currentLinkName() {
+			const paths = this.$nuxt.$route.path.split("/");
+			return "/" + paths[1];
 		},
 	},
 };

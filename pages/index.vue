@@ -16,5 +16,12 @@ export default {
 			],
 		};
 	},
+	created() {
+		if (this.$store.state.login.user) {
+			this.$router.push(this.$store.state.nav.availableLinks[0].link);
+		} else {
+			this.$router.push("/login");
+		}
+	},
 };
 </script>

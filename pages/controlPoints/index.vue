@@ -28,7 +28,6 @@ export default {
 		Translate,
 	},
 	created() {
-		console.log("Created");
 		this.$store.dispatch("controlPoints/loadControlPoints", {});
 	},
 	computed: {
@@ -44,10 +43,11 @@ export default {
 	},
 	methods: {
 		controlPointClickCallback(row) {
-			console.log("PAGE - Row with id: " + row.id + " clicked");
 			this.$router.push("/controlPoints/" + row.id);
 		},
-		handleCreate() {},
+		handleCreate() {
+			this.$router.push("/controlPoints/manage/createControlPoint");
+		},
 	},
 };
 </script>

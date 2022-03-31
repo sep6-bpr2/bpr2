@@ -7,7 +7,7 @@ const links = [
 ]
 
 export const state = () => ({
-    availableLinks: []
+    availableLinks: [],
 })
 
 
