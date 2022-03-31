@@ -21,15 +21,15 @@ const get = (name, config) => {
     return pools.get(name);
 }
 
-module.exports.getConnections = async () =>{
+module.exports.getConnections = async () => {
     konfairDB = await get("Konfair", "Server=localhost,1433;Database=KonfairDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
     localDB = await get("Own", "Server=localhost,1433;Database=OurDatabase;User Id=sa;Password=r00t.R00T;Encrypt=true;trustServerCertificate=true;")
 }
 
-module.exports.konfairDB = ()=>{
+module.exports.konfairDB = () => {
     return konfairDB
 }
-module.exports.localDB = ()=>{
+module.exports.localDB = () => {
     return localDB
 }
 

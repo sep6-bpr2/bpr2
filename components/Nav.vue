@@ -1,77 +1,103 @@
 <template>
-  <!--    <header class="header">-->
-  <!--        <h1 class="title"><span>konf</span>Air</h1>-->
-  <!--        <ul>-->
-  <!--            <li>-->
-  <!--                <nuxt-link to='/'>Home</nuxt-link>-->
-  <!--            </li>-->
-  <!--            <li>-->
-  <!--                <nuxt-link to='/jokes'>Jokes</nuxt-link>-->
-  <!--            </li>-->
-  <!--            <li>-->
-  <!--                <nuxt-link to='/about'>About</nuxt-link>-->
-  <!--            </li>-->
-  <!--        </ul>-->
-  <!--    </header>-->
-  <v-app-bar app :color=cols.KonfairPrimary>
-    <v-toolbar-title>KONFAIR</v-toolbar-title>
-  </v-app-bar>
+	<header :color="cols.KonfairPrimary" class="header">
+		<h1 class="title">KONFAIR</h1>
+		<div>
+			<ul>
+				<li v-for="link in allLinks" :key="link.id">
+					<nuxt-link :to="{ path: link.link }">{{
+						link.name
+					}}</nuxt-link>
+				</li>
+			</ul>
+		</div>
+		<button v-on:click="logout" style="margin-left: auto" v-if="user">
+			Logout
+		</button>
+	</header>
 </template>
 
 <script>
 import colors from "../styles/colors";
 
 export default {
-  name: "Nav",
-  data: function () {
-    return {
-      cols: colors
-    }
-  }
-
-}
+	name: "Nav",
+	data: function () {
+		return {
+			cols: colors,
+			links: [],
+		};
+	},
+	created() {
+		this.loadLinks();
+	},
+	methods: {
+		loadLinks() {
+			this.$store.dispatch("nav/loadLinks");
+		},
+		logout() {
+			this.$store.dispatch("nav/logout");
+			this.$router.push("/login");
+		},
+	},
+	computed: {
+		allLinks() {
+			this.links = this.$store.state.nav.availableLinks;
+			return this.$store.state.nav.availableLinks;
+		},
+		user() {
+			return this.$store.state.login.user;
+		},
+	},
+};
 </script>
 
 <style>
-.title span {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title {
-  margin: 0;
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
-  text-align: center;
-}
-
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px dotted #ccc;
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	background: #333;
 }
 
 .header .title {
-  font-size: 3rem;
-  color: #526488;
+	font-size: 3rem;
+	color: #fff;
+}
+
+.title {
+	padding: 0.3rem 2rem;
+	margin-right: 2rem;
 }
 
 .header ul {
-  display: flex;
+	display: flex;
+	height: 64px;
 }
 
 .header a {
-  display: inline-block;
-  background: #333;
-  color: #fff;
-  padding: 0.3rem 1rem;
-  margin-right: 0.5rem;
+	color: #fff;
+	height: 64px;
+	width: 150px;
+	padding: 0.3rem 0.3rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.header button {
+	color: #fff;
+	height: 64px;
+	width: 150px;
+	padding: 0.3rem 0.3rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.header a:hover {
+	background: #555;
+	color: #fff;
 }
 </style>
