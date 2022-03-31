@@ -1,7 +1,5 @@
 <template>
-	<div>
-		<h1>This is control point page</h1>
-	</div>
+	<div>Control point {{ $route.params.id }}</div>
 </template>
 
 <script>

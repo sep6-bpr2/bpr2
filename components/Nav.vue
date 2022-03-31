@@ -4,22 +4,32 @@
 		<div>
 			<ul>
 				<li v-for="link in allLinks" :key="link.id">
-					<nuxt-link :to="{ path: link.link }">{{
-						link.name
-					}}</nuxt-link>
+					<nuxt-link
+						:to="{ path: link.link }"
+						v-bind:style="[
+							currentLinkName == link.link
+								? { 'background-color': '#555' }
+								: {},
+						]"
+						><Translate :text="link.name"
+					/></nuxt-link>
 				</li>
 			</ul>
 		</div>
 		<button v-on:click="logout" style="margin-left: auto" v-if="user">
-			Logout
+			<Translate :text="'Logout'" />
 		</button>
 	</header>
 </template>
 
 <script>
 import colors from "../styles/colors";
+import Translate from "./Translate.vue";
 
 export default {
+	components: {
+		Translate,
+	},
 	name: "Nav",
 	data: function () {
 		return {
@@ -46,6 +56,11 @@ export default {
 		},
 		user() {
 			return this.$store.state.login.user;
+		},
+		//For handling selected page
+		currentLinkName() {
+			const paths = this.$nuxt.$route.path.split("/");
+			return "/" + paths[1];
 		},
 	},
 };

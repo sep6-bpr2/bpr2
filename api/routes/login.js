@@ -1,10 +1,11 @@
 const { Router } = require('express')
 const router = Router()
-import { getLogin } from "../models/login"
+import { getUserByUsername } from "../models/login"
 
+// TEST- http://localhost:3000/api/login/rokas
 router.get("/:username", async (req, res) => {
-    
-    const result = await getLogin(req.params.username)
+
+    const result = await getUserByUsername(req.params.username)
 
     res.send(result)
 })
