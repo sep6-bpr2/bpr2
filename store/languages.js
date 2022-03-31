@@ -54,6 +54,39 @@ const translations = {
         "lt": "Bla bla bla",
         "dk": "Bla bla bla",
     },
+    "username": {
+        "gb": "username",
+        "lt": "vartotojo vardas",
+        "dk": "brugernavn",
+    },
+    "choose location": {
+        "gb": "choose location",
+        "lt": "pasirinkti vieta",
+        "dk": "vælge placering",
+    },
+    "Login": {
+        "gb": "Login",
+        "lt": "Prisijungti",
+        "dk": "Log på",
+    },
 }
 
-export default translations
+const translateFunction = (text, flag) => {
+    if (text && translations[text]) {
+        try {
+            const translated =
+                translations[text][flag];
+            if (translated) {
+                return translated;
+            } else {
+                return text;
+            }
+        } catch (err) {
+            return text;
+        }
+    } else {
+        return text;
+    }
+}
+
+export default { translateFunction, translations }

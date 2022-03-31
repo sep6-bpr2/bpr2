@@ -20,12 +20,12 @@
 			<v-card-text>
 				<v-text-field
 					v-model="username"
-					label="username"
+					v-bind:label="translateText('username')"
 					prepend-icon="mdi-account-circle"
 				/>
 				<v-select
 					:items="allLanguages"
-					label="choose location"
+					v-bind:label="translateText('choose location')"
 					prepend-icon="mdi-office-building"
 				>
 				</v-select>
@@ -38,8 +38,8 @@
 					v-on:click="hanldeLogin"
 					:color="cols.KonfairPrimary"
 					style="float: right"
-					>Login</v-btn
-				>
+					><Translate :text="'Login'"
+				/></v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-main>
@@ -49,10 +49,15 @@
 import colors from "../styles/colors";
 import FlagIcon from "vue-flag-icon";
 import Vue from "vue";
+import Translate from "../components/Translate.vue";
+import lanugages from "../store/languages";
 
 Vue.use(FlagIcon);
 
 export default {
+	components: {
+		Translate,
+	},
 	name: "LogIn",
 	data: function () {
 		return {
@@ -84,6 +89,12 @@ export default {
 						}
 					});
 			}
+		},
+		translateText(text) {
+			return lanugages.translateFunction(
+				text,
+				this.$store.state.login.chosenLanguage.flag
+			);
 		},
 	},
 };

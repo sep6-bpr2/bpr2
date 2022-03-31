@@ -5,16 +5,16 @@
 </template>
 
 <script>
-import translations from "../store/languages";
+import lanugages from "../store/languages";
 
 export default {
 	props: ["text"],
 	methods: {
 		translate() {
-			if (this.text && translations[this.text]) {
+			if (this.text && lanugages.translations[this.text]) {
 				try {
 					const translated =
-						translations[this.text][
+						lanugages.translations[this.text][
 							this.$store.state.login.chosenLanguage.flag
 						];
 					if (translated) {
