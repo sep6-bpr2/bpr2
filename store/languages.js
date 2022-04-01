@@ -69,6 +69,34 @@ const translations = {
         "lt": "Prisijungti",
         "dk": "Log på",
     },
+	//---------------------- Control point details
+	// Main information card
+	"Main information": {
+		"gb": "Main information",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Name": {
+		"gb": "Name",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	// Check frequency card
+	"Check frequency": {
+		"gb": "Check frequency",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	// Relationship with category items and attributes card
+	"Relationship with category items and attributes": {
+		"gb": "Relationship with category items and attributes",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	}
+
+	// ---------------------
 }
 
 const translateFunction = (text, flag) => {
