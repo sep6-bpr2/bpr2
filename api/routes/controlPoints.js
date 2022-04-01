@@ -8,7 +8,6 @@ import { getControlPointsMinimal, getDescriptionsByControlPointId } from "../mod
 router.get("/listMinimal/:username/:language", async (req, res) => {
     //Get user
     const users = await getUserByUsername(req.params.username)
-
     //CHeck if user has admin role
     if (users[0].role == "admin") {
         let controlPoints = await getControlPointsMinimal()

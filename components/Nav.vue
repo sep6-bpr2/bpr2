@@ -8,7 +8,7 @@
 						:to="{ path: link.link }"
 						v-bind:style="[
 							currentLinkName == link.link
-								? { 'background-color': '#555' }
+								? { 'background-color': cols.KonfairPrimary }
 								: {},
 						]"
 						><Translate :text="link.name"
