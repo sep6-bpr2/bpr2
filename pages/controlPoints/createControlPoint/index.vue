@@ -5,12 +5,32 @@
 				<h3>
 					<Translate :text="'Main information'"/>
 				</h3>
-				<div class="cptName innerElement">
-					<a>
+				<div class="innerElement row">
+					<p>
 						<Translate :text="'Name'"/>
-					</a>
+					</p>
 					<v-text-field
 						v-model="name"
+					/>
+				</div>
+
+				<div class="innerElement row">
+					<p>
+						<Translate :text="'Type'"/>
+					</p>
+					<v-select
+						:items="allTypes"
+						v-model="type"
+					/>
+				</div>
+
+
+				<div class="innerElement row">
+					<p>
+						<Translate :text="'Value'"/>
+					</p>
+					<v-text-field
+						
 					/>
 				</div>
 			</v-card>
@@ -19,27 +39,74 @@
 				<h3>
 					<Translate :text="'Relationship with category items and attributes'"/>
 				</h3>
-				<div class="innerElement">
-					<a>
-						Attributes
-					</a>
+				<div class="innerElement multiValueCard">
+					<p>
+						<Translate :text="'Attributes'"/>
+					</p>
 					<div class="attributes"
 						 v-for="(attribute, index) in attributes"
 					>
-						<v-card class="attribute"
+						<v-card class="valueEntry"
 
 						>
-							<a>Name</a>
-							<v-select
-								:items="attributesChoice"
-								v-model="attribute.name"
-							/>
-							<a>Value</a>
+								<p>
+									<Translate :text="'Name'"/>
+								</p>
+								<v-autocomplete
+									:items="attributesChoice"
+									v-model="attribute.name"
+								/>
+								<p>
+									<Translate :text="'Min value'"/>
+								</p>
+								<v-text-field
+									v-model="attribute.minValue"
+								/>
+								<p>
+									<Translate :text="'Max value'"/>
+								</p>
+								<v-text-field
+									v-model="attribute.maxValue"
+								/>
+								<v-btn
+									v-on:click="removeValue(index, attributes)"
+								>
+									<v-icon>
+										mdi-delete
+									</v-icon>
+								</v-btn>
+						</v-card>
+					</div>
+
+					<v-btn
+						v-on:click="newValue(attributes)"
+					>
+						<v-icon>
+							mdi-pencil-plus-outline
+						</v-icon>
+						<p>
+							<Translate :text="'new attribute'"/>
+						</p>
+					</v-btn>
+				</div>
+
+				<div class="innerElement multiValueCard">
+					<p>
+						<Translate :text="'Category Item Codes'"/>
+					</p>
+					<div
+						v-for="(code, index) in codes"
+					>
+						<v-card class="valueEntry">
+							<p>
+								<Translate :text="'Code'"/>
+							</p>
 							<v-text-field
-								v-model="attribute.value"
+								v-model="code.value"
+								type="number"
 							/>
 							<v-btn
-								v-on:click="removeAttribute(index)"
+								v-on:click="removeValue(index, codes)"
 							>
 								<v-icon>
 									mdi-delete
@@ -47,14 +114,13 @@
 							</v-btn>
 						</v-card>
 					</div>
-
 					<v-btn
-						v-on:click="newAttribute"
+						v-on:click="newValue(codes)"
 					>
 						<v-icon>
 							mdi-pencil-plus-outline
 						</v-icon>
-						new attribute
+						<Translate :text="'new code'"/>
 					</v-btn>
 				</div>
 			</v-card>
@@ -71,11 +137,13 @@
 		<div class="buttons">
 			<v-btn
 				v-on:click="deleteControlPoint"
-			>Delete Control Point
+			>
+				<Translate :text="'Delete Control Point'"/>
 			</v-btn>
 			<v-btn
 				v-on:click="submit"
-			>Submit
+			>
+				<Translate :text="'Submit'"/>
 			</v-btn>
 		</div>
 
@@ -92,7 +160,12 @@ export default {
 	data: () => {
 		return {
 			name: "",
-			attributes: [{name: '', value: 0}]
+			allTypes: ['number', 'text', 'options'],
+			type: '',
+			value: null, // number or string
+			optionValues: [],// {value: '',}
+			attributes: [],//{name: '', minValue: 0, maxValue: 0}
+			codes: [{value: null}]
 		}
 	},
 	mounted() {
@@ -101,11 +174,9 @@ export default {
 	},
 	watch: {
 		name(newName) {
-			console.log("name: " + name)
 			localStorage.cpName = newName
 		},
 		attributes(list) {
-			console.log(list)
 			localStorage.setItem("attributes", JSON.stringify(this.attributes))
 		}
 	},
@@ -115,11 +186,11 @@ export default {
 		}
 	},
 	methods: {
-		newAttribute() {
-			this.attributes.push({name: '', value: 0})
+		newValue(list) {
+			list.push({name: '', value: 0})
 		},
-		removeAttribute(index) {
-			this.attributes.splice(index, 1)
+		removeValue(index, list) {
+			list.splice(index, 1)
 		},
 		deleteControlPoint() {
 			alert("this will work only on edit control point while reusing this component")
@@ -147,11 +218,11 @@ export default {
 	float: left;
 }
 
-a {
-	margin-right: 5pt;
+p {
+	margin-inline: 10pt;
 }
 
-.cptName {
+.row {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
@@ -161,7 +232,12 @@ a {
 	margin: 5pt;
 }
 
-.attribute {
+.multiValueCard {
+	display: flex;
+	flex-direction: column;
+}
+
+.valueEntry {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;

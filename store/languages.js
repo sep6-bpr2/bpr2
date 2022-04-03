@@ -81,6 +81,26 @@ const translations = {
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
+	"Value":{
+		"gb": "Value",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Type":{
+		"gb": "Type",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Delete Control Point":{
+		"gb": "Delete Control Point",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Submit":{
+		"gb": "Submit",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
 
 	// Check frequency card
 	"Check frequency": {
@@ -92,6 +112,43 @@ const translations = {
 	// Relationship with category items and attributes card
 	"Relationship with category items and attributes": {
 		"gb": "Relationship with category items and attributes",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Attributes":{
+		"gb": "Attributes",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Min value": {
+		"gb": "Min value",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Max value": {
+		"gb": "Max value",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	"new attribute": {
+		"gb": "new attribute",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	"Category Item Codes": {
+		"gb": "Category Item Codes",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Code": {
+		"gb": "Code",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"new code": {
+		"gb": "new code",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	}
