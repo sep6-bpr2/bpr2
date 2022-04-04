@@ -1,5 +1,5 @@
 const colors = {
-    KonfairPrimary: "#52cbff",
+    KonfairPrimary: "#555",
 
 }
 

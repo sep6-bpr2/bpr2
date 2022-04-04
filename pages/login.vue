@@ -1,47 +1,53 @@
 <template>
 	<v-main>
-		<v-card width="500" class="mx-auto mt-9">
-			<v-select
-				:items="allLanguages"
-				v-model="language"
-				prepend-icon="mdi-account-voice"
-				class="px-4"
-			>
-				<template slot="selection" slot-scope="data">
-					{{ data.item.name }}
-					<flag :iso="data.item.flag" class="ml-1" />
-				</template>
-				<template slot="item" slot-scope="data">
-					{{ data.item.name }}
-					<flag :iso="data.item.flag" class="ml-1" />
-				</template>
-			</v-select>
-			<v-divider></v-divider>
-			<v-card-text>
-				<v-text-field
-					v-model="username"
-					v-bind:label="translateText('username')"
-					prepend-icon="mdi-account-circle"
-				/>
+		<v-form ref="form">
+			<v-card width="500" class="mx-auto mt-9">
 				<v-select
 					:items="allLanguages"
-					v-bind:label="translateText('choose location')"
-					prepend-icon="mdi-office-building"
+					v-model="language"
+					prepend-icon="mdi-account-voice"
+					class="px-4"
 				>
+					<template slot="selection" slot-scope="data">
+						{{ data.item.name }}
+						<flag :iso="data.item.flag" class="ml-1" />
+					</template>
+					<template slot="item" slot-scope="data">
+						{{ data.item.name }}
+						<flag :iso="data.item.flag" class="ml-1" />
+					</template>
 				</v-select>
-			</v-card-text>
+				<v-divider></v-divider>
+				<v-card-text>
+					<v-text-field
+						:rules="usernameRules"
+						required
+						v-model="username"
+						v-bind:label="translateText('username')"
+						prepend-icon="mdi-account-circle"
+					/>
+					<v-select
+						required
+						:rules="locationRules"
+						:items="allLanguages"
+						v-bind:label="translateText('choose location')"
+						prepend-icon="mdi-office-building"
+					>
+					</v-select>
+				</v-card-text>
 
-			<v-divider></v-divider>
-			<v-card-actions>
-				<v-spacer></v-spacer>
-				<v-btn
-					v-on:click="hanldeLogin"
-					:color="cols.KonfairPrimary"
-					style="float: right"
+				<v-divider></v-divider>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						v-on:click="hanldeLogin"
+						:color="cols.KonfairPrimary"
+						style="float: right"
 					><Translate :text="'Login'"
-				/></v-btn>
-			</v-card-actions>
-		</v-card>
+					/></v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-form>
 	</v-main>
 </template>
 
@@ -63,6 +69,13 @@ export default {
 		return {
 			cols: colors,
 			username: "",
+			canLogIn:false,
+			usernameRules: [
+				v => !!v || 'Name is required',
+			],
+			locationRules: [
+				v => !!v || 'location is required',
+			],
 		};
 	},
 	computed: {
@@ -80,14 +93,17 @@ export default {
 	},
 	methods: {
 		hanldeLogin() {
-			if (this.username != "") {
-				return this.$store
-					.dispatch("login/loginUser", { username: this.username })
-					.then((result) => {
-						if (result) {
-							this.$router.push("/controlPoints");
-						}
-					});
+			if(this.$refs.form.validate() == true)
+			{
+				if (this.username != "") {
+					return this.$store
+						.dispatch("login/loginUser", { username: this.username })
+						.then((result) => {
+							if (result) {
+								this.$router.push("/controlPoints");
+							}
+						});
+				}
 			}
 		},
 		translateText(text) {
