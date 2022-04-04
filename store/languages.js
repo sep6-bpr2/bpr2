@@ -91,6 +91,19 @@ const translations = {
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
+	"Option":{
+		"gb": "Option",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"new option":{
+		"gb": "new option",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+
+
 	"Delete Control Point":{
 		"gb": "Delete Control Point",
 		"lt": "bla bla",

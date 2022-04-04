@@ -5,13 +5,18 @@
 				<h3>
 					<Translate :text="'Main information'"/>
 				</h3>
-				<div class="innerElement row">
-					<p>
-						<Translate :text="'Name'"/>
-					</p>
-					<v-text-field
-						v-model="name"
-					/>
+				<div
+					v-for="description in descriptions"
+				>
+					<div class="innerElement row">
+						<p>
+							{{ description.lang }}
+							<Translate :text="'Description'"/>
+						</p>
+						<v-text-field
+							v-model="description.value"
+						/>
+					</div>
 				</div>
 
 				<div class="innerElement row">
@@ -21,16 +26,53 @@
 					<v-select
 						:items="allTypes"
 						v-model="type"
+						class="shrink"
 					/>
 				</div>
 
+				<div
+					v-if="type==='options'"
+				>
+					<div class="innerElement row"
+						 v-for="(option, index) in optionValues"
+					>
+						<p>
+							<Translate :text="'Option'"/>
+							{{ index + 1 }}
+						</p>
+						<v-text-field
+							v-model="option.value"
+							class="shrink"
+						/>
+						<v-btn
+							v-on:click="removeValue(index, optionValues)"
+						>
+							<v-icon>
+								mdi-delete
+							</v-icon>
+						</v-btn>
+					</div>
+					<v-btn
+						v-on:click="newValue(optionValues)"
+					>
+						<v-icon>
+							mdi-pencil-plus-outline
+						</v-icon>
+						<Translate :text="'new option'"/>
+					</v-btn>
 
-				<div class="innerElement row">
+				</div>
+
+				<div
+					v-else
+					class="innerElement row"
+				>
 					<p>
 						<Translate :text="'Value'"/>
 					</p>
 					<v-text-field
-						
+						v-model="value"
+						class="shrink"
 					/>
 				</div>
 			</v-card>
@@ -49,32 +91,34 @@
 						<v-card class="valueEntry"
 
 						>
-								<p>
-									<Translate :text="'Name'"/>
-								</p>
-								<v-autocomplete
-									:items="attributesChoice"
-									v-model="attribute.name"
-								/>
-								<p>
-									<Translate :text="'Min value'"/>
-								</p>
-								<v-text-field
-									v-model="attribute.minValue"
-								/>
-								<p>
-									<Translate :text="'Max value'"/>
-								</p>
-								<v-text-field
-									v-model="attribute.maxValue"
-								/>
-								<v-btn
-									v-on:click="removeValue(index, attributes)"
-								>
-									<v-icon>
-										mdi-delete
-									</v-icon>
-								</v-btn>
+							<p>
+								<Translate :text="'Name'"/>
+							</p>
+							<v-autocomplete
+								:items="attributesChoice"
+								v-model="attribute.name"
+							/>
+							<p>
+								<Translate :text="'Min value'"/>
+							</p>
+							<v-text-field
+								v-model="attribute.minValue"
+								class="shrink"
+							/>
+							<p>
+								<Translate :text="'Max value'"/>
+							</p>
+							<v-text-field
+								v-model="attribute.maxValue"
+								class="shrink"
+							/>
+							<v-btn
+								v-on:click="removeValue(index, attributes)"
+							>
+								<v-icon>
+									mdi-delete
+								</v-icon>
+							</v-btn>
 						</v-card>
 					</div>
 
@@ -104,6 +148,7 @@
 							<v-text-field
 								v-model="code.value"
 								type="number"
+								class="shrink"
 							/>
 							<v-btn
 								v-on:click="removeValue(index, codes)"
@@ -159,25 +204,50 @@ export default {
 	components: {Translate},
 	data: () => {
 		return {
-			name: "",
+			descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 			allTypes: ['number', 'text', 'options'],
 			type: '',
 			value: null, // number or string
-			optionValues: [],// {value: '',}
+			optionValues: [{value: null}],// {value: '',}
 			attributes: [],//{name: '', minValue: 0, maxValue: 0}
 			codes: [{value: null}]
 		}
 	},
 	mounted() {
-		if (localStorage.cpName) this.name = localStorage.cpName
+		if (localStorage.descriptions) this.descriptions = JSON.parse(localStorage.getItem("descriptions"))
+		if (localStorage.type) this.type = JSON.parse(localStorage.getItem("type"))
+		if (localStorage.value) this.value = JSON.parse(localStorage.getItem("value"))
+		if (localStorage.optionValues) this.optionValues = JSON.parse(localStorage.getItem("optionValues"))
 		if (localStorage.attributes) this.attributes = JSON.parse(localStorage.getItem("attributes"))
+		if (localStorage.codes) this.codes = JSON.parse(localStorage.getItem("codes"))
 	},
 	watch: {
-		name(newName) {
-			localStorage.cpName = newName
+		descriptions: {
+			handler(){
+				localStorage.setItem("descriptions", JSON.stringify(this.descriptions))
+			},
+			deep: true
 		},
-		attributes(list) {
-			localStorage.setItem("attributes", JSON.stringify(this.attributes))
+		type() {
+			localStorage.setItem("type", JSON.stringify(this.type))
+		},
+		optionValues: {
+			handler(){
+				localStorage.setItem("optionValues", JSON.stringify(this.optionValues))
+			},
+			deep: true
+		},
+		attributes: {
+			handler(){
+				localStorage.setItem("attributes", JSON.stringify(this.attributes))
+			},
+			deep: true
+		},
+		codes: {
+			handler(){
+				localStorage.setItem("codes", JSON.stringify(this.codes))
+			},
+			depp: true
 		}
 	},
 	computed: {
@@ -187,7 +257,9 @@ export default {
 	},
 	methods: {
 		newValue(list) {
-			list.push({name: '', value: 0})
+			list.push(list === this.attributes ?
+				{name: '', minValue: null, maxValue: null} :
+				{value: null})
 		},
 		removeValue(index, list) {
 			list.splice(index, 1)
@@ -196,6 +268,7 @@ export default {
 			alert("this will work only on edit control point while reusing this component")
 		},
 		submit() {
+			// validate stuff which is required
 			// push stuff to db
 			// check if successful
 			localStorage.clear()
