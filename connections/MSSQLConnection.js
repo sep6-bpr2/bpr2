@@ -22,8 +22,8 @@ const get = (name, config) => {
 }
 
 module.exports.getConnections = async () => {
-    konfairDB = await get("Konfair", "Server=konfdb.database.windows.net,1433;Database=konfair;User Id=Odinaka@konfdb;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
-    localDB = await get("Own", "Server=owndatabase.database.windows.net,1433;Database=Own;User Id=Odinaka@owndatabase;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
+    konfairDB = await get("Konfair", "Server=konfdb.database.windows.net,1433;Database=konfair;User Id=Odinaka@konfdb;Password=dadadada;Encrypt=true;trustServerCertificate=true;")
+    localDB = await get("Own", "Server=owndatabase.database.windows.net,1433;Database=Own;User Id=Odinaka@owndatabase;Password=dadadada;Encrypt=true;trustServerCertificate=true;")
 }
 
 module.exports.konfairDB = () => {
