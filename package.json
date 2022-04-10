@@ -13,6 +13,7 @@
 		"@nuxtjs/vuetify": "^1.12.3",
 		"axios": "^0.26.1",
 		"core-js": "^3.19.3",
+		"cypress": "^9.5.3",
 		"express": "latest",
 		"helmet": "^5.0.2",
 		"mssql": "7.3.0",
