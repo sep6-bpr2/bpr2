@@ -1,5 +1,4 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 require('dotenv').config()
 // const cors = require('cors')
 const helmet = require("helmet");
@@ -19,8 +18,6 @@ function initializeMiddleware(app) {
     app.use(helmet())
     // app.use(cors())
     app.use(express.json())
-	app.use(bodyParser.urlencoded({ extended: false }));
-	app.use(bodyParser.json());
 }
 
 const app = express()

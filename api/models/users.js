@@ -15,7 +15,7 @@ module.exports.addUser = async (user) => {
 
 	const result = await localDB()
 		.request()
-		.query(`select * from SystemUser`)
+		.query(`select * from SystemUser where SystemUser.username= '${user.username}'`)
 
 	return result.recordset
 }

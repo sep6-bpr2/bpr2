@@ -6,24 +6,33 @@
 		 <Translate :text="'Create User'" />
 	 </button>
 
-	 <Transition>
-		 <div v-if="shouldCreateUser" class="create_User_form">
-			 <v-form ref="form">
-				 <v-text-field
-					 v-model="userName"
-					 :counter="10"
-					 :rules="userNameRules"
-					 label="Username"
-					 required
-				 ></v-text-field>
+	 <div style="display: flex; min-height: 248px">
+		 <CustomTable
+			 :allowedHeaders="allowedHeaders"
+			 :rows="userList"
+			 :tableHeaders="headers"
+		 />
+		 <Transition>
+			 <div v-if="shouldCreateUser" class="create_User_form ml-5">
+				 <v-form ref="form">
 
-				 <v-select
-					 v-model="roleValue"
-					 :items="roles"
-					 :rules="[v => !!v || 'Item is required']"
-					 label="Role"
-					 required>
-				 </v-select>
+					 <h4>New User</h4>
+
+					 <v-text-field
+						 v-model="userName"
+						 :counter="10"
+						 :rules="userNameRules"
+						 label="Username"
+						 required
+					 ></v-text-field>
+
+					 <v-select
+						 v-model="roleValue"
+						 :items="roles"
+						 :rules="[v => !!v || 'Item is required']"
+						 label="Role"
+						 required>
+					 </v-select>
 
 					 <v-btn
 						 color="#333"
@@ -32,21 +41,17 @@
 						 Submit
 					 </v-btn>
 
-				 <v-btn
-					 color="#333"
-					 @click="cancelCreateUser"
-				 >
-					 Cancel
-				 </v-btn>
-			 </v-form>
-		 </div>
-	 </Transition>
+					 <v-btn
+						 color="#333"
+						 @click="cancelCreateUser"
+					 >
+						 Cancel
+					 </v-btn>
+				 </v-form>
+			 </div>
+		 </Transition>
+	 </div>
 
-	 <CustomTable
-		 :allowedHeaders="allowedHeaders"
-		 :rows="userList"
-		 :tableHeaders="headers"
-	 />
  </div>
 </template>
 
@@ -137,11 +142,11 @@ export default {
 }
 .create_User_form{
 	transition: ease-in;
-	max-width: 400px;
+	width: 400px;
+	height: 242px;
 	border: 1px solid #ddd;
 	border-radius: 5px;
 	padding: 10px;
-	margin-bottom: 15px;
 }
 
 .v-leave-active,

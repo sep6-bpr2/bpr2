@@ -10,6 +10,9 @@ export const mutations = {
 	setUsers(state, userList) {
 		state.userList = userList
 	},
+	setNewUser(state, userList) {
+		state.userList.push(...userList)
+	},
 }
 
 export const actions = {
@@ -17,7 +20,7 @@ export const actions = {
 		const user = rootState.login.user;
 		if (user) {
 			const language = rootState.login.chosenLanguage.flag;
-			fetch(`api/users/allUsers/${language}`).then(res => res.json()).then(result => {
+			fetch(`api/users`).then(res => res.json()).then(result => {
 				commit('setUsers', result)
 			})
 		}
@@ -32,8 +35,8 @@ export const actions = {
 			},
 		}
 		if (user) {
-			await fetch(`api/users/addUser`, fetchData).then(res=> res.json()).then(result => {
-				commit('setUsers', result)
+			await fetch(`api/users`, fetchData).then(res=> res.json()).then(result => {
+				commit('setNewUser', result)
 			})
 		}
 	},
