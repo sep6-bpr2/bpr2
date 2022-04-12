@@ -8,6 +8,7 @@ const mssql = require('../connections/MSSQLConnection')
 // Routes that contain the endpoints
 function initializeRoutes(app) {
     app.use("/login", require("./routes/login"))
+	app.use("/users", require("./routes/users"))
     app.use("/controlPoints", require("./routes/controlPoints"))
 
 }
