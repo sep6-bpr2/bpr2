@@ -1,4 +1,4 @@
-import { mssql, konfairDB, localDB } from '../../connections/MSSQLConnection'
+const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getUserByUsername = async (username) => {
     const result = await localDB()
