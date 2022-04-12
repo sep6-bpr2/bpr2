@@ -20,4 +20,10 @@ router.get("/:username",
     }
 )
 
+router.post("/", async (req, res) => {
+    const result = await service.addUser(req.body)
+
+    res.send(result)
+})
+
 module.exports = router
