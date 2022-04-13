@@ -10,7 +10,7 @@ function initializeRoutes(app) {
     app.use("/login", require("./routes/login"))
 	app.use("/users", require("./routes/users"))
     app.use("/controlPoints", require("./routes/controlPoints"))
-
+	app.use("/createControlPoint", require("./routes/createControlPoint"))
 }
 
 // Functions that are called before the actual endpoint is reached
