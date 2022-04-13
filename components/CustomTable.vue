@@ -45,15 +45,18 @@ export default {
 			let filtered = this.rows;
 			const allowedHeaders = this.allowedHeaders;
 
-			for (let i = 0; i < filtered.length; i++) {
-				for (const [key, value] of Object.entries(filtered[i])) {
-					if (!allowedHeaders.includes(key)) {
-						delete filtered[i][key];
+			if (filtered) {
+				for (let i = 0; i < filtered.length; i++) {
+					for (const [key, value] of Object.entries(filtered[i])) {
+						if (!allowedHeaders.includes(key)) {
+							delete filtered[i][key];
+						}
 					}
 				}
+				return filtered;
+			} else {
+				return [];
 			}
-
-			return filtered;
 		},
 	},
 	methods: {
