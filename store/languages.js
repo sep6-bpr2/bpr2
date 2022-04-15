@@ -114,6 +114,12 @@ const translations = {
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
+	// Image card
+	"Image": {
+		"gb": "Image",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
 
 	// Check frequency card
 	"Check frequency": {

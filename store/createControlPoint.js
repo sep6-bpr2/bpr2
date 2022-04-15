@@ -1,15 +1,11 @@
-const defaultState = () => ({
-		allTypes: [],
-		attributesNames: [],
-	}
-)
+export const state = {
+	allTypes: [],
+	attributesNames: [],
 
-export const state = defaultState()
+	
+}
 
 export const mutations = {
-	resetState(state){
-		Object.assign(state, defaultState())
-	},
 
 	setAllTypes(state, types){
 		state.allTypes = types

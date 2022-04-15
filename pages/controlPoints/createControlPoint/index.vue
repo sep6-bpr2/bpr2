@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-form
-		ref="controlPointForm"
+			ref="controlPointForm"
 		>
 			<div class="column">
 				<v-card class="card1">
@@ -182,6 +182,32 @@
 			</div>
 
 			<div class="column">
+				<v-card>
+					<h3>
+						<Translate :text="'Image'"/>
+					</h3>
+					<img
+						v-if="previewImage===null"
+						class="image innerElement"
+						src="~/assets/no_image.png"
+					/>
+					<v-img
+						v-else
+						class="image innerElement"
+						v-bind:src="this.previewImage"
+					/>
+					<v-file-input
+						id="file-input"
+						chips
+						accept="image/*"
+						label="Image file"
+						v-model="currentImage"
+					></v-file-input>
+					<div>{{ previewImage }}</div>
+					<div>{{currentImage}}</div>
+					<div>{{}}</div>
+				</v-card>
+
 				<v-card class="card2">
 					<h3>
 						<Translate :text="'Check frequency'"/>
@@ -220,6 +246,10 @@ export default {
 			attributes: [],//{id: '', minValue: 0, maxValue: 0}
 			codes: [{value: null}],
 
+			currentImage: null,
+			previewImage: null,
+			progress: 0,
+
 			rules: {
 				input: [val => (val || '').length > 0 || 'This field is required'],
 				number: [val => val !== '' || 'This field is required']
@@ -231,7 +261,6 @@ export default {
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
 	},
 	mounted() {
-
 		if (localStorage.descriptions) this.descriptions = JSON.parse(localStorage.getItem("descriptions"))
 		if (localStorage.type) this.type = JSON.parse(localStorage.getItem("type"))
 		if (localStorage.value) this.value = JSON.parse(localStorage.getItem("value"))
@@ -269,7 +298,10 @@ export default {
 				localStorage.setItem("codes", JSON.stringify(this.codes))
 			},
 			depp: true
-		}
+		},
+		currentImage(image) {
+			this.uploadImage(image)
+		},
 	},
 	computed: {
 		allTypes() {
@@ -280,6 +312,13 @@ export default {
 		}
 	},
 	methods: {
+		uploadImage(image) {
+			if(image){
+				this.previewImage = URL.createObjectURL(image);
+			}else {
+				this.previewImage = null
+			}
+		},
 		newValue(list) {
 			list.push(list === this.attributes ?
 				{id: '', minValue: null, maxValue: null} :
@@ -296,8 +335,8 @@ export default {
 		},
 		deleteControlPoint() {
 			alert("this will work only on edit control point while reusing this component")
-			localStorage.clear()
-			window.location.reload()
+			// localStorage.clear()
+			// window.location.reload()
 		},
 		submit() {
 			if (this.$refs.controlPointForm.validate() === true) {
@@ -355,6 +394,10 @@ p {
 	flex-direction: row;
 	align-items: baseline;
 	margin: 5pt;
+}
+.image {
+	max-width: 300pt;
+	max-height: 300pt;
 }
 
 .buttons {

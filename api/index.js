@@ -3,6 +3,7 @@ require('dotenv').config()
 // const cors = require('cors')
 const helmet = require("helmet");
 const mssql = require('../connections/MSSQLConnection')
+const fs = require('fs')
 
 
 // Routes that contain the endpoints

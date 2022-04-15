@@ -46,7 +46,7 @@ export default {
 			this.$router.push("/controlPoints/" + row.id);
 		},
 		handleCreate() {
-			this.$router.push("/controlPoints/manage/createControlPoint");
+			this.$router.push("/controlPoints/createControlPoint");
 		},
 	},
 };
