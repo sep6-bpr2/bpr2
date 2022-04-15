@@ -43,7 +43,7 @@
 						v-on:click="hanldeLogin"
 						:color="cols.KonfairPrimary"
 						style="float: right"
-					><Translate :text="'Login'"
+						><Translate :text="'Login'"
 					/></v-btn>
 				</v-card-actions>
 			</v-card>
@@ -69,13 +69,9 @@ export default {
 		return {
 			cols: colors,
 			username: "",
-			canLogIn:false,
-			usernameRules: [
-				v => !!v || 'Name is required',
-			],
-			locationRules: [
-				v => !!v || 'location is required',
-			],
+			canLogIn: false,
+			usernameRules: [(v) => !!v || "Name is required"],
+			locationRules: [(v) => !!v || "location is required"],
 		};
 	},
 	computed: {
@@ -93,11 +89,12 @@ export default {
 	},
 	methods: {
 		hanldeLogin() {
-			if(this.$refs.form.validate() == true)
-			{
+			if (this.$refs.form.validate() == true) {
 				if (this.username != "") {
 					return this.$store
-						.dispatch("login/loginUser", { username: this.username })
+						.dispatch("login/loginUser", {
+							username: this.username,
+						})
 						.then((result) => {
 							if (result) {
 								this.$router.push("/controlPoints");

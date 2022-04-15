@@ -22,7 +22,7 @@ export const mutations = {
 export const actions = {
     loginUser({ commit, dispatch }, { username }) {
         return new Promise((resolve, reject) => {
-            fetch(`api/login/${username}`).then(res => res.json()).then(result => {
+            fetch(`api/users/${username}`).then(res => res.json()).then(result => {
                 if (result != null && result.length != 0) {
                     commit('setUser', result)
                     dispatch('nav/loadLinks', {}, { root: true })

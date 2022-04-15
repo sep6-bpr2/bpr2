@@ -1,19 +1,29 @@
 const { Router } = require('express')
 const router = Router()
-import { getAllUsers,addUser,checkUserExist } from "../models/users"
+const { param, body } = require('express-validator')
+const { validate } = require("../middleware/validateMiddleware")
+const service = require("../services/users")
 
-// TEST- http://localhost:3000/api/users
-router.get("", async (req, res) => {
 
-	const result = await getAllUsers()
-	res.send(result)
+/**
+ * @description - Pass username and get back the user if he exists
+ * @param username - integer, id for which to get comments for.
+ *
+ * @example - GET {BaseURL}/api/users/rokas
+ */
+router.get("/:username",
+    param("username").isLength({ min: 1, max: 35 }),
+    validate,
+    async (req, res) => {
+        const data = await service.login(req.params.username)
+        res.send(data)
+    }
+)
+
+router.post("/", async (req, res) => {
+    const result = await service.addUser(req.body)
+
+    res.send(result)
 })
-
-router.post("", async (req,res)=>{
-	const result = await addUser(req.body)
-
-	res.send(result)
-})
-
 
 module.exports = router
