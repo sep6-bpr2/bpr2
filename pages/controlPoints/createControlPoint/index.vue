@@ -9,7 +9,8 @@
 						<Translate :text="'Main information'"/>
 					</h3>
 					<div
-						v-for="description in descriptions"
+						v-for="(description, index) in descriptions"
+
 					>
 						<div class="innerElement row">
 							<p>
@@ -17,7 +18,8 @@
 								<Translate :text="'Description'"/>
 							</p>
 							<v-text-field
-								v-model="description.value"
+								:value="description.value"
+								v-on:input="descriptionChange($event, index)"
 							/>
 						</div>
 					</div>
@@ -45,12 +47,13 @@
 								{{ index + 1 }}
 							</p>
 							<v-text-field
-								v-model="option.value"
 								class="shrink"
 								:rules="rules.input"
+								:value="option.value"
+								v-on:input="optionValueChange($event, index)"
 							/>
 							<v-btn
-								v-on:click="removeValue(index, optionValues)"
+								v-on:click="removeOptionValue(index)"
 							>
 								<v-icon>
 									mdi-delete
@@ -58,7 +61,7 @@
 							</v-btn>
 						</div>
 						<v-btn
-							v-on:click="newValue(optionValues)"
+							v-on:click="newValue('optionValue')"
 						>
 							<v-icon>
 								mdi-pencil-plus-outline
@@ -104,25 +107,28 @@
 									:items="attributesChoice"
 									:item-text="item=>item.name"
 									:item-value="item=>item.id"
-									v-model="attribute.id"
-									:rules="rules.number"
+									:value="attribute.id"
+									v-on:input="attributeChange($event, index, 'Id')"
+									class="manualValidation"
 								/>
 								<p>
 									<Translate :text="'Min value'"/>
 								</p>
 								<v-text-field
-									v-model="attribute.minValue"
 									class="shrink"
+									:value="attribute.minValue"
+									v-on:input="attributeChange($event, index, 'MinValue')"
 								/>
 								<p>
 									<Translate :text="'Max value'"/>
 								</p>
 								<v-text-field
-									v-model="attribute.maxValue"
 									class="shrink"
+									:value="attribute.maxValue"
+									v-on:input="attributeChange($event, index, 'MaxValue')"
 								/>
 								<v-btn
-									v-on:click="removeValue(index, attributes)"
+									v-on:click="removeAttribute(index)"
 								>
 									<v-icon>
 										mdi-delete
@@ -132,7 +138,7 @@
 						</div>
 
 						<v-btn
-							v-on:click="newValue(attributes)"
+							v-on:click="newValue('attribute')"
 						>
 							<v-icon>
 								mdi-pencil-plus-outline
@@ -155,13 +161,13 @@
 									<Translate :text="'Code'"/>
 								</p>
 								<v-text-field
-									v-model="code.value"
+									:value="code.value"
+									v-on:input="codeChange($event, index)"
 									type="number"
-									class="shrink"
-									:rules="rules.input"
+									class="shrink manualValidation"
 								/>
 								<v-btn
-									v-on:click="removeValue(index, codes)"
+									v-on:click="removeCodes(index)"
 								>
 									<v-icon>
 										mdi-delete
@@ -170,7 +176,7 @@
 							</v-card>
 						</div>
 						<v-btn
-							v-on:click="newValue(codes)"
+							v-on:click="newValue('code')"
 						>
 							<v-icon>
 								mdi-pencil-plus-outline
@@ -204,7 +210,7 @@
 						v-model="currentImage"
 					></v-file-input>
 					<div>{{ previewImage }}</div>
-					<div>{{currentImage}}</div>
+					<div>{{ currentImage }}</div>
 					<div>{{}}</div>
 				</v-card>
 
@@ -239,20 +245,12 @@ export default {
 	components: {Translate},
 	data: () => {
 		return {
-			descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-			type: '',
-			value: null, // number or string
-			optionValues: [{value: null}],// {value: '',}
-			attributes: [],//{id: '', minValue: 0, maxValue: 0}
-			codes: [{value: null}],
-
 			currentImage: null,
 			previewImage: null,
-			progress: 0,
+			// progress: 0,
 
 			rules: {
-				input: [val => (val || '').length > 0 || 'This field is required'],
-				number: [val => val !== '' || 'This field is required']
+				input: [val => (val || '').length > 0 || 'This field is required']
 			},
 		}
 	},
@@ -260,45 +258,7 @@ export default {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
 	},
-	mounted() {
-		if (localStorage.descriptions) this.descriptions = JSON.parse(localStorage.getItem("descriptions"))
-		if (localStorage.type) this.type = JSON.parse(localStorage.getItem("type"))
-		if (localStorage.value) this.value = JSON.parse(localStorage.getItem("value"))
-		if (localStorage.optionValues) this.optionValues = JSON.parse(localStorage.getItem("optionValues"))
-		if (localStorage.attributes) this.attributes = JSON.parse(localStorage.getItem("attributes"))
-		if (localStorage.codes) this.codes = JSON.parse(localStorage.getItem("codes"))
-	},
 	watch: {
-		descriptions: {
-			handler() {
-				localStorage.setItem("descriptions", JSON.stringify(this.descriptions))
-			},
-			deep: true
-		},
-		type() {
-			localStorage.setItem("type", JSON.stringify(this.type))
-		},
-		value() {
-			localStorage.setItem("value", JSON.stringify(this.value))
-		},
-		optionValues: {
-			handler() {
-				localStorage.setItem("optionValues", JSON.stringify(this.optionValues))
-			},
-			deep: true
-		},
-		attributes: {
-			handler() {
-				localStorage.setItem("attributes", JSON.stringify(this.attributes))
-			},
-			deep: true
-		},
-		codes: {
-			handler() {
-				localStorage.setItem("codes", JSON.stringify(this.codes))
-			},
-			depp: true
-		},
 		currentImage(image) {
 			this.uploadImage(image)
 		},
@@ -309,48 +269,120 @@ export default {
 		},
 		attributesChoice() {
 			return this.$store.state.createControlPoint.attributesNames
-		}
+		},
+		descriptions() {
+			return this.$store.state.createControlPoint.descriptions
+		},
+		type: {
+			get() {
+				return this.$store.state.createControlPoint.type
+			},
+			set(type) {
+				this.$store.commit('createControlPoint/setType', type)
+			}
+		},
+		value: {
+			get() {
+				return this.$store.state.createControlPoint.value
+			},
+			set(value) {
+				this.$store.commit('createControlPoint/setValue', value)
+			}
+		},
+		optionValues() {
+			return this.$store.state.createControlPoint.optionValues
+		},
+		attributes() {
+			return this.$store.state.createControlPoint.attributes
+		},
+		codes() {
+			return this.$store.state.createControlPoint.codes
+		},
 	},
 	methods: {
+		// set computed property with v-model causes error on complex objects, see: https://vuex.vuejs.org/guide/forms.html
+		descriptionChange(desc, index) {
+			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
+		},
+		optionValueChange(option, index) {
+			this.$store.commit('createControlPoint/setOptionValues', {option: option, index: index})
+		},
+		attributeChange(att, index, prop) {
+			this.$store.commit(`createControlPoint/setAttribute${prop}`, {att: att, index: index})
+		},
+		codeChange(code, index) {
+			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
+		},
+
+
 		uploadImage(image) {
-			if(image){
+			if (image) {
 				this.previewImage = URL.createObjectURL(image);
-			}else {
+			} else {
 				this.previewImage = null
 			}
 		},
 		newValue(list) {
-			list.push(list === this.attributes ?
-				{id: '', minValue: null, maxValue: null} :
-				{value: null})
+			switch (list) {
+				case 'optionValue':
+					this.$store.commit('createControlPoint/addOptionValue')
+					break;
+				case 'attribute':
+					this.$store.commit('createControlPoint/addAttribute')
+					break;
+				case 'code':
+					this.$store.commit('createControlPoint/addCode')
+					break;
+			}
 		},
-		removeValue(index, list) {
-			if (list === this.codes & this.codes.length === 1) {
-				alert("control point must have at least one item category code")
-			} else if (list === this.optionValues & this.optionValues.length === 1) {
+		removeOptionValue(index) {
+			if (this.optionValues.length === 1) {
 				alert("there must be at least one option for the options type")
 			} else {
-				list.splice(index, 1)
+				this.$store.commit('createControlPoint/removeOptionValue', index)
 			}
+		},
+		removeCodes(index) {
+			if (this.codes.length === 1) {
+				alert("control point must have at least one item category code")
+			} else {
+				this.$store.commit('createControlPoint/removeCode', index)
+			}
+		},
+		removeAttribute(index) {
+			this.$store.commit('createControlPoint/removeAttribute', index)
 		},
 		deleteControlPoint() {
 			alert("this will work only on edit control point while reusing this component")
 			// localStorage.clear()
 			// window.location.reload()
 		},
+		// rules works only with v-model. However, v-model can not be used on complex state properties
+		validate() {
+			for (let el of this.$store.state.createControlPoint.attributes) {
+				if (el.id === null || el.id === undefined || el.id === "") {
+					alert("attribute name can not be empty")
+					break;
+				}
+			}
+			for (let el of this.$store.state.createControlPoint.codes) {
+				if (el.value === null || el.value === undefined || el.value === "") {
+					alert("code value can not be empty")
+					break;
+				}
+			}
+		},
 		submit() {
+			this.validate()
 			if (this.$refs.controlPointForm.validate() === true) {
-				this.$store.dispatch(
-					'createControlPoint/submitControlPoint',
-					{
-						descriptions: this.descriptions,
-						type: this.type,
-						value: this.value,
-						optionValues: this.optionValues,
-						attributes: this.attributes,
-						codes: this.codes
-					}
-				)
+				this.$store.dispatch('createControlPoint/submitControlPoint', {
+					descriptions: this.descriptions,
+					type: this.type,
+					value: this.value,
+					optionValues: this.optionValues,
+					attributes: this.attributes,
+					codes: this.codes
+				})
 			}
 		}
 	}
@@ -395,6 +427,7 @@ p {
 	align-items: baseline;
 	margin: 5pt;
 }
+
 .image {
 	max-width: 300pt;
 	max-height: 300pt;

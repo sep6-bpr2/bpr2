@@ -1,39 +1,106 @@
-export const state = {
-	allTypes: [],
-	attributesNames: [],
+const getDefaultState = () => ({
+		allTypes: [],
+		attributesNames: [],
 
-	
-}
+		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+		type: '',
+		value: null, // number or string
+		optionValues: [{value: null}],// {value: '',}
+		attributes: [],//{id: '', minValue: 0, maxValue: 0}
+		codes: [{value: null}],
+	}
+)
+
+export const state = () => getDefaultState()
 
 export const mutations = {
+	resetState(state) {
+		Object.assign(state, getDefaultState())
+	},
 
-	setAllTypes(state, types){
+	setAllTypes(state, types) {
 		state.allTypes = types
 	},
 
-	setAllAttributesNames(state, attributesNames){
+	setAllAttributesNames(state, attributesNames) {
 		state.attributesNames = attributesNames
+	},
+
+	setDescription(state, obj) {
+		state.descriptions[obj.index].value = obj.desc
+	},
+	setType(state, type) {
+		state.type = type
+	},
+	setValue(state, value) {
+		state.value = value
+	},
+
+	setOptionValues(state, obj) {
+		state.optionValues[obj.index].value = obj.option
+	},
+	addOptionValue(state) {
+		state.optionValues.push({value: null})
+	},
+	removeOptionValue(state, index) {
+		state.optionValues.splice(index, 1)
+	},
+
+	setAttributeId(state, obj) {
+		state.attributes[obj.index].id = obj.att
+	},
+	setAttributeMinValue(state, obj) {
+		state.attributes[obj.index].minValue = obj.att
+	},
+	setAttributeMaxValue(state, obj) {
+		state.attributes[obj.index].maxValue = obj.att
+	},
+	addAttribute(state) {
+		state.attributes.push({id: '', minValue: null, maxValue: null})
+	},
+	removeAttribute(state, index) {
+		console.log(index)
+		state.attributes.splice(index, 1)
+	},
+
+	setCodes(state, obj) {
+		state.codes[obj.index].value = obj.code
+	},
+	addCode(state) {
+		state.codes.push({value: null})
+	},
+	removeCode(state, index) {
+		state.codes.splice(index, 1)
 	},
 }
 
 export const actions = {
-	getAllTypes({ commit}) {
-			fetch(`http://localhost:3000/api/createControlPoint/allTypes`)
-				.then(res => res.json())
-				.then(res => {commit('setAllTypes', res)})
+	getAllTypes({commit}) {
+		fetch(`http://localhost:3000/api/createControlPoint/allTypes`)
+			.then(res => res.json())
+			.then(res => {
+				commit('setAllTypes', res)
+			})
 	},
-	getAllAttributesNames({commit}){
+	getAllAttributesNames({commit}) {
 		fetch('http://localhost:3000/api/createControlPoint/allAttributesNames')
 			.then(res => res.json())
-			.then(res => {commit('setAllAttributesNames', res)})
+			.then(res => {
+				commit('setAllAttributesNames', res)
+			})
 	},
-	async submitControlPoint({commit}, controlPoint){
-		await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint',{
+	async submitControlPoint({commit}, cp) {
+		await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
 			method: 'POST',
-			body: JSON.stringify(controlPoint),
+			body: JSON.stringify(cp),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
+		}).then(response => {
+				if (response.ok) {
+					commit('resetState')
+				}
+			}
+		)
 	}
 }
