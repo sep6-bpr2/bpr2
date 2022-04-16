@@ -62,7 +62,6 @@ export const mutations = {
 		state.attributes.push({id: '', minValue: null, maxValue: null})
 	},
 	removeAttribute(state, index) {
-		console.log(index)
 		state.attributes.splice(index, 1)
 	},
 

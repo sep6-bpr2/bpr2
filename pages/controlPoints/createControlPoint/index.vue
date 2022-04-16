@@ -243,20 +243,19 @@
 <script>
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate.js"
+import {alerts} from "../../../mixins/alerts.js";
 
 export default {
 	name: "index",
 	components: {Translate},
-	mixins: [translate],
-	data: () => {
-		return {
+	mixins: [translate, alerts],
+	data: () => ({
 			currentImage: null,
 			previewImage: null,
 
 			successAlert: {show: false, text: ''},
 			warningAlert: {show: false, text: ''},
-		}
-	},
+	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
@@ -359,14 +358,11 @@ export default {
 		},
 		deleteControlPoint() {
 			alert("this will work only on edit control point while reusing this component")
-			// localStorage.clear()
-			// window.location.reload()
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
 			let notEmptyDesc = 0
 			for (const des of this.descriptions) {if(this.validate([{value: des.value}], '')=== true) notEmptyDesc+=1}
-			console.log(notEmptyDesc)
 			if(notEmptyDesc===0) { this.showAlert('warning', this.translateText('control point must have at least one description')); return false}
 
 			if(this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
@@ -391,7 +387,6 @@ export default {
 			return true
 		},
 		submit() {
-			console.log(this.validateAll())
 			if (this.validateAll()) {
 				this.$store.dispatch('createControlPoint/submitControlPoint', {
 					descriptions: this.descriptions,
@@ -404,23 +399,6 @@ export default {
 				this.showAlert('success', this.translateText('control point has been created'))
 			}
 		},
-		showAlert(type, text) {
-			switch (type) {
-				case 'warning':
-					this.warningAlert.show = true
-					this.warningAlert.text = text
-					setTimeout(() => {
-						this.warningAlert.show = false
-					}, 2000);
-					break;
-				case 'success':
-					this.successAlert.show = true
-					this.successAlert.text = text
-					setTimeout(() => {
-						this.successAlert.show = false
-					}, 2000);
-			}
-		}
 	}
 }
 </script>
