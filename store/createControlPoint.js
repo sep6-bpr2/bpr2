@@ -15,7 +15,10 @@ export const state = () => getDefaultState()
 
 export const mutations = {
 	resetState(state) {
+		let keep = [state.allTypes, state.attributesNames]
 		Object.assign(state, getDefaultState())
+		state.allTypes = keep[0]
+		state.attributesNames = keep[1]
 	},
 
 	setAllTypes(state, types) {

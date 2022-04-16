@@ -170,6 +170,52 @@ const translations = {
 		"gb": "new code",
 		"lt": "bla bla",
 		"dk": "bla bla"
+	},
+	// alerts
+	"there must be at least one option for the options type": {
+		"gb": "there must be at least one option for the options type",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},"control point must have at least one item category code": {
+		"gb": "control point must have at least one item category code",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	"control point must have at least one description": {
+		"gb": "control point must have at least one DESCRIPTION",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},"value can not be empty": {
+		"gb": "VALUE can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"type can not be empty": {
+		"gb": "TYPE can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"option can not be empty": {
+		"gb": "OPTION can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"attribute name can not be empty": {
+		"gb": "ATTRIBUTE NAME can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"code can not be empty": {
+		"gb": "CODE can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	"control point has been created": {
+		"gb": "control point has been created",
+		"lt": "bla bla",
+		"dk": "bla bla"
 	}
 
 	// ---------------------

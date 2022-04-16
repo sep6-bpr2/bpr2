@@ -4,7 +4,7 @@
 			ref="controlPointForm"
 		>
 			<div class="column">
-				<v-card class="card1">
+				<v-card class="card1" elevation="24">
 					<h3>
 						<Translate :text="'Main information'"/>
 					</h3>
@@ -23,7 +23,12 @@
 							/>
 						</div>
 					</div>
+				</v-card>
 
+				<v-card elevation="24">
+					<h3>
+						<Translate :text="'Value'"/>
+					</h3>
 					<div class="innerElement row">
 						<p>
 							<Translate :text="'Type'"/>
@@ -31,34 +36,32 @@
 						<v-select
 							:items="allTypes"
 							v-model="type"
-							class="shrink"
-							:rules="rules.input"
 						/>
 					</div>
 
 					<div
 						v-if="type==='options'"
 					>
-						<div class="innerElement row"
-							 v-for="(option, index) in optionValues"
+						<div
+							v-for="(option, index) in optionValues"
 						>
-							<p>
-								<Translate :text="'Option'"/>
-								{{ index + 1 }}
-							</p>
-							<v-text-field
-								class="shrink"
-								:rules="rules.input"
-								:value="option.value"
-								v-on:input="optionValueChange($event, index)"
-							/>
-							<v-btn
-								v-on:click="removeOptionValue(index)"
-							>
-								<v-icon>
-									mdi-delete
-								</v-icon>
-							</v-btn>
+							<v-card class="valueEntry" elevation="24">
+								<p>
+									<Translate :text="'Option'"/>
+									{{ index + 1 }}
+								</p>
+								<v-text-field
+									:value="option.value"
+									v-on:input="optionValueChange($event, index)"
+								/>
+								<v-btn
+									v-on:click="removeOptionValue(index)"
+								>
+									<v-icon>
+										mdi-delete
+									</v-icon>
+								</v-btn>
+							</v-card>
 						</div>
 						<v-btn
 							v-on:click="newValue('optionValue')"
@@ -80,13 +83,11 @@
 						</p>
 						<v-text-field
 							v-model="value"
-							class="shrink"
-							:rules="rules.input"
 						/>
 					</div>
 				</v-card>
 
-				<v-card class="card3">
+				<v-card class="card3" elevation="24">
 					<h3>
 						<Translate :text="'Relationship with category items and attributes'"/>
 					</h3>
@@ -97,9 +98,7 @@
 						<div class="attributes"
 							 v-for="(attribute, index) in attributes"
 						>
-							<v-card class="valueEntry"
-
-							>
+							<v-card class="valueEntry" elevation="24">
 								<p>
 									<Translate :text="'Name'"/>
 								</p>
@@ -114,10 +113,9 @@
 								<p>
 									<Translate :text="'Min value'"/>
 								</p>
-								<v-text-field
-									class="shrink"
-									:value="attribute.minValue"
-									v-on:input="attributeChange($event, index, 'MinValue')"
+								<v-text-field required
+											  :value="attribute.minValue"
+											  v-on:input="attributeChange($event, index, 'MinValue')"
 								/>
 								<p>
 									<Translate :text="'Max value'"/>
@@ -143,9 +141,7 @@
 							<v-icon>
 								mdi-pencil-plus-outline
 							</v-icon>
-							<p>
-								<Translate :text="'new attribute'"/>
-							</p>
+							<Translate :text="'new attribute'"/>
 						</v-btn>
 					</div>
 
@@ -156,7 +152,7 @@
 						<div
 							v-for="(code, index) in codes"
 						>
-							<v-card class="valueEntry">
+							<v-card class="valueEntry" elevation="24">
 								<p>
 									<Translate :text="'Code'"/>
 								</p>
@@ -164,7 +160,7 @@
 									:value="code.value"
 									v-on:input="codeChange($event, index)"
 									type="number"
-									class="shrink manualValidation"
+									class="manualValidation"
 								/>
 								<v-btn
 									v-on:click="removeCodes(index)"
@@ -188,7 +184,7 @@
 			</div>
 
 			<div class="column">
-				<v-card>
+				<v-card elevation="24">
 					<h3>
 						<Translate :text="'Image'"/>
 					</h3>
@@ -209,19 +205,16 @@
 						label="Image file"
 						v-model="currentImage"
 					></v-file-input>
-					<div>{{ previewImage }}</div>
-					<div>{{ currentImage }}</div>
-					<div>{{}}</div>
 				</v-card>
 
-				<v-card class="card2">
+				<v-card class="card2" elevation="24">
 					<h3>
 						<Translate :text="'Check frequency'"/>
 					</h3>
 				</v-card>
 			</div>
 
-			<div class="buttons">
+			<div class="bottomButtons">
 				<v-btn
 					v-on:click="deleteControlPoint"
 				>
@@ -233,25 +226,35 @@
 					<Translate :text="'Submit'"/>
 				</v-btn>
 			</div>
+
 		</v-form>
+		<div class="alert">
+			<v-alert type="success" v-if="successAlert.show">
+				{{ successAlert.text }}
+			</v-alert>
+
+			<v-alert type="warning" v-if="warningAlert.show">
+				{{ warningAlert.text }}
+			</v-alert>
+		</div>
 	</div>
 </template>
 
 <script>
 import Translate from "../../../components/Translate";
+import {translate} from "../../../mixins/translate.js"
 
 export default {
 	name: "index",
 	components: {Translate},
+	mixins: [translate],
 	data: () => {
 		return {
 			currentImage: null,
 			previewImage: null,
-			// progress: 0,
 
-			rules: {
-				input: [val => (val || '').length > 0 || 'This field is required']
-			},
+			successAlert: {show: false, text: ''},
+			warningAlert: {show: false, text: ''},
 		}
 	},
 	created() {
@@ -337,17 +340,19 @@ export default {
 		},
 		removeOptionValue(index) {
 			if (this.optionValues.length === 1) {
-				alert("there must be at least one option for the options type")
+				this.showAlert('warning', this.translateText('there must be at least one option for the options type'))
+
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)
 			}
 		},
 		removeCodes(index) {
 			if (this.codes.length === 1) {
-				alert("control point must have at least one item category code")
+				this.showAlert('warning', this.translateText('control point must have at least one item category code'))
 			} else {
 				this.$store.commit('createControlPoint/removeCode', index)
 			}
+
 		},
 		removeAttribute(index) {
 			this.$store.commit('createControlPoint/removeAttribute', index)
@@ -358,23 +363,36 @@ export default {
 			// window.location.reload()
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
-		validate() {
-			for (let el of this.$store.state.createControlPoint.attributes) {
-				if (el.id === null || el.id === undefined || el.id === "") {
-					alert("attribute name can not be empty")
-					break;
+		validateAll() {
+			let notEmptyDesc = 0
+			for (const des of this.descriptions) {if(this.validate([{value: des.value}], '')=== true) notEmptyDesc+=1}
+			console.log(notEmptyDesc)
+			if(notEmptyDesc===0) { this.showAlert('warning', this.translateText('control point must have at least one description')); return false}
+
+			if(this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
+			if (this.type === 'options') {
+				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
+			} else {
+				if(this.validate([{value: this.value}], this.translateText('value can not be empty')) === false) return false
+			}
+
+			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
+			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
+			return true
+		},
+		validate(list, warningMessage) {
+			for (let el of list) {
+				let firstObjProp = el[Object.keys(el)[0]]
+				if (firstObjProp === null || firstObjProp === undefined || firstObjProp === "") {
+					if(warningMessage!=='') this.showAlert('warning', warningMessage)
+					return false
 				}
 			}
-			for (let el of this.$store.state.createControlPoint.codes) {
-				if (el.value === null || el.value === undefined || el.value === "") {
-					alert("code value can not be empty")
-					break;
-				}
-			}
+			return true
 		},
 		submit() {
-			this.validate()
-			if (this.$refs.controlPointForm.validate() === true) {
+			console.log(this.validateAll())
+			if (this.validateAll()) {
 				this.$store.dispatch('createControlPoint/submitControlPoint', {
 					descriptions: this.descriptions,
 					type: this.type,
@@ -383,6 +401,24 @@ export default {
 					attributes: this.attributes,
 					codes: this.codes
 				})
+				this.showAlert('success', this.translateText('control point has been created'))
+			}
+		},
+		showAlert(type, text) {
+			switch (type) {
+				case 'warning':
+					this.warningAlert.show = true
+					this.warningAlert.text = text
+					setTimeout(() => {
+						this.warningAlert.show = false
+					}, 2000);
+					break;
+				case 'success':
+					this.successAlert.show = true
+					this.successAlert.text = text
+					setTimeout(() => {
+						this.successAlert.show = false
+					}, 2000);
 			}
 		}
 	}
@@ -426,6 +462,7 @@ p {
 	flex-direction: row;
 	align-items: baseline;
 	margin: 5pt;
+	justify-content: space-between;
 }
 
 .image {
@@ -433,11 +470,31 @@ p {
 	max-height: 300pt;
 }
 
-.buttons {
+.bottomButtons {
 	width: 100%;
 	float: left;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
+	margin-bottom: 10pt;
+
+}
+
+button {
+	background-color: #555 !important;
+	color: white !important;
+}
+
+v-input {
+	width: inherit !important;
+}
+
+.alert {
+	position: fixed;
+	top: 90%;
+	width: 60%;
+	right: 20%;
+	left: 20%;
 }
 </style>
+
