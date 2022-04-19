@@ -10,43 +10,30 @@ module.exports.releasedOrderFull = async (id, language) => {
     info = info[0]
 
     // Check if there exists a QA report for this order
-    const qaReport = await model.getReleasedOrderReport(id)
+    let qaReport = await model.getReleasedOrderReport(id)
 
     if (qaReport.length == 0) {
-        // Get all control points in the system 
-
         // Get all the attributes with the values of the order
-
-        // Get all control poins based on the category id and attribute i
         let attibutes = await model.getReleasedOrderAttributes(id)
 
-        // let controlPointsCategory = await model.getByCategory(parseInt(info["Item Category Code"]))
-        // let controlPointsCategory = await model.getByCategory(parseInt(info["Item Category Code"]))
-        /// IMPROVEMENT - get onlu the control points that already have the attribute connection to the attribute or the item category connection
-        let controlPoints = await model.getAllControlPoints()
+        let attributeListStringForm = ""
+        for (let i = 0; i < attibutes.length; i++) {
+            if ((attibutes.length - 1) == i) {
+                attributeListStringForm = attributeListStringForm + attibutes[i].ID.toString()
+            } else {
+                attributeListStringForm = attributeListStringForm + attibutes[i].ID.toString() + ","
+            }
+        }
+
+        let controlPoints = await model.getSpecificControlPoints(attributeListStringForm, parseInt(info["Item Category Code"]))
 
         // Get all the attributes and item categories of these control points 
         for (let i = 0; i < controlPoints.length; i++) {
             controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
-            controlPoints[i].itemCategories = await model.getControlPointCategories(controlPoints[i].id)
         }
 
         let added = []
         for (let i = 0; i < controlPoints.length; i++) {
-            let pass = false
-
-            // All control points should have a item category code
-            for (let j = 0; j < controlPoints[i].itemCategories.length; j++) {
-
-                if (controlPoints[i].itemCategories[j].ItemCategoryCode == parseInt(info["Item Category Code"])) {
-                    pass = true
-                    break;
-                }
-            }
-
-            if (!pass) {
-                continue;
-            }
 
             // If no attributes then it is a general control point for category
             if (controlPoints[i].attributes.length == 0) {
@@ -59,11 +46,9 @@ module.exports.releasedOrderFull = async (id, language) => {
                 for (let k = 0; k < attibutes.length; k++) {
                     // The control point must be linked to at least one attribute
                     if (attibutes[k].ID == controlPoints[i].attributes[j].attributeId) {
-
                         // Control point without a range 
                         if (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) {
                             added.push(controlPoints[i])
-
                             // Break out of both loops using the label
                             break attributes;
                         }
@@ -77,8 +62,6 @@ module.exports.releasedOrderFull = async (id, language) => {
                     }
                 }
             }
-
-
         }
 
         if (added.length != 0) {
@@ -90,21 +73,20 @@ module.exports.releasedOrderFull = async (id, language) => {
                 await model.insertControlPointConnection(added[i].id, report.id)
             }
 
-        }
+            qaReport = await model.getReleasedOrderReport(id)
 
-        console.log("Hello there")
+        } else {
+            return null
+        }
     }
 
+    qaReport = qaReport[0]
 
-
-
-
-
-    // If qa report already exists
-    let controlPoints = await model.getReleasedOrderControlPoints(id)
+    // Once qa report already exists
+    let controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
 
     for (let i = 0; i < controlPoints.length; i++) {
-        let descriptions = await model.getReleasedOrderControlPointsDescriptions(id)
+        let descriptions = await model.getReleasedOrderControlPointsDescriptions(controlPoints[i].id)
 
         let englishIndex = -1;
         for (let j = 0; j < descriptions.length; j++) {
@@ -121,12 +103,13 @@ module.exports.releasedOrderFull = async (id, language) => {
             controlPoints[i].description = descriptions[englishIndex].description
         }
 
-        controlPoints[i].frequency = await model.getReleasedOrderControlPointsFrequencies(id)
-        if (controlPoints[i].type == "option") {
-            controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(id)
+        controlPoints[i].frequency = await model.getReleasedOrderControlPointsFrequencies(controlPoints[i].frequencyId)
+        if (controlPoints[i].type == 0) {
+            controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id)
         }
     }
 
+    info.qaReportId = qaReport.id
     info.controlPoints = controlPoints
     return info
 }

@@ -33,7 +33,7 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT * FROM [QAReportControlPoint] connection
+            SELECT point.id, point.frequencyId, point.image, point.type, point.lowerTolerance, point.upperTolerance FROM [QAReportControlPoint] connection
             INNER JOIN [ControlPoint] point ON connection.[ControlPointId] = point.[id]
             WHERE connection.[QAReportId] = @id
         `)
@@ -45,9 +45,9 @@ module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT * FROM [QAReportControlPoint] connection
-            INNER JOIN [ControlPoint] point ON connection.[ControlPointId] = point.[id]
-            WHERE connection.[QAReportId] = @id
+            SELECT d.id, d.language, d.description from ControlPoint
+            INNER JOIN Description d on ControlPoint.id = d.controlPointId
+            WHERE d.controlPointId = @id
         `)
     return result.recordset
 }
@@ -69,7 +69,7 @@ module.exports.getReleasedOrderControlPointsFrequencies = async (id) => {
         .input("id", mssql.Int, id)
         .query(`
             SELECT * FROM [Frequency]
-            WHERE controlPointId = @id
+            WHERE id = @id
         `)
     return result.recordset
 }
@@ -85,11 +85,15 @@ module.exports.getReleasedOrderReport = async (id) => {
     return result.recordset
 }
 
-module.exports.getAllControlPoints = async () => {
+module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => {
     const result = await localDB()
         .request()
+        .input("categoryCode", mssql.Int, categoryCode)
         .query(`
-            SELECT * FROM [ControlPoint] 
+            SELECT DISTINCT ControlPoint.id FROM [ControlPoint]
+            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.ControlPointId
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.ControlPointId
+            WHERE ACP.attributeId in (${attributeIds}) AND ICCP.ItemCategoryCode = @categoryCode
         `)
     return result.recordset
 }
@@ -135,7 +139,7 @@ module.exports.createQAReport = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            INSERT INTO QAReport values(0, @id)
+            INSERT INTO QAReport (itemId, status) VALUES (@id, 0)
         `)
 
     const result = await localDB()
@@ -154,6 +158,29 @@ module.exports.insertControlPointConnection = async (controlPointId, qaReportId)
         .input("qaReportId", mssql.Int, qaReportId)
         .query(`
             INSERT INTO QAReportControlPoint values(@qaReportId, @controlPointId, null)
+        `)
+    return result.recordset
+}
+
+module.exports.getByCategory = async (categoryCode) => {
+    const result = await localDB()
+        .request()
+        .input("categoryCode", mssql.Int, categoryCode)
+        .query(`
+            SELECT DISTINCT ControlPoint.id FROM [ControlPoint]
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.ControlPointId
+            where ICCP.ItemCategoryCode = @categoryCode
+        `)
+    return result.recordset
+}
+
+module.exports.getByAttribute = async (attributeIds) => {
+    const result = await localDB()
+        .request()
+        .query(`
+            SELECT DISTINCT ControlPoint.id FROM [ControlPoint]
+            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.ControlPointId
+            where ACP.attributeId in (${attributeIds})
         `)
     return result.recordset
 }
