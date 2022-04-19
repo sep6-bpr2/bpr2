@@ -23,7 +23,7 @@ describe("Orders api testing", () => {
 
             sinon.stub(ordersService, "releasedOrders").returns("Test worked")
 
-            const response = await request.get("/orders/released/rokas/denmark")
+            const response = await request.get("/orders/releasedList/minimal/rokas/denmark")
 
             assertEquals(response.text, "Test worked")
         })

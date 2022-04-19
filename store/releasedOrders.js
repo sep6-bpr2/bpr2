@@ -29,7 +29,7 @@ export const actions = {
         const user = rootState.login.user;
         const location = rootState.login.selectedLocation;
         if (user) {
-            fetch(`api/orders/released/${user.username}/${location}`).then(res => res.json()).then(result => {
+            fetch(`api/orders/releasedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
                 commit('setReleasedOrders', result)
                 console.log("Released orders")
 
