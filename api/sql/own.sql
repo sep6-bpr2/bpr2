@@ -94,49 +94,49 @@ create table [dbo].[ItemCategoryFrequency]
     frequencyid int
 )
 
-INSERT INTO [dbo].[Frequency] VALUES (23, 2, 343, 5, 5, 6, 66, 7, 5, 76, 76, 766, 69);
+INSERT INTO [dbo].[Frequency] (to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000) VALUES (23, 2, 343, 5, 5, 6, 66, 7, 5, 76, 76, 766, 69);
 
 
 ----------------
-insert into ControlPoint values (1, null, 3, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, null, null)
 
-insert into ItemCategoryControlPoint values (32110, 1)
-insert into AttributeControlPoint values (3, 1, null, null)
-
-----------------
-insert into ControlPoint values (1, null, 3, null, null)
-
-insert into ItemCategoryControlPoint values (32110, 2)
-insert into AttributeControlPoint values (4, 2, 300, 400)
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 1)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (3, 1, null, null)
 
 ----------------
-insert into ControlPoint values (1, null, 3, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, null, null)
 
-insert into ItemCategoryControlPoint values (32110, 3)
-insert into AttributeControlPoint values (49, 3, 30, 50)
-
-----------------
-insert into ControlPoint values (1, null, 1, null, null)
-
-insert into ItemCategoryControlPoint values (32110, 4)
-insert into AttributeControlPoint values (51, 4, null, null)
-
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 2)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (4, 2, 300, 400)
 
 ----------------
-insert into ControlPoint values (1, null, 0, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, null, null)
 
-insert into ItemCategoryControlPoint values (32110, 5)
-insert into AttributeControlPoint values (70, 5, null, null)
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 3)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (49, 3, 30, 50)
+
+----------------
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 1, null, null)
+
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 4)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (51, 4, null, null)
 
 
 ----------------
-insert into ControlPoint values (1, null, 0, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 0, null, null)
 
-insert into ItemCategoryControlPoint values (32110, 6)
-insert into AttributeControlPoint values (104, 6, null, null)
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 5)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (70, 5, null, null)
+
 
 ----------------
-insert into ControlPoint values (1, null, 0, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 0, null, null)
 
-insert into ItemCategoryControlPoint values (32110, 7)
-insert into AttributeControlPoint values (109, 7, null, null)
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 6)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (104, 6, null, null)
+
+----------------
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 0, null, null)
+
+insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 7)
+insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (109, 7, null, null)

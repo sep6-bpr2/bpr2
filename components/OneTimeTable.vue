@@ -12,15 +12,19 @@
 		</thead>
 		<tbody>
 			<tr
-				v-for="row in filteredRows"
-				:key="Object.values(row)[0].toString()"
+				v-for="(row, index) in filteredRows"
+				:key="Object.keys(row)[0].toString() + index"
 				v-on:click="clickList(row)"
 			>
 				<td
 					v-for="[key, value] in Object.entries(row)"
-					:key="key + value"
+					:key="key + index"
 				>
-					{{ value }}
+					<input
+						v-if="key == 'answer'"
+						v-model="originalRows[index].answer"
+					/>
+					<basic v-else>{{ value }}</basic>
 				</td>
 			</tr>
 		</tbody>
@@ -42,21 +46,31 @@ export default {
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
 	props: ["allowedHeaders", "rows", "tableHeaders", "callback"],
+	data() {
+		return {
+			originalRows: this.rows,
+		};
+	},
 	computed: {
 		filteredRows() {
 			//Filter to only have the wanted headers shown in table
-			let filtered = this.rows;
+
+			let filteredTemp = JSON.parse(JSON.stringify(this.rows));
+
 			const allowedHeaders = this.allowedHeaders;
 
-			if (filtered) {
-				for (let i = 0; i < filtered.length; i++) {
-					for (const [key, value] of Object.entries(filtered[i])) {
+			if (filteredTemp) {
+				for (let i = 0; i < filteredTemp.length; i++) {
+					for (const [key, value] of Object.entries(
+						filteredTemp[i]
+					)) {
 						if (!allowedHeaders.includes(key)) {
-							delete filtered[i][key];
+							delete filteredTemp[i][key];
 						}
 					}
 				}
-				return filtered;
+
+				return filteredTemp;
 			} else {
 				return [];
 			}

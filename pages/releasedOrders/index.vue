@@ -35,7 +35,7 @@ export default {
 	},
 	methods: {
 		releasedOrderClickCallback(row) {
-			this.$router.push("/releasedOrders/" + row.id);
+			this.$router.push("/releasedOrders/" + row.No_);
 		},
 		// handleCreate() {
 		// 	this.$router.push("/controlPoints/manage/createControlPoint");

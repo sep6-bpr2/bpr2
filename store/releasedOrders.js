@@ -1,21 +1,12 @@
-const temp = [
-    {
-        id: 2, description: "sasdasdas daga sdgasfg", frequency: 5, image: "fasdasffqqfasd", tolerance: "dasdas", type: "gasdas"
-    },
-    {
-        id: 3, description: "This  is the description", frequency: 5, image: "fasdasffqqfasd", tolerance: "dasdas", type: "gasdas"
-    }
-]
-
 export const state = () => ({
     tableHeaders: [
         { name: "Item Number", id: 0 },
         { name: "Item Category Code", id: 1 },
         { name: "Quantity", id: 2 },
-        { name: "Deadline", id: 0 },
+        { name: "Deadline", id: 3 },
     ],
     allowedHeaders: ["No_", "Item Category Code", "Quantity", "Due Date"],
-    orders: []
+    orders: [],
 })
 
 export const mutations = {
@@ -36,5 +27,5 @@ export const actions = {
                 console.log(result)
             })
         }
-    }
+    },
 }

@@ -19,7 +19,7 @@ describe("Control points api testing", () => {
 
     describe("get list controlpoints minimal", () => {
         it("get list controlpoints minimal OK", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "admin" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 
             sinon.stub(controlPointsService, "controlPointsMinimal").returns("Test worked")
 
@@ -31,5 +31,5 @@ describe("Control points api testing", () => {
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert")
+    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
 }

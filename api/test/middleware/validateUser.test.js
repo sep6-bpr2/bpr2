@@ -14,7 +14,7 @@ describe("Validate role middleware testing", () => {
 
     describe("Validate admin", () => {
         it("Validate admin OK", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "admin" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 
             let passed = false;
             const req = {
@@ -32,7 +32,7 @@ describe("Validate role middleware testing", () => {
         })
 
         it("Validate admin Error", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "asfasfaf" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "asfasfaf" }])
 
             let passed = false;
             const req = {
@@ -55,7 +55,7 @@ describe("Validate role middleware testing", () => {
 
     describe("Validate qa employee", () => {
         it("Validate qa employee OK", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "qa employee" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
             let passed = false;
             const req = {
@@ -73,7 +73,7 @@ describe("Validate role middleware testing", () => {
         })
 
         it("Validate qa employee Error", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "asfasfaf" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "asfasfaf" }])
 
             let passed = false;
             const req = {
@@ -96,5 +96,5 @@ describe("Validate role middleware testing", () => {
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert")
+    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
 }

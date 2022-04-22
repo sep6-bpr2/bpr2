@@ -19,7 +19,7 @@ describe("Orders api testing", () => {
 
     describe("released orders", () => {
         it("released orders OK", async () => {
-            sinon.stub(userModel, "getUserByUsername").returns({ "role": "qa employee" })
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
             sinon.stub(ordersService, "releasedOrders").returns("Test worked")
 
@@ -28,8 +28,20 @@ describe("Orders api testing", () => {
             assertEquals(response.text, "Test worked")
         })
     })
+
+    describe("released order full", () => {
+        it("released order full OK", async () => {
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
+
+            sinon.stub(ordersService, "releasedOrderFull").returns("Test worked")
+
+            const response = await request.get("/orders/released/full/worker/47827/gb")
+
+            assertEquals(response.text, "Test worked")
+        })
+    })
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert")
+    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
 }
