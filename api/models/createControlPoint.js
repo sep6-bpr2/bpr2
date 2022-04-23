@@ -16,18 +16,19 @@ module.exports.getAllAttributesNames = async () => {
 module.exports.insertControlPoint = async (cp) => {
 	const con = await localDB().request()
 	const nVarchar = mssql.NVarChar(1000)
-
+	console.log(cp.image)
 
 	let sqlString = `
 	BEGIN TRANSACTION
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (1, @type, 0, 999, null);
+    	INSERT INTO ControlPoint VALUES (1, @type, 0, 999, @image);
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
 	console.log(cp.type)
 	con.input('type', nVarchar, cp.type)
+	con.input('image', mssql.NVarChar, cp.image)
 
 	con.input('engDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="English").value)
 	con.input('dkDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="Danish").value)

@@ -391,7 +391,8 @@ export default {
 					value: this.value,
 					optionValues: this.optionValues,
 					attributes: this.attributes,
-					codes: this.codes
+					codes: this.codes,
+					image: this.currentImage
 				})
 				this.showAlert('success', this.translateText('control point has been created'))
 			}

@@ -118,10 +118,44 @@ export const actions = {
 				}
 			})
 		}
-		// reader.readAsDataURL(image)
+		reader.readAsDataURL(image)
+	},
+	async submitControlPoint({commit}, cp) {
+		if(cp.image==null){
+			await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
+				method: 'POST',
+				body: JSON.stringify(cp),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(response => {
+					if (response.ok) {
+						commit('resetState')
+					}
+				}
+			)
+		}else {
+			let reader = new FileReader()
+			reader.onload = async function (e) {
+				cp.image = e.target.result
+				await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
+					method: 'POST',
+					body: JSON.stringify(cp),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}).then(response => {
+						if (response.ok) {
+							commit('resetState')
+						}
+					}
+				)
+			}
+			reader.readAsDataURL(cp.image)
+		}
 	},
 
-	async submitControlPoint({commit}, cp) {
+	async submitCp({commit}, cp) {
 		await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
 			method: 'POST',
 			body: JSON.stringify(cp),
