@@ -1,4 +1,4 @@
-import { mssql, konfairDB, localDB } from '../../connections/MSSQLConnection'
+const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getControlPointsMinimal = async () => {
     const result = await localDB()
