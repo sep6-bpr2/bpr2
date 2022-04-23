@@ -250,20 +250,12 @@ export default {
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
-			currentImage: null,
-			previewImage: null,
-
 			successAlert: {show: false, text: ''},
 			warningAlert: {show: false, text: ''},
 	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-	},
-	watch: {
-		currentImage(image) {
-			this.uploadImage(image)
-		},
 	},
 	computed: {
 		allTypes() {
@@ -300,6 +292,17 @@ export default {
 		codes() {
 			return this.$store.state.createControlPoint.codes
 		},
+		currentImage: {
+			get() {
+				return this.$store.state.createControlPoint.image
+			},
+			set(value) {
+				this.$store.commit('createControlPoint/setImage', value)
+			}
+		},
+		previewImage(){
+			return this.$store.state.createControlPoint.imagePreview
+		}
 	},
 	methods: {
 		// set computed property with v-model causes error on complex objects, see: https://vuex.vuejs.org/guide/forms.html
@@ -316,14 +319,6 @@ export default {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
 		},
 
-
-		uploadImage(image) {
-			if (image) {
-				this.previewImage = URL.createObjectURL(image);
-			} else {
-				this.previewImage = null
-			}
-		},
 		newValue(list) {
 			switch (list) {
 				case 'optionValue':
@@ -357,6 +352,8 @@ export default {
 			this.$store.commit('createControlPoint/removeAttribute', index)
 		},
 		deleteControlPoint() {
+			if(this.currentImage!= null) this.$store.dispatch('createControlPoint/uploadImage', this.currentImage)
+
 			alert("this will work only on edit control point while reusing this component")
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties

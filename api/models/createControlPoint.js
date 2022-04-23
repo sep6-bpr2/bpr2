@@ -17,15 +17,16 @@ module.exports.insertControlPoint = async (cp) => {
 	const con = await localDB().request()
 	const nVarchar = mssql.NVarChar(1000)
 
+
 	let sqlString = `
 	BEGIN TRANSACTION
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (0, 'a', @type, 0, 999);
+    	INSERT INTO ControlPoint VALUES (1, @type, 0, 999, null);
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
-
+	console.log(cp.type)
 	con.input('type', nVarchar, cp.type)
 
 	con.input('engDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="English").value)

@@ -3,11 +3,14 @@ const getDefaultState = () => ({
 		attributesNames: [],
 
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-		type: '',
+		type: 0,
 		value: null, // number or string
 		optionValues: [{value: null}],// {value: '',}
 		attributes: [],//{id: '', minValue: 0, maxValue: 0}
 		codes: [{value: null}],
+
+		image: null,
+		imagePreview: null,
 	}
 )
 
@@ -74,23 +77,50 @@ export const mutations = {
 	removeCode(state, index) {
 		state.codes.splice(index, 1)
 	},
+
+	setImage(state, image) {
+		state.image = image
+		state.imagePreview = image ? URL.createObjectURL(image) : null
+	},
 }
 
 export const actions = {
-	getAllTypes({commit}) {
-		fetch(`http://localhost:3000/api/createControlPoint/allTypes`)
+	async getAllTypes({commit}) {
+		await fetch(`http://localhost:3000/api/createControlPoint/allTypes`)
 			.then(res => res.json())
 			.then(res => {
 				commit('setAllTypes', res)
 			})
 	},
-	getAllAttributesNames({commit}) {
-		fetch('http://localhost:3000/api/createControlPoint/allAttributesNames')
+	async getAllAttributesNames({commit}) {
+		await fetch('http://localhost:3000/api/createControlPoint/allAttributesNames')
 			.then(res => res.json())
 			.then(res => {
 				commit('setAllAttributesNames', res)
 			})
 	},
+
+	async uploadImage({commit}, image){
+		console.log("hello there: "+ image)
+		var reader = new FileReader()
+		reader.onload = async function (e) {
+			var myDataURL = e.target.result
+			console.log(myDataURL)
+			await fetch('http://localhost:3000/api/createControlPoint/uploadImage', {
+				method: 'POST',
+				body: JSON.stringify({url:myDataURL}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(res => {
+				if (res.ok) {
+					console.log('image uploaded')
+				}
+			})
+		}
+		// reader.readAsDataURL(image)
+	},
+
 	async submitControlPoint({commit}, cp) {
 		await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
 			method: 'POST',
