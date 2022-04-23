@@ -352,8 +352,6 @@ export default {
 			this.$store.commit('createControlPoint/removeAttribute', index)
 		},
 		deleteControlPoint() {
-			if(this.currentImage!= null) this.$store.dispatch('createControlPoint/uploadImage', this.currentImage)
-
 			alert("this will work only on edit control point while reusing this component")
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties

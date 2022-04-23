@@ -99,29 +99,8 @@ export const actions = {
 				commit('setAllAttributesNames', res)
 			})
 	},
-
-	async uploadImage({commit}, image){
-		console.log("hello there: "+ image)
-		var reader = new FileReader()
-		reader.onload = async function (e) {
-			var myDataURL = e.target.result
-			console.log(myDataURL)
-			await fetch('http://localhost:3000/api/createControlPoint/uploadImage', {
-				method: 'POST',
-				body: JSON.stringify({url:myDataURL}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(res => {
-				if (res.ok) {
-					console.log('image uploaded')
-				}
-			})
-		}
-		reader.readAsDataURL(image)
-	},
 	async submitControlPoint({commit}, cp) {
-		if(cp.image==null){
+		const request = async (commit, cp)=>{
 			await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
 				method: 'POST',
 				body: JSON.stringify(cp),
@@ -134,39 +113,16 @@ export const actions = {
 					}
 				}
 			)
+		}
+		if(cp.image==null){
+			await request(commit, cp)
 		}else {
 			let reader = new FileReader()
 			reader.onload = async function (e) {
 				cp.image = e.target.result
-				await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
-					method: 'POST',
-					body: JSON.stringify(cp),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}).then(response => {
-						if (response.ok) {
-							commit('resetState')
-						}
-					}
-				)
+				await request(commit, cp)
 			}
 			reader.readAsDataURL(cp.image)
 		}
 	},
-
-	async submitCp({commit}, cp) {
-		await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
-			method: 'POST',
-			body: JSON.stringify(cp),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then(response => {
-				if (response.ok) {
-					commit('resetState')
-				}
-			}
-		)
-	}
 }

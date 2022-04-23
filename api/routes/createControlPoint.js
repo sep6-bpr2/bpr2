@@ -33,28 +33,6 @@ router.get(
 )
 
 router.post(
-	"/uploadImage",
-	async (req, res) => {
-		const result = req.body;
-		console.log("hello "+ JSON.stringify(result))
-
-		res.send(result)
-	}
-)
-function getBinaryFromFile(file) {
-	return new Promise((resolve, reject) => {
-		const reader = fs
-
-		reader.addEventListener("load", () => resolve(reader.result));
-		reader.addEventListener("error", err => reject(err));
-
-		reader.readAsBinaryString(file);
-	});
-}
-
-
-
-router.post(
 	"/submitControlPoint",
 	async (req, res) => {
 		const result = await insertControlPoint(req.body)
