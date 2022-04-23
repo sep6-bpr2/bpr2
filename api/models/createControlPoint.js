@@ -16,7 +16,6 @@ module.exports.getAllAttributesNames = async () => {
 module.exports.insertControlPoint = async (cp) => {
 	const con = await localDB().request()
 	const nVarchar = mssql.NVarChar(1000)
-	console.log(cp.image)
 
 	let sqlString = `
 	BEGIN TRANSACTION
@@ -26,7 +25,7 @@ module.exports.insertControlPoint = async (cp) => {
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
-	console.log(cp.type)
+
 	con.input('type', nVarchar, cp.type)
 	con.input('image', mssql.NVarChar, cp.image)
 
