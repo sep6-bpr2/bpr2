@@ -7,8 +7,8 @@ module.exports.releasedOrders = async (location) => {
 
 module.exports.releasedOrderFull = async (id, language) => {
     // Get general order from the konfair database
-    let info = await model.getReleasedOrderInformation(id)
-    info = info[0]
+    let itemData = await model.getReleasedOrderInformation(id)
+    itemData = itemData[0]
 
     // Check if there exists a QA report for this order
     let qaReport = await model.getReleasedOrderReport(id)
@@ -29,7 +29,7 @@ module.exports.releasedOrderFull = async (id, language) => {
             }
         }
 
-        controlPoints = await model.getSpecificControlPoints(attributeListStringForm, parseInt(info.categoryCode))
+        controlPoints = await model.getSpecificControlPoints(attributeListStringForm, parseInt(itemData.categoryCode))
 
         // Get all the attributes and item categories of these control points 
         for (let i = 0; i < controlPoints.length; i++) {
@@ -129,9 +129,9 @@ module.exports.releasedOrderFull = async (id, language) => {
         }
         controlPoints[i].controlPointType = 1
     }
-    info.attributes = attributes
-    info.qaReportId = qaReport.id
-    info.controlPoints = controlPoints
+    itemData.attributes = attributes
+    itemData.qaReportId = qaReport.id
+    itemData.controlPoints = controlPoints
 
-    return info
+    return itemData
 }

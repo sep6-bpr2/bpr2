@@ -9,12 +9,19 @@
 		<h2>Location: {{ currentOrder.location }}</h2>
 		<h2>Status: {{ currentOrder.status }}</h2>
 
+        
 		<h2>ONE TIME MEASUREMENTS</h2>
 
 		<OneTimeTable
 			:allowedHeaders="oneTimeAllowedHeaders"
 			:rows="currentOrder.oneTimeControlPoints"
 			:tableHeaders="oneTimeHeaders"
+			:imageCallback="showImageModal"
+		/>
+		<ImageModal
+			:image="modalImage"
+			:show="modalShow"
+			:closeCallback="closeImageModal"
 		/>
 	</div>
 </template>
@@ -23,18 +30,22 @@
 import CustomTable from "../../../components/CustomTable.vue";
 import Translate from "../../../components/Translate.vue";
 import OneTimeTable from "../../../components/OneTimeTable.vue";
+import ImageModal from "../../../components/ImageModal.vue";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 		OneTimeTable,
+		ImageModal,
 	},
 	data() {
 		return {
 			currentOrder: JSON.parse(
 				JSON.stringify(this.$store.state.releasedOrder.currentReleased)
 			),
+			modalImage: "",
+			modalShow: false,
 		};
 	},
 	computed: {
@@ -61,6 +72,16 @@ export default {
 				JSON.stringify(this.$store.state.releasedOrder.currentReleased)
 			);
 			console.log("END CLONING");
+		},
+	},
+	methods: {
+		showImageModal(image) {
+			this.modalImage = image;
+			this.modalShow = true;
+		},
+		closeImageModal() {
+			this.modalImage = "";
+			this.modalShow = false;
 		},
 	},
 };

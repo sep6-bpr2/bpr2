@@ -16,15 +16,33 @@
 				:key="Object.keys(row)[0].toString() + index"
 				v-on:click="clickList(row)"
 			>
-				<td
-					v-for="[key, value] in Object.entries(row)"
-					:key="key + index"
-				>
+				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
-						v-if="key == 'answer'"
-						v-model="originalRows[index].answer"
+						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
+						v-model="filteredRows[index][value]"
 					/>
-					<basic v-else>{{ value }}</basic>
+					<select
+						v-else-if="value == 'answer' && originalRows[index].type == 0"
+						name="cars"
+						id="cars"
+					>
+						<option disabled selected value>
+							-- select an option --
+						</option>
+						<option
+							v-for="option in originalRows[index].options"
+							:key="value + index + option.value"
+						>
+							{{ option.value }}
+						</option>
+					</select>
+					<button
+						v-else-if="value == 'image'"
+                        v-on:click="showImageCallback(originalRows[index].image)"
+					>
+						Show guide
+					</button>
+					<basic v-else>{{ filteredRows[index][value] }}</basic>
 				</td>
 			</tr>
 		</tbody>
@@ -45,7 +63,7 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback"],
+	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback"],
 	data() {
 		return {
 			originalRows: this.rows,
@@ -80,6 +98,9 @@ export default {
 		clickList(row) {
 			if (this.callback) this.callback(row);
 		},
+        showImageCallback(image){
+            if (this.imageCallback) this.imageCallback(image);
+        }
 	},
 };
 </script>
@@ -119,9 +140,28 @@ export default {
 .customTable tbody tr:last-of-type {
 	border-bottom: 2px solid #333;
 }
-
+/* 
 .customTable tbody tr:hover {
 	background-color: #ccc;
 	cursor: pointer;
+} */
+
+input {
+    border-bottom: solid black 2px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
+
+button {
+    border: solid #333 2px;
+	border-radius: 5px 5px 5px 5px;
+    padding: 0.2rem;
+    background: #333;
+    color: #ffffff;
+}
+
+select {
+	cursor: pointer;
+}
+
 </style>

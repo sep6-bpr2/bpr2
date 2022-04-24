@@ -102,24 +102,28 @@ insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerToleran
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 1)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (3, 1, null, null)
+insert into [Description] (controlPointId, language, description) values (1,'gb', 'This is a description')
 
 ----------------
-insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, 1, 1)
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 2)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (4, 2, 300, 400)
+insert into [Description] (controlPointId, language, description) values (2,'gb', 'This is a description')
 
 ----------------
-insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, null, null)
+insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 3, 6, 1)
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 3)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (49, 3, 30, 50)
+insert into [Description] (controlPointId, language, description) values (3,'gb', 'This is a description')
 
 ----------------
 insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 1, null, null)
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 4)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (51, 4, null, null)
+insert into [Description] (controlPointId, language, description) values (4,'gb', 'This is a description')
 
 
 ----------------
@@ -127,16 +131,27 @@ insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerToleran
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 5)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (70, 5, null, null)
+insert into [Description] (controlPointId, language, description) values (5,'gb', 'This is a description')
 
+insert into [Option] (controlPointId, value) values (5, 'Yes')
+insert into [Option] (controlPointId, value) values (5, 'No')
 
 ----------------
 insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 0, null, null)
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 6)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (104, 6, null, null)
+insert into [Description] (controlPointId, language, description) values (6,'gb', 'This is a description')
+
+insert into [Option] (controlPointId, value) values (6, 'Yes')
+insert into [Option] (controlPointId, value) values (6, 'No')
 
 ----------------
 insert into ControlPoint (frequencyid, image, type, upperTolerance, lowerTolerance) values (1, null, 0, null, null)
 
 insert into ItemCategoryControlPoint (ItemCategoryCode, ControlPointId) values (32110, 7)
 insert into AttributeControlPoint (attributeId, ControlPointId, minValue, maxValue) values (109, 7, null, null)
+insert into [Description] (controlPointId, language, description) values (7,'gb', 'This is a description')
+
+insert into [Option] (controlPointId, value) values (7, 'Yes')
+insert into [Option] (controlPointId, value) values (7, 'No')

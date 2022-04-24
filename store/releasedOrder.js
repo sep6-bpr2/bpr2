@@ -71,7 +71,9 @@ export const actions = {
 
                     }
 
-                    result.controlPoints[i].image = "http://localhost:3000/favicon.ico"
+                    // result.controlPoints[i].image = "http://localhost:3000/favicon.ico"
+                    result.controlPoints[i].image = "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg"
+                    
                     // One time measurement
                     if (result.controlPoints[i].controlPointType == 1) {
                         result.oneTimeControlPoints.push(result.controlPoints[i])
@@ -79,15 +81,30 @@ export const actions = {
                         result.multipleTimeControlPoints.push(result.controlPoints[i])
                     }
 
-                    result.controlPoints[i].toleranceText = "temp"
+                    result.controlPoints[i].toleranceText = ""
                     if (result.controlPoints[i].upperTolerance != null && result.controlPoints[i].upperTolerance == result.controlPoints[i].lowerTolerance) {
-                        result.controlPoints[i].toleranceText = "+/-" + result.controlPoints[i].upperTolerance
+                        result.controlPoints[i].toleranceText = "+/-" + result.controlPoints[i].upperTolerance + result.controlPoints[i].units
                     } else if (result.controlPoints[i].upperTolerance != null && result.controlPoints[i].upperTolerance != result.controlPoints[i].lowerTolerance) {
-                        result.controlPoints[i].toleranceText = "+" + result.controlPoints[i].upperTolerance + "/-" + result.controlPoints[i].upperTolerance
+                        result.controlPoints[i].toleranceText = "+" + result.controlPoints[i].upperTolerance + "/-" + result.controlPoints[i].lowerTolerance + result.controlPoints[i].units
                     }
-                    result.controlPoints[i].answer = "temp"
-                    result.controlPoints[i].description = "temp"
 
+                    if (result.controlPoints[i].type == 0) {
+                        let allUnits = ""
+
+                        for (let j = 0; j < result.controlPoints[i].options.length; j++) {
+                            if (j == 0) {
+                                allUnits = result.controlPoints[i].options[j].value
+                            } else {
+                                allUnits = allUnits + "/" + result.controlPoints[i].options[j].value
+                            }
+                        }
+
+                        result.controlPoints[i].units = allUnits
+                    } else if (result.controlPoints[i].type == 1) {
+                        result.controlPoints[i].units = "Text"
+                    }
+
+                    result.controlPoints[i].answer = "temp"
                 }
                 // Add expected value to the control points
 

@@ -41,9 +41,9 @@ module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT d.id, d.language, d.description from ControlPoint
-            INNER JOIN Description d on ControlPoint.id = d.controlPointId
-            WHERE d.controlPointId = @id
+            SELECT Description.id, Description.language, Description.description from ControlPoint
+            INNER JOIN Description on ControlPoint.id = Description.controlPointId
+            WHERE ControlPoint.id = @id
         `)
     return result.recordset
 }
