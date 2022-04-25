@@ -24,14 +24,8 @@ const get = (name, config) => {
 module.exports.getConnections = async () => {
     // docker pull mcr.microsoft.com/mssql/server
     // docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=konf123!proj" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU15-ubuntu-20.04
-    // rokasAccountDatabase
-    // konf123!proj
-    // jdbc:sqlserver://127.0.0.1:1433;encrypt=true;trustServerCertificate=true;
-
 
     if (process.env.environment != "testing") {
-        // konfairDB = await get("Konfair", "Server=35.228.93.238,1433;Database=konfair;User Id=rokasAccountDatabase;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
-        // localDB = await get("Own", "Server=35.228.93.238,1433;Database=Own;User Id=rokasAccountDatabase;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
 
         konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
         localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")

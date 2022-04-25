@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const router = Router()
-import {getAllAttributesNames, getAllTypes, insertControlPoint} from "../models/createControlPoint";
+const {getAllAttributesNames, getAllTypes, insertControlPoint} =  require("../models/createControlPoint");
 
 router.get(
 	"/allTypes",
