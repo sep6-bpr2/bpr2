@@ -6,7 +6,7 @@ GO
 CREATE TABLE [dbo].[AttributeControlPoint](
 	[attributeId] [int] NOT NULL,
 	[ControlPointId] [int] NOT NULL,
-    CONSTRAINT [AttributeControlPoint_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [AttributeControlPoint_pkey] PRIMARY KEY CLUSTERED
     (
 	    [attributeId] ASC,
 	    [ControlPointId] ASC
@@ -20,11 +20,24 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ControlPoint](
 	[id] [int] IDENTITY(1,1) NOT NULL,
+	[code] [nvarchar](1000) NOT NULL,
+	[frequencyName] [nvarchar](1000) NULL,
+	[frequencyValue] [nvarchar](1000) NOT NULL,
+    CONSTRAINT [ControlPoint_pkey] PRIMARY KEY CLUSTERED
+    (
+        [id] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[ControlPoint](
+	[id] [int] IDENTITY(1,1) NOT NULL,
 	[frequency] [int] NOT NULL,
 	[image] [nvarchar](1000) NOT NULL,
 	[tolerance] [nvarchar](1000) NULL,
 	[type] [nvarchar](1000) NOT NULL,
-    CONSTRAINT [ControlPoint_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [ControlPoint_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -40,7 +53,7 @@ CREATE TABLE [dbo].[Description](
 	[controlPointId] [int] NOT NULL,
 	[language] [nvarchar](1000) NOT NULL,
 	[description] [nvarchar](1000) NOT NULL,
-    CONSTRAINT [Description_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [Description_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -54,7 +67,7 @@ GO
 CREATE TABLE [dbo].[ItemCategoryControlPoint](
 	[ItemCategoryCode] [int] NOT NULL,
 	[ControlPointId] [int] NOT NULL,
-    CONSTRAINT [ItemCategoryControlPoint_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [ItemCategoryControlPoint_pkey] PRIMARY KEY CLUSTERED
     (
         [ItemCategoryCode] ASC,
         [ControlPointId] ASC
@@ -70,7 +83,7 @@ CREATE TABLE [dbo].[Option](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[value] [nvarchar](1000) NOT NULL,
 	[controlPointId] [int] NOT NULL,
-    CONSTRAINT [Option_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [Option_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -85,7 +98,7 @@ CREATE TABLE [dbo].[Order](
 	[id] [nvarchar](1000) NOT NULL,
 	[articleNo] [nvarchar](1000) NOT NULL,
 	[location] [nvarchar](1000) NOT NULL,
-    CONSTRAINT [Order_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [Order_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -100,7 +113,7 @@ CREATE TABLE [dbo].[QAReport](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[status] [bit] NOT NULL,
 	[itemId] [int] NOT NULL,
-    CONSTRAINT [QAReport_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [QAReport_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -114,7 +127,7 @@ GO
 CREATE TABLE [dbo].[QAReportControlPoint](
 	[QAReportId] [int] NOT NULL,
 	[ControlPointId] [int] NOT NULL,
-    CONSTRAINT [QAReportControlPoint_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [QAReportControlPoint_pkey] PRIMARY KEY CLUSTERED
     (
         [QAReportId] ASC,
         [ControlPointId] ASC
@@ -130,7 +143,7 @@ CREATE TABLE [dbo].[SystemUser](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[username] [nvarchar](1000) NOT NULL,
 	[role] [nvarchar](1000) NOT NULL,
-    CONSTRAINT [SystemUser_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [SystemUser_pkey] PRIMARY KEY CLUSTERED
     (
         [id] ASC
     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -144,7 +157,7 @@ GO
 CREATE TABLE [dbo].[SystemUserQAReport](
 	[userId] [int] NOT NULL,
 	[QAReportId] [int] NOT NULL,
-    CONSTRAINT [SystemUserQAReport_pkey] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [SystemUserQAReport_pkey] PRIMARY KEY CLUSTERED
     (
         [userId] ASC,
         [QAReportId] ASC
@@ -201,5 +214,5 @@ ALTER TABLE [dbo].[SystemUserQAReport] CHECK CONSTRAINT [SystemUserQAReport_user
 GO
 USE [master]
 GO
-ALTER DATABASE [OurDatabase] SET  READ_WRITE 
+ALTER DATABASE [OurDatabase] SET  READ_WRITE
 GO

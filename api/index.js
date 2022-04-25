@@ -10,6 +10,7 @@ function initializeRoutes(app) {
     app.use("/login", require("./routes/login"))
 	app.use("/users", require("./routes/users"))
     app.use("/controlPoints", require("./routes/controlPoints"))
+	app.use("/itemCategory",require("./routes/itemCategory"))
 
 }
 
