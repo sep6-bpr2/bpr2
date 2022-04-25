@@ -73,10 +73,11 @@ export const actions = {
 
                     // result.controlPoints[i].image = "http://localhost:3000/favicon.ico"
                     result.controlPoints[i].image = "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg"
-                    
+
                     // One time measurement
                     if (result.controlPoints[i].controlPointType == 1) {
                         result.oneTimeControlPoints.push(result.controlPoints[i])
+                        result.multipleTimeControlPoints.push(result.controlPoints[i])
                     } else {
                         result.multipleTimeControlPoints.push(result.controlPoints[i])
                     }
@@ -105,7 +106,63 @@ export const actions = {
                     }
 
                     result.controlPoints[i].answer = "temp"
+
+
                 }
+
+                result.multipleTimeControlPoints = JSON.parse(JSON.stringify(result.multipleTimeControlPoints))
+
+                let currentChar = 'a'
+
+                let asnwersMulti = []
+
+                let frequencyCategoryKey = ""
+
+                if (result.quantity <= 25) {
+                    frequencyCategoryKey = "to25"
+                } else if (result.quantity <= 50) {
+                    frequencyCategoryKey = "to50"
+                } else if (result.quantity <= 100) {
+                    frequencyCategoryKey = "to100"
+                } else if (result.quantity <= 200) {
+                    frequencyCategoryKey = "to200"
+                } else if (result.quantity <= 300) {
+                    frequencyCategoryKey = "to300"
+                } else if (result.quantity <= 500) {
+                    frequencyCategoryKey = "to500"
+                } else if (result.quantity <= 700) {
+                    frequencyCategoryKey = "to700"
+                } else if (result.quantity <= 1000) {
+                    frequencyCategoryKey = "to1000"
+                } else if (result.quantity <= 1500) {
+                    frequencyCategoryKey = "to1500"
+                } else if (result.quantity <= 2000) {
+                    frequencyCategoryKey = "to2000"
+                } else if (result.quantity <= 4000) {
+                    frequencyCategoryKey = "to4000"
+                } else if (result.quantity <= 5000) {
+                    frequencyCategoryKey = "to5000"
+                }
+
+                for (let i = 0; i < result.multipleTimeControlPoints.length; i++) {
+                    result.multipleTimeControlPoints[i].letter = currentChar.toUpperCase()
+
+
+                    let arrayOfAnswers = []
+
+                    for (let j = 0; j < result.multipleTimeControlPoints[i].frequency[0][frequencyCategoryKey]; j++) {
+                        arrayOfAnswers.push(
+                            {
+                                id: result.multipleTimeControlPoints[i].id,
+                                answer: "ttemp " + j + " " + i,
+                                type: result.multipleTimeControlPoints[i].type
+                            })
+                    }
+                    asnwersMulti.push(arrayOfAnswers)
+                    currentChar = String.fromCharCode(currentChar.charCodeAt(0) + 1);
+                }
+
+                result.multipleTimeAnswers = asnwersMulti
                 // Add expected value to the control points
 
                 // Add text for units and tolerance 

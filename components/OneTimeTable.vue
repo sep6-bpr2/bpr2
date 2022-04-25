@@ -14,7 +14,6 @@
 			<tr
 				v-for="(row, index) in filteredRows"
 				:key="Object.keys(row)[0].toString() + index"
-				v-on:click="clickList(row)"
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
