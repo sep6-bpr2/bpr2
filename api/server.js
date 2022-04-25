@@ -9,6 +9,7 @@ const mssql = require('./connections/MSSQLConnection')
 function initializeRoutes(app) {
     app.use("/users", require("./routes/users"))
     app.use("/controlPoints", require("./routes/controlPoints"))
+    app.use("/orders", require("./routes/orders"))
 
 }
 

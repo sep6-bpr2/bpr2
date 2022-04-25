@@ -97,7 +97,13 @@ export default {
 						})
 						.then((result) => {
 							if (result) {
-								this.$router.push("/controlPoints");
+								if (
+									this.$store.state.login.user.role == "admin"
+								) {
+									this.$router.push("/controlPoints");
+								} else {
+									this.$router.push("/releasedOrders");
+								}
 							}
 						});
 				}

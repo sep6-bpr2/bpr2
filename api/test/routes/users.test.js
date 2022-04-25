@@ -27,5 +27,5 @@ describe("Users api testing", () => {
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert")
+    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
 }

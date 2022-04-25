@@ -2,7 +2,10 @@
 	<table class="customTable">
 		<thead>
 			<tr>
-				<th v-for="header in tableHeaders" :key="header.id">
+				<th
+					v-for="header in tableHeaders"
+					:key="header.id.toString() + header.name.toString()"
+				>
 					<Translate :text="header.name" />
 				</th>
 			</tr>
@@ -10,7 +13,7 @@
 		<tbody>
 			<tr
 				v-for="row in filteredRows"
-				:key="row.id"
+				:key="Object.values(row)[0].toString()"
 				v-on:click="clickList(row)"
 			>
 				<td
@@ -45,15 +48,18 @@ export default {
 			let filtered = this.rows;
 			const allowedHeaders = this.allowedHeaders;
 
-			for (let i = 0; i < filtered.length; i++) {
-				for (const [key, value] of Object.entries(filtered[i])) {
-					if (!allowedHeaders.includes(key)) {
-						delete filtered[i][key];
+			if (filtered) {
+				for (let i = 0; i < filtered.length; i++) {
+					for (const [key, value] of Object.entries(filtered[i])) {
+						if (!allowedHeaders.includes(key)) {
+							delete filtered[i][key];
+						}
 					}
 				}
+				return filtered;
+			} else {
+				return [];
 			}
-
-			return filtered;
 		},
 	},
 	methods: {

@@ -4,6 +4,7 @@ const defaultLanguage = { name: "English", flag: "gb" }
 export const state = () => ({
     allLanguages: languages,
     chosenLanguage: defaultLanguage,
+    selectedLocation: "Denmark, Give",
     user: null
 })
 
