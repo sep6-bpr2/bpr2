@@ -9,7 +9,7 @@
 					<v-text-field
 						:value=frequencies.to25
 						type="number"
-						v-on:input="updatefreq($event,'to25')"
+						v-on:input="updateFreq($event,'to25')"
 						label="to 25"
 						outlined
 						shaped
@@ -22,7 +22,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to50
-						v-on:input="updatefreq($event,'to50')"
+						v-on:input="updateFreq($event,'to50')"
 						label="to 50"
 						outlined
 						shaped
@@ -34,7 +34,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to100
-						v-on:input="updatefreq($event,'to100')"
+						v-on:input="updateFreq($event,'to100')"
 						label="to 100"
 						outlined
 						shaped
@@ -46,7 +46,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to200
-						v-on:input="updatefreq($event,'to200')"
+						v-on:input="updateFreq($event,'to200')"
 						label="to 200"
 						outlined
 						shaped
@@ -58,7 +58,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to300
-						v-on:input="updatefreq($event,'to300')"
+						v-on:input="updateFreq($event,'to300')"
 						label="to 300"
 						outlined
 						shaped
@@ -70,7 +70,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to500
-						v-on:input="updatefreq($event,'to500')"
+						v-on:input="updateFreq($event,'to500')"
 						label="to 500"
 						outlined
 						shaped
@@ -82,7 +82,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to700
-						v-on:input="updatefreq($event,'to700')"
+						v-on:input="updateFreq($event,'to700')"
 						label="to 700"
 						outlined
 						shaped
@@ -94,7 +94,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to1000
-						v-on:input="updatefreq($event,'to1000')"
+						v-on:input="updateFreq($event,'to1000')"
 						label="to 1000"
 						outlined
 						shaped
@@ -106,7 +106,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to1500
-						v-on:input="updatefreq($event,'to1500')"
+						v-on:input="updateFreq($event,'to1500')"
 						label="to 1500"
 						outlined
 						shaped
@@ -118,7 +118,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to2000
-						v-on:input="updatefreq($event,'to2000')"
+						v-on:input="updateFreq($event,'to2000')"
 						label="to 2000"
 						outlined
 						shaped
@@ -130,7 +130,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to3000
-						v-on:input="updatefreq($event,'to3000')"
+						v-on:input="updateFreq($event,'to3000')"
 						label="to 3000"
 						outlined
 						shaped
@@ -142,7 +142,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to4000
-						v-on:input="updatefreq($event,'to4000')"
+						v-on:input="updateFreq($event,'to4000')"
 						label="to 4000"
 						outlined
 						shaped
@@ -154,7 +154,7 @@
 				>
 					<v-text-field
 						:value=frequencies.to5000
-						v-on:input="updatefreq($event,'to5000')"
+						v-on:input="updateFreq($event,'to5000')"
 						label="to 5000"
 						outlined
 						shaped
@@ -168,7 +168,7 @@
 					cols="12"
 					sm="3"
 				>
-					<v-btn color="#333" v-on:click="submitFrequencies" :disabled="notStartedForm" class="white--text">
+					<v-btn color="#333" v-on:click="submitFrequencies"  class="white--text">
 						Submit
 					</v-btn>
 				</v-col>
@@ -176,7 +176,7 @@
 					cols="12"
 					sm="3"
 				>
-					<v-btn color="#333" v-on:click="resetFrequencies" :disabled="notStartedForm" class="white--text">
+					<v-btn color="#333" v-on:click="resetFrequencies" class="white--text">
 						Reset
 					</v-btn>
 				</v-col>
@@ -215,6 +215,7 @@ export default {
 		formKey:0,
 
 	}),
+	props : ["submitFrequenciesCallback","resetFrequenciesCallback","pushBackCallback"],
 	computed: {
 		frequencies() {
 			return this.$store.state.itemCategory.frequencies[0]
@@ -227,10 +228,20 @@ export default {
 		}
 	},
 	methods:{
-		updatefreq(e,key){
+		updateFreq(e, key){
 			this.localFrequencies[key] = {val: parseInt(e),changed:true}
-			this.notStartedForm = false
+			console.log(this.localFrequencies[key])
 		},
+		submitFrequencies(){
+				if (this.submitFrequenciesCallback) this.submitFrequenciesCallback(this.frequencies, this.localFrequencies);
+		},
+		resetFrequencies(){
+			if (this.resetFrequenciesCallback) this.resetFrequenciesCallback(this.localFrequencies);
+		},
+		pushBack(){
+			if (this.pushBackCallback) this.pushBackCallback();
+		}
+
 	}
 }
 </script>
