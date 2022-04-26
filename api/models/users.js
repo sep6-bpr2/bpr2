@@ -8,6 +8,14 @@ module.exports.getUserByUsername = async (username) => {
     return result.recordset
 }
 
+module.exports.getAllUsers = async () => {
+	const result = await localDB()
+		.request()
+		.query('SELECT * FROM SystemUser')
+
+	return result.recordset
+}
+
 module.exports.addUser = async (user) => {
     await localDB()
         .request()

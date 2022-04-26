@@ -1,4 +1,5 @@
-import { mssql, konfairDB, localDB } from '../../connections/MSSQLConnection'
+const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
+
 module.exports.getAllTypes = async () => {
 	const result = await konfairDB()
 		.request()

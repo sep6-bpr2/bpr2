@@ -86,14 +86,14 @@ export const mutations = {
 
 export const actions = {
 	async getAllTypes({commit}) {
-		await fetch(`http://localhost:3000/api/createControlPoint/allTypes`)
+		await fetch(`http://localhost:3000/api/controlPoints/allTypes`)
 			.then(res => res.json())
 			.then(res => {
 				commit('setAllTypes', res)
 			})
 	},
 	async getAllAttributesNames({commit}) {
-		await fetch('http://localhost:3000/api/createControlPoint/allAttributesNames')
+		await fetch('http://localhost:3000/api/controlPoints/allAttributesNames')
 			.then(res => res.json())
 			.then(res => {
 				commit('setAllAttributesNames', res)
@@ -101,7 +101,7 @@ export const actions = {
 	},
 	async submitControlPoint({commit}, cp) {
 		const request = async (commit, cp)=>{
-			await fetch('http://localhost:3000/api/createControlPoint/submitControlPoint', {
+			await fetch('http://localhost:3000/api/controlPoints/submitControlPoint', {
 				method: 'POST',
 				body: JSON.stringify(cp),
 				headers: {

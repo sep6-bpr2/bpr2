@@ -20,7 +20,7 @@ export const actions = {
 		const user = rootState.login.user;
 		if (user) {
 			const language = rootState.login.chosenLanguage.flag;
-			fetch(`api/users`).then(res => res.json()).then(result => {
+			fetch(`api/users/`).then(res => res.json()).then(result => {
 				commit('setUsers', result)
 			})
 		}

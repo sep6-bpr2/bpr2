@@ -7,3 +7,7 @@ module.exports.login = async (username) => {
 module.exports.addUser = async (body) => {
     return model.addUser(body)
 }
+
+module.exports.getAllUsers = async (body) => {
+	return model.getAllUsers(body)
+}
