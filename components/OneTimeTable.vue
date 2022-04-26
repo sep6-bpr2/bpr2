@@ -19,10 +19,12 @@
 					<input
 						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
 						v-model="originalRows[index].answer"
+                        v-on:input="updateParent(index)"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].type == 0"
 						v-model="originalRows[index].answer"
+                        v-on:change="updateParent(index)"
 					>
 						<option disabled selected value="">
 							-- select an option --
@@ -62,7 +64,7 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback"],
+	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback", "valueUpdateCallback"],
 	data() {
 		return {
 			originalRows: this.rows,
@@ -100,6 +102,11 @@ export default {
         showImageCallback(image){
             if (this.imageCallback) this.imageCallback(image);
         },
+        updateParent(index){
+            if(this.valueUpdateCallback){
+                this.valueUpdateCallback(index, this.originalRows[index].answer)
+            }
+        }
 	},
 };
 </script>
@@ -112,6 +119,7 @@ export default {
 	min-width: 400px;
 	border-radius: 5px 5px 0 0;
 	overflow: hidden;
+    margin: 5px;
 }
 
 .customTable thead tr {

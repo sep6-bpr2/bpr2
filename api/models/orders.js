@@ -5,7 +5,7 @@ module.exports.getReleasedOrders = async (location) => {
         .request()
         .input("location", mssql.NVarChar(40), location)
         .query(`
-            SELECT item.[No_], item.[Item Category Code], pOrder.[Quantity], pOrder.[Due Date] FROM [KonfAir DRIFT$Item] item
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3
         `)

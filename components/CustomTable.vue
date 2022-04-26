@@ -56,6 +56,7 @@ export default {
 						}
 					}
 				}
+                console.log(JSON.stringify(filtered))
 				return filtered;
 			} else {
 				return [];

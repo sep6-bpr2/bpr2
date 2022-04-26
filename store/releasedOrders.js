@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const state = () => ({
     tableHeaders: [
         { name: "Item Number", id: 0 },
@@ -5,7 +7,7 @@ export const state = () => ({
         { name: "Quantity", id: 2 },
         { name: "Deadline", id: 3 },
     ],
-    allowedHeaders: ["No_", "Item Category Code", "Quantity", "Due Date"],
+    allowedHeaders: ["id", "categoryCode", "quantity", "deadline"],
     orders: [],
 })
 
@@ -21,10 +23,12 @@ export const actions = {
         const location = rootState.login.selectedLocation;
         if (user) {
             fetch(`api/orders/releasedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
-                commit('setReleasedOrders', result)
-                console.log("Released orders")
+                for (let i = 0; i < result.length; i++) {
+                    const date = new Date(result[i].deadline);
+                    result[i].deadline = moment(date).format('YYYY-MM-DD');
+                }
 
-                console.log(result)
+                commit('setReleasedOrders', result)
             })
         }
     },

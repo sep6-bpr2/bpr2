@@ -20,17 +20,19 @@
 						<input
 							v-if="cell.type == 3 || cell.type == 1"
 							v-model="originalColumns[index][cellIndex].answer"
+                            v-on:input="updateParent(index, cellIndex)"
 						/>
 						<select
 							v-else-if="cell.type == 0"
                             v-model="originalColumns[index][cellIndex].answer"
+                            v-on:change="updateParent(index, cellIndex)"
 						>
 							<option disabled selected value="">
 								-- select an option --
 							</option>
 							<option
 								v-for="option in getHeaders[index].options"
-								:key="value + index + option.value"
+								:key="index + option.value"
                                 :value="option.value"
 							>
 								{{ option.value }}
@@ -50,7 +52,7 @@ export default {
 	components: {
 		Translate,
 	},
-	props: ["tableHeaders", "columns"],
+	props: ["tableHeaders", "columns", "valueUpdateCallback"],
 	data() {
 		return {
 			originalColumns: this.columns,
@@ -72,6 +74,11 @@ export default {
 			}
 		},
 	},
+    methods: {
+        updateParent(columnIndex, cellIndex){
+            this.valueUpdateCallback(columnIndex, cellIndex, this.originalColumns[columnIndex][cellIndex].answer)
+        }
+    }
 };
 </script>
 
@@ -83,6 +90,7 @@ export default {
 	min-width: 400px;
 	border-radius: 5px 5px 0 0;
 	overflow: hidden;
+    margin: 5px;
 }
 
 .customTable thead tr {

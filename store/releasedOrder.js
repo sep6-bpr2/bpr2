@@ -1,3 +1,5 @@
+import moment from "moment"
+
 const defaultCurrentReleased = {
     "id": "1",
     "description": "1",
@@ -185,6 +187,9 @@ export const actions = {
                 }
 
                 result.multipleTimeAnswers = asnwersMulti
+
+                const date = new Date(result.deadline);
+                result.deadline = moment(date).format('YYYY-MM-DD');
                 // Add expected value to the control points
 
                 // Add text for units and tolerance 

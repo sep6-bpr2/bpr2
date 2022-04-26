@@ -5,41 +5,60 @@
 			:show="modalShow"
 			:closeCallback="closeImageModal"
 		/>
-    
-		<h1>QA FORM {{ $route.params.id }}</h1>
 
-		<h2>Item ID: {{ currentOrder.id }}</h2>
-		<h2>Description: {{ currentOrder.description }}</h2>
-		<h2>Item Category Code: {{ currentOrder.categoryCode }}</h2>
-		<h2>Deadline: {{ currentOrder.deadline }}</h2>
-		<h2>Location: {{ currentOrder.location }}</h2>
-		<h2>Status: {{ currentOrder.status }}</h2>
+		<div class="information">
+			<h2>Information</h2>
+			<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
+			<DataDisplay
+				:name="'Description'"
+				:data="currentOrder.description"
+			/>
+			<DataDisplay
+				:name="'Item category code'"
+				:data="currentOrder.categoryCode"
+			/>
+			<DataDisplay :name="'Deadline'" :data="currentOrder.deadline" />
+			<DataDisplay :name="'Location'" :data="currentOrder.location" />
+			<DataDisplay :name="'Status'" :data="currentOrder.status" />
+			<DataDisplay
+				:name="'Description'"
+				:data="currentOrder.description"
+			/>
+		</div>
 
-		<h2>ONE TIME MEASUREMENTS</h2>
+		<div class="oneTimeMeasurements">
+			<h2>One time measurements</h2>
 
-		<OneTimeTable
-			:allowedHeaders="oneTimeAllowedHeaders"
-			:rows="currentOrder.oneTimeControlPoints"
-			:tableHeaders="oneTimeHeaders"
-			:imageCallback="showImageModal"
-		/>
+			<OneTimeTable
+				:allowedHeaders="oneTimeAllowedHeaders"
+				:rows="currentOrder.oneTimeControlPoints"
+				:tableHeaders="oneTimeHeaders"
+				:imageCallback="showImageModal"
+                :valueUpdateCallback="editOneTimeValue"
+			/>
+		</div>
 
-		<h2>MULTIPLE TIME MEASUREMENTS</h2>
-		<OneTimeTable
-			:allowedHeaders="mAllowedHeaders"
-			:rows="currentOrder.multipleTimeControlPoints"
-			:tableHeaders="mHeaders"
-			:imageCallback="showImageModal"
-		/>
+		<div class="multipleTimeMeasurements">
+			<h2>Multiple time measurements</h2>
 
-		<MultipleTimeTable
-			:tableHeaders="multipleTimeAnswerHeaders"
-			:columns="currentOrder.multipleTimeAnswers"
-		/>
+			<OneTimeTable
+				:allowedHeaders="mAllowedHeaders"
+				:rows="currentOrder.multipleTimeControlPoints"
+				:tableHeaders="mHeaders"
+				:imageCallback="showImageModal"
+			/>
 
-		<button v-on:click="handleSave" >Complete</button>
-		<button v-on:click="handleSave" >Save</button>
+			<MultipleTimeTable
+				:tableHeaders="multipleTimeAnswerHeaders"
+				:columns="currentOrder.multipleTimeAnswers"
+                :valueUpdateCallback="editMultipleTimeValue"
+			/>
+		</div>
 
+		<div>
+			<button v-on:click="handleSave">Complete</button>
+			<button v-on:click="handleSave">Save</button>
+		</div>
 	</div>
 </template>
 
@@ -49,6 +68,7 @@ import Translate from "../../../components/Translate.vue";
 import OneTimeTable from "../../../components/OneTimeTable.vue";
 import ImageModal from "../../../components/ImageModal.vue";
 import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
+import DataDisplay from "../../../components/DataDisplay.vue";
 
 export default {
 	components: {
@@ -57,6 +77,7 @@ export default {
 		OneTimeTable,
 		ImageModal,
 		MultipleTimeTable,
+		DataDisplay,
 	},
 	data() {
 		return {
@@ -113,18 +134,29 @@ export default {
 			this.modalImage = "";
 			this.modalShow = false;
 		},
-
 		handleSave() {
 			console.log(this.currentOrder);
 			console.log(JSON.stringify(this.currentOrder));
 		},
+        editOneTimeValue(index, value){
+            this.currentOrder.oneTimeControlPoints[index].answer = value
+        },
+        editMultipleTimeValue(indexColumn, indexCell, value){
+            this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer = value
+        }
 	},
 };
 </script>
 
 <style scoped>
+.containerInfoOneTime {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+}
 .releasedOrder {
 	margin: 10px;
+	/* display: flex; */
 }
 
 .releasedOrder button {
