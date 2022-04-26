@@ -1,11 +1,11 @@
 <template>
 	<div class="releasedOrder">
-        <ImageModal
+		<ImageModal
 			:image="modalImage"
 			:show="modalShow"
 			:closeCallback="closeImageModal"
 		/>
-
+    
 		<h1>QA FORM {{ $route.params.id }}</h1>
 
 		<h2>Item ID: {{ currentOrder.id }}</h2>
@@ -15,13 +15,6 @@
 		<h2>Location: {{ currentOrder.location }}</h2>
 		<h2>Status: {{ currentOrder.status }}</h2>
 
-
-        
-        <MultipleTimeTable
-			:tableHeaders="multipleTimeHeaders"
-			:columns="currentOrderMultipleTimeColumns"
-		/>
-
 		<h2>ONE TIME MEASUREMENTS</h2>
 
 		<OneTimeTable
@@ -30,6 +23,22 @@
 			:tableHeaders="oneTimeHeaders"
 			:imageCallback="showImageModal"
 		/>
+
+		<h2>MULTIPLE TIME MEASUREMENTS</h2>
+		<OneTimeTable
+			:allowedHeaders="mAllowedHeaders"
+			:rows="currentOrder.multipleTimeControlPoints"
+			:tableHeaders="mHeaders"
+			:imageCallback="showImageModal"
+		/>
+
+		<MultipleTimeTable
+			:tableHeaders="multipleTimeAnswerHeaders"
+			:columns="currentOrder.multipleTimeAnswers"
+		/>
+
+		<button v-on:click="handleSave" >Complete</button>
+		<button v-on:click="handleSave" >Save</button>
 
 	</div>
 </template>
@@ -47,7 +56,7 @@ export default {
 		Translate,
 		OneTimeTable,
 		ImageModal,
-        MultipleTimeTable
+		MultipleTimeTable,
 	},
 	data() {
 		return {
@@ -65,14 +74,21 @@ export default {
 		oneTimeAllowedHeaders() {
 			return this.$store.state.releasedOrder.oneTimeAllowedHeaders;
 		},
-		currentOrderOneTimeAttributes() {
-			return this.$store.state.releasedOrder.oneTimeControlPoints;
+
+		mHeaders() {
+			return this.$store.state.releasedOrder.mTableHeaders;
 		},
-        multipleTimeHeaders() {
-			return this.$store.state.releasedOrder.currentReleased.multipleTimeControlPoints;
+		mAllowedHeaders() {
+			return this.$store.state.releasedOrder.mAllowedHeaders;
 		},
-		currentOrderMultipleTimeColumns() {
-			return this.$store.state.releasedOrder.currentReleased.multipleTimeAnswers;
+
+		multipleTimeAnswerHeaders() {
+			return this.$store.state.releasedOrder.currentReleased
+				.multipleTimeControlPoints;
+		},
+		currentOrderMultipleTimeAnswerColumns() {
+			return this.$store.state.releasedOrder.currentReleased
+				.multipleTimeAnswers;
 		},
 	},
 	mounted() {
@@ -83,11 +99,9 @@ export default {
 	},
 	watch: {
 		"$store.state.releasedOrder.currentReleased": function () {
-			console.log("CLONING");
 			this.currentOrder = JSON.parse(
 				JSON.stringify(this.$store.state.releasedOrder.currentReleased)
 			);
-			console.log("END CLONING");
 		},
 	},
 	methods: {
@@ -99,12 +113,25 @@ export default {
 			this.modalImage = "";
 			this.modalShow = false;
 		},
+
+		handleSave() {
+			console.log(this.currentOrder);
+			console.log(JSON.stringify(this.currentOrder));
+		},
 	},
 };
 </script>
 
-<style>
+<style scoped>
 .releasedOrder {
 	margin: 10px;
+}
+
+.releasedOrder button {
+	border: solid #333 2px;
+	border-radius: 5px 5px 5px 5px;
+	padding: 0.2rem;
+	background: #333;
+	color: #ffffff;
 }
 </style>

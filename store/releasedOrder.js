@@ -18,6 +18,20 @@ const defaultCurrentReleased = {
             answer: "dfsdfsdf"
         }
     ],
+    multipleTimeControlPoints: [
+        {
+            letter: "A",
+            id: 24,
+            frequencyId: null,
+            description: "This is a control point",
+            image: "http://localhost:3000/favicon.ico",
+            units: "mm",
+            upperTolerance: 2,
+            lowerTolerance: 1,
+            type: 3,
+            answer: "dfsdfsdf"
+        }
+    ],
 }
 
 export const state = () => ({
@@ -29,6 +43,14 @@ export const state = () => ({
         { name: "Answer", id: 4 },
     ],
     oneTimeAllowedHeaders: ["description", "image", "units", "toleranceText", "answer"],
+    mTableHeaders: [
+        { name: "Letter", id: 0 },
+        { name: "Description", id: 1 },
+        { name: "Picture", id: 2 },
+        { name: "Units", id: 3 },
+        { name: "Tolerance", id: 4 },
+    ],
+    mAllowedHeaders: ["letter", "description", "image", "units", "toleranceText"],
     currentReleased: defaultCurrentReleased
 })
 
@@ -105,7 +127,7 @@ export const actions = {
                         result.controlPoints[i].units = "Text"
                     }
 
-                    result.controlPoints[i].answer = "temp"
+                    result.controlPoints[i].answer = ""
 
 
                 }
@@ -154,7 +176,7 @@ export const actions = {
                         arrayOfAnswers.push(
                             {
                                 id: result.multipleTimeControlPoints[i].id,
-                                answer: "ttemp " + j + " " + i,
+                                answer: "",
                                 type: result.multipleTimeControlPoints[i].type
                             })
                     }

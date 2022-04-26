@@ -16,22 +16,22 @@
 					v-for="(cell, cellIndex) in column"
 					:key="cellIndex + cell.id"
 				>
-					<div class="">
+					<div class="cell">
 						<input
 							v-if="cell.type == 3 || cell.type == 1"
-							v-model="cell.answer"
+							v-model="originalColumns[index][cellIndex].answer"
 						/>
 						<select
 							v-else-if="cell.type == 0"
-							name="cars"
-							id="cars"
+                            v-model="originalColumns[index][cellIndex].answer"
 						>
-							<option disabled selected value>
+							<option disabled selected value="">
 								-- select an option --
 							</option>
 							<option
 								v-for="option in getHeaders[index].options"
 								:key="value + index + option.value"
+                                :value="option.value"
 							>
 								{{ option.value }}
 							</option>
@@ -59,8 +59,6 @@ export default {
 	computed: {
 		getColumns() {
 			if (this.columns) {
-				console.log(this.columns[0]);
-
 				return this.columns;
 			} else {
 				return [];
@@ -89,30 +87,20 @@ export default {
 
 .customTable thead tr {
 	color: #ffffff;
-	text-align: left;
+	text-align: center;
 }
 
 .customTable th {
 	background-color: #333;
 }
 
-.customTable th {
-	padding-top: 12px;
-	padding-left: 12px;
-	padding-right: 12px;
-
-	/* 15px */
+.customTable thead th,
+.customTable thead td {
+	padding: 12px 15px;
 }
-
-/* .customTable td,
-.customTable td  {
-    padding: 12px 15px;
-} */
-
 .cell {
-    padding: 12px 15px;
+	padding: 12px 15px;
 }
-
 
 .customTable tbody tr {
 	border-bottom: 1px solid #dddddd;
@@ -123,16 +111,11 @@ export default {
 }
 
 .customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+	border-bottom: 4px solid #333;
 }
-/*
-.customTable tbody tr:hover {
-	background-color: #ccc;
-	cursor: pointer;
-} */
 
-/* input {
-	border-bottom: solid black 2px;
+input {
+    border-bottom: 2px solid #333;
 	padding-left: 1rem;
 	padding-right: 1rem;
 }
@@ -147,5 +130,8 @@ button {
 
 select {
 	cursor: pointer;
-} */
+    /* To align the select boxes with the input boxes */
+    border-bottom: 2px solid transparent;
+}
+
 </style>

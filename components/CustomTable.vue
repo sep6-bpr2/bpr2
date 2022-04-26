@@ -103,7 +103,7 @@ export default {
 }
 
 .customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+	border-bottom: 4px solid #333;
 }
 
 .customTable tbody tr:hover {

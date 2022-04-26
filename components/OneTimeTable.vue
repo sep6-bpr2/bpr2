@@ -18,19 +18,19 @@
 				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
 						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
-						v-model="filteredRows[index][value]"
+						v-model="originalRows[index].answer"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].type == 0"
-						name="cars"
-						id="cars"
+						v-model="originalRows[index].answer"
 					>
-						<option disabled selected value>
+						<option disabled selected value="">
 							-- select an option --
 						</option>
 						<option
 							v-for="option in originalRows[index].options"
 							:key="value + index + option.value"
+                            :value="option.value"
 						>
 							{{ option.value }}
 						</option>
@@ -99,7 +99,7 @@ export default {
 		},
         showImageCallback(image){
             if (this.imageCallback) this.imageCallback(image);
-        }
+        },
 	},
 };
 </script>
@@ -137,7 +137,7 @@ export default {
 }
 
 .customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+	border-bottom: 4px solid #333;
 }
 /* 
 .customTable tbody tr:hover {
