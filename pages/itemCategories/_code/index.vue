@@ -22,7 +22,6 @@ export default {
 	components: {Frequency},
 	data: () => ({
 		notStartedForm :true,
-		formKey:0,
 	}),
 	computed: {
 		// frequencies() {
@@ -37,7 +36,6 @@ export default {
 	},
 	methods: {
 		resetFrequencies(localFrequencies) {
-			 this.formKey += 1;
 			for (let key in localFrequencies) {
 				localFrequencies[key].changed = false
 			}
