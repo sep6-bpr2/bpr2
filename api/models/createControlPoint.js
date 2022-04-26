@@ -21,13 +21,14 @@ module.exports.insertControlPoint = async (cp) => {
 	let sqlString = `
 	BEGIN TRANSACTION
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (0, 'a', @type, 0, 999);
+    	INSERT INTO ControlPoint VALUES (1, @type, 0, 999, @image);
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
 
 	con.input('type', nVarchar, cp.type)
+	con.input('image', mssql.NVarChar, cp.image)
 
 	con.input('engDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="English").value)
 	con.input('dkDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="Danish").value)
