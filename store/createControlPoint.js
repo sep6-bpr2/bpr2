@@ -1,14 +1,13 @@
 const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
-
+		frequencies:[],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		type: 0,
 		value: null, // number or string
 		optionValues: [{value: null}],// {value: '',}
 		attributes: [],//{id: '', minValue: 0, maxValue: 0}
 		codes: [{value: null}],
-
 		image: null,
 		imagePreview: null,
 	}
@@ -26,6 +25,10 @@ export const mutations = {
 
 	setAllTypes(state, types) {
 		state.allTypes = types
+	},
+
+	setFrequencies(state, frequencies) {
+		state.frequencies = frequencies
 	},
 
 	setAllAttributesNames(state, attributesNames) {
@@ -90,6 +93,16 @@ export const actions = {
 			.then(res => res.json())
 			.then(res => {
 				commit('setAllTypes', res)
+			})
+	},
+
+	async getFrequencies({commit},cpId) {
+		let controlPointId = cpId.controlPointId
+		console.log(controlPointId)
+		await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${controlPointId}`)
+			.then(res => res.json())
+			.then(res => {
+				commit('setFrequencies', res)
 			})
 	},
 	async getAllAttributesNames({commit}) {

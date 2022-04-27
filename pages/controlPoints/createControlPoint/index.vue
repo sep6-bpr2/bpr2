@@ -211,7 +211,30 @@
 					<h3>
 						<Translate :text="'Check frequency'"/>
 					</h3>
+					<v-btn
+						v-if="!showFreq"
+						v-on:click="showFrequencies()"
+					>
+						<v-icon>
+							mdi-pencil-plus-outline
+						</v-icon>
+						<Translate :text="'add frequency'"/>
+					</v-btn>
+
+					<v-btn
+						v-if="showFreq"
+						v-on:click="showFreq=!showFreq"
+					>
+						<v-icon>
+							mdi-delete
+						</v-icon>
+						<Translate :text="'Delete Frequency'"/>
+					</v-btn>
 				</v-card>
+				<Frequency v-if="showFreq"
+						   ref="frequencyChild"
+						   :frequencies="frequencies"
+				/>
 			</div>
 
 			<div class="bottomButtons">
@@ -235,6 +258,7 @@
 
 			<v-alert type="warning" v-if="warningAlert.show">
 				{{ warningAlert.text }}
+
 			</v-alert>
 		</div>
 	</div>
@@ -250,14 +274,19 @@ export default {
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
-			successAlert: {show: false, text: ''},
-			warningAlert: {show: false, text: ''},
+		successAlert: {show: false, text: ''},
+		warningAlert: {show: false, text: ''},
+		showFreq: false,
+		id:0
 	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
 	},
 	computed: {
+		frequencies() {
+			return this.$store.state.createControlPoint.frequencies[0]
+		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes
 		},
@@ -300,7 +329,7 @@ export default {
 				this.$store.commit('createControlPoint/setImage', value)
 			}
 		},
-		previewImage(){
+		previewImage() {
 			return this.$store.state.createControlPoint.imagePreview
 		}
 	},
@@ -309,6 +338,7 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
+
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {option: option, index: index})
 		},
@@ -318,7 +348,10 @@ export default {
 		codeChange(code, index) {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
 		},
-
+		showFrequencies() {
+			this.showFreq = true
+			this.$store.dispatch('createControlPoint/getFrequencies', {controlPointId: this.id})
+		},
 		newValue(list) {
 			switch (list) {
 				case 'optionValue':
@@ -357,14 +390,19 @@ export default {
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
 			let notEmptyDesc = 0
-			for (const des of this.descriptions) {if(this.validate([{value: des.value}], '')=== true) notEmptyDesc+=1}
-			if(notEmptyDesc===0) { this.showAlert('warning', this.translateText('control point must have at least one description')); return false}
+			for (const des of this.descriptions) {
+				if (this.validate([{value: des.value}], '') === true) notEmptyDesc += 1
+			}
+			if (notEmptyDesc === 0) {
+				this.showAlert('warning', this.translateText('control point must have at least one description'));
+				return false
+			}
 
-			if(this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
+			if (this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else {
-				if(this.validate([{value: this.value}], this.translateText('value can not be empty')) === false) return false
+				if (this.validate([{value: this.value}], this.translateText('value can not be empty')) === false) return false
 			}
 
 			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
@@ -375,26 +413,70 @@ export default {
 			for (let el of list) {
 				let firstObjProp = el[Object.keys(el)[0]]
 				if (firstObjProp === null || firstObjProp === undefined || firstObjProp === "") {
-					if(warningMessage!=='') this.showAlert('warning', warningMessage)
+					if (warningMessage !== '') this.showAlert('warning', warningMessage)
 					return false
 				}
 			}
 			return true
 		},
-		submit() {
-			if (this.validateAll()) {
-				this.$store.dispatch('createControlPoint/submitControlPoint', {
-					descriptions: this.descriptions,
-					type: this.type,
-					value: this.value,
-					optionValues: this.optionValues,
-					attributes: this.attributes,
-					codes: this.codes,
-					image: this.currentImage
-				})
-				this.showAlert('success', this.translateText('control point has been created'))
+
+		submitFrequencies() {
+			if(typeof this.$refs.frequencyChild === 'undefined')
+			{
+				return null
 			}
+			let localFrequencies = this.$refs.frequencyChild.localFrequencies
+			let stateFrequencies = this.frequencies
+			let tempFrequencies = {
+				id: 0,
+				to25: 0,
+				to50: 0,
+				to100: 0,
+				to200: 0,
+				to300: 0,
+				to500: 0,
+				to700: 0,
+				to1000: 0,
+				to1500: 0,
+				to2000: 0,
+				to3000: 0,
+				to4000: 0,
+				to5000: 0
+			}
+			for (let x in localFrequencies) {
+				if (localFrequencies[x].changed == false) {
+					tempFrequencies[x] = stateFrequencies[x]
+				} else {
+					tempFrequencies[x] = localFrequencies[x].val
+				}
+			}
+
+			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
+
+			if (!existsNegVal) {
+				alert("There is an invalid input")
+			} else {
+					return tempFrequencies
+			}
+
 		},
+		submit() {
+				if (this.validateAll()) {
+					this.$store.dispatch('createControlPoint/submitControlPoint', {
+						descriptions: this.descriptions,
+						type: this.type,
+						value: this.value,
+						optionValues: this.optionValues,
+						attributes: this.attributes,
+						codes: this.codes,
+						image: this.currentImage,
+						frequencies: this.submitFrequencies()
+					})
+					this.showAlert('success', this.translateText('control point has been created'))
+				}
+		},
+
+
 	}
 }
 </script>

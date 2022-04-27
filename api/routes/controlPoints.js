@@ -4,7 +4,7 @@ const { param, body } = require('express-validator')
 const { validate } = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
 const service = require("../services/controlPoints")
-const {getAllTypes, getAllAttributesNames, insertControlPoint} = require("../models/createControlPoint");
+const {getAllTypes, getAllAttributesNames, insertControlPoint,getFrequenciesOfControlPoint} = require("../models/createControlPoint");
 
 /**
  * @description - Get all control points with enough information for list
@@ -52,6 +52,13 @@ router.get(
 		res.send(result)
 	}
 )
+
+router.get("/getFrequenciesOfControlPoint/:controlPointId", async (req, res) => {
+
+	let result = await getFrequenciesOfControlPoint(req.params.controlPointId)
+
+	res.send(result)
+})
 
 router.post(
 	"/submitControlPoint",
