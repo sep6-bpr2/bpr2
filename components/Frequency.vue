@@ -1,28 +1,30 @@
 <template>
 	<v-card elevation="0" outlined>
 		<v-form ref="form" :key="formKey">
-			<v-container style="max-width: 500px; background-color: #fcfcfc; ">
+			<v-container style=" background-color: #fcfcfc; ">
 				<v-row>
-					<v-list v-if="frequencies" v-for="(value,key) in frequencies" :key="key">
-						<v-col
-							class="col-12 freqs"
-							v-if="key != 'id'"
+					<div class="max-width">
+						<v-list v-if="frequencies" v-for="(value,key) in frequencies" :key="key"
 						>
-							<v-list-item class="mt-0">
+						<div v-if="key != 'id'">
+							<v-list-item class="oneLine max-width">
 								<v-list-item-content>
-									<v-list-item-title>{{ createLabel(key) }}</v-list-item-title>
-									<v-list-item-subtitle>
-										<v-text-field
-											:value=value
-											type="number"
-											v-on:input="updateFreq($event,key)"
-											outlined
-										></v-text-field>
-									</v-list-item-subtitle>
+									<div class="oneLine">
+										<h3>{{ createLabel(key) }}</h3>
+										<v-list-item-subtitle>
+											<v-text-field
+												:value=value
+												type="number"
+												v-on:input="updateFreq($event,key)"
+												outlined
+											></v-text-field>
+										</v-list-item-subtitle>
+									</div>
 								</v-list-item-content>
 							</v-list-item>
-						</v-col>
-					</v-list>
+						</div>
+						</v-list>
+					</div>
 				</v-row>
 				<v-row class="mt-0">
 					<v-col
@@ -30,7 +32,7 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn  color="#333" v-on:click="submitFrequencies" class="white--text">
+						<v-btn color="#333" v-on:click="submitFrequencies" class="white--text">
 							Submit
 						</v-btn>
 					</v-col>
@@ -38,7 +40,7 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn color="#333"  v-on:click="resetFrequencies" class="white--text">
+						<v-btn color="#333" v-on:click="resetFrequencies" class="white--text">
 							Reset
 						</v-btn>
 					</v-col>
@@ -86,7 +88,7 @@ export default {
 			this.localFrequencies[key] = {val: parseInt(e), changed: true}
 		},
 		submitFrequencies() {
-			if (this.submitFrequenciesCallback)  this.submitFrequenciesCallback(this.frequencies, this.localFrequencies);
+			if (this.submitFrequenciesCallback) this.submitFrequenciesCallback(this.frequencies, this.localFrequencies);
 		},
 		resetFrequencies() {
 			this.formKey += 1;
@@ -96,7 +98,7 @@ export default {
 		},
 		createLabel(keyVal) {
 			let labelValue = keyVal.split('to')[1];
-			return 'to' + labelValue
+			return '>' + labelValue
 		},
 		pushBack() {
 			if (this.pushBackCallback) this.pushBackCallback();
@@ -115,8 +117,17 @@ export default {
 	padding: 0;
 }
 
-.freqs {
-	padding: 0;
+.oneLine {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+}
+
+.max-width {
+	width: -webkit-fill-available !important;
+}
+
+v-list {
 }
 
 </style>

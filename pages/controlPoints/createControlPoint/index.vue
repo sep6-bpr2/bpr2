@@ -230,11 +230,12 @@
 						</v-icon>
 						<Translate :text="'Delete Frequency'"/>
 					</v-btn>
+					<Frequency v-if="showFreq"
+							   ref="frequencyChild"
+							   :frequencies="frequencies"
+					/>
 				</v-card>
-				<Frequency v-if="showFreq"
-						   ref="frequencyChild"
-						   :frequencies="frequencies"
-				/>
+
 			</div>
 
 			<div class="bottomButtons">
