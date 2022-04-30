@@ -26,7 +26,7 @@ router.get("/releasedList/minimal/:username/:location",
 
 /**
  * @description - Get the released order by id
- * @param username - name of the user for valiation
+ * @param username - name of the user for validation
  * @param id - id of the selected order
  *
  * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
@@ -40,6 +40,38 @@ router.get("/released/full/:username/:id/:language",
     async (req, res) => {
         const data = await service.releasedOrderFull(req.params.id, req.params.language)
         res.send(data)
+    }
+)
+
+/**
+ * @description - Save changes to the qa report
+ * @param username - name of the user for validation
+ *
+ * @example - GET {BaseURL}/api/orders/save/worker
+ */
+router.put("/save/:username",
+    param("username").isLength({ min: 1, max: 35 }),
+    validate,
+    validateUserQA,
+    async (req, res) => {
+        const result = await service.saveQAReport(req.body, req.params.username)
+        res.send(result)
+    }
+)
+
+/**
+ * @description - Complete the qa report
+ * @param username - name of the user for validation
+ *
+ * @example - GET {BaseURL}/api/orders/complete/worker
+ */
+router.put("/complete/:username",
+    param("username").isLength({ min: 1, max: 35 }),
+    validate,
+    validateUserQA,
+    async (req, res) => {
+        const result = await service.completeQAReport(req.body, req.params.username)
+        res.send(result)
     }
 )
 

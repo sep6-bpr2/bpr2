@@ -16,7 +16,7 @@
 				</li>
 			</ul>
 		</div>
-		<button v-on:click="logout" style="margin-left: auto" v-if="user">
+		<button v-on:click="logout" style="margin-left: auto" :style="{ display: show }" >
 			<Translate :text="'Logout'" />
 		</button>
 	</header>
@@ -35,6 +35,7 @@ export default {
 		return {
 			cols: colors,
 			links: [],
+            // showLogout: 'none'
 		};
 	},
 	created() {
@@ -54,8 +55,12 @@ export default {
 			this.links = this.$store.state.nav.availableLinks;
 			return this.$store.state.nav.availableLinks;
 		},
-		user() {
-			return this.$store.state.login.user;
+		show() {
+            if (this.$store.state.login.user){
+                return 'inline'
+            }else{
+                return 'none'
+            }
 		},
 		//For handling selected page
 		currentLinkName() {

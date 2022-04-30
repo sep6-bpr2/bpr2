@@ -1,0 +1,156 @@
+[
+	[
+		{ "connectionId": 8, "id": 8, "answer": null, "type": 3, "author": "" },
+		{ "connectionId": "", "id": 8, "answer": "", "type": 3, "author": "" },
+		{ "connectionId": "", "id": 8, "answer": "", "type": 3, "author": "" },
+		{ "connectionId": "", "id": 8, "answer": "", "type": 3, "author": "" },
+		{ "connectionId": "", "id": 8, "answer": "", "type": 3, "author": "" }
+	],
+	[
+		{ "connectionId": 9, "id": 9, "answer": null, "type": 1, "author": "" },
+		{ "connectionId": "", "id": 9, "answer": "", "type": 1, "author": "" },
+		{ "connectionId": "", "id": 9, "answer": "", "type": 1, "author": "" },
+		{ "connectionId": "", "id": 9, "answer": "", "type": 1, "author": "" },
+		{ "connectionId": "", "id": 9, "answer": "", "type": 1, "author": "" }
+	],
+	[
+		{
+			"connectionId": 10,
+			"id": 10,
+			"answer": null,
+			"type": 0,
+			"author": ""
+		},
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" },
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" },
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" },
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" },
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" },
+		{ "connectionId": "", "id": 10, "answer": "", "type": 0, "author": "" }
+	],
+	[
+		{
+			"connectionId": 8,
+			"id": 8,
+			"answer": null,
+			"type": 3,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 8,
+			"answer": "",
+			"type": 3,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 8,
+			"answer": "",
+			"type": 3,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 8,
+			"answer": "",
+			"type": 3,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 8,
+			"answer": "",
+			"type": 3,
+			"author": ""
+		}
+	],
+	[
+		{
+			"connectionId": 9,
+			"id": 9,
+			"answer": null,
+			"type": 1,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 9,
+			"answer": "",
+			"type": 1,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 9,
+			"answer": "",
+			"type": 1,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 9,
+			"answer": "",
+			"type": 1,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 9,
+			"answer": "",
+			"type": 1,
+			"author": ""
+		}
+	],
+	[
+		{
+			"connectionId": 10,
+			"id": 10,
+			"answer": null,
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		},
+		{
+			"connectionId": "",
+			"id": 10,
+			"answer": "",
+			"type": 0,
+			"author": ""
+		}
+	]
+]

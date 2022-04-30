@@ -12,7 +12,7 @@
 		</thead>
 		<tbody>
 			<tr
-				v-for="(row, index) in filteredRows"
+				v-for="(row, index) in originalRows"
 				:key="Object.keys(row)[0].toString() + index"
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
@@ -43,7 +43,7 @@
 					>
 						Show guide
 					</button>
-					<basic v-else>{{ filteredRows[index][value] }}</basic>
+					<div v-else>{{ originalRows[index][value] }}</div>
 				</td>
 			</tr>
 		</tbody>
@@ -69,31 +69,6 @@ export default {
 		return {
 			originalRows: this.rows,
 		};
-	},
-	computed: {
-		filteredRows() {
-			//Filter to only have the wanted headers shown in table
-
-			let filteredTemp = JSON.parse(JSON.stringify(this.rows));
-
-			const allowedHeaders = this.allowedHeaders;
-
-			if (filteredTemp) {
-				for (let i = 0; i < filteredTemp.length; i++) {
-					for (const [key, value] of Object.entries(
-						filteredTemp[i]
-					)) {
-						if (!allowedHeaders.includes(key)) {
-							delete filteredTemp[i][key];
-						}
-					}
-				}
-
-				return filteredTemp;
-			} else {
-				return [];
-			}
-		},
 	},
 	methods: {
 		clickList(row) {
