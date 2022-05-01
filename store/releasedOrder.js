@@ -28,7 +28,6 @@ export const state = () => ({
         { name: "Tolerance", id: 4 },
     ],
     mAllowedHeaders: ["letter", "description", "image", "units", "toleranceText"],
-    currentReleased: null,
     notification: null
 })
 
@@ -46,11 +45,14 @@ export const actions = {
         const user = rootState.login.user
         if (user) {
             const language = rootState.login.chosenLanguage.flag
-
-            fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
-
-                commit('setCurrentReleased', result)
-                // return 
+            return new Promise((resolve, reject) => {
+                fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
+                    if (result) {
+                        resolve(result)
+                    } else {
+                        resolve(null)
+                    }
+                })
             })
         }
     },
@@ -58,19 +60,19 @@ export const actions = {
         const user = rootState.login.user
         if (user) {
             commit('setCurrentReleased', changedOrder)
-                fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(changedOrder),
-                    method: 'PUT'
-                }).then(res => res.json()).then(result => {
-                    if (result != null) {
-                        commit('setNotification', result)
-                    } else {
-                        commit('setNotification',  {response: 0, message: "No response from server" })
-                    }
-                })
+            fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(changedOrder),
+                method: 'PUT'
+            }).then(res => res.json()).then(result => {
+                if (result != null) {
+                    commit('setNotification', result)
+                } else {
+                    commit('setNotification', { response: 0, message: "No response from server" })
+                }
+            })
         }
     },
     completeContent({ commit, rootState }, changedOrder) {
@@ -87,7 +89,7 @@ export const actions = {
                 if (result != null) {
                     commit('setNotification', result)
                 } else {
-                    commit('setNotification',  {response: 0, message: "No response from server" })
+                    commit('setNotification', { response: 0, message: "No response from server" })
                 }
             })
         }

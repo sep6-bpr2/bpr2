@@ -20,11 +20,13 @@
 						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
 						v-model="originalRows[index].answer"
                         v-on:input="updateParent(index)"
+                        :style="{color: validated(index), 'border-color': validated(index)}"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].type == 0"
 						v-model="originalRows[index].answer"
                         v-on:change="updateParent(index)"
+                        :style="{color: validated(index)}"
 					>
 						<option disabled selected value="">
 							-- select an option --
@@ -80,6 +82,13 @@ export default {
         updateParent(index){
             if(this.valueUpdateCallback){
                 this.valueUpdateCallback(index, this.originalRows[index].answer)
+            }
+        },
+        validated(index){
+            if(this.originalRows[index].validated == null || this.originalRows[index].validated){
+                return 'black'
+            }else{
+                return 'red'
             }
         }
 	},

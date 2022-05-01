@@ -362,7 +362,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
             }
 
             if (match) {
-                
+
                 let badValuesPresent = false
 
                 for (let i = 0; i < editedQAReport.oneTimeControlPoints.length; i++) {
@@ -371,33 +371,30 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                     if (editedQAReport.oneTimeControlPoints[i].author != originalOrder.oneTimeControlPoints[i].author ||
                         editedQAReport.oneTimeControlPoints[i].answer != originalOrder.oneTimeControlPoints[i].answer
                     ) {
-                        let inputValidated = false
-                        //VALIDATE THE INPUT 
-                        
-                        if(originalOrder.oneTimeControlPoints[i].type == 0){
-                            //Option
 
-                            for (let j = 0; j < editedQAReport.oneTimeControlPoints[i].options.length; j++) {
-                                if(editedQAReport.oneTimeControlPoints[i].options[j].value){
+                        let inputValidated = false
+
+                        if (originalOrder.oneTimeControlPoints[i].type == 0) { //Option
+
+                            for (let j = 0; j < originalOrder.oneTimeControlPoints[i].options.length; j++) {
+                                if (originalOrder.oneTimeControlPoints[i].options[j].value == editedQAReport.oneTimeControlPoints[i].answer) {
                                     inputValidated = true
                                     break;
                                 }
                             }
-                        }else if(originalOrder.oneTimeControlPoints[i].type == 1 && 
-                            typeof originalOrder.oneTimeControlPoints[i].answer === 'string'
-                        ) { 
-                            // Text
+                        } else if (originalOrder.oneTimeControlPoints[i].type == 1 &&  // Text
+                            typeof editedQAReport.oneTimeControlPoints[i].answer === 'string'
+                        ) {
                             inputValidated = true
-                        }else if(originalOrder.oneTimeControlPoints[i].type == 3 &&
-                            !(typeof originalOrder.oneTimeControlPoints[i].answer === 'string') //// THIS DOESNT WORK
-                        ){ 
-                            // Number
+                        } else if (originalOrder.oneTimeControlPoints[i].type == 3 && // Number
+                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer)
+                        ) {
                             inputValidated = true
-                        }else{
+                        } else {
                             badValuesPresent = true
                         }
 
-                        if (inputValidated){
+                        if (inputValidated) {
                             await model.deleteQAReportConnection(editedQAReport.oneTimeControlPoints[i].connectionId)
                             await model.insertOrReplaceOneTimeMeasurement(
                                 editedQAReport.oneTimeControlPoints[i].id,
@@ -416,21 +413,46 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         if (editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author ||
                             editedQAReport.multipleTimeAnswers[i][j].answer != originalOrder.multipleTimeAnswers[i][j].answer
                         ) {
-                            await model.deleteQAReportConnection(editedQAReport.multipleTimeAnswers[i][j].connectionId)
-                            await model.insertOrReplaceMultipleTimeMeasurement(
-                                editedQAReport.multipleTimeAnswers[i][j].id,
-                                editedQAReport.multipleTimeAnswers[i][j].answer,
-                                editedQAReport.qaReportId,
-                                username,
-                            )
+
+                            let inputValidated = false
+
+                            if (originalOrder.multipleTimeAnswers[i][j].type == 0) { //Option
+
+                                for (let k = 0; k < originalOrder.multipleTimeControlPoints[i].options.length; k++) {
+                                    if (originalOrder.multipleTimeControlPoints[i].options[k].value == editedQAReport.multipleTimeAnswers[i][j].answer) {
+                                        inputValidated = true
+                                        break;
+                                    }
+                                }
+                            } else if (originalOrder.multipleTimeAnswers[i][j].type == 1 &&  // Text
+                                typeof editedQAReport.multipleTimeAnswers[i][j].answer === 'string'
+                            ) {
+                                inputValidated = true
+                            } else if (originalOrder.multipleTimeAnswers[i][j].type == 3 && // Number
+                                isNumeric(editedQAReport.multipleTimeAnswers[i][j].answer)
+                            ) {
+                                inputValidated = true
+                            } else {
+                                badValuesPresent = true
+                            }
+
+                            if (inputValidated) {
+                                await model.deleteQAReportConnection(editedQAReport.multipleTimeAnswers[i][j].connectionId)
+                                await model.insertOrReplaceMultipleTimeMeasurement(
+                                    editedQAReport.multipleTimeAnswers[i][j].id,
+                                    editedQAReport.multipleTimeAnswers[i][j].answer,
+                                    editedQAReport.qaReportId,
+                                    username,
+                                )
+                            }
                         }
                     }
                 }
 
-                if(badValuesPresent){
-                    return { response: 2, message: "Only some data was saved. There were type issues in the data" }
+                if (badValuesPresent) {
+                    return { response: 2, message: "Only some data was saved. There were mistakes in input types. Make sure numbers with a decimal point are with a '.' and not a ','" }
 
-                }else{
+                } else {
                     return { response: 1, message: "Data saved successfully" }
                 }
             } else {
@@ -441,6 +463,14 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
         }
     } else {
         return { response: 0, message: "Your data does not match what is in the database" }
+    }
+}
+
+function isNumeric(str) {
+    if (typeof str != "string") {
+        return false // we only process strings!  
+    } else {
+        return !isNaN(str) && !isNaN(parseFloat(str))
     }
 }
 
@@ -472,7 +502,7 @@ module.exports.completeQAReport = async (editedQAReport, username) => {
             }
         }
 
-        if(qaReportIsFinished){
+        if (qaReportIsFinished) {
             const result = await module.exports.saveQAReport(editedQAReport, username)
 
 
@@ -485,10 +515,10 @@ module.exports.completeQAReport = async (editedQAReport, username) => {
             } else {
                 return result
             }
-        }else{
+        } else {
             return { response: 0, message: "All qa report fields have to be filled" }
         }
-    }else{
+    } else {
         return { response: 0, message: "Data is not valid" }
     }
 }

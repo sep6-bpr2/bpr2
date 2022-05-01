@@ -19,17 +19,15 @@
 					<div class="cell">
 						<input
 							v-if="cell.type == 3 || cell.type == 1"
-							v-model="
-								originalColumns[index - 1][cellIndex].answer
-							"
+							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:input="updateParent(index - 1, cellIndex)"
+                            :style="{color: validated(index - 1, cellIndex), 'border-color': validated(index - 1, cellIndex)}"
 						/>
 						<select
 							v-else-if="cell.type == 0"
-							v-model="
-								originalColumns[index - 1][cellIndex].answer
-							"
+							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:change="updateParent(index - 1, cellIndex)"
+                            :style="{color: validated(index - 1, cellIndex)}"
 						>
 							<option disabled selected value="">
 								-- select an option --
@@ -145,6 +143,13 @@ export default {
 				this.originalColumns[columnIndex][cellIndex].answer
 			);
 		},
+        validated(columnIndex, cellIndex){
+            if(this.originalColumns[columnIndex][cellIndex].validated == null || this.originalColumns[columnIndex][cellIndex].validated){
+                return 'black'
+            }else{
+                return 'red'
+            }
+        }
 	},
 };
 </script>

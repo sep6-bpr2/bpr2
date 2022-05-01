@@ -135,17 +135,16 @@ export default {
 		},
 	},
 	created() {
-		this.$store.dispatch(
-			"releasedOrder/loadReleasedOrderFull",
-			this.$route.params.id
-		);
+		this.$store
+			.dispatch(
+				"releasedOrder/loadReleasedOrderFull",
+				this.$route.params.id
+			)
+			.then((result) => {
+				this.currentOrder = result;
+			});
 	},
 	watch: {
-		"$store.state.releasedOrder.currentReleased": function () {
-			this.currentOrder = JSON.parse(
-				JSON.stringify(this.$store.state.releasedOrder.currentReleased)
-			);
-		},
 		"$store.state.releasedOrder.notification": function () {
 			this.notification = this.$store.state.releasedOrder.notification;
 			this.modalAlertShow = true;
@@ -168,6 +167,41 @@ export default {
 			this.currentOrder.oneTimeControlPoints[index].author = JSON.parse(
 				JSON.stringify(this.$store.state.login.user.username)
 			);
+
+            let inputValidated = false
+
+			// Validate the input
+            if (this.currentOrder.oneTimeControlPoints[index].type == 0) { //Option
+
+                for (let i = 0; i < this.currentOrder.oneTimeControlPoints[index].options.length; i++) {
+                    if (this.currentOrder.oneTimeControlPoints[index].options[i].value == this.currentOrder.oneTimeControlPoints[index].answer) {
+                        inputValidated = true
+                        break;
+                    }
+                }
+
+            } else if (this.currentOrder.oneTimeControlPoints[index].type == 1 &&  // Text
+                typeof this.currentOrder.oneTimeControlPoints[index].answer === 'string'
+            ) {
+
+
+                inputValidated = true
+
+            } else if (this.currentOrder.oneTimeControlPoints[index].type == 3 // Number
+            ) {
+                let str = this.currentOrder.oneTimeControlPoints[index].answer
+                if (typeof str != "string") {
+                    inputValidated = false 
+                } else {
+                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str))
+                }
+            }
+
+            if(inputValidated || this.currentOrder.oneTimeControlPoints[index].answer == ''){
+                this.currentOrder.oneTimeControlPoints[index].validated = true
+            }else{
+                this.currentOrder.oneTimeControlPoints[index].validated = false
+            }
 		},
 		editMValue(indexColumn, indexCell, value) {
 			this.currentOrder.multipleTimeAnswers[indexColumn][
@@ -178,6 +212,41 @@ export default {
 			].author = JSON.parse(
 				JSON.stringify(this.$store.state.login.user.username)
 			);
+
+            let inputValidated = false
+
+			// Validate the input
+            if (this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].type == 0) { //Option
+
+                for (let i = 0; i < this.currentOrder.multipleTimeControlPoints[indexColumn].options.length; i++) {
+                    if (this.currentOrder.multipleTimeControlPoints[indexColumn].options[i].value == this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer) {
+                        inputValidated = true
+                        break;
+                    }
+                }
+
+            } else if (this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].type == 1 &&  // Text
+                typeof this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer === 'string'
+            ) {
+
+
+                inputValidated = true
+
+            } else if (this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].type == 3 // Number
+            ) {
+                let str = this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer
+                if (typeof str != "string") {
+                    inputValidated = false 
+                } else {
+                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str))
+                }
+            }
+
+            if(inputValidated || this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer == ''){
+                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].validated = true
+            }else{
+                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].validated = false
+            }
 		},
 
 		handleSave() {
