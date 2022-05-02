@@ -46,7 +46,7 @@ function listToCommaString(list, key) {
 module.exports.releasedOrderFull = async (id, language) => {
     // Get general order from the konfair database
     let itemData = await model.getReleasedOrderInformation(id)
-    if (itemData.length != 0) {
+    if (itemData && itemData.length != 0) {
         itemData = itemData[0]
 
         // Check if there exists a QA report for this order
@@ -64,11 +64,11 @@ module.exports.releasedOrderFull = async (id, language) => {
             attributes = await model.getReleasedOrderAttributes(id)
 
             controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
-
             // Get all the attributes and item categories of these control points 
             for (let i = 0; i < controlPoints.length; i++) {
                 controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
             }
+
 
             let added = []
             for (let i = 0; i < controlPoints.length; i++) {
@@ -106,15 +106,13 @@ module.exports.releasedOrderFull = async (id, language) => {
 
             if (added.length != 0) {
                 // Add qa report 
-                let report = await model.createQAReport(id)
-                report = report[0]
+                let qaReport = await model.createQAReport(id)
+                qaReport = qaReport[0]
+
                 // Add the connections between control point and qa report
                 for (let i = 0; i < added.length; i++) {
-                    await model.insertControlPointConnection(added[i].id, report.id)
+                    await model.insertControlPointConnection(added[i].id, qaReport.id)
                 }
-
-                qaReport = await model.getReleasedOrderReport(id)
-                qaReport = qaReport[0]
 
             } else {
                 return null
@@ -125,8 +123,6 @@ module.exports.releasedOrderFull = async (id, language) => {
 
             // Get all the attributes with the values of the order
             attributes = await model.getReleasedOrderAttributes(id)
-
-
         }
 
         controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
@@ -161,6 +157,7 @@ module.exports.releasedOrderFull = async (id, language) => {
 
             controlPoints[i].frequency = null
             controlPoints[i].frequency = await model.getReleasedOrderControlPointsFrequencies(controlPoints[i].frequencyId)
+
             if (controlPoints[i].type == 0) {
                 controlPoints[i].options = null
                 controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id)
@@ -264,12 +261,8 @@ module.exports.releasedOrderFull = async (id, language) => {
             mResults = await model.qaReportControlPointResults(itemData.qaReportId, mIdList)
         }
 
-
-
         for (let i = 0; i < itemData.multipleTimeControlPoints.length; i++) {
             itemData.multipleTimeControlPoints[i].letter = currentChar.toUpperCase()
-
-
 
             let arrayOfAnswers = []
 
@@ -347,6 +340,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
         ) {
             let match = true
 
+            // Check if there is a match to the amount of answers
             for (let i = 0; i < originalOrder.oneTimeControlPoints.length; i++) {
                 if (originalOrder.oneTimeControlPoints[i].id != editedQAReport.oneTimeControlPoints[i].id) {
                     match = false
@@ -387,11 +381,10 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         ) {
                             inputValidated = true
                         } else if (originalOrder.oneTimeControlPoints[i].type == 3 && // Number
-                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer)
+                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer) && 
+                            Number(editedQAReport.oneTimeControlPoints[i].answer) >= 0
                         ) {
                             inputValidated = true
-                        } else {
-                            badValuesPresent = true
                         }
 
                         if (inputValidated) {
@@ -402,6 +395,8 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                                 editedQAReport.qaReportId,
                                 username
                             )
+                        }else{
+                            badValuesPresent = true
                         }
                     }
                 }
@@ -429,11 +424,10 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                             ) {
                                 inputValidated = true
                             } else if (originalOrder.multipleTimeAnswers[i][j].type == 3 && // Number
-                                isNumeric(editedQAReport.multipleTimeAnswers[i][j].answer)
+                                isNumeric(editedQAReport.multipleTimeAnswers[i][j].answer) &&
+                                Number(editedQAReport.multipleTimeAnswers[i][j].answer) >= 0
                             ) {
                                 inputValidated = true
-                            } else {
-                                badValuesPresent = true
                             }
 
                             if (inputValidated) {
@@ -444,6 +438,8 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                                     editedQAReport.qaReportId,
                                     username,
                                 )
+                            }else{
+                                badValuesPresent = true
                             }
                         }
                     }

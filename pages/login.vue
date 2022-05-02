@@ -3,6 +3,7 @@
 		<v-form ref="form">
 			<v-card width="500" class="mx-auto mt-9">
 				<v-select
+					id="selectLanguage"
 					:items="allLanguages"
 					v-model="language"
 					prepend-icon="mdi-account-voice"
@@ -20,6 +21,7 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
+						id="enterUsername"
 						:rules="usernameRules"
 						required
 						v-model="username"
@@ -27,6 +29,7 @@
 						prepend-icon="mdi-account-circle"
 					/>
 					<v-select
+						id="selectLocation"
 						required
 						:rules="locationRules"
 						:items="allLanguages"
@@ -40,6 +43,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn
+						id="submitLogin"
 						v-on:click="hanldeLogin"
 						:color="cols.KonfairPrimary"
 						style="float: right"

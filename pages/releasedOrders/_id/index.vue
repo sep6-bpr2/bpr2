@@ -58,7 +58,6 @@
 			:show="modalAlertShow"
 			:status="notificationStatus"
 			:closeCallback="closeAlertModal"
-			:timing="10"
 		/>
 
 		<div>
@@ -164,9 +163,7 @@ export default {
 		},
 		editOValue(index, value) {
 			this.currentOrder.oneTimeControlPoints[index].answer = value;
-			this.currentOrder.oneTimeControlPoints[index].author = JSON.parse(
-				JSON.stringify(this.$store.state.login.user.username)
-			);
+			this.currentOrder.oneTimeControlPoints[index].author = this.$store.state.login.user.username
 
             let inputValidated = false
 
@@ -193,7 +190,7 @@ export default {
                 if (typeof str != "string") {
                     inputValidated = false 
                 } else {
-                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str))
+                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str)) && Number(str) >= 0
                 }
             }
 
@@ -207,11 +204,9 @@ export default {
 			this.currentOrder.multipleTimeAnswers[indexColumn][
 				indexCell
 			].answer = value;
-			this.currentOrder.multipleTimeAnswers[indexColumn][
+            this.currentOrder.multipleTimeAnswers[indexColumn][
 				indexCell
-			].author = JSON.parse(
-				JSON.stringify(this.$store.state.login.user.username)
-			);
+			].author = this.$store.state.login.user.username
 
             let inputValidated = false
 
@@ -238,7 +233,7 @@ export default {
                 if (typeof str != "string") {
                     inputValidated = false 
                 } else {
-                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str))
+                    inputValidated =  !isNaN(str) && !isNaN(parseFloat(str)) && Number(str) >= 0
                 }
             }
 

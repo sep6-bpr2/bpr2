@@ -14,8 +14,8 @@ const service = require("../services/orders")
  * @example - GET {BaseURL}/api/orders//releasedList/minimal/worker/denmark
  */
 router.get("/releasedList/minimal/:username/:location",
-    param("username").isLength({ min: 1, max: 35 }),
-    param("location").isLength({ min: 1, max: 35 }),
+    param("username").isLength({ min: 4, max: 50 }),
+    param("location").isLength({ min: 1, max: 50 }),
     validate,
     validateUserQA,
     async (req, res) => {
@@ -32,7 +32,7 @@ router.get("/releasedList/minimal/:username/:location",
  * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
  */
 router.get("/released/full/:username/:id/:language",
-    param("username").isLength({ min: 1, max: 35 }),
+    param("username").isLength({ min: 4, max: 50 }),
     param("id").isInt().isLength({ min: 1, max: 35 }),
     param("language").isLength({ min: 2, max: 2 }),
     validate,
@@ -46,11 +46,17 @@ router.get("/released/full/:username/:id/:language",
 /**
  * @description - Save changes to the qa report
  * @param username - name of the user for validation
+ * @body - must pass the body of the qa report with some answers filled in
  *
  * @example - GET {BaseURL}/api/orders/save/worker
  */
 router.put("/save/:username",
-    param("username").isLength({ min: 1, max: 35 }),
+    param("username").isLength({ min: 4, max: 50 }),
+    body("id").isInt().isLength({ min: 1, max: 10 }),
+    body("categoryCode").isInt().isLength({ min: 1, max: 10 }),
+    body("quantity").isInt().isLength({ min: 1, max: 10 }),
+    body("qaReportId").isInt().isLength({ min: 1, max: 10 }),
+    body("status").isLength({ min: 1, max: 20 }),
     validate,
     validateUserQA,
     async (req, res) => {
@@ -62,11 +68,17 @@ router.put("/save/:username",
 /**
  * @description - Complete the qa report
  * @param username - name of the user for validation
- *
+ * @body - must pass the body of the qa report with all answers filled in
+ * 
  * @example - GET {BaseURL}/api/orders/complete/worker
  */
 router.put("/complete/:username",
-    param("username").isLength({ min: 1, max: 35 }),
+    param("username").isLength({ min: 4, max: 50 }),
+    body("id").isInt().isLength({ min: 1, max: 10 }),
+    body("categoryCode").isInt().isLength({ min: 1, max: 10 }),
+    body("quantity").isInt().isLength({ min: 1, max: 10 }),
+    body("qaReportId").isInt().isLength({ min: 1, max: 10 }),
+    body("status").isLength({ min: 1, max: 20 }),
     validate,
     validateUserQA,
     async (req, res) => {

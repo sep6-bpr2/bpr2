@@ -1,16 +1,3 @@
-
-const defaultCurrentReleased = {
-    "id": "  ",
-    "description": "  ",
-    "categoryCode": "  ",
-    "deadline": "  ",
-    "location": "  ",
-    "status": "  ",
-    oneTimeControlPoints: [],
-    multipleTimeControlPoints: [],
-    multipleTimeAnswers: []
-}
-
 export const state = () => ({
     oneTimeTableHeaders: [
         { name: "Description", id: 0 },
@@ -41,7 +28,7 @@ export const mutations = {
 }
 
 export const actions = {
-    loadReleasedOrderFull({ commit, rootState }, itemId) {
+    loadReleasedOrderFull({ rootState }, itemId) {
         const user = rootState.login.user
         if (user) {
             const language = rootState.login.chosenLanguage.flag
@@ -59,7 +46,7 @@ export const actions = {
     saveContent({ commit, rootState }, changedOrder) {
         const user = rootState.login.user
         if (user) {
-            commit('setCurrentReleased', changedOrder)
+            console.log(JSON.stringify(changedOrder))
             fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -78,7 +65,6 @@ export const actions = {
     completeContent({ commit, rootState }, changedOrder) {
         const user = rootState.login.user;
         if (user) {
-            commit('setCurrentReleased', changedOrder)
             fetch(`http://localhost:3000/api/orders/complete/${user.username}`, {
                 headers: {
                     'Content-Type': 'application/json'

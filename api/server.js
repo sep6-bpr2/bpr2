@@ -18,7 +18,9 @@ function initializeMiddleware(app) {
     app.use(helmet())
     // app.use(cors())
     app.use(express.json())
-    app.use(require("./middleware/loggingMiddleware"))
+    if(process.env.LOGGING == "true"){
+        app.use(require("./middleware/loggingMiddleware"))
+    }
 }
 
 const startServer = () => {

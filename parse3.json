@@ -72,7 +72,6 @@
 			"id": 112
 		}
 	],
-	"qaReportId": 1,
 	"controlPoints": [
 		{
 			"id": 1,
@@ -81,9 +80,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 11,
-			"answer": "4",
+			"author": null,
+			"connectionId": 1,
+			"answer": "",
 			"attributes": [{ "id": 3, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -117,9 +116,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 1,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 12,
-			"answer": "4",
+			"author": null,
+			"connectionId": 2,
+			"answer": "",
 			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -153,9 +152,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 6,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 13,
-			"answer": "4",
+			"author": null,
+			"connectionId": 3,
+			"answer": "",
 			"attributes": [{ "id": 49, "maxValue": 50, "minValue": 30 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -189,9 +188,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 14,
-			"answer": "temp",
+			"author": null,
+			"connectionId": 4,
+			"answer": "",
 			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -225,9 +224,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 15,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 5,
+			"answer": "",
 			"attributes": [{ "id": 70, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -265,9 +264,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 16,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 6,
+			"answer": "",
 			"attributes": [{ "id": 104, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -290,8 +289,8 @@
 				}
 			],
 			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Z-line",
 			"units": "Yes/No",
@@ -305,9 +304,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 17,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 7,
+			"answer": "",
 			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -330,8 +329,8 @@
 				}
 			],
 			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Fiber",
 			"units": "Yes/No",
@@ -345,9 +344,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 6,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 39,
-			"answer": "3",
+			"author": null,
+			"connectionId": 8,
+			"answer": "",
 			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -382,9 +381,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 44,
-			"answer": "temp2",
+			"author": null,
+			"connectionId": 9,
+			"answer": "",
 			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -419,33 +418,33 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 51,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 10,
+			"answer": "",
 			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
 			"frequency": [
 				{
-					"id": 2,
-					"to25": 25,
-					"to50": 5,
-					"to100": 345,
-					"to200": 7,
-					"to300": 7,
-					"to500": 8,
-					"to700": 68,
-					"to1000": 9,
-					"to1500": 7,
-					"to2000": 78,
-					"to3000": 78,
-					"to4000": 768,
-					"to5000": 71
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
 				}
 			],
 			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Fiber",
 			"units": "Yes/No",
@@ -462,9 +461,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 11,
-			"answer": "4",
+			"author": null,
+			"connectionId": 1,
+			"answer": "",
 			"attributes": [{ "id": 3, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -498,9 +497,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 1,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 12,
-			"answer": "4",
+			"author": null,
+			"connectionId": 2,
+			"answer": "",
 			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -534,9 +533,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 6,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 13,
-			"answer": "4",
+			"author": null,
+			"connectionId": 3,
+			"answer": "",
 			"attributes": [{ "id": 49, "maxValue": 50, "minValue": 30 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -570,9 +569,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 14,
-			"answer": "temp",
+			"author": null,
+			"connectionId": 4,
+			"answer": "",
 			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -606,9 +605,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 15,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 5,
+			"answer": "",
 			"attributes": [{ "id": 70, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -646,9 +645,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 16,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 6,
+			"answer": "",
 			"attributes": [{ "id": 104, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -671,8 +670,8 @@
 				}
 			],
 			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Z-line",
 			"units": "Yes/No",
@@ -686,9 +685,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 1,
-			"author": "taken",
-			"connectionId": 17,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 7,
+			"answer": "",
 			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -711,8 +710,8 @@
 				}
 			],
 			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Fiber",
 			"units": "Yes/No",
@@ -728,9 +727,9 @@
 			"lowerTolerance": 1,
 			"upperTolerance": 6,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 39,
-			"answer": "3",
+			"author": null,
+			"connectionId": 8,
+			"answer": "",
 			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -765,9 +764,9 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 44,
-			"answer": "temp2",
+			"author": null,
+			"connectionId": 9,
+			"answer": "",
 			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
@@ -802,33 +801,33 @@
 			"lowerTolerance": null,
 			"upperTolerance": null,
 			"controlPointType": 0,
-			"author": "taken",
-			"connectionId": 51,
-			"answer": "Yes",
+			"author": null,
+			"connectionId": 10,
+			"answer": "",
 			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
 			"descriptions": "",
 			"description": "This is a description",
 			"frequency": [
 				{
-					"id": 2,
-					"to25": 25,
-					"to50": 5,
-					"to100": 345,
-					"to200": 7,
-					"to300": 7,
-					"to500": 8,
-					"to700": 68,
-					"to1000": 9,
-					"to1500": 7,
-					"to2000": 78,
-					"to3000": 78,
-					"to4000": 768,
-					"to5000": 71
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
 				}
 			],
 			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
 			],
 			"expectedValue": "Fiber",
 			"units": "Yes/No",
@@ -840,127 +839,113 @@
 	"multipleTimeAnswers": [
 		[
 			{
-				"connectionId": 35,
+				"connectionId": 8,
 				"id": 8,
-				"answer": "3",
+				"answer": "",
 				"type": 3,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 36,
+				"connectionId": "",
 				"id": 8,
-				"answer": "3",
+				"answer": "",
 				"type": 3,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 37,
+				"connectionId": "",
 				"id": 8,
-				"answer": "3",
+				"answer": "",
 				"type": 3,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 38,
+				"connectionId": "",
 				"id": 8,
-				"answer": "3",
+				"answer": "",
 				"type": 3,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 39,
+				"connectionId": "",
 				"id": 8,
-				"answer": "3",
+				"answer": "",
 				"type": 3,
-				"author": "taken"
+				"author": ""
 			}
 		],
 		[
 			{
-				"connectionId": 40,
+				"connectionId": 9,
 				"id": 9,
-				"answer": "temp2",
+				"answer": "",
 				"type": 1,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 41,
+				"connectionId": "",
 				"id": 9,
-				"answer": "temp2",
+				"answer": "",
 				"type": 1,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 42,
+				"connectionId": "",
 				"id": 9,
-				"answer": "temp2",
+				"answer": "",
 				"type": 1,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 43,
+				"connectionId": "",
 				"id": 9,
-				"answer": "temp2",
+				"answer": "",
 				"type": 1,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 44,
+				"connectionId": "",
 				"id": 9,
-				"answer": "temp2",
+				"answer": "",
 				"type": 1,
-				"author": "taken"
+				"author": ""
 			}
 		],
 		[
 			{
-				"connectionId": 45,
+				"connectionId": 10,
 				"id": 10,
-				"answer": "Yes",
+				"answer": "",
 				"type": 0,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 46,
+				"connectionId": "",
 				"id": 10,
-				"answer": "Yes",
+				"answer": "",
 				"type": 0,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 47,
+				"connectionId": "",
 				"id": 10,
-				"answer": "Yes",
+				"answer": "",
 				"type": 0,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 48,
+				"connectionId": "",
 				"id": 10,
-				"answer": "Yes",
+				"answer": "",
 				"type": 0,
-				"author": "taken"
+				"author": ""
 			},
 			{
-				"connectionId": 49,
+				"connectionId": "",
 				"id": 10,
-				"answer": "Yes",
+				"answer": "",
 				"type": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 50,
-				"id": 10,
-				"answer": "Yes",
-				"type": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 51,
-				"id": 10,
-				"answer": "Yes",
-				"type": 0,
-				"author": "taken"
+				"author": ""
 			}
 		]
 	]
