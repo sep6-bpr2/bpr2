@@ -81,8 +81,6 @@ export default {
         },
         updateParent(index){
             if(this.valueUpdateCallback){
-                console.log("Child edit O")
-
                 this.valueUpdateCallback(index, this.originalRows[index].answer)
             }
         },

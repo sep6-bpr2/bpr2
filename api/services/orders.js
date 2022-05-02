@@ -370,7 +370,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                 for (let i = 0; i < editedQAReport.oneTimeControlPoints.length; i++) {
                     // Insert The one time measurement
 
-                    if (editedQAReport.oneTimeControlPoints[i].author != originalOrder.oneTimeControlPoints[i].author ||
+                    if ((editedQAReport.oneTimeControlPoints[i].author != originalOrder.oneTimeControlPoints[i].author && editedQAReport.oneTimeControlPoints[i].author != 'taken')||
                         editedQAReport.oneTimeControlPoints[i].answer != originalOrder.oneTimeControlPoints[i].answer
                     ) {
 
@@ -397,7 +397,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                         if (inputValidated) {
                             await model.deleteQAReportConnection(editedQAReport.oneTimeControlPoints[i].connectionId)
-                            await model.insertOrReplaceOneTimeMeasurement(
+                            model.insertOrReplaceOneTimeMeasurement(
                                 editedQAReport.oneTimeControlPoints[i].id,
                                 editedQAReport.oneTimeControlPoints[i].answer,
                                 editedQAReport.qaReportId,
@@ -413,7 +413,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                 for (let i = 0; i < originalOrder.multipleTimeAnswers.length; i++) {
                     for (let j = 0; j < originalOrder.multipleTimeAnswers[i].length; j++) {
                         // Insert The one time measurement
-                        if (editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author ||
+                        if ((editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author && editedQAReport.oneTimeControlPoints[i].author != 'taken')||
                             editedQAReport.multipleTimeAnswers[i][j].answer != originalOrder.multipleTimeAnswers[i][j].answer
                         ) {
 
@@ -440,7 +440,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                             if (inputValidated) {
                                 await model.deleteQAReportConnection(editedQAReport.multipleTimeAnswers[i][j].connectionId)
-                                await model.insertOrReplaceMultipleTimeMeasurement(
+                                model.insertOrReplaceMultipleTimeMeasurement(
                                     editedQAReport.multipleTimeAnswers[i][j].id,
                                     editedQAReport.multipleTimeAnswers[i][j].answer,
                                     editedQAReport.qaReportId,

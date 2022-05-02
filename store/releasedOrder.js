@@ -46,7 +46,6 @@ export const actions = {
     saveContent({ commit, rootState }, changedOrder) {
         const user = rootState.login.user
         if (user) {
-            console.log(JSON.stringify(changedOrder))
             fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
                 headers: {
                     'Content-Type': 'application/json'
