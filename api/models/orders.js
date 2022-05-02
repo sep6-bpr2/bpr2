@@ -49,6 +49,32 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
     return result.recordset
 }
 
+module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
+    // The max statements are to help group by
+    const result = await localDB()
+        .request()
+        .input("id", mssql.Int, id)
+        .query(`
+            SELECT 
+            DISTINCT
+            point.id, 
+            MAX(point.frequencyId) as frequencyId, 
+            MAX(point.type) as type, 
+            MAX(point.lowerTolerance) as lowerTolerance,
+            MAX(point.upperTolerance) as upperTolerance, 
+            MAX(point.controlPointType) as controlPointType, 
+            MAX(connection.author) as author,
+            MAX(connection.id) as connectionId, 
+            MAX(connection.value) as answer
+            FROM [QAReportControlPointValue] connection
+            INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
+            WHERE connection.[qaReportId] = @id
+            Group by point.id
+        `)
+    return result.recordset
+}
+
+
 module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
     const result = await localDB()
         .request()
@@ -263,6 +289,23 @@ module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPoi
             connection.controlPointId,
             connection.qaReportId,
             (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author 
+            FROM [QAReportControlPointValue] connection
+            WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
+        `)
+    return result.recordset
+}
+
+module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfControlPointIds) => {
+    const result = await localDB()
+        .request()
+        .input("qaReportId", mssql.Int, qaReportId)
+        .query(`
+            SELECT 
+            connection.value as answer, 
+            connection.id as connectionId, 
+            connection.controlPointId,
+            connection.qaReportId,
+            connection.author
             FROM [QAReportControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)

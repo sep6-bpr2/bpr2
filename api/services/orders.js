@@ -43,7 +43,7 @@ function listToCommaString(list, key) {
     return stringList
 }
 
-module.exports.releasedOrderFull = async (id, language) => {
+module.exports.releasedOrderFull = async (id, language, showAuthors) => {
     // Get general order from the konfair database
     let itemData = await model.getReleasedOrderInformation(id)
     if (itemData && itemData.length != 0) {
@@ -125,7 +125,11 @@ module.exports.releasedOrderFull = async (id, language) => {
             attributes = await model.getReleasedOrderAttributes(id)
         }
 
-        controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
+        if(showAuthors){
+            controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id)
+        }else{
+            controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
+        }
 
         // Get all the attributes and item categories of these control points 
         for (let i = 0; i < controlPoints.length; i++) {
@@ -258,7 +262,11 @@ module.exports.releasedOrderFull = async (id, language) => {
 
         let mResults = []
         if (mIdList != '') {
-            mResults = await model.qaReportControlPointResults(itemData.qaReportId, mIdList)
+            if (showAuthors){
+                mResults = await model.qaReportControlPointResultsAuthors(itemData.qaReportId, mIdList)
+            }else{
+                mResults = await model.qaReportControlPointResults(itemData.qaReportId, mIdList)
+            }
         }
 
         for (let i = 0; i < itemData.multipleTimeControlPoints.length; i++) {
@@ -322,7 +330,7 @@ module.exports.releasedOrderFull = async (id, language) => {
 
 module.exports.saveQAReport = async (editedQAReport, username) => {
 
-    const originalOrder = await module.exports.releasedOrderFull(editedQAReport.id, 'gb')
+    const originalOrder = await module.exports.releasedOrderFull(editedQAReport.id, 'gb', true)
 
     if (originalOrder != null) {
         //Check surface level requirements
@@ -466,6 +474,7 @@ function isNumeric(str) {
     if (typeof str != "string") {
         return false // we only process strings!  
     } else {
+        // @ts-ignore
         return !isNaN(str) && !isNaN(parseFloat(str))
     }
 }

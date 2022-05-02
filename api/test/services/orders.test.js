@@ -973,6 +973,974 @@ let finishedOrder = {
 	]
 }
 
+let finishedOrderAuthorMain = {
+	"id": "47827",
+	"description": "Panelfilter 390x300x47",
+	"categoryCode": "32110",
+	"status": "incomplete",
+	"deadline": "2022-06-12",
+	"location": "Denmark, Give",
+	"quantity": 240,
+	"attributes": [
+		{
+			"name": "Højde",
+			"type": 3,
+			"units": "mm",
+			"value": "300.00",
+			"id": 3
+		},
+		{
+			"name": "Bredde",
+			"type": 3,
+			"units": "mm",
+			"value": "390.00",
+			"id": 4
+		},
+		{ "name": "Dybde", "type": 3, "units": "mm", "value": "47", "id": 49 },
+		{
+			"name": "ISO 16890",
+			"type": 0,
+			"units": null,
+			"value": "ISO ePM10 50%",
+			"id": 51
+		},
+		{
+			"name": "Webshop",
+			"type": 0,
+			"units": null,
+			"value": "Ja",
+			"id": 70
+		},
+		{
+			"name": "Paneltype",
+			"type": 0,
+			"units": null,
+			"value": "Z-line",
+			"id": 104
+		},
+		{
+			"name": "Ramme (panelfilter)",
+			"type": 0,
+			"units": null,
+			"value": "Fiber",
+			"id": 109
+		},
+		{
+			"name": "Number example",
+			"type": 3,
+			"units": "mm",
+			"value": "290.00",
+			"id": 110
+		},
+		{
+			"name": "Text example",
+			"type": 0,
+			"units": null,
+			"value": "ISO e",
+			"id": 111
+		},
+		{
+			"name": "Option example",
+			"type": 0,
+			"units": null,
+			"value": "Fiber glass",
+			"id": 112
+		}
+	],
+	"qaReportId": 1,
+	"controlPoints": [
+		{
+			"id": 1,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 11,
+			"answer": "4",
+			"attributes": [{ "id": 3, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "300.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 2,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 1,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 12,
+			"answer": "4",
+			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "390.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+/-1mm"
+		},
+		{
+			"id": 3,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 13,
+			"answer": "4",
+			"attributes": [{ "id": 49, "maxValue": 50, "minValue": 30 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "47",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+6/-1mm"
+		},
+		{
+			"id": 4,
+			"frequencyId": 1,
+			"type": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 14,
+			"answer": "temp",
+			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 5,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 15,
+			"answer": "Yes",
+			"attributes": [{ "id": 70, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
+			],
+			"expectedValue": "Ja",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 6,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 16,
+			"answer": "Yes",
+			"attributes": [{ "id": 104, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 3, "controlPointId": 6, "value": "Yes" },
+				{ "id": 4, "controlPointId": 6, "value": "No" }
+			],
+			"expectedValue": "Z-line",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 7,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 17,
+			"answer": "Yes",
+			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 5, "controlPointId": 7, "value": "Yes" },
+				{ "id": 6, "controlPointId": 7, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 8,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 39,
+			"answer": "3",
+			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "390.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+6/-1mm",
+			"letter": "A"
+		},
+		{
+			"id": 9,
+			"frequencyId": 1,
+			"type": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 44,
+			"answer": "temp2",
+			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "",
+			"letter": "B"
+		},
+		{
+			"id": 10,
+			"frequencyId": 2,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 51,
+			"answer": "Yes",
+			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 2,
+					"to25": 25,
+					"to50": 5,
+					"to100": 345,
+					"to200": 7,
+					"to300": 7,
+					"to500": 8,
+					"to700": 68,
+					"to1000": 9,
+					"to1500": 7,
+					"to2000": 78,
+					"to3000": 78,
+					"to4000": 768,
+					"to5000": 71
+				}
+			],
+			"options": [
+				{ "id": 7, "controlPointId": 10, "value": "Yes" },
+				{ "id": 8, "controlPointId": 10, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "",
+			"letter": "C"
+		}
+	],
+	"oneTimeControlPoints": [
+		{
+			"id": 1,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 11,
+			"answer": "4",
+			"attributes": [{ "id": 3, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "300.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 2,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 1,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 12,
+			"answer": "4",
+			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "390.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+/-1mm"
+		},
+		{
+			"id": 3,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 13,
+			"answer": "4",
+			"attributes": [{ "id": 49, "maxValue": 50, "minValue": 30 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "47",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+6/-1mm"
+		},
+		{
+			"id": 4,
+			"frequencyId": 1,
+			"type": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 14,
+			"answer": "temp",
+			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 5,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 15,
+			"answer": "Yes",
+			"attributes": [{ "id": 70, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
+			],
+			"expectedValue": "Ja",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 6,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 16,
+			"answer": "Yes",
+			"attributes": [{ "id": 104, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 3, "controlPointId": 6, "value": "Yes" },
+				{ "id": 4, "controlPointId": 6, "value": "No" }
+			],
+			"expectedValue": "Z-line",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		},
+		{
+			"id": 7,
+			"frequencyId": 1,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 1,
+			"author": "worker",
+			"connectionId": 17,
+			"answer": "Yes",
+			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"options": [
+				{ "id": 5, "controlPointId": 7, "value": "Yes" },
+				{ "id": 6, "controlPointId": 7, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": ""
+		}
+	],
+	"multipleTimeControlPoints": [
+		{
+			"id": 8,
+			"frequencyId": 1,
+			"type": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 39,
+			"answer": "3",
+			"attributes": [{ "id": 4, "maxValue": 400, "minValue": 300 }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "390.00",
+			"units": "mm",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "+6/-1mm",
+			"letter": "A"
+		},
+		{
+			"id": 9,
+			"frequencyId": 1,
+			"type": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 44,
+			"answer": "temp2",
+			"attributes": [{ "id": 51, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 1,
+					"to25": 23,
+					"to50": 2,
+					"to100": 343,
+					"to200": 5,
+					"to300": 5,
+					"to500": 6,
+					"to700": 66,
+					"to1000": 7,
+					"to1500": 5,
+					"to2000": 76,
+					"to3000": 76,
+					"to4000": 766,
+					"to5000": 69
+				}
+			],
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "",
+			"letter": "B"
+		},
+		{
+			"id": 10,
+			"frequencyId": 2,
+			"type": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"controlPointType": 0,
+			"author": "worker",
+			"connectionId": 51,
+			"answer": "Yes",
+			"attributes": [{ "id": 109, "maxValue": null, "minValue": null }],
+			"descriptions": "",
+			"description": "This is a description",
+			"frequency": [
+				{
+					"id": 2,
+					"to25": 25,
+					"to50": 5,
+					"to100": 345,
+					"to200": 7,
+					"to300": 7,
+					"to500": 8,
+					"to700": 68,
+					"to1000": 9,
+					"to1500": 7,
+					"to2000": 78,
+					"to3000": 78,
+					"to4000": 768,
+					"to5000": 71
+				}
+			],
+			"options": [
+				{ "id": 7, "controlPointId": 10, "value": "Yes" },
+				{ "id": 8, "controlPointId": 10, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"image": "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg",
+			"toleranceText": "",
+			"letter": "C"
+		}
+	],
+	"multipleTimeAnswers": [
+		[
+			{
+				"connectionId": 35,
+				"id": 8,
+				"answer": "3",
+				"type": 3,
+				"author": "worker"
+			},
+			{
+				"connectionId": 36,
+				"id": 8,
+				"answer": "3",
+				"type": 3,
+				"author": "worker"
+			},
+			{
+				"connectionId": 37,
+				"id": 8,
+				"answer": "3",
+				"type": 3,
+				"author": "worker"
+			},
+			{
+				"connectionId": 38,
+				"id": 8,
+				"answer": "3",
+				"type": 3,
+				"author": "worker"
+			},
+			{
+				"connectionId": 39,
+				"id": 8,
+				"answer": "3",
+				"type": 3,
+				"author": "worker"
+			}
+		],
+		[
+			{
+				"connectionId": 40,
+				"id": 9,
+				"answer": "temp2",
+				"type": 1,
+				"author": "worker"
+			},
+			{
+				"connectionId": 41,
+				"id": 9,
+				"answer": "temp2",
+				"type": 1,
+				"author": "worker"
+			},
+			{
+				"connectionId": 42,
+				"id": 9,
+				"answer": "temp2",
+				"type": 1,
+				"author": "worker"
+			},
+			{
+				"connectionId": 43,
+				"id": 9,
+				"answer": "temp2",
+				"type": 1,
+				"author": "worker"
+			},
+			{
+				"connectionId": 44,
+				"id": 9,
+				"answer": "temp2",
+				"type": 1,
+				"author": "worker"
+			}
+		],
+		[
+			{
+				"connectionId": 45,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 46,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 47,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 48,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 49,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 50,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			},
+			{
+				"connectionId": 51,
+				"id": 10,
+				"answer": "Yes",
+				"type": 0,
+				"author": "worker"
+			}
+		]
+	]
+}
+
 let unfinishedOrderMain = {
     "id": "47827",
     "description": "Panelfilter 390x300x47",
@@ -1942,6 +2910,7 @@ let unfinishedOrderMain = {
 }
 
 let unfinishedOrder = JSON.parse(JSON.stringify(unfinishedOrderMain))
+let finishedOrderAuthor = JSON.parse(JSON.stringify(finishedOrderAuthorMain))
 
 let order = JSON.parse(JSON.stringify(finishedOrder))
 
@@ -1950,6 +2919,8 @@ describe("Orders service testing", () => {
     afterEach(function () {
         sinon.restore()
         order = JSON.parse(JSON.stringify(finishedOrder))
+        unfinishedOrder = JSON.parse(JSON.stringify(unfinishedOrderMain))
+        finishedOrderAuthor = JSON.parse(JSON.stringify(finishedOrderAuthorMain))
     })
 
     describe("released orders", () => {
@@ -2873,9 +3844,6 @@ describe("Orders service testing", () => {
             delete unfinishedOrder.qaReportId
             delete test1.qaReportId
 
-            console.log(JSON.stringify(unfinishedOrder))
-            console.log("          ")
-            console.log(JSON.stringify(test1))
             assertEquals(JSON.stringify(test1), JSON.stringify(unfinishedOrder))
         })
 
@@ -3227,10 +4195,358 @@ describe("Orders service testing", () => {
             delete order.qaReportId
             delete test1.qaReportId
 
-            console.log(JSON.stringify(order))
-            console.log("          ")
-            console.log(JSON.stringify(test1))
             assertEquals(JSON.stringify(test1), JSON.stringify(order))
+        })
+
+        it("get order OK qa report with values filled in. Author", async () => {
+            sinon.stub(ordersModel, "getReleasedOrderInformation").returns([
+                {
+                    id: '47827',
+                    description: 'Panelfilter 390x300x47',
+                    categoryCode: '32110',
+                    status: 3,
+                    deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
+                    location: 'Denmark, Give',
+                    quantity: 240,
+                    "qaReportId": 1,
+                }
+            ])
+
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ "id": 1, "itemId": 47827, "status": false }])
+
+            sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
+                [
+                    { "name": "Højde", "type": 3, "units": "mm", "value": "300.00", "id": 3 },
+                    { "name": "Bredde", "type": 3, "units": "mm", "value": "390.00", "id": 4 },
+                    { "name": "Dybde", "type": 3, "units": "mm", "value": "47", "id": 49 },
+                    {
+                        "name": "ISO 16890",
+                        "type": 0,
+                        "units": null,
+                        "value": "ISO ePM10 50%",
+                        "id": 51
+                    },
+                    { "name": "Webshop", "type": 0, "units": null, "value": "Ja", "id": 70 },
+                    {
+                        "name": "Paneltype",
+                        "type": 0,
+                        "units": null,
+                        "value": "Z-line",
+                        "id": 104
+                    },
+                    {
+                        "name": "Ramme (panelfilter)",
+                        "type": 0,
+                        "units": null,
+                        "value": "Fiber",
+                        "id": 109
+                    },
+                    {
+                        "name": "Number example",
+                        "type": 3,
+                        "units": "mm",
+                        "value": "290.00",
+                        "id": 110
+                    },
+                    {
+                        "name": "Text example",
+                        "type": 0,
+                        "units": null,
+                        "value": "ISO e",
+                        "id": 111
+                    },
+                    {
+                        "name": "Option example",
+                        "type": 0,
+                        "units": null,
+                        "value": "Fiber glass",
+                        "id": 112
+                    }
+                ]
+            )
+
+            sinon.stub(ordersModel, "getReleasedOrderControlPointsAuthors").returns(
+                [
+                    {
+                        "id": 1,
+                        "frequencyId": 1,
+                        "type": 3,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 11,
+                        "answer": "4"
+                    },
+                    {
+                        "id": 2,
+                        "frequencyId": 1,
+                        "type": 3,
+                        "lowerTolerance": 1,
+                        "upperTolerance": 1,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 12,
+                        "answer": "4"
+                    },
+                    {
+                        "id": 3,
+                        "frequencyId": 1,
+                        "type": 3,
+                        "lowerTolerance": 1,
+                        "upperTolerance": 6,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 13,
+                        "answer": "4"
+                    },
+                    {
+                        "id": 4,
+                        "frequencyId": 1,
+                        "type": 1,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 14,
+                        "answer": "temp"
+                    },
+                    {
+                        "id": 5,
+                        "frequencyId": 1,
+                        "type": 0,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 15,
+                        "answer": "Yes"
+                    },
+                    {
+                        "id": 6,
+                        "frequencyId": 1,
+                        "type": 0,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 16,
+                        "answer": "Yes"
+                    },
+                    {
+                        "id": 7,
+                        "frequencyId": 1,
+                        "type": 0,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 1,
+                        "author": "worker",
+                        "connectionId": 17,
+                        "answer": "Yes"
+                    },
+                    {
+                        "id": 8,
+                        "frequencyId": 1,
+                        "type": 3,
+                        "lowerTolerance": 1,
+                        "upperTolerance": 6,
+                        "controlPointType": 0,
+                        "author": "worker",
+                        "connectionId": 39,
+                        "answer": "3"
+                    },
+                    {
+                        "id": 9,
+                        "frequencyId": 1,
+                        "type": 1,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 0,
+                        "author": "worker",
+                        "connectionId": 44,
+                        "answer": "temp2"
+                    },
+                    {
+                        "id": 10,
+                        "frequencyId": 2,
+                        "type": 0,
+                        "lowerTolerance": null,
+                        "upperTolerance": null,
+                        "controlPointType": 0,
+                        "author": "worker",
+                        "connectionId": 51,
+                        "answer": "Yes"
+                    }
+                ]
+                                
+            )
+
+            let getControlPointAttributes = sinon.stub(ordersModel, "getControlPointAttributes").returns([])
+            getControlPointAttributes.onCall(0).returns([{ "id": 3, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(1).returns([{ "id": 4, "maxValue": 400, "minValue": 300 }]);
+            getControlPointAttributes.onCall(2).returns([{ "id": 49, "maxValue": 50, "minValue": 30 }]);
+            getControlPointAttributes.onCall(3).returns([{ "id": 51, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(4).returns([{ "id": 70, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(5).returns([{ "id": 104, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(6).returns([{ "id": 109, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(7).returns([{ "id": 4, "maxValue": 400, "minValue": 300 }]);
+            getControlPointAttributes.onCall(8).returns([{ "id": 51, "maxValue": null, "minValue": null }]);
+            getControlPointAttributes.onCall(9).returns([{ "id": 109, "maxValue": null, "minValue": null }]);
+
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 1, "itemId": 47827, "status": false }])
+            sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
+
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+
+            let getReleasedOrderControlPointsFrequencies = sinon.stub(ordersModel, "getReleasedOrderControlPointsFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
+            getReleasedOrderControlPointsFrequencies.onCall(9).returns([{ "id": 2, "to25": 25, "to50": 5, "to100": 345, "to200": 7, "to300": 7, "to500": 8, "to700": 68, "to1000": 9, "to1500": 7, "to2000": 78, "to3000": 78, "to4000": 768, "to5000": 71 }]);
+
+            let getReleasedOrderControlPointsOptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsOptions").returns([{ "id": 1, "controlPointId": 5, "value": "Yes" }, { "id": 2, "controlPointId": 5, "value": "No" }])
+            getReleasedOrderControlPointsOptions.onCall(0).returns([{ "id": 1, "controlPointId": 5, "value": "Yes" }, { "id": 2, "controlPointId": 5, "value": "No" }]);
+            getReleasedOrderControlPointsOptions.onCall(1).returns([{ "id": 3, "controlPointId": 6, "value": "Yes" }, { "id": 4, "controlPointId": 6, "value": "No" }]);
+            getReleasedOrderControlPointsOptions.onCall(2).returns([{ "id": 5, "controlPointId": 7, "value": "Yes" }, { "id": 6, "controlPointId": 7, "value": "No" }]);
+            getReleasedOrderControlPointsOptions.onCall(3).returns([{ "id": 7, "controlPointId": 10, "value": "Yes" }, { "id": 8, "controlPointId": 10, "value": "No" }]);
+
+            sinon.stub(ordersModel, "qaReportControlPointResultsAuthors").returns(
+                [
+                    {
+                        "answer": "3",
+                        "connectionId": 35,
+                        "controlPointId": 8,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "temp2",
+                        "connectionId": 40,
+                        "controlPointId": 9,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 45,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "3",
+                        "connectionId": 36,
+                        "controlPointId": 8,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "3",
+                        "connectionId": 37,
+                        "controlPointId": 8,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "3",
+                        "connectionId": 38,
+                        "controlPointId": 8,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "3",
+                        "connectionId": 39,
+                        "controlPointId": 8,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "temp2",
+                        "connectionId": 41,
+                        "controlPointId": 9,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "temp2",
+                        "connectionId": 42,
+                        "controlPointId": 9,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "temp2",
+                        "connectionId": 43,
+                        "controlPointId": 9,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "temp2",
+                        "connectionId": 44,
+                        "controlPointId": 9,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 46,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 47,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 48,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 49,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 50,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    },
+                    {
+                        "answer": "Yes",
+                        "connectionId": 51,
+                        "controlPointId": 10,
+                        "qaReportId": 1,
+                        "author": "worker"
+                    }
+                ]
+            )
+
+            const test1 = await ordersService.releasedOrderFull("12213", "gb", true)
+
+            delete finishedOrderAuthor.qaReportId
+            delete test1.qaReportId
+
+            assertEquals(JSON.stringify(test1), JSON.stringify(finishedOrderAuthor))
         })
     })
 })

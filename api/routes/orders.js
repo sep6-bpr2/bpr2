@@ -38,7 +38,7 @@ router.get("/released/full/:username/:id/:language",
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.releasedOrderFull(req.params.id, req.params.language)
+        const data = await service.releasedOrderFull(req.params.id, req.params.language, false)
         res.send(data)
     }
 )
