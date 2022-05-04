@@ -34,6 +34,10 @@ module.exports.insertControlPoint = async (cp) => {
 
 	let newFrequencyId = null
 
+
+	const con = await localDB().request()
+	const nVarchar = mssql.NVarChar(1000)
+
 	if(cp.frequencies != null){
 		let item = cp.frequencies
 
@@ -45,13 +49,11 @@ module.exports.insertControlPoint = async (cp) => {
 
 		newFrequencyId = idResult.recordset[0][""]
 	}
-	const con = await localDB().request()
-	const nVarchar = mssql.NVarChar(1000)
 
 	let sqlString = `
 	BEGIN TRANSACTION
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (@frequencyId, @type, 0, 999, @image);
+    	INSERT INTO ControlPoint VALUES (@frequencyId, @type, @lowerTolerance, @upperTolerance, @image);
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
@@ -70,10 +72,11 @@ module.exports.insertControlPoint = async (cp) => {
 			sqlString+=`INSERT INTO [Option] VALUES (@option${index}, @CpID); `
 			con.input('option'+index, nVarchar, item.value)
 		})
-	}else {
-		sqlString+=`INSERT INTO QAReportControlPoint VALUES (1, @CpID, @value); `
-		con.input('value', nVarchar, cp.value)
 	}
+	sqlString+=`INSERT INTO QAReportControlPoint VALUES (1, @CpID, @value); `
+	con.input('@lowerTolerance', nVarchar, cp.lowerTolerance)
+	con.input('@upperTolerance', nVarchar, cp.upperTolerance)
+
 
 	cp.attributes.forEach((item, index) => {
 		sqlString+=`INSERT INTO AttributeControlPoint VALUES (@id${index}, @CpID, @min${index}, @max${index}) `

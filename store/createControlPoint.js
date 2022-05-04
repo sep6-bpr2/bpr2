@@ -5,6 +5,8 @@ const getDefaultState = () => ({
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		type: 0,
 		value: null, // number or string
+		upperTolerance: null,
+		lowerTolerance: null,
 		optionValues: [{value: null}],// {value: '',}
 		attributes: [],//{id: '', minValue: 0, maxValue: 0}
 		codes: [{value: null}],
@@ -41,8 +43,11 @@ export const mutations = {
 	setType(state, type) {
 		state.type = type
 	},
-	setValue(state, value) {
-		state.value = value
+	setUpperTolerance(state, value) {
+		state.uppperTolerance = value
+	},
+	setLowerTolerance(state, value) {
+		state.lowerTolerance = value
 	},
 
 	setOptionValues(state, obj) {

@@ -75,14 +75,20 @@
 					</div>
 
 					<div
-						v-else
+						v-if="type==='number'"
 						class="innerElement row"
 					>
 						<p>
-							<Translate :text="'Value'"/>
+							<Translate :text="'LowerTolerance'"/>
 						</p>
 						<v-text-field
-							v-model="value"
+							v-model="lowerTolerance"
+						/>
+						<p>
+							<Translate :text="'UpperTolerance'"/>
+						</p>
+						<v-text-field
+							v-model="upperTolerance"
 						/>
 					</div>
 				</v-card>
@@ -305,12 +311,20 @@ export default {
 				this.$store.commit('createControlPoint/setType', type)
 			}
 		},
-		value: {
+		lowerTolerance: {
 			get() {
-				return this.$store.state.createControlPoint.value
+				return this.$store.state.createControlPoint.lowerTolerance
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setValue', value)
+				this.$store.commit('createControlPoint/setLowerTolerance', value)
+			}
+		},
+		upperTolerance: {
+			get() {
+				return this.$store.state.createControlPoint.upperTolerance
+			},
+			set(value) {
+				this.$store.commit('createControlPoint/setUpperTolerance', value)
 			}
 		},
 		optionValues() {
@@ -403,7 +417,7 @@ export default {
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else {
-				if (this.validate([{value: this.value}], this.translateText('value can not be empty')) === false) return false
+				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 			}
 
 			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
@@ -466,7 +480,8 @@ export default {
 					this.$store.dispatch('createControlPoint/submitControlPoint', {
 						descriptions: this.descriptions,
 						type: this.type,
-						value: this.value,
+						upperTolerance: this.upperTolerance,
+						lowerTolerance: this.lowerTolerance,
 						optionValues: this.optionValues,
 						attributes: this.attributes,
 						codes: this.codes,
