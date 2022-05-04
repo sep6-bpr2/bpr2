@@ -416,7 +416,7 @@ export default {
 			if (this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
-			} else {
+			} else if(this.type === 'number'){
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 			}
 
