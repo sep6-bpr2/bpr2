@@ -10,7 +10,6 @@
 					</h3>
 					<div
 						v-for="(description, index) in descriptions"
-
 					>
 						<div class="innerElement row">
 							<p>
@@ -18,6 +17,7 @@
 								<Translate :text="'Description'"/>
 							</p>
 							<v-text-field
+								id="description"
 								:value="description.value"
 								v-on:input="descriptionChange($event, index)"
 							/>
@@ -34,6 +34,7 @@
 							<Translate :text="'Type'"/>
 						</p>
 						<v-select
+							id="type"
 							:items="allTypes"
 							v-model="type"
 						/>
@@ -41,11 +42,13 @@
 
 					<div
 						v-if="type==='options'"
+						id="options"
 					>
 						<div
 							v-for="(option, index) in optionValues"
 						>
-							<v-card class="valueEntry" elevation="24">
+							<v-card class="valueEntry" elevation="24"
+							>
 								<p>
 									<Translate :text="'Option'"/>
 									{{ index + 1 }}
@@ -55,6 +58,7 @@
 									v-on:input="optionValueChange($event, index)"
 								/>
 								<v-btn
+									id="deleteOption"
 									v-on:click="removeOptionValue(index)"
 								>
 									<v-icon>
@@ -65,6 +69,7 @@
 						</div>
 						<v-btn
 							v-on:click="newValue('optionValue')"
+							id="newOption"
 						>
 							<v-icon>
 								mdi-pencil-plus-outline
@@ -163,6 +168,7 @@
 									<Translate :text="'Code'"/>
 								</p>
 								<v-text-field
+									id="categoryItemCode"
 									:value="code.value"
 									v-on:input="codeChange($event, index)"
 									type="number"
@@ -251,6 +257,7 @@
 					<Translate :text="'Delete Control Point'"/>
 				</v-btn>
 				<v-btn
+					id="submit"
 					v-on:click="submit"
 				>
 					<Translate :text="'Submit'"/>
@@ -381,8 +388,8 @@ export default {
 			}
 		},
 		removeOptionValue(index) {
-			if (this.optionValues.length === 1) {
-				this.showAlert('warning', this.translateText('there must be at least one option for the options type'))
+			if (this.optionValues.length === 2) {
+				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
 
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)

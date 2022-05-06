@@ -7,7 +7,7 @@ const getDefaultState = () => ({
 		value: null, // number or string
 		upperTolerance: null,
 		lowerTolerance: null,
-		optionValues: [{value: null}],// {value: '',}
+		optionValues: [{value: null}, {value: null}],// {value: '',}
 		attributes: [],//{id: '', minValue: 0, maxValue: 0}
 		codes: [{value: null}],
 		image: null,

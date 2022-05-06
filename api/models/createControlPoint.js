@@ -67,16 +67,20 @@ module.exports.insertControlPoint = async (cp) => {
 	con.input('dkDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="Danish").value)
 	con.input('ltDescription', nVarchar, cp.descriptions.find(obj=>obj.lang==="Lithuanian").value)
 
+	if(cp.type === "number"){
+		con.input('lowerTolerance', nVarchar, cp.lowerTolerance)
+		con.input('upperTolerance', nVarchar, cp.upperTolerance)
+	}else {
+		con.input('lowerTolerance', nVarchar, null)
+		con.input('upperTolerance', nVarchar, null)
+	}
+
 	if(cp.type === "options"){
 		cp.optionValues.forEach((item, index) => {
 			sqlString+=`INSERT INTO [Option] VALUES (@option${index}, @CpID); `
 			con.input('option'+index, nVarchar, item.value)
 		})
 	}
-	sqlString+=`INSERT INTO QAReportControlPoint VALUES (1, @CpID, @value); `
-	con.input('@lowerTolerance', nVarchar, cp.lowerTolerance)
-	con.input('@upperTolerance', nVarchar, cp.upperTolerance)
-
 
 	cp.attributes.forEach((item, index) => {
 		sqlString+=`INSERT INTO AttributeControlPoint VALUES (@id${index}, @CpID, @min${index}, @max${index}) `

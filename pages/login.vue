@@ -20,6 +20,7 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
+						id="username"
 						:rules="usernameRules"
 						required
 						v-model="username"
@@ -27,6 +28,7 @@
 						prepend-icon="mdi-account-circle"
 					/>
 					<v-select
+						id="location"
 						required
 						:rules="locationRules"
 						:items="allLanguages"
