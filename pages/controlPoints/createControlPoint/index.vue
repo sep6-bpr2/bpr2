@@ -102,7 +102,9 @@
 					<h3>
 						<Translate :text="'Relationship with category items and attributes'"/>
 					</h3>
-					<div class="innerElement multiValueCard">
+					<div class="innerElement multiValueCard"
+						id="attributes"
+					>
 						<p>
 							<Translate :text="'Attributes'"/>
 						</p>
@@ -137,6 +139,7 @@
 									v-on:input="attributeChange($event, index, 'MaxValue')"
 								/>
 								<v-btn
+									id="deleteAttribute"
 									v-on:click="removeAttribute(index)"
 								>
 									<v-icon>
@@ -147,6 +150,7 @@
 						</div>
 
 						<v-btn
+							id="newAttribute"
 							v-on:click="newValue('attribute')"
 						>
 							<v-icon>
@@ -156,7 +160,9 @@
 						</v-btn>
 					</div>
 
-					<div class="innerElement multiValueCard">
+					<div class="innerElement multiValueCard"
+						id="codes"
+					>
 						<p>
 							<Translate :text="'Category Item Codes'"/>
 						</p>
@@ -175,6 +181,7 @@
 									class="manualValidation"
 								/>
 								<v-btn
+									id="deleteItemCode"
 									v-on:click="removeCodes(index)"
 								>
 									<v-icon>
@@ -184,6 +191,7 @@
 							</v-card>
 						</div>
 						<v-btn
+							id="newItemCode"
 							v-on:click="newValue('code')"
 						>
 							<v-icon>
@@ -224,6 +232,7 @@
 						<Translate :text="'Check frequency'"/>
 					</h3>
 					<v-btn
+						id="addFreq"
 						v-if="!showFreq"
 						v-on:click="showFrequencies()"
 					>
@@ -234,6 +243,7 @@
 					</v-btn>
 
 					<v-btn
+						id="deleteFreq"
 						v-if="showFreq"
 						v-on:click="showFreq=!showFreq"
 					>
