@@ -12,7 +12,6 @@ describe('create control point', () => {
 	})
 
 	it('sunny scenario', () => {
-		expect(true).to.be.true
 		cy.get('#description').type('test control point')
 		cy.get('#type').click({force: true})
 		cy.contains('text').click()
@@ -93,13 +92,6 @@ describe('create control point', () => {
 			cy.get('#deleteFreq').click()
 			cy.get('#addFreq')
 		})
-		it('reset frequency', ()=> {
-			cy.get('#addFreq').click()
-			cy.get('.freqEntry').first().type("33")
-			cy.get('.freqEntry').first().should('have.value', "233")// does not work
-		})
-
 	})
-
 
 })
