@@ -18,9 +18,34 @@ describe("Control points api testing", () => {
     })
 	describe("allTypes", () => {
 		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "getTypes").returns(["number", "text", "options"])
-			const response = await request.get("/controlPoints/allTypes")
+			const response = await request.get("/controlPoints/rafal/allTypes")
 			chai.expect(response.body).to.deep.equal(["number", "text", "options"])
+		})
+	})
+	describe("allAttributesNames", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "getAttributes").returns(["width", "height", "radius"])
+			const response = await request.get("/controlPoints/rafal/allAttributesNames")
+			chai.expect(response.body).to.deep.equal(["width", "height", "radius"])
+		})
+	})
+	describe("submitControlPoint", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "submitControlPoint").returns()
+			const response = await request.post("/controlPoints/rafal/submitControlPoint")
+			chai.expect(response.status).to.deep.equal(200)
+		})
+	})
+	describe("getFrequenciesOfControlPoint", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "getFrequenciesOfControlPoint").returns()
+			const response = await request.get("/controlPoints/rafal/getFrequenciesOfControlPoint/1")
+			chai.expect(response.status).to.deep.equal(200)
 		})
 	})
 

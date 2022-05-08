@@ -7,11 +7,15 @@ const controlPointService = require("../services/controlPoints")
 
 /**
  * @description - Returns all available types to pick while creating control point
+ * @param username - username of the user
  *
- * @example - GET {BaseURL}/api/controlPoints/allTypes
+ * @example - GET {BaseURL}/api/controlPoints/rafal/allTypes
  */
 router.get(
-	"/allTypes",
+	"/:username/allTypes",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
 	async (req, res) => {
 		const allTypes = await controlPointService.getTypes()
 		res.send(allTypes)
@@ -20,11 +24,15 @@ router.get(
 
 /**
  * @description - Returns all available attributes to pick while creating control point
+ * @param username - username of the user
  *
- * @example - GET {BaseURL}/api/controlPoints/allAttributesNames
+ * @example - GET {BaseURL}/api/controlPoints/rafal/allAttributesNames
  */
 router.get(
-	"/allAttributesNames",
+	"/:username/allAttributesNames",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
 	async (req, res) => {
 		const result = await controlPointService.getAttributes()
 		res.send(result)
@@ -33,13 +41,16 @@ router.get(
 
 /**
  * @description - Inserts new control point
+ * @param username - username of the user
  * @body controlPoint - all control point data
  *
- * @example - POST {BaseURL}/api/controlPoints/submitControlPoint
+ * @example - POST {BaseURL}/api/controlPoints/rafal/submitControlPoint
  */
 router.post(
-	"/submitControlPoint",
+	"/:username/submitControlPoint",
+	param("username").isLength({ min: 1, max: 35 }),
 	validate,
+	validateUserAdmin,
 	async (req, res) => {
 		const result = await controlPointService.submitControlPoint(req.body)
 		res.send(result)
@@ -48,13 +59,16 @@ router.post(
 
 /**
  * @description - Returns frequencies for specific control point
- * @param controlPointId - username of the user
+ * @param username - username of the user
+ * @param controlPointId - id of control point
  *
- * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1
+ * @example - GET {BaseURL}/api/controlPoints/rafal/getFrequenciesOfControlPoint/1
  */
 
-router.get("/getFrequenciesOfControlPoint/:controlPointId",
+router.get("/:username/getFrequenciesOfControlPoint/:controlPointId",
+	param("username").isLength({ min: 1, max: 35 }),
 	validate,
+	validateUserAdmin,
 	async (req, res) => {
 	let result = await controlPointService.getFrequenciesOfControlPoint(req.params.controlPointId)
 	res.send(result)
