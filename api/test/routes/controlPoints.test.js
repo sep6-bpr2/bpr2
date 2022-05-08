@@ -4,11 +4,11 @@ const server = require("../../server")
 const app = server.startServer()
 const request = supertest(app)
 const sinon = require('sinon')
+const chai = require('chai')
 
 //Imports in file being tested
 const controlPointsService = require('../../services/controlPoints')
 const userModel = require("../../models/users")
-
 
 describe("Control points api testing", () => {
 
@@ -16,6 +16,13 @@ describe("Control points api testing", () => {
         sinon.restore()
         process.env.environment = "testing"
     })
+	describe("allTypes", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(controlPointsService, "getTypes").returns(["number", "text", "options"])
+			const response = await request.get("/controlPoints/allTypes")
+			chai.expect(response.body).to.deep.equal(["number", "text", "options"])
+		})
+	})
 
     describe("get list controlpoints minimal", () => {
         it("get list controlpoints minimal OK", async () => {
