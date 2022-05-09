@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const { param, body } = require('express-validator')
-const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt} = require("../middleware/validateMiddleware")
+const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt, validateListEntriesNotEmpty} = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
 const controlPointService = require("../services/controlPoints")
 
@@ -42,15 +42,24 @@ router.get(
 /**
  * @description - Inserts new control point
  * @param username - username of the user
- * @body controlPoint - all control point data
+ * @body frequencies - list with frquencies
+ * @body
  *
  * @example - POST {BaseURL}/api/controlPoints/rafal/submitControlPoint
  */
 router.post(
 	"/:username/submitControlPoint",
 	param("username").isLength({ min: 1, max: 35 }),
-	body("descriptions").custom((value) => validateAtLeastOneListEntryNotEmpty(value)),
-	body("type").custom(value => validateNullOrInt(value)),
+	body("frequencies").isArray(),
+	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
+	body("type").isInt(),
+	body("value").custom(value => validateNullOrInt(value)),
+	body("upperTolerance").custom(value => validateNullOrInt(value)),
+	body("lowerTolerance").custom(value => validateNullOrInt(value)),
+	body("optionValues").isArray(),
+	body("attributes").isArray(),
+	body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
+	body("image").exists(),
 	validate,
 	validateUserAdmin,
 	async (req, res) => {

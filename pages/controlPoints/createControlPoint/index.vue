@@ -10,7 +10,6 @@
 					</h3>
 					<div
 						v-for="(description, index) in descriptions"
-
 					>
 						<div class="innerElement row">
 							<p>
@@ -18,6 +17,7 @@
 								<Translate :text="'Description'"/>
 							</p>
 							<v-text-field
+								id="description"
 								:value="description.value"
 								v-on:input="descriptionChange($event, index)"
 							/>
@@ -34,6 +34,7 @@
 							<Translate :text="'Type'"/>
 						</p>
 						<v-select
+							id="type"
 							:items="allTypes"
 							v-model="type"
 						/>
@@ -41,11 +42,13 @@
 
 					<div
 						v-if="type==='options'"
+						id="options"
 					>
 						<div
 							v-for="(option, index) in optionValues"
 						>
-							<v-card class="valueEntry" elevation="24">
+							<v-card class="valueEntry" elevation="24"
+							>
 								<p>
 									<Translate :text="'Option'"/>
 									{{ index + 1 }}
@@ -55,6 +58,7 @@
 									v-on:input="optionValueChange($event, index)"
 								/>
 								<v-btn
+									id="deleteOption"
 									v-on:click="removeOptionValue(index)"
 								>
 									<v-icon>
@@ -65,6 +69,7 @@
 						</div>
 						<v-btn
 							v-on:click="newValue('optionValue')"
+							id="newOption"
 						>
 							<v-icon>
 								mdi-pencil-plus-outline
@@ -75,14 +80,20 @@
 					</div>
 
 					<div
-						v-else
+						v-if="type==='number'"
 						class="innerElement row"
 					>
 						<p>
-							<Translate :text="'Value'"/>
+							<Translate :text="'LowerTolerance'"/>
 						</p>
 						<v-text-field
-							v-model="value"
+							v-model="lowerTolerance"
+						/>
+						<p>
+							<Translate :text="'UpperTolerance'"/>
+						</p>
+						<v-text-field
+							v-model="upperTolerance"
 						/>
 					</div>
 				</v-card>
@@ -91,7 +102,9 @@
 					<h3>
 						<Translate :text="'Relationship with category items and attributes'"/>
 					</h3>
-					<div class="innerElement multiValueCard">
+					<div class="innerElement multiValueCard"
+						id="attributes"
+					>
 						<p>
 							<Translate :text="'Attributes'"/>
 						</p>
@@ -126,6 +139,7 @@
 									v-on:input="attributeChange($event, index, 'MaxValue')"
 								/>
 								<v-btn
+									id="deleteAttribute"
 									v-on:click="removeAttribute(index)"
 								>
 									<v-icon>
@@ -136,6 +150,7 @@
 						</div>
 
 						<v-btn
+							id="newAttribute"
 							v-on:click="newValue('attribute')"
 						>
 							<v-icon>
@@ -145,7 +160,9 @@
 						</v-btn>
 					</div>
 
-					<div class="innerElement multiValueCard">
+					<div class="innerElement multiValueCard"
+						id="codes"
+					>
 						<p>
 							<Translate :text="'Category Item Codes'"/>
 						</p>
@@ -157,12 +174,14 @@
 									<Translate :text="'Code'"/>
 								</p>
 								<v-text-field
+									id="categoryItemCode"
 									:value="code.value"
 									v-on:input="codeChange($event, index)"
 									type="number"
 									class="manualValidation"
 								/>
 								<v-btn
+									id="deleteItemCode"
 									v-on:click="removeCodes(index)"
 								>
 									<v-icon>
@@ -172,6 +191,7 @@
 							</v-card>
 						</div>
 						<v-btn
+							id="newItemCode"
 							v-on:click="newValue('code')"
 						>
 							<v-icon>
@@ -212,6 +232,7 @@
 						<Translate :text="'Check frequency'"/>
 					</h3>
 					<v-btn
+						id="addFreq"
 						v-if="!showFreq"
 						v-on:click="showFrequencies()"
 					>
@@ -222,6 +243,7 @@
 					</v-btn>
 
 					<v-btn
+						id="deleteFreq"
 						v-if="showFreq"
 						v-on:click="showFreq=!showFreq"
 					>
@@ -245,6 +267,7 @@
 					<Translate :text="'Delete Control Point'"/>
 				</v-btn>
 				<v-btn
+					id="submit"
 					v-on:click="submit"
 				>
 					<Translate :text="'Submit'"/>
@@ -305,12 +328,20 @@ export default {
 				this.$store.commit('createControlPoint/setType', type)
 			}
 		},
-		value: {
+		lowerTolerance: {
 			get() {
-				return this.$store.state.createControlPoint.value
+				return this.$store.state.createControlPoint.lowerTolerance
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setValue', value)
+				this.$store.commit('createControlPoint/setLowerTolerance', value)
+			}
+		},
+		upperTolerance: {
+			get() {
+				return this.$store.state.createControlPoint.upperTolerance
+			},
+			set(value) {
+				this.$store.commit('createControlPoint/setUpperTolerance', value)
 			}
 		},
 		optionValues() {
@@ -367,8 +398,8 @@ export default {
 			}
 		},
 		removeOptionValue(index) {
-			if (this.optionValues.length === 1) {
-				this.showAlert('warning', this.translateText('there must be at least one option for the options type'))
+			if (this.optionValues.length === 2) {
+				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
 
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)
@@ -402,8 +433,8 @@ export default {
 			if (this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
-			} else {
-				if (this.validate([{value: this.value}], this.translateText('value can not be empty')) === false) return false
+			} else if(this.type === 'number'){
+				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 			}
 
 			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
@@ -466,7 +497,8 @@ export default {
 					this.$store.dispatch('createControlPoint/submitControlPoint', {
 						descriptions: this.descriptions,
 						type: this.type,
-						value: this.value,
+						upperTolerance: this.upperTolerance,
+						lowerTolerance: this.lowerTolerance,
 						optionValues: this.optionValues,
 						attributes: this.attributes,
 						codes: this.codes,

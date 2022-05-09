@@ -8,13 +8,14 @@ module.exports.validate = async (req, res, next) => {
 		next()
 	}
 }
-module.exports.validateAtLeastOneListEntryNotEmpty = value => {
+
+module.exports.validateListEntriesNotEmpty = (value, notEmptyRequirement) => {
 	let result = value.filter(desc =>
 		desc.value !== "" &&
 		desc.value !== null &&
 		desc.value !== undefined)
 
-	if (result.length < 1) {
+	if (result.length < notEmptyRequirement) {
 		throw new Error("value is not valid");
 	} else {
 		return value;
