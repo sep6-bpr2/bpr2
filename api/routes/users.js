@@ -15,7 +15,7 @@ router.get("/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
     async (req, res) => {
-	const data = await service.login(req.params.username)
+	    const data = await service.login(req.params.username)
         res.send(data)
     }
 )
