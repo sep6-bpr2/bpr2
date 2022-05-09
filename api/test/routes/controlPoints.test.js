@@ -37,6 +37,17 @@ describe("Control points api testing", () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "submitControlPoint").returns()
 			const response = await request.post("/controlPoints/rafal/submitControlPoint")
+				.send({
+					frequencies: [],
+					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+					type: 2,
+					value: null, // number or string
+					optionValues: [{value: null}],// {value: '',}
+					attributes: [],//{id: '', minValue: 0, maxValue: 0}
+					codes: [{value: null}],
+					image: null,
+					imagePreview: null,
+				})
 			chai.expect(response.status).to.deep.equal(200)
 		})
 	})

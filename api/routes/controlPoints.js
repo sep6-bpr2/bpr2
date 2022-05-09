@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const { param, body } = require('express-validator')
-const { validate } = require("../middleware/validateMiddleware")
+const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt} = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
 const controlPointService = require("../services/controlPoints")
 
@@ -49,6 +49,8 @@ router.get(
 router.post(
 	"/:username/submitControlPoint",
 	param("username").isLength({ min: 1, max: 35 }),
+	body("descriptions").custom((value) => validateAtLeastOneListEntryNotEmpty(value)),
+	body("type").custom(value => validateNullOrInt(value)),
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
