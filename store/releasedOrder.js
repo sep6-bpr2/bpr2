@@ -4,17 +4,19 @@ export const state = () => ({
         { name: "Picture", id: 1 },
         { name: "Units", id: 2 },
         { name: "Tolerance", id: 3 },
-        { name: "Answer", id: 4 },
+        { name: "Expected value", id: 4 },
+        { name: "Answer", id: 5 },
     ],
-    oneTimeAllowedHeaders: ["description", "image", "units", "toleranceText", "answer"],
+    oneTimeAllowedHeaders: ["description", "image", "units", "toleranceText", "expectedValue", "answer"],
     mTableHeaders: [
         { name: "Letter", id: 0 },
         { name: "Description", id: 1 },
         { name: "Picture", id: 2 },
         { name: "Units", id: 3 },
         { name: "Tolerance", id: 4 },
+        { name: "Expected value", id: 5 },
     ],
-    mAllowedHeaders: ["letter", "description", "image", "units", "toleranceText"],
+    mAllowedHeaders: ["letter", "description", "image", "units", "toleranceText", "expectedValue"],
     notification: null
 })
 

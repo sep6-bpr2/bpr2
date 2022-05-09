@@ -2,6 +2,7 @@
 	<div class="releasedOrders">
 		<h1>This is the released orders page</h1>
 		<CustomTable
+            id="releasedOrderList"
 			:allowedHeaders="allowedHeaders"
 			:rows="releasedOrders"
 			:tableHeaders="headers"
@@ -20,6 +21,9 @@ export default {
 		Translate,
 	},
 	created() {
+        if (!this.$store.state || !this.$store.state.login.user) {
+			this.$router.push("/login");
+		}
 		this.$store.dispatch("releasedOrders/loadReleasedOrders", {});
 	},
 	computed: {
@@ -37,9 +41,6 @@ export default {
 		releasedOrderClickCallback(row) {
 			this.$router.push("/releasedOrders/" + row.id);
 		},
-		// handleCreate() {
-		// 	this.$router.push("/controlPoints/manage/createControlPoint");
-		// },
 	},
 };
 </script>

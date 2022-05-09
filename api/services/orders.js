@@ -53,7 +53,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
         let qaReport = await model.getReleasedOrderReport(id)
 
         if (qaReport.length != 0 && qaReport[0].status == 1) {
-            return { result: 0, message: "Order is completed" }
+            return { response: 0, message: "Order is completed" }
         }
 
         let controlPoints = null
@@ -63,6 +63,10 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             // Get all the attributes with the values of the order
             attributes = await model.getReleasedOrderAttributes(id)
 
+            if(attributes.length == 0){
+                return { response: 0, message: "This order does not have any attributes in it" }
+            }
+            
             controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
             // Get all the attributes and item categories of these control points 
             for (let i = 0; i < controlPoints.length; i++) {
@@ -106,7 +110,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
 
             if (added.length != 0) {
                 // Add qa report 
-                let qaReport = await model.createQAReport(id)
+                qaReport = await model.createQAReport(id)
                 qaReport = qaReport[0]
 
                 // Add the connections between control point and qa report
@@ -140,7 +144,6 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
         }
 
         for (let i = 0; i < controlPoints.length; i++) {
-            controlPoints[i].descriptions = ""
             let descriptions = await model.getReleasedOrderControlPointsDescriptions(controlPoints[i].id)
 
             let englishIndex = -1;
@@ -169,93 +172,94 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
         }
 
         itemData.status = "incomplete"
-        itemData.attributes = attributes
         itemData.qaReportId = qaReport.id
-        itemData.controlPoints = controlPoints
 
         itemData.oneTimeControlPoints = []
         itemData.multipleTimeControlPoints = []
 
-        for (let i = 0; i < itemData.controlPoints.length; i++) {
+        for (let i = 0; i < controlPoints.length; i++) {
 
-            if (itemData.controlPoints[i].attributes.length != 0) {
-
+            if (controlPoints[i].attributes.length != 0) {
                 loop:
-                for (let j = 0; j < itemData.controlPoints[i].attributes.length; j++) {
-                    for (let k = 0; k < itemData.attributes.length; k++) {
-                        if (itemData.controlPoints[i].attributes[j].id == itemData.attributes[k].id) {
-                            itemData.controlPoints[i].expectedValue = itemData.attributes[k].value
-                            itemData.controlPoints[i].units = itemData.attributes[k].units
+                for (let j = 0; j < controlPoints[i].attributes.length; j++) {
+                    for (let k = 0; k < attributes.length; k++) {
+                        if (controlPoints[i].attributes[j].id == attributes[k].id) {
+                            controlPoints[i].expectedValue = attributes[k].value
+                            controlPoints[i].units = attributes[k].units
                             break loop
                         }
                     }
                 }
-
             }
 
-            itemData.controlPoints[i].image = "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg"
+            // Attributes no longer needed
+            delete controlPoints[i].attributes
+
+            controlPoints[i].image = "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg"
 
             // One time measurement
-            if (itemData.controlPoints[i].controlPointType == 1) {
-                itemData.oneTimeControlPoints.push(itemData.controlPoints[i])
+            if (controlPoints[i].controlPointType == 1) {
+                itemData.oneTimeControlPoints.push(controlPoints[i])
             } else {
-                itemData.multipleTimeControlPoints.push(itemData.controlPoints[i])
+                itemData.multipleTimeControlPoints.push(controlPoints[i])
             }
 
-            itemData.controlPoints[i].toleranceText = ""
-            if (itemData.controlPoints[i].upperTolerance != null && itemData.controlPoints[i].upperTolerance == itemData.controlPoints[i].lowerTolerance) {
-                itemData.controlPoints[i].toleranceText = "+/-" + itemData.controlPoints[i].upperTolerance + itemData.controlPoints[i].units
-            } else if (itemData.controlPoints[i].upperTolerance != null && itemData.controlPoints[i].upperTolerance != itemData.controlPoints[i].lowerTolerance) {
-                itemData.controlPoints[i].toleranceText = "+" + itemData.controlPoints[i].upperTolerance + "/-" + itemData.controlPoints[i].lowerTolerance + itemData.controlPoints[i].units
+            controlPoints[i].toleranceText = ""
+            if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance == controlPoints[i].lowerTolerance) {
+                controlPoints[i].toleranceText = "+/-" + controlPoints[i].upperTolerance + controlPoints[i].units
+            } else if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance != controlPoints[i].lowerTolerance) {
+                controlPoints[i].toleranceText = "+" + controlPoints[i].upperTolerance + "/-" + controlPoints[i].lowerTolerance + controlPoints[i].units
             }
 
-            if (itemData.controlPoints[i].type == 0) {
+            if (controlPoints[i].type == 0) {
                 let allUnits = ""
 
-                for (let j = 0; j < itemData.controlPoints[i].options.length; j++) {
+                for (let j = 0; j < controlPoints[i].options.length; j++) {
                     if (j == 0) {
-                        allUnits = itemData.controlPoints[i].options[j].value
+                        allUnits = controlPoints[i].options[j].value
                     } else {
-                        allUnits = allUnits + "/" + itemData.controlPoints[i].options[j].value
+                        allUnits = allUnits + "/" + controlPoints[i].options[j].value
                     }
                 }
 
-                itemData.controlPoints[i].units = allUnits
-            } else if (itemData.controlPoints[i].type == 1) {
-                itemData.controlPoints[i].units = "Text"
+                controlPoints[i].units = allUnits
+            } else if (controlPoints[i].type == 1) {
+                controlPoints[i].units = "Text"
             }
         }
 
         let currentChar = 'a'
 
-        let asnwersMulti = []
+        let answersMulti = []
 
         let frequencyCategoryKey = ""
 
-        if (itemData.quantity <= 25) {
-            frequencyCategoryKey = "to25"
-        } else if (itemData.quantity <= 50) {
-            frequencyCategoryKey = "to50"
-        } else if (itemData.quantity <= 100) {
-            frequencyCategoryKey = "to100"
-        } else if (itemData.quantity <= 200) {
-            frequencyCategoryKey = "to200"
-        } else if (itemData.quantity <= 300) {
-            frequencyCategoryKey = "to300"
-        } else if (itemData.quantity <= 500) {
-            frequencyCategoryKey = "to500"
-        } else if (itemData.quantity <= 700) {
-            frequencyCategoryKey = "to700"
-        } else if (itemData.quantity <= 1000) {
-            frequencyCategoryKey = "to1000"
-        } else if (itemData.quantity <= 1500) {
-            frequencyCategoryKey = "to1500"
-        } else if (itemData.quantity <= 2000) {
-            frequencyCategoryKey = "to2000"
-        } else if (itemData.quantity <= 4000) {
-            frequencyCategoryKey = "to4000"
-        } else if (itemData.quantity <= 5000) {
-            frequencyCategoryKey = "to5000"
+        {
+            if (itemData.quantity <= 25) {
+                frequencyCategoryKey = "to25"
+            } else if (itemData.quantity <= 50) {
+                frequencyCategoryKey = "to50"
+            } else if (itemData.quantity <= 100) {
+                frequencyCategoryKey = "to100"
+            } else if (itemData.quantity <= 200) {
+                frequencyCategoryKey = "to200"
+            } else if (itemData.quantity <= 300) {
+                frequencyCategoryKey = "to300"
+            } else if (itemData.quantity <= 500) {
+                frequencyCategoryKey = "to500"
+            } else if (itemData.quantity <= 700) {
+                frequencyCategoryKey = "to700"
+            } else if (itemData.quantity <= 1000) {
+                frequencyCategoryKey = "to1000"
+            } else if (itemData.quantity <= 1500) {
+                frequencyCategoryKey = "to1500"
+            } else if (itemData.quantity <= 2000) {
+                frequencyCategoryKey = "to2000"
+            } else if (itemData.quantity <= 4000) {
+                frequencyCategoryKey = "to4000"
+            } else if (itemData.quantity <= 5000) {
+                frequencyCategoryKey = "to5000"
+            }
         }
 
         let mIdList = listToCommaString(itemData.multipleTimeControlPoints, 'id')
@@ -296,11 +300,15 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                 let author = ""
                 let connectionId = ""
 
-                if (mResultsForControlPoint.length !== 0) {
+                if (mResultsForControlPoint.length != 0) {
                     answer = mResultsForControlPoint[0].answer
                     author = mResultsForControlPoint[0].author
                     connectionId = mResultsForControlPoint[0].connectionId
                     mResultsForControlPoint.shift() // Remove the first element
+                }else{
+                    // Add the thing to the database and give the connectionID to it
+                    let insertResponse = await model.insertMultipleTimeMeasurement(itemData.multipleTimeControlPoints[i].id, '', itemData.qaReportId, '')
+                    connectionId = insertResponse[0].id
                 }
 
                 arrayOfAnswers.push(
@@ -312,18 +320,22 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                         author: author
                     })
             }
-            asnwersMulti.push(arrayOfAnswers)
+
+            // Sort these so that the order stays the same in the ui every time
+            arrayOfAnswers.sort((a, b) => (a.connectionId > b.connectionId) ? 1 : -1)
+
+            answersMulti.push(arrayOfAnswers)
             currentChar = String.fromCharCode(currentChar.charCodeAt(0) + 1)
         }
 
-        itemData.multipleTimeAnswers = asnwersMulti
+        itemData.multipleTimeAnswers = answersMulti
 
         const date = new Date(itemData.deadline)
         itemData.deadline = moment(date).format('YYYY-MM-DD')
 
         return itemData
     } else {
-        return null
+        return { response: 0, message: "The order does not exist in the database" }
     }
 
 }
@@ -340,8 +352,6 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
             originalOrder.quantity == editedQAReport.quantity &&
             originalOrder.qaReportId == editedQAReport.qaReportId &&
             originalOrder.status == "incomplete" &&
-            originalOrder.attributes.length == editedQAReport.attributes.length &&
-            originalOrder.controlPoints.length == editedQAReport.controlPoints.length &&
             originalOrder.oneTimeControlPoints.length == editedQAReport.oneTimeControlPoints.length &&
             originalOrder.multipleTimeControlPoints.length == editedQAReport.multipleTimeControlPoints.length &&
             originalOrder.multipleTimeAnswers.length == editedQAReport.multipleTimeAnswers.length
@@ -376,7 +386,9 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                         let inputValidated = false
 
-                        if (originalOrder.oneTimeControlPoints[i].type == 0) { //Option
+                        if(editedQAReport.oneTimeControlPoints[i].answer.length > 50){
+                            inputValidated = false
+                        }else if (originalOrder.oneTimeControlPoints[i].type == 0) { //Option
 
                             for (let j = 0; j < originalOrder.oneTimeControlPoints[i].options.length; j++) {
                                 if (originalOrder.oneTimeControlPoints[i].options[j].value == editedQAReport.oneTimeControlPoints[i].answer) {
@@ -396,8 +408,8 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         }
 
                         if (inputValidated) {
-                            await model.deleteQAReportConnection(editedQAReport.oneTimeControlPoints[i].connectionId)
-                            model.insertOrReplaceOneTimeMeasurement(
+                            await model.alterMeasurement(
+                                editedQAReport.oneTimeControlPoints[i].connectionId,
                                 editedQAReport.oneTimeControlPoints[i].id,
                                 editedQAReport.oneTimeControlPoints[i].answer,
                                 editedQAReport.qaReportId,
@@ -413,13 +425,17 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                 for (let i = 0; i < originalOrder.multipleTimeAnswers.length; i++) {
                     for (let j = 0; j < originalOrder.multipleTimeAnswers[i].length; j++) {
                         // Insert The one time measurement
-                        if ((editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author && editedQAReport.oneTimeControlPoints[i].author != 'taken')||
+
+
+                        if ((editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author && editedQAReport.multipleTimeAnswers[i][j].author != 'taken')||
                             editedQAReport.multipleTimeAnswers[i][j].answer != originalOrder.multipleTimeAnswers[i][j].answer
                         ) {
 
                             let inputValidated = false
 
-                            if (originalOrder.multipleTimeAnswers[i][j].type == 0) { //Option
+                            if(editedQAReport.multipleTimeAnswers[i][j].answer.length > 50){
+                                inputValidated = false
+                            }else if (originalOrder.multipleTimeAnswers[i][j].type == 0) { //Option
 
                                 for (let k = 0; k < originalOrder.multipleTimeControlPoints[i].options.length; k++) {
                                     if (originalOrder.multipleTimeControlPoints[i].options[k].value == editedQAReport.multipleTimeAnswers[i][j].answer) {
@@ -439,8 +455,8 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                             }
 
                             if (inputValidated) {
-                                await model.deleteQAReportConnection(editedQAReport.multipleTimeAnswers[i][j].connectionId)
-                                model.insertOrReplaceMultipleTimeMeasurement(
+                                model.alterMeasurement(
+                                    editedQAReport.multipleTimeAnswers[i][j].connectionId,
                                     editedQAReport.multipleTimeAnswers[i][j].id,
                                     editedQAReport.multipleTimeAnswers[i][j].answer,
                                     editedQAReport.qaReportId,
@@ -454,7 +470,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                 }
 
                 if (badValuesPresent) {
-                    return { response: 2, message: "Only some data was saved. There were mistakes in input types. Make sure numbers with a decimal point are with a '.' and not a ','" }
+                    return { response: 2, message: "Only some data was saved. There were mistakes in input." }
 
                 } else {
                     return { response: 1, message: "Data saved successfully" }

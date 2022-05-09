@@ -13,6 +13,7 @@
 		<tbody>
 			<tr
 				v-for="(row, index) in rows"
+                :id="'customTable'+index"
 				:key="Object.values(row)[0].toString() + index"
 				v-on:click="clickList(row)"
 			>

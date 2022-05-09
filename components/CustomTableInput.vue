@@ -14,6 +14,7 @@
 			<tr
 				v-for="(row, index) in originalRows"
 				:key="Object.keys(row)[0].toString() + index"
+                :id="'customTableInput'+index"
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
@@ -85,9 +86,11 @@ export default {
             }
         },
         validated(index){
-            if(this.originalRows[index].validated == null || this.originalRows[index].validated){
+            if(this.originalRows[index].validated == null || this.originalRows[index].validated == 1){
                 return 'black'
-            }else{
+            }else if (this.originalRows[index].validated == 2){
+                return 'DarkOrange'
+            }else if (this.originalRows[index].validated == 0){
                 return 'red'
             }
         }

@@ -5,6 +5,7 @@
 			<ul>
 				<li v-for="link in allLinks" :key="link.id">
 					<nuxt-link
+                        :id="'nav'+link.id"
 						:to="{ path: link.link }"
 						v-bind:style="[
 							currentLinkName == link.link

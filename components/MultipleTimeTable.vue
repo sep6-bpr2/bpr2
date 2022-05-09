@@ -11,7 +11,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<td v-for="(column, index) in getColumns" :key="index">
+			<td 
+                v-for="(column, index) in getColumns" 
+                :key="index" 
+                :id="'multipleTimeTable' + index"
+            >
 				<tr
 					v-for="(cell, cellIndex) in column"
 					:key="cellIndex + Object.values(cell)[0].toString()"
@@ -144,9 +148,11 @@ export default {
 			);
 		},
         validated(columnIndex, cellIndex){
-            if(this.originalColumns[columnIndex][cellIndex].validated == null || this.originalColumns[columnIndex][cellIndex].validated){
+            if(this.originalColumns[columnIndex][cellIndex].validated == null || this.originalColumns[columnIndex][cellIndex].validated == 1){
                 return 'black'
-            }else{
+            }else if (this.originalColumns[columnIndex][cellIndex].validated == 2){
+                return 'DarkOrange'
+            }else if (this.originalColumns[columnIndex][cellIndex].validated == 0){
                 return 'red'
             }
         }

@@ -11,6 +11,7 @@
 			}"
 		>
 			<button
+                id="closeAlertButton"
 				style="
 					text-decoration: none;
 					float: right;
@@ -46,27 +47,9 @@ export default {
 	 * timing - how long the modal should be shown. In seconds
 	 * closeCallback - callback to change the state of the modal showing in the parent
 	 */
-	props: ["id", "message", "status", "show", "timing", "closeCallback"],
+	props: ["id", "message", "status", "show", "closeCallback"],
 	components: {
 		Translate,
-	},
-	watch: {
-		show: function () {
-            // THIS is needed because otherwise this is not called. 
-            // I assume the compiler optimizes it out
-
-
-            // This is a bud in the code but it actually ads functionality
-
-            // This watch only works after the user closes the alert using the x button.
-            // This makes a lot of sense for a user. Who closes the alert and does not 
-            // want to look at them for long afterwards
-
-            console.log("      ") 
-			if (this.timing && this.show) {
-				setTimeout(() => this.closeModal(), this.timing* 1000);
-			}
-		},
 	},
 	computed: {
 		getColor() {

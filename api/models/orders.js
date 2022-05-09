@@ -242,7 +242,7 @@ module.exports.getByAttribute = async (attributeIds) => {
     return result.recordset
 }
 
-module.exports.insertOrReplaceMultipleTimeMeasurement = async (controlPointId, value, qaReportId, author) => {
+module.exports.insertMultipleTimeMeasurement = async (controlPointId, value, qaReportId, author) => {
     const result = await localDB()
         .request()
         .input("controlPointId", mssql.Int, controlPointId)
@@ -250,20 +250,24 @@ module.exports.insertOrReplaceMultipleTimeMeasurement = async (controlPointId, v
         .input("value", mssql.NVarChar, value)
         .input("author", mssql.NVarChar, author)
         .query(`
-            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author)
+            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author);
+            SELECT SCOPE_IDENTITY() AS id
         `)
     return result.recordset
 }
 
-module.exports.insertOrReplaceOneTimeMeasurement = async (controlPointId, value, qaReportId, author) => {
+module.exports.alterMeasurement = async (connectionId, controlPointId, value, qaReportId, author) => {
     const result = await localDB()
         .request()
+        .input("id", mssql.Int, connectionId)
         .input("controlPointId", mssql.Int, controlPointId)
         .input("qaReportId", mssql.Int, qaReportId)
         .input("value", mssql.NVarChar, value)
         .input("author", mssql.NVarChar, author)
         .query(`
-            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author)
+            UPDATE [QAReportControlPointValue]
+            SET [value] = @value, [author] = @author
+            WHERE qaReportId = @qaReportId AND controlPointId = @controlPointId AND id = @id; 
         `)
     return result.recordset
 }
