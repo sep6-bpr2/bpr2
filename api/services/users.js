@@ -11,3 +11,4 @@ module.exports.addUser = async (body) => {
 module.exports.getAllUsers = async (body) => {
 	return model.getAllUsers(body)
 }
+

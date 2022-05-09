@@ -13,6 +13,7 @@
 										<h3>{{ createLabel(key) }}</h3>
 										<v-list-item-subtitle>
 											<v-text-field
+												:id="key"
 												:value=value
 												type="number"
 												v-on:input="updateFreq($event,key)"
@@ -32,7 +33,7 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn color="#333" v-on:click="submitFrequencies" class="white--text">
+						<v-btn color="#333" id="submitBtn" v-on:click="submitFrequencies" class="white--text">
 							Submit
 						</v-btn>
 					</v-col>
@@ -40,7 +41,7 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn color="#333" v-on:click="resetFrequencies" class="white--text">
+						<v-btn color="#333" id="resetBtn" v-on:click="resetFrequencies" class="white--text">
 							Reset
 						</v-btn>
 					</v-col>
@@ -49,7 +50,7 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn color="#333" v-on:click="pushBack" class="white--text">Cancel</v-btn>
+						<v-btn color="#333" id="pushbackBtn" v-on:click="pushBack" class="white--text">Cancel</v-btn>
 					</v-col>
 				</v-row>
 			</v-container>

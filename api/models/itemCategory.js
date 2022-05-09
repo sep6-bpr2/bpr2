@@ -1,9 +1,19 @@
 const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 const defaultFrequencyValue = [{"id":0,"to25":2,"to50":3,"to100":4,"to200":7,"to300":10,"to500":16,"to700":22,"to1000":30,"to1500":40,"to2000":50,"to3000":60,"to4000":65,"to5000":70}]
-module.exports.getItemCatCodes = async () => {
-	const result = await konfairDB()
-		.request()
-		.query(`select Code from [dbo].[KonfAir DRIFT$Item Category]`)
+
+module.exports.getItemCatCodes = async (location) => {
+	let result
+	if (location !== "All")
+	{
+		 result = await konfairDB()
+			.request()
+			.query(`select Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code where [Location Code] = '${location}'`)
+	}
+	else
+		 result = await konfairDB()
+			.request()
+			.query(`select Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code`)
+
 	return result.recordset
 }
 module.exports.getFrequenciesOfItem = async (itemCode) => {

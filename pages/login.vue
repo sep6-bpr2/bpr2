@@ -21,6 +21,7 @@
 				<v-card-text>
 					<v-text-field
 						:rules="usernameRules"
+						id="userInput"
 						required
 						v-model="username"
 						v-bind:label="translateText('username')"
@@ -29,7 +30,8 @@
 					<v-select
 						required
 						:rules="locationRules"
-						:items="allLanguages"
+						:items="allLocations"
+						v-model="location"
 						v-bind:label="translateText('choose location')"
 						prepend-icon="mdi-office-building"
 					>
@@ -74,7 +76,21 @@ export default {
 			locationRules: [(v) => !!v || "location is required"],
 		};
 	},
+	mounted() {
+		this.$store.dispatch("login/getLocations")
+	},
 	computed: {
+		allLocations() {
+			return this.$store.state.login.allLocations;
+		},
+		location: {
+			get() {
+				return this.$store.state.login.chosenLocation;
+			},
+			set(newLocation) {
+				this.$store.commit("login/setLocation", newLocation);
+			},
+		},
 		allLanguages() {
 			return this.$store.state.login.allLanguages;
 		},

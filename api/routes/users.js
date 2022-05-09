@@ -7,7 +7,7 @@ const service = require("../services/users")
 
 /**
  * @description - Pass username and get back the user if he exists
- * @param username - integer, id for which to get comments for.
+ * @param username - value of the username needed to find if user exists .
  *
  * @example - GET {BaseURL}/api/users/rokas
  */
@@ -20,12 +20,23 @@ router.get("/:username",
     }
 )
 
+/**
+ * @description - get all users in the system
+ *
+ * @example - GET {BaseURL}/api/users/
+ */
 router.get("/", async (req, res) => {
-
 	const result = await service.getAllUsers()
 	res.send(result)
 })
 
+
+/**
+ * @description - add user to the system
+ * @body - user to add to the system
+ *
+ * @example - POST {BaseURL}/api/users/
+ */
 router.post("/", async (req, res) => {
     const result = await service.addUser(req.body)
 
