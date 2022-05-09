@@ -31,6 +31,24 @@ module.exports.releasedOrders = async (location) => {
     return uncompletedOrders
 }
 
+
+module.exports.completedOrders = async (location) => {
+    let qaReports = await model.getCompletedQAReports()
+    
+    if(qaReports.length == 0){
+        return []
+    }
+    
+    let orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
+
+    for (let i = 0; i < orders.length; i++) {
+        const date = new Date(orders[i].deadline)
+        orders[i].deadline = moment(date).format('YYYY-MM-DD')
+    }
+    
+    return orders
+}
+
 function listToCommaString(list, key) {
     let stringList = ""
     for (let i = 0; i < list.length; i++) {
@@ -89,6 +107,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                         // The control point must be linked to at least one attribute
                         if (attributes[k].id == controlPoints[i].attributes[j].id) {
                             // Control point without a range 
+
                             if (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) {
                                 added.push(controlPoints[i])
                                 // Break out of both loops using the label

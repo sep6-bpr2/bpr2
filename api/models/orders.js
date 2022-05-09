@@ -12,6 +12,18 @@ module.exports.getReleasedOrders = async (location) => {
     return result.recordset
 }
 
+module.exports.getOrders = async (location) => {
+    const result = await konfairDB()
+        .request()
+        .input("location", mssql.NVarChar(40), location)
+        .query(`
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
+            WHERE pOrder.[Location Code] = @location
+        `)
+    return result.recordset
+}
+
 module.exports.getReleasedOrderInformation = async (id) => {
     const result = await konfairDB()
         .request()
@@ -317,10 +329,34 @@ module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfCon
 }
 
 module.exports.getMultipleQAReports = async (stringList) => {
+
     const result = await localDB()
         .request()
         .query(`
             Select * from QAReport WHERE itemId in (${stringList});
+        `)
+    return result.recordset
+}
+
+module.exports.getOrdersByIdList = async (location, stringList) => {
+
+    const result = await konfairDB()
+        .request()
+        .input("location", mssql.NVarChar(40), location)
+        .query(`
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
+            WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringList})
+        `)
+        
+    return result.recordset
+}
+
+module.exports.getCompletedQAReports = async () => {
+    const result = await localDB()
+        .request()
+        .query(`
+            Select * from QAReport WHERE status = 1;
         `)
     return result.recordset
 }
