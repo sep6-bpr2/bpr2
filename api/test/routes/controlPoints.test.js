@@ -41,12 +41,11 @@ describe("Control points api testing", () => {
 					frequencies: [],
 					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 					type: 1,
-					value: null, // number or string
 					upperTolerance: null,
 					lowerTolerance: null,
 					optionValues: [{value: null}, {value: null}],// {value: '',}
 					attributes: [],//{id: '', minValue: 0, maxValue: 0}
-					codes: [{value: 25674}],
+					codes: [{value: 25674}, {value: 25674}],
 					image: null,
 				})
 			chai.expect(response.status).to.deep.equal(200)

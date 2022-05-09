@@ -4,7 +4,6 @@ const getDefaultState = () => ({
 		frequencies: [],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		type: 0,
-		value: null, // number or string
 		upperTolerance: null,
 		lowerTolerance: null,
 		optionValues: [{value: null}, {value: null}],// {value: '',}

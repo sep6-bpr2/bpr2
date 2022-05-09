@@ -53,7 +53,6 @@ router.post(
 	body("frequencies").isArray(),
 	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
 	body("type").isInt(),
-	body("value").custom(value => validateNullOrInt(value)),
 	body("upperTolerance").custom(value => validateNullOrInt(value)),
 	body("lowerTolerance").custom(value => validateNullOrInt(value)),
 	body("optionValues").isArray(),
