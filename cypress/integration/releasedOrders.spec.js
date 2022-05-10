@@ -43,6 +43,9 @@ describe('login', () => {
 
         cy.contains('47827').should('be.visible')
         cy.contains('32110').should('be.visible')
+        
+        // Completed order not visible
+        cy.contains('1111').should('not.exist');
 
         // Check order clicking
         cy.get('#customTable0').click()

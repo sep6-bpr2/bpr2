@@ -31,6 +31,18 @@ describe("Orders api testing", () => {
         })
     })
 
+    describe("completed orders", () => {
+        it("released orders OK", async () => {
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+
+            sinon.stub(ordersService, "completedOrders").returns("Test worked")
+
+            const response = await request.get("/orders/completedList/minimal/rokas/denmark")
+
+            assertEquals(response.text, "Test worked")
+        })
+    })
+
     describe("released order full", () => {
         it("released order full OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
