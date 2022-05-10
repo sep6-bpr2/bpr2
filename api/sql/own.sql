@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS [dbo].[AttributeControlPoint];
 CREATE TABLE [dbo].[AttributeControlPoint](
-    [attributeId] int,
-    [ControlPointId] int,
+    [attributeId] int NOT NULL,
+    [controlPointId] int NOT NULL,
     [minValue] float,
     [maxValue] float,
 );
@@ -9,12 +9,12 @@ CREATE TABLE [dbo].[AttributeControlPoint](
 DROP TABLE IF EXISTS [dbo].[ControlPoint];
 CREATE TABLE [dbo].[ControlPoint](
     [id] int IDENTITY(1, 1),
-    [frequencyid] int,
-    [image] varbinary,
+    [frequencyid] int, -- difference
+    [image] nvarchar(MAX),-- difference
     [upperTolerance] float,
     [lowerTolerance] float,
     [type] int,
-    [controlPointType] int
+    [controlPointType] int-- difference
 );
 
 DROP TABLE IF EXISTS [dbo].[Description];
@@ -27,7 +27,7 @@ CREATE TABLE [dbo].[Description](
 
 DROP TABLE IF EXISTS [dbo].[ItemCategoryControlPoint];
 CREATE TABLE [dbo].[ItemCategoryControlPoint](
-    [itemCategoryCode] int,
+    [itemCategoryCode] int, -- difference
     [controlPointId] int,
 );
 
@@ -65,10 +65,7 @@ INSERT INTO [dbo].[SystemUser] VALUES ('admin', 'admin');
 INSERT INTO [dbo].[SystemUser] VALUES ('worker', 'qa employee');
 
 DROP TABLE IF EXISTS [dbo].[SystemUserQAReport];
-CREATE TABLE [dbo].[SystemUserQAReport](
-    [userId] int, 
-    [qaReportId] int
-);
+
 
 DROP TABLE IF EXISTS [dbo].[Frequency];
 create table [dbo].[Frequency]
