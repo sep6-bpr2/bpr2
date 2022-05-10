@@ -8,7 +8,7 @@ const service = require("../services/location")
  *
  * @example - GET {BaseURL}/api/location/getLocations
  */
-router.get("/getLocations" ,validate, async (req, res) => {
+router.get("/getLocations" , async (req, res) => {
 	const result = await service.getAllLocations()
 	res.send(result)
 })

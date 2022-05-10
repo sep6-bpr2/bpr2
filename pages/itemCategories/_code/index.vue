@@ -52,6 +52,8 @@ export default {
 				to4000 : 0,
 				to5000 : 0
 			}
+			console.log(JSON.stringify(localFrequencies))
+			console.log(JSON.stringify(stateFrequencies))
 			for (let x in localFrequencies) {
 				if(localFrequencies[x].changed == false){
 					tempFrequencies[x] = stateFrequencies[x]

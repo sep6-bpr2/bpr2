@@ -11,7 +11,7 @@ const service = require("../services/users")
  *
  * @example - GET {BaseURL}/api/users/rokas
  */
-router.get("/:username",
+router.get("/getUser/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
     async (req, res) => {
@@ -25,7 +25,7 @@ router.get("/:username",
  *
  * @example - GET {BaseURL}/api/users/
  */
-router.get("/", async (req, res) => {
+router.get("/getAllUsers", async (req, res) => {
 	const result = await service.getAllUsers()
 	res.send(result)
 })
@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
  *
  * @example - POST {BaseURL}/api/users/
  */
-router.post("/", async (req, res) => {
+router.post("/addUser", async (req, res) => {
     const result = await service.addUser(req.body)
 
     res.send(result)
