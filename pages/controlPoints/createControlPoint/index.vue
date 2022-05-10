@@ -103,7 +103,7 @@
 						<Translate :text="'Relationship with category items and attributes'"/>
 					</h3>
 					<div class="innerElement multiValueCard"
-						id="attributes"
+						 id="attributes"
 					>
 						<p>
 							<Translate :text="'Attributes'"/>
@@ -161,7 +161,7 @@
 					</div>
 
 					<div class="innerElement multiValueCard"
-						id="codes"
+						 id="codes"
 					>
 						<p>
 							<Translate :text="'Category Item Codes'"/>
@@ -301,7 +301,7 @@ export default {
 		successAlert: {show: false, text: ''},
 		warningAlert: {show: false, text: ''},
 		showFreq: false,
-		id:0
+		id: 0
 	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
@@ -309,7 +309,7 @@ export default {
 	},
 	computed: {
 		frequencies() {
-			return this.$store.state.createControlPoint.frequencies[0]
+			return this.$store.state.createControlPoint.frequencies
 		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes
@@ -433,7 +433,7 @@ export default {
 			if (this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
-			} else if(this.type === 'number'){
+			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 			}
 
@@ -453,8 +453,7 @@ export default {
 		},
 
 		submitFrequencies() {
-			if(typeof this.$refs.frequencyChild === 'undefined')
-			{
+			if (typeof this.$refs.frequencyChild === 'undefined') {
 				return null
 			}
 			let localFrequencies = this.$refs.frequencyChild.localFrequencies
@@ -488,25 +487,30 @@ export default {
 			if (!existsNegVal) {
 				alert("There is an invalid input")
 			} else {
-					return tempFrequencies
+				return tempFrequencies
 			}
 
 		},
 		submit() {
-				if (this.validateAll()) {
-					this.$store.dispatch('createControlPoint/submitControlPoint', {
-						descriptions: this.descriptions,
-						type: this.type,
-						upperTolerance: this.upperTolerance,
-						lowerTolerance: this.lowerTolerance,
-						optionValues: this.optionValues,
-						attributes: this.attributes,
-						codes: this.codes,
-						image: this.currentImage,
-						frequencies: this.submitFrequencies()
-					})
-					this.showAlert('success', this.translateText('control point has been created'))
-				}
+			if (this.validateAll()) {
+				this.$store.dispatch('createControlPoint/submitControlPoint', {
+					descriptions: this.descriptions,
+					type: this.type,
+					upperTolerance: this.upperTolerance,
+					lowerTolerance: this.lowerTolerance,
+					optionValues: this.optionValues,
+					attributes: this.attributes,
+					codes: this.codes,
+					image: this.currentImage,
+					frequencies: this.frequencies,
+				}).then(result => {
+					if (result) {
+						this.showAlert('success', this.translateText('control point has been created'))
+					}else{
+						this.showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
+					}
+				})
+			}
 		},
 
 

@@ -4,13 +4,8 @@ describe('create control point', () => {
 		cy.get('#username').type('admin')
 		cy.get('#location').click({force: true})
 		cy.contains("object").click()
-		cy.get('button').click()
-		cy.wait(2000)// it is ok to wait a bit in cypress tests, ref: https://www.cypress.io/blog/2017/11/28/testing-vue-web-application-with-vuex-data-store-and-rest-backend/
-	})
-
-	beforeEach(() => {
+		cy.get('#loginBtn').click()
 		cy.visit('http://localhost:3000/controlPoints/createControlPoint')
-		cy.wait(2000)
 	})
 
 	it('sunny scenario', () => {

@@ -1,7 +1,7 @@
 const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
-		frequencies: [],
+		frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},{name:"to200",value:7},{name:"to300",value:10},{name:"to500",value:16},{name:"to700",value:22},{name:"to1000",value:30},{name:"to1500", value:40},{name:"to2000",value:50},{name:"to3000",value:60},{name:"to4000",value:65},{name:"to5000",value:70}],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		type: 0,
 		upperTolerance: null,
@@ -43,7 +43,7 @@ export const mutations = {
 		state.type = type
 	},
 	setUpperTolerance(state, value) {
-		state.uppperTolerance = value
+		state.upperTolerance = value
 	},
 	setLowerTolerance(state, value) {
 		state.lowerTolerance = value
@@ -95,7 +95,7 @@ export const actions = {
 	async getAllTypes({commit, rootState}) {
 		const user = rootState.login.user;
 		if (user) {
-			await fetch(`http://localhost:3000/api/controlPoints/${user.username}/allTypes`)
+			await fetch(`http://localhost:3000/api/controlPoints/allTypes/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
 					commit('setAllTypes', res)
@@ -105,8 +105,8 @@ export const actions = {
 
 	async getFrequencies({commit, rootState}, cpId) {
 		const user = rootState.login.user;
-		if(user) {
-			await fetch(`http://localhost:3000/api/controlPoints/${user.username}/getFrequenciesOfControlPoint/${cpId.controlPointId}`)
+		if (user) {
+			await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${cpId.controlPointId}/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
 					commit('setFrequencies', res)
@@ -115,8 +115,8 @@ export const actions = {
 	},
 	async getAllAttributesNames({commit, rootState}) {
 		const user = rootState.login.user;
-		if(user) {
-			await fetch(`http://localhost:3000/api/controlPoints/${user.username}/allAttributesNames`)
+		if (user) {
+			await fetch(`http://localhost:3000/api/controlPoints/allAttributesNames/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
 					commit('setAllAttributesNames', res)
@@ -124,9 +124,11 @@ export const actions = {
 		}
 	},
 	async submitControlPoint({commit, rootState}, cp) {
+		console.log(cp)
 		const user = rootState.login.user;
-		const request = async (commit, cp) => {
-			await fetch(`http://localhost:3000/api/controlPoints/${user.username}/submitControlPoint`, {
+		const request = (commit, cp) => {
+			return new Promise((resolve, reject) => {
+			fetch(`http://localhost:3000/api/controlPoints/submitControlPoint/${user.username}`, {
 				method: 'POST',
 				body: JSON.stringify(cp),
 				headers: {
@@ -134,19 +136,23 @@ export const actions = {
 				}
 			}).then(response => {
 					if (response.ok) {
+						resolve(true)
 						commit('resetState')
+					}else{
+						resolve(false)
 					}
 				}
 			)
+			})
 		}
-		if(user) {
+		if (user) {
 			if (cp.image == null) {
-				await request(commit, cp)
+				return request(commit, cp)
 			} else {
 				let reader = new FileReader()
 				reader.onload = async function (e) {
 					cp.image = e.target.result
-					await request(commit, cp)
+					return request(commit, cp)
 				}
 				reader.readAsDataURL(cp.image)
 			}

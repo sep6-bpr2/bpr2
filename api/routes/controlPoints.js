@@ -9,10 +9,10 @@ const controlPointService = require("../services/controlPoints")
  * @description - Returns all available types to pick while creating control point
  * @param username - username of the user
  *
- * @example - GET {BaseURL}/api/controlPoints/rafal/allTypes
+ * @example - GET {BaseURL}/api/controlPoints/allTypes/rafal
  */
 router.get(
-	"/:username/allTypes",
+	"/allTypes/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	validate,
 	validateUserAdmin,
@@ -26,10 +26,10 @@ router.get(
  * @description - Returns all available attributes to pick while creating control point
  * @param username - username of the user
  *
- * @example - GET {BaseURL}/api/controlPoints/rafal/allAttributesNames
+ * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */
 router.get(
-	"/:username/allAttributesNames",
+	"/allAttributesNames/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	validate,
 	validateUserAdmin,
@@ -42,17 +42,24 @@ router.get(
 /**
  * @description - Inserts new control point
  * @param username - username of the user
- * @body frequencies - list with frquencies
- * @body
+ * @body frequencies - list with frequencies
+ * @body descriptions - list of descriptions where at least one has some value
+ * @body type - type of control point value
+ * @body upperTolerance - upper tolerance for measure
+ * @body lowerTolerance - lower tolerance for measure
+ * @body optionValues - list with options
+ * @body attributes - list with attributes
+ * @body codes - list with codes where all of them can not be null or empty
+ * @body images - image
  *
- * @example - POST {BaseURL}/api/controlPoints/rafal/submitControlPoint
+ * @example - POST {BaseURL}/api/controlPoints/submitControlPoint/rafal
  */
 router.post(
-	"/:username/submitControlPoint",
+	"/submitControlPoint/:username",
 	param("username").isLength({ min: 1, max: 35 }),
-	body("frequencies").isArray(),
+	// body("frequencies").isArray(),
 	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
-	body("type").isInt(),
+	body("type").isString(),
 	body("upperTolerance").custom(value => validateNullOrInt(value)),
 	body("lowerTolerance").custom(value => validateNullOrInt(value)),
 	body("optionValues").isArray(),
@@ -72,10 +79,10 @@ router.post(
  * @param username - username of the user
  * @param controlPointId - id of control point
  *
- * @example - GET {BaseURL}/api/controlPoints/rafal/getFrequenciesOfControlPoint/1
+ * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/rafal
  */
 
-router.get("/:username/getFrequenciesOfControlPoint/:controlPointId",
+router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	validate,
 	validateUserAdmin,

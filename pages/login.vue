@@ -42,6 +42,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn
+						id="loginBtn"
 						v-on:click="hanldeLogin"
 						:color="cols.KonfairPrimary"
 						style="float: right"

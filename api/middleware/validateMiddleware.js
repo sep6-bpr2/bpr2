@@ -22,14 +22,6 @@ module.exports.validateListEntriesNotEmpty = (value, notEmptyRequirement) => {
 	}
 }
 
-module.exports.validateInRange = (value, from, to) => {
-	if (value > to || value < from) {
-		throw new Error("value is not valid");
-	} else {
-		return value;
-	}
-}
-
 module.exports.validateNullOrInt = (value) => {
 	if (value == null || !isNaN(parseInt(value))) {
 		if (value == null || value >= 1 && value <= 9999999) {

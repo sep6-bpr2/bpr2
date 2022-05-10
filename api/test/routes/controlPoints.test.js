@@ -20,7 +20,7 @@ describe("Control points api testing", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "getTypes").returns(["number", "text", "options"])
-			const response = await request.get("/controlPoints/rafal/allTypes")
+			const response = await request.get("/controlPoints/allTypes/rafal")
 			chai.expect(response.body).to.deep.equal(["number", "text", "options"])
 		})
 	})
@@ -28,7 +28,7 @@ describe("Control points api testing", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "getAttributes").returns(["width", "height", "radius"])
-			const response = await request.get("/controlPoints/rafal/allAttributesNames")
+			const response = await request.get("/controlPoints/allAttributesNames/rafal")
 			chai.expect(response.body).to.deep.equal(["width", "height", "radius"])
 		})
 	})
@@ -36,11 +36,16 @@ describe("Control points api testing", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "submitControlPoint").returns()
-			const response = await request.post("/controlPoints/rafal/submitControlPoint")
+			const response = await request.post("/controlPoints/submitControlPoint/rafal")
 				.send({
-					frequencies: [],
+					frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},
+						{name:"to200",value:7},{name:"to300",value:10},
+						{name:"to500",value:16},{name:"to700",value:22},
+						{name:"to1000",value:30},{name:"to1500", value:40},
+						{name:"to2000",value:50},{name:"to3000",value:60},
+						{name:"to4000",value:65},{name:"to5000",value:70}],
 					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-					type: 1,
+					type: "number",
 					upperTolerance: null,
 					lowerTolerance: null,
 					optionValues: [{value: null}, {value: null}],// {value: '',}
@@ -55,7 +60,7 @@ describe("Control points api testing", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "getFrequenciesOfControlPoint").returns()
-			const response = await request.get("/controlPoints/rafal/getFrequenciesOfControlPoint/1")
+			const response = await request.get("/controlPoints/getFrequenciesOfControlPoint/1/rafal")
 			chai.expect(response.status).to.deep.equal(200)
 		})
 	})
