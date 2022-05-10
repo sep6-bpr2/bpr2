@@ -1,10 +1,95 @@
 const { Router } = require('express')
 const router = Router()
 const { param, body } = require('express-validator')
-const { validate } = require("../middleware/validateMiddleware")
+const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt, validateListEntriesNotEmpty} = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
-const service = require("../services/controlPoints")
-const {getAllTypes, getAllAttributesNames, insertControlPoint,getFrequenciesOfControlPoint} = require("../models/createControlPoint");
+const controlPointService = require("../services/controlPoints")
+
+/**
+ * @description - Returns all available types to pick while creating control point
+ * @param username - username of the user
+ *
+ * @example - GET {BaseURL}/api/controlPoints/allTypes/rafal
+ */
+router.get(
+	"/allTypes/:username",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const allTypes = await controlPointService.getTypes()
+		res.send(allTypes)
+	}
+)
+
+/**
+ * @description - Returns all available attributes to pick while creating control point
+ * @param username - username of the user
+ *
+ * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
+ */
+router.get(
+	"/allAttributesNames/:username",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const result = await controlPointService.getAttributes()
+		res.send(result)
+	}
+)
+
+/**
+ * @description - Inserts new control point
+ * @param username - username of the user
+ * @body frequencies - list with frequencies
+ * @body descriptions - list of descriptions where at least one has some value
+ * @body type - type of control point value
+ * @body upperTolerance - upper tolerance for measure
+ * @body lowerTolerance - lower tolerance for measure
+ * @body optionValues - list with options
+ * @body attributes - list with attributes
+ * @body codes - list with codes where all of them can not be null or empty
+ * @body images - image
+ *
+ * @example - POST {BaseURL}/api/controlPoints/submitControlPoint/rafal
+ */
+router.post(
+	"/submitControlPoint/:username",
+	param("username").isLength({ min: 1, max: 35 }),
+	// body("frequencies").isArray(),
+	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
+	body("type").isString(),
+	body("upperTolerance").custom(value => validateNullOrInt(value)),
+	body("lowerTolerance").custom(value => validateNullOrInt(value)),
+	body("optionValues").isArray(),
+	body("attributes").isArray(),
+	body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
+	body("image").exists(),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const result = await controlPointService.submitControlPoint(req.body)
+		res.send(result)
+	}
+)
+
+/**
+ * @description - Returns frequencies for specific control point
+ * @param username - username of the user
+ * @param controlPointId - id of control point
+ *
+ * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/rafal
+ */
+
+router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+	let result = await controlPointService.getFrequenciesOfControlPoint(req.params.controlPointId)
+	res.send(result)
+})
 
 /**
  * @description - Get all control points with enough information for list
@@ -14,57 +99,13 @@ const {getAllTypes, getAllAttributesNames, insertControlPoint,getFrequenciesOfCo
  * @example - GET {BaseURL}/api/controlPoints/listMinimal/rokas/gb
  */
 router.get("/listMinimal/:username/:language",
-    param("username").isLength({ min: 1, max: 35 }),
-    param("language").isLength({ min: 2, max: 2 }),
-    validate,
-    validateUserAdmin,
-    async (req, res) => {
-        const data = await service.controlPointsMinimal(req.params.language)
-        res.send(data)
-    }
-)
-
-router.get(
-	"/allTypes",
+	param("username").isLength({ min: 1, max: 35 }),
+	param("language").isLength({ min: 2, max: 2 }),
+	validate,
+	validateUserAdmin,
 	async (req, res) => {
-		const allTypes = await getAllTypes()
-		res.send(
-			allTypes.map(obj => {
-				switch (obj.type) {
-					case 1:
-						return "number"
-					case 2:
-						return "text"
-					case 3:
-						return "options"
-					default:
-						return "unknown"
-				}
-			})
-		)
-	}
-)
-
-router.get(
-	"/allAttributesNames",
-	async (req, res) => {
-		const result = await getAllAttributesNames()
-		res.send(result)
-	}
-)
-
-router.get("/getFrequenciesOfControlPoint/:controlPointId", async (req, res) => {
-
-	let result = await getFrequenciesOfControlPoint(req.params.controlPointId)
-
-	res.send(result)
-})
-
-router.post(
-	"/submitControlPoint",
-	async (req, res) => {
-		const result = await insertControlPoint(req.body)
-		res.send(result)
+		const data = await controlPointService.controlPointsMinimal(req.params.language)
+		res.send(data)
 	}
 )
 

@@ -13,6 +13,7 @@
 										<h3>{{ createLabel(key) }}</h3>
 										<v-list-item-subtitle>
 											<v-text-field
+												class="freqEntry"
 												:value=value
 												type="number"
 												v-on:input="updateFreq($event,key)"
@@ -40,7 +41,9 @@
 						cols="12"
 						sm="3"
 					>
-						<v-btn color="#333" v-on:click="resetFrequencies" class="white--text">
+						<v-btn color="#333" v-on:click="resetFrequencies" class="white--text"
+							id="resetFreq"
+						>
 							Reset
 						</v-btn>
 					</v-col>
