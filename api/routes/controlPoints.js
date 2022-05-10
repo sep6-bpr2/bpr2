@@ -2,9 +2,10 @@ const { Router } = require('express')
 const router = Router()
 const { param, body } = require('express-validator')
 const { validate } = require("../middleware/validateMiddleware")
-const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
+const { validateUserAdmin, validateUserQA, validateAllVerifiedUsers } = require("../middleware/validateUser")
 const service = require("../services/controlPoints")
 const {getAllTypes, getAllAttributesNames, insertControlPoint,getFrequenciesOfControlPoint} = require("../models/createControlPoint");
+const path = require("path");
 
 /**
  * @description - Get all control points with enough information for list
@@ -42,6 +43,16 @@ router.get(
 				}
 			})
 		)
+	}
+)
+
+router.get("/picture/:username/:pictureName",
+    param("username").isLength({ min: 4, max: 50 }),
+    param("pictureName").isLength({ min: 4, max: 200 }),
+    validate,
+    validateAllVerifiedUsers,
+	async (req, res) => {
+		res.sendFile(path.join(__dirname, "../pictures/" + req.params.pictureName));
 	}
 )
 
