@@ -4,8 +4,8 @@ describe('testCreationOfFrequency', () => {
 	 let chosenItemCode
 		it('should login', () => {
 			cy.visit('http://localhost:3000/login');
-			cy.get('#userInput').click();
-			cy.get('#userInput').type('admin');
+			cy.get('#username').click();
+			cy.get('#username').type('admin');
 			cy.get('.v-btn__content > div').click();
 		})
 
@@ -43,7 +43,7 @@ describe('testCreationOfFrequency', () => {
 		})
 
 		it('should reset form', () => {
-			cy.get('#resetBtn').click();
+			cy.get('#resetFreq').click();
 			cy.wait(1000)
 			cy.get('#to25').should('have.value',to25Value)
 		})

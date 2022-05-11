@@ -20,14 +20,15 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
+						id="username"
 						:rules="usernameRules"
-						id="userInput"
 						required
 						v-model="username"
 						v-bind:label="translateText('username')"
 						prepend-icon="mdi-account-circle"
 					/>
 					<v-select
+						id="location"
 						required
 						:rules="locationRules"
 						:items="allLocations"
@@ -42,6 +43,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn
+						id="loginBtn"
 						v-on:click="hanldeLogin"
 						:color="cols.KonfairPrimary"
 						style="float: right"

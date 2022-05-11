@@ -5,8 +5,8 @@ describe('testCreationOfUser', () => {
 
 	it('should login', () => {
 		cy.visit('http://localhost:3000/login');
-		cy.get('#userInput').click();
-		cy.get('#userInput').type('admin');
+		cy.get('#username').click();
+		cy.get('#username').type('admin');
 		cy.get('.v-btn__content > div').click();
 	})
 
