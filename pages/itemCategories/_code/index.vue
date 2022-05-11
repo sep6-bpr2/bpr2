@@ -52,6 +52,8 @@ export default {
 				to4000 : 0,
 				to5000 : 0
 			}
+			console.log(JSON.stringify(localFrequencies))
+			console.log(JSON.stringify(stateFrequencies))
 			for (let x in localFrequencies) {
 				if(localFrequencies[x].changed == false){
 					tempFrequencies[x] = stateFrequencies[x]
@@ -63,7 +65,7 @@ export default {
 			tempFrequencies.Code = parseInt(this.$route.params.code)
 			let text = "Are you sure you want to update frequency for this item Category?"
 
-			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] > 0)
+			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
 			console.log(JSON.stringify(tempFrequencies) + existsNegVal)
 
 			if(!existsNegVal){
