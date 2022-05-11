@@ -13,7 +13,7 @@ describe("Control points service testing", () => {
 
 	describe("getAllTypes", () => {
 		it('sunny scenario', async () => {
-			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: 1},{type: 2},{type: 3}])
+			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: 3},{type: 1},{type: 0}])
 
 			const data = await controlPointsService.getTypes()
 			chai.expect(data[0]).to.be.equal("number")
@@ -22,19 +22,17 @@ describe("Control points service testing", () => {
 		})
 
 		it("non positive values", async () => {
-			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: -5},{type: 1}])
+			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: -5},{type: 3}])
 
 			const data = await controlPointsService.getTypes()
-			chai.expect(data[0]).to.be.equal("unknown")
 			chai.expect(data[1]).to.be.equal("number")
 		})
 
 		it("values out of bound", async () => {
-			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: 3},{type: 351}])
+			sinon.stub(controlPointsModel, "getAllTypes").returns([{type: 0},{type: 351}])
 
 			const data = await controlPointsService.getTypes()
 			chai.expect(data[0]).to.be.equal("options")
-			chai.expect(data[1]).to.be.equal("unknown")
 		})
 
 		it("empty list", async () => {
