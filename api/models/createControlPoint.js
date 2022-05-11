@@ -31,9 +31,7 @@ module.exports.getAllAttributesNames = async () => {
 }
 
 module.exports.insertControlPoint = async (cp) => {
-
 	let newFrequencyId = null
-
 	if(cp.frequencies != null){
 		let item = cp.frequencies
 

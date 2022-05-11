@@ -214,8 +214,6 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             // Attributes no longer needed
             delete controlPoints[i].attributes
 
-            controlPoints[i].image = "Untitled.png"
-
             // controlPoints/picture/worker/
 
             // One time measurement

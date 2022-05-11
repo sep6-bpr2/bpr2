@@ -46,13 +46,23 @@ router.get(
 	}
 )
 
+router.post("/uploadPicture/:username",
+    param("username").isLength({ min: 4, max: 50 }),
+    validate,
+    validateUserAdmin,
+	async (req, res) => {
+        await service.saveImage(req.body.base64)
+        res.sendStatus(200)
+    }
+)
+
 router.get("/picture/:username/:pictureName",
     param("username").isLength({ min: 4, max: 50 }),
     param("pictureName").isLength({ min: 4, max: 200 }),
     validate,
     validateAllVerifiedUsers,
 	async (req, res) => {
-		res.sendFile(path.join(__dirname, "../pictures/" + req.params.pictureName));
+        res.sendFile(path.join(__dirname, "../pictures/" + req.params.pictureName));
 	}
 )
 
@@ -74,7 +84,7 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId", async (req, res) => 
 router.post(
 	"/submitControlPoint",
 	async (req, res) => {
-		const result = await insertControlPoint(req.body)
+		const result = await service.createConrolPoint(req.body)
 		res.send(result)
 	}
 )

@@ -133,6 +133,7 @@ export const actions = {
 			let reader = new FileReader()
 			reader.onload = async function (e) {
 				cp.image = e.target.result
+                console.log(cp.image)
 				await request(commit, cp)
 			}
 			reader.readAsDataURL(cp.image)
