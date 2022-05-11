@@ -214,7 +214,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             // Attributes no longer needed
             delete controlPoints[i].attributes
 
-            controlPoints[i].image = "https://syria.liveuamap.com/pics/2022/04/23/22430986_0.jpg"
+            // controlPoints/picture/worker/
 
             // One time measurement
             if (controlPoints[i].controlPointType == 1) {

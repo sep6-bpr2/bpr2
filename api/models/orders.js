@@ -45,6 +45,7 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
             SELECT 
             DISTINCT
             point.id, 
+            MAX(point.image) as image,
             MAX(point.frequencyId) as frequencyId, 
             MAX(point.type) as type, 
             MAX(point.lowerTolerance) as lowerTolerance,
@@ -70,6 +71,7 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
             SELECT 
             DISTINCT
             point.id, 
+            MAX(point.image) as image,
             MAX(point.frequencyId) as frequencyId, 
             MAX(point.type) as type, 
             MAX(point.lowerTolerance) as lowerTolerance,

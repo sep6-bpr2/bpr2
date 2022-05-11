@@ -18,3 +18,13 @@ module.exports.validateUserQA = async (req, res, next) => {
         res.sendStatus(403)
     }
 }
+
+module.exports.validateAllVerifiedUsers = async (req, res, next) => {
+    const user = await userModel.getUserByUsername(req.params.username)
+
+    if (user[0] && (user[0].role == "qa employee" || user[0].role == "admin")) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
+}

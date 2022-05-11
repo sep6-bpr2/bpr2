@@ -184,8 +184,10 @@ export default {
 	},
 	methods: {
 		showImageModal(image) {
-			this.modalImage = image;
-			this.modalImageShow = true;
+            if(this.$store.state.login.user){
+                this.modalImage = window.location.origin + "/api/controlPoints/picture/" + this.$store.state.login.user.username + "/" + image;
+                this.modalImageShow = true;
+            }
 		},
 		closeImageModal() {
 			this.modalImage = "";
