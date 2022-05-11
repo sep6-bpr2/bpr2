@@ -59,9 +59,10 @@ router.get(
 router.post(
     "/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
-    // body("frequencies").isArray(),
+    body("frequencies").isArray(),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
-    body("type").isString(),
+    body("measurementType").isInt(),
+	body("type").isString(),
     body("upperTolerance").custom(value => validateNullOrInt(value)),
     body("lowerTolerance").custom(value => validateNullOrInt(value)),
     body("optionValues").isArray(),

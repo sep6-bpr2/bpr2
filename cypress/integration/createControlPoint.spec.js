@@ -12,6 +12,8 @@ describe('create control point', () => {
 
 	it('sunny scenario', () => {
 		cy.get('#description').type('test control point')
+		cy.get('#measurementType').click({force: true})
+		cy.contains('one time').click()
 		cy.get('#type').click({force: true})
 		cy.contains('text').click()
 		cy.get('#categoryItemCode').type('32456')

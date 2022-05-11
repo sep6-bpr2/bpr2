@@ -75,19 +75,30 @@ const translations = {
 		"gb": "Main information",
 		"lt": "bla bla",
 		"dk": "bla bla"
+	}
+	,"Control point measurement type": {
+		"gb": "Control point measurement type",
+		"lt": "bla bla",
+		"dk": "bla bla"
 	},
 	"Name": {
 		"gb": "Name",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
-	"Value":{
-		"gb": "Value",
+
+	"Value Type":{
+		"gb": "Value Type",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
-	"Type":{
-		"gb": "Type",
+	"Lower Tolerance":{
+		"gb": "LowerTolerance",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Upper Tolerance":{
+		"gb": "Upper Tolerance",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
@@ -186,13 +197,22 @@ const translations = {
 		"gb": "control point must have at least one DESCRIPTION",
 		"lt": "bla bla",
 		"dk": "bla bla"
-	},"value can not be empty": {
-		"gb": "VALUE can not be empty",
+	},"upper tolerance can not be empty": {
+		"gb": "UPPER TOLERANCE can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},"lower tolerance can not be empty": {
+		"gb": "LOWER TOLERANCE can not be empty",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	}
+	,"measurement type con not be empty": {
+		"gb": "MEASUREMENT TYPE con not be empty",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
-	"type can not be empty": {
-		"gb": "TYPE can not be empty",
+	"value type can not be empty": {
+		"gb": "VALUE TYPE can not be empty",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},
