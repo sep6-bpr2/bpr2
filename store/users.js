@@ -20,7 +20,7 @@ export const actions = {
 		const user = rootState.login.user;
 		if (user) {
 			const language = rootState.login.chosenLanguage.flag;
-			fetch(`api/users/`).then(res => res.json()).then(result => {
+			fetch(`api/users/getAllUsers`).then(res => res.json()).then(result => {
 				commit('setUsers', result)
 			})
 		}
@@ -35,7 +35,7 @@ export const actions = {
 			},
 		}
 		if (user) {
-			await fetch(`api/users`, fetchData).then(res=> res.json()).then(result => {
+			await fetch(`api/users/addUser`, fetchData).then(res=> res.json()).then(result => {
 				commit('setNewUser', result)
 			})
 		}
