@@ -27,10 +27,12 @@ export const actions = {
         let user = rootState.login.user;
 
         if (user != null) {
+            let id = 0
             for (let i = 0; i < links.length; i++) {
                 if (links[i].roles.includes(user.role)) {
                     let link = links[i]
-                    link.id = i // Get key
+                    link.id = id // Get key
+                    id++
                     availableLinks.push(links[i])
                 }
             }

@@ -96,5 +96,5 @@ describe("Validate role middleware testing", () => {
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
+    if (value1 != value2) throw Error("Failed assert values: '" + value1 + "' is not '" + value2 + "'")
 }

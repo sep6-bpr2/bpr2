@@ -1,10 +1,10 @@
 describe('create control point', () => {
 	beforeEach(() => {
 		cy.visit('http://localhost:3000/login')
-		cy.get('#username').type('admin')
-		cy.get('#location').click({force: true})
+		cy.get('#enterUsername').type('admin')
+		cy.get('#selectLocation').click({force: true})
 		cy.contains("object").click()
-		cy.get('#loginBtn').click()
+		cy.get('#submitLogin').click()
 		cy.visit('http://localhost:3000/controlPoints/createControlPoint')
 	})
 

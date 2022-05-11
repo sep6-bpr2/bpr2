@@ -4,10 +4,10 @@ describe('login', () => {
 	})
 
 	it('login with existing user', () => {
-		cy.get('#username').type('admin')
-		cy.get('#location').click({force: true})
+		cy.get('#enterUsername').type('admin')
+		cy.get('#selectLocation').click({force: true})
 		cy.contains("object").click()
-		cy.get('button').click()
+		cy.get('#submitLogin').click()
 	})
 
 })

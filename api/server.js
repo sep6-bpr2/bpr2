@@ -22,6 +22,9 @@ function initializeMiddleware(app) {
 	app.use(express.json({limit: '50mb'}));
 	app.use(express.urlencoded({limit: '50mb'}));
     app.use(express.json())
+    if(process.env.LOGGING == "true"){
+        app.use(require("./middleware/loggingMiddleware"))
+    }
 }
 
 const startServer = () => {

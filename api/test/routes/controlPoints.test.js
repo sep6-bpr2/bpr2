@@ -1,5 +1,7 @@
 const supertest = require("supertest")
 process.env.environment = "testing"
+process.env.LOGGING = "false"
+
 const server = require("../../server")
 const app = server.startServer()
 const request = supertest(app)

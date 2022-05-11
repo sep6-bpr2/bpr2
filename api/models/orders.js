@@ -5,7 +5,7 @@ module.exports.getReleasedOrders = async (location) => {
         .request()
         .input("location", mssql.NVarChar(40), location)
         .query(`
-            SELECT item.[No_], item.[Item Category Code], pOrder.[Quantity], pOrder.[Due Date] FROM [KonfAir DRIFT$Item] item
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3
         `)
@@ -25,16 +25,55 @@ module.exports.getReleasedOrderInformation = async (id) => {
 }
 
 module.exports.getReleasedOrderControlPoints = async (id) => {
+    // The max statements are to help group by
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT point.id, point.frequencyId, point.image, point.type, point.lowerTolerance, point.upperTolerance FROM [QAReportControlPoint] connection
-            INNER JOIN [ControlPoint] point ON connection.[ControlPointId] = point.[id]
-            WHERE connection.[QAReportId] = @id
+            SELECT 
+            DISTINCT
+            point.id, 
+            MAX(point.frequencyId) as frequencyId, 
+            MAX(point.type) as type, 
+            MAX(point.lowerTolerance) as lowerTolerance,
+            MAX(point.upperTolerance) as upperTolerance, 
+            MAX(point.controlPointType) as controlPointType, 
+            MAX(CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
+            MAX(connection.id) as connectionId, 
+            MAX(connection.value) as answer
+            FROM [QAReportControlPointValue] connection
+            INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
+            WHERE connection.[qaReportId] = @id
+            Group by point.id
         `)
     return result.recordset
 }
+
+module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
+    // The max statements are to help group by
+    const result = await localDB()
+        .request()
+        .input("id", mssql.Int, id)
+        .query(`
+            SELECT 
+            DISTINCT
+            point.id, 
+            MAX(point.frequencyId) as frequencyId, 
+            MAX(point.type) as type, 
+            MAX(point.lowerTolerance) as lowerTolerance,
+            MAX(point.upperTolerance) as upperTolerance, 
+            MAX(point.controlPointType) as controlPointType, 
+            MAX(connection.author) as author,
+            MAX(connection.id) as connectionId, 
+            MAX(connection.value) as answer
+            FROM [QAReportControlPointValue] connection
+            INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
+            WHERE connection.[qaReportId] = @id
+            Group by point.id
+        `)
+    return result.recordset
+}
+
 
 module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
     const result = await localDB()
@@ -86,10 +125,17 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
         .request()
         .input("categoryCode", mssql.Int, categoryCode)
         .query(`
-            SELECT DISTINCT ControlPoint.id, ControlPoint.frequencyId, ControlPoint.image, ControlPoint.type, ControlPoint.lowerTolerance, ControlPoint.upperTolerance  FROM [ControlPoint]
-            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.ControlPointId
-            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.ControlPointId
-            WHERE ACP.attributeId in (${attributeIds}) AND ICCP.ItemCategoryCode = @categoryCode
+            SELECT DISTINCT 
+            ControlPoint.id, 
+            ControlPoint.frequencyId, 
+            ControlPoint.image, 
+            ControlPoint.type, 
+            ControlPoint.lowerTolerance, 
+            ControlPoint.upperTolerance  
+            FROM [ControlPoint]
+            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.controlPointId
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.controlPointId
+            WHERE ACP.attributeId in (${attributeIds}) AND ICCP.itemCategoryCode = @categoryCode
         `)
     return result.recordset
 }
@@ -100,7 +146,12 @@ module.exports.getReleasedOrderAttributes = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT attribute.[Name] as name, attribute.[Type] as type, attribute.[Unit of Measure] as units, value.[Value] as value, attribute.[ID] as id FROM [KonfAir DRIFT$Item Attribute Value Mapping] mapping
+            SELECT 
+            attribute.[Name] as name, 
+            attribute.[Type] as type, 
+            attribute.[Unit of Measure] as units, 
+            value.[Value] as value, attribute.[ID] as id 
+            FROM [KonfAir DRIFT$Item Attribute Value Mapping] mapping
             INNER JOIN [KonfAir DRIFT$Item Attribute] attribute ON mapping.[Item Attribute ID] = attribute.[ID]
             INNER JOIN [KonfAir DRIFT$Item Atrribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
             WHERE mapping.[No_] = @id
@@ -113,8 +164,12 @@ module.exports.getControlPointAttributes = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT attributeId as id, maxValue, minValue FROM [AttributeControlPoint]
-            WHERE ControlPointId = @id
+            SELECT 
+            attributeId as id, 
+            maxValue, 
+            minValue 
+            FROM [AttributeControlPoint]
+            WHERE controlPointId = @id
         `)
     return result.recordset
 }
@@ -124,8 +179,10 @@ module.exports.getControlPointCategories = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT ItemCategoryCode FROM [ItemCategoryControlPoint]
-            WHERE ControlPointId = @id
+            SELECT 
+            ItemCategoryCode 
+            FROM [ItemCategoryControlPoint]
+            WHERE controlPointId = @id
         `)
     return result.recordset
 }
@@ -153,7 +210,7 @@ module.exports.insertControlPointConnection = async (controlPointId, qaReportId)
         .input("controlPointId", mssql.Int, controlPointId)
         .input("qaReportId", mssql.Int, qaReportId)
         .query(`
-            INSERT INTO QAReportControlPoint (QAReportId, ControlPointId, value) values(@qaReportId, @controlPointId, null)
+            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value) values(@qaReportId, @controlPointId, '')
         `)
     return result.recordset
 }
@@ -163,9 +220,11 @@ module.exports.getByCategory = async (categoryCode) => {
         .request()
         .input("categoryCode", mssql.Int, categoryCode)
         .query(`
-            SELECT DISTINCT ControlPoint.id FROM [ControlPoint]
-            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.ControlPointId
-            where ICCP.ItemCategoryCode = @categoryCode
+            SELECT DISTINCT 
+            ControlPoint.id 
+            FROM [ControlPoint]
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.controlPointId
+            where ICCP.itemCategoryCode = @categoryCode
         `)
     return result.recordset
 }
@@ -174,9 +233,106 @@ module.exports.getByAttribute = async (attributeIds) => {
     const result = await localDB()
         .request()
         .query(`
-            SELECT DISTINCT ControlPoint.id FROM [ControlPoint]
-            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.ControlPointId
+            SELECT DISTINCT 
+            ControlPoint.id 
+            FROM [ControlPoint]
+            INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.controlPointId
             where ACP.attributeId in (${attributeIds})
+        `)
+    return result.recordset
+}
+
+module.exports.insertMultipleTimeMeasurement = async (controlPointId, value, qaReportId, author) => {
+    const result = await localDB()
+        .request()
+        .input("controlPointId", mssql.Int, controlPointId)
+        .input("qaReportId", mssql.Int, qaReportId)
+        .input("value", mssql.NVarChar, value)
+        .input("author", mssql.NVarChar, author)
+        .query(`
+            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author);
+            SELECT SCOPE_IDENTITY() AS id
+        `)
+    return result.recordset
+}
+
+module.exports.alterMeasurement = async (connectionId, controlPointId, value, qaReportId, author) => {
+    const result = await localDB()
+        .request()
+        .input("id", mssql.Int, connectionId)
+        .input("controlPointId", mssql.Int, controlPointId)
+        .input("qaReportId", mssql.Int, qaReportId)
+        .input("value", mssql.NVarChar, value)
+        .input("author", mssql.NVarChar, author)
+        .query(`
+            UPDATE [QAReportControlPointValue]
+            SET [value] = @value, [author] = @author
+            WHERE qaReportId = @qaReportId AND controlPointId = @controlPointId AND id = @id; 
+        `)
+    return result.recordset
+}
+
+module.exports.deleteQAReportConnection = async (connectionId) => {
+    const result = await localDB()
+        .request()
+        .input("connectionId", mssql.Int, connectionId)
+        .query(`
+            DELETE FROM QAReportControlPointValue WHERE id = @connectionId
+        `)
+    return result.recordset
+}
+
+module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPointIds) => {
+    const result = await localDB()
+        .request()
+        .input("qaReportId", mssql.Int, qaReportId)
+        .query(`
+            SELECT 
+            connection.value as answer, 
+            connection.id as connectionId, 
+            connection.controlPointId,
+            connection.qaReportId,
+            (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author 
+            FROM [QAReportControlPointValue] connection
+            WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
+        `)
+    return result.recordset
+}
+
+module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfControlPointIds) => {
+    const result = await localDB()
+        .request()
+        .input("qaReportId", mssql.Int, qaReportId)
+        .query(`
+            SELECT 
+            connection.value as answer, 
+            connection.id as connectionId, 
+            connection.controlPointId,
+            connection.qaReportId,
+            connection.author
+            FROM [QAReportControlPointValue] connection
+            WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
+        `)
+    return result.recordset
+}
+
+module.exports.getMultipleQAReports = async (stringList) => {
+    const result = await localDB()
+        .request()
+        .query(`
+            Select * from QAReport WHERE itemId in (${stringList});
+        `)
+    return result.recordset
+}
+
+module.exports.setQaReportStatusToFinished = async (itemId) => {
+    const result = await localDB()
+        .request()
+        .input("itemId", mssql.NVarChar, itemId)
+        .query(`
+            UPDATE [QAReport]
+            SET status = 1
+            WHERE itemId = @itemId; 
         `)
     return result.recordset
 }
