@@ -15,8 +15,9 @@ export const mutations = {
 export const actions = {
 	loadItemCategoryCodes({ commit, rootState }) {
 		const user = rootState.login.user;
+		const location = rootState.login.chosenLocation
 		if (user) {
-			fetch(`api/itemCategory/getCodes`).then(res => res.json()).then(result => {
+			fetch(`api/itemCategory/getCodes/${user.username}/${location}`).then(res => res.json()).then(result => {
 				commit('setItemCodes', result)
 			})
 		}
@@ -24,7 +25,7 @@ export const actions = {
 	getFrequencyOfItemCode({commit,rootState },{itemCode}){
 		const user = rootState.login.user;
 		if (user) {
-			fetch(`api/itemCategory/getFrequenciesOfCode/${itemCode}`).then(res => res.json()).then(result => {
+			fetch(`api/itemCategory/getFrequenciesOfCode/${user.username}/${itemCode}`).then(res => res.json()).then(result => {
 				commit('setFrequencies', result)
 			})
 		}
@@ -39,7 +40,7 @@ export const actions = {
 					'Content-Type': 'application/json'
 				},
 			}
-			fetch(`../api/itemCategory/setFrequencies`,fetchData)
+			fetch(`../api/itemCategory/setFrequencies/${user.username}`,fetchData)
 		}
 	},
 }

@@ -106,7 +106,7 @@ module.exports.getReleasedOrderControlPointsOptions = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT * FROM [Option] 
+            SELECT * FROM [Option]
             WHERE controlPointId = @id
         `)
     return result.recordset

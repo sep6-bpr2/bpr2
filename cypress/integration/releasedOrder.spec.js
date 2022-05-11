@@ -15,10 +15,10 @@ describe('released order', () => {
     //     cy.get('#submitLogin').click()
 
 
-    //     // Released orders validation
-    //     cy.contains('This is the released orders page').should('be.visible')
-    //     // Check that there are 2 rows in the table
-    //     cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        // Released orders validation
+        // cy.contains('This is the released orders page').should('be.visible')
+        // Check that there are 2 rows in the table
+        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
     //     // Check order that has no attributes
     //     cy.get('#customTable0').click()
@@ -32,10 +32,10 @@ describe('released order', () => {
     //     cy.contains("object").click()
     //     cy.get('#submitLogin').click()
 
-    //     // Released orders validation
-    //     cy.contains('This is the released orders page').should('be.visible')
-    //     // Check that there are 2 rows in the table
-    //     cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        // Released orders validation
+        // cy.contains('This is the released orders page').should('be.visible')
+        // Check that there are 2 rows in the table
+        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
     //     // Check order that has no attributes
     //     cy.get('#customTable0').click()
@@ -67,7 +67,7 @@ describe('released order', () => {
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -217,7 +217,7 @@ describe('released order', () => {
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -336,7 +336,7 @@ describe('released order', () => {
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -347,17 +347,17 @@ describe('released order', () => {
             // Number
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('asdasd')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").should('not.have.value', 'asdasd')
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('555555555555555555555555555555555555555555555555555')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").should('not.have.value', '555555555555555555555555555555555555555555555555555')
 
@@ -389,9 +389,9 @@ describe('released order', () => {
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').find("input").clear().type('555555555555555555555555555555555555555555555555555')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').find("input").should('not.have.value', '555555555555555555555555555555555555555555555555555')
 
@@ -427,17 +427,17 @@ describe('released order', () => {
             // // Number
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('asdasd')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).should('not.have.value', 'asdasd')
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('555555555555555555555555555555555555555555555555555')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).should('not.have.value', '555555555555555555555555555555555555555555555555555')
 
@@ -470,9 +470,9 @@ describe('released order', () => {
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable2').find("input").filter(':enabled').eq(1).clear().type('555555555555555555555555555555555555555555555555555')
             cy.get('#saveButton').click()
-            cy.contains('Warning').should('be.visible')
+            cy.contains('Failed').should('be.visible')
             cy.get('#closeAlertButton').click()
-            cy.contains('Warning').should('not.exist');
+            cy.contains('Failed').should('not.exist');
             cy.reload()
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable2').find("input").filter(':enabled').eq(1).should('not.have.value', '555555555555555555555555555555555555555555555555555')
 
@@ -513,7 +513,7 @@ describe('released order', () => {
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
         // Check order that is ok
         cy.get('#customTable1').click()

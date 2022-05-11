@@ -2,7 +2,7 @@
  <div class="users">
 	 <h1><Translate :text="'User management'" /></h1>
 
-	 <button v-on:click="handleCreateUser">
+	 <button id="createUser" v-on:click="handleCreateUser">
 		 <Translate :text="'Create User'" />
 	 </button>
 
@@ -20,6 +20,7 @@
 
 					 <v-text-field
 						 v-model="userName"
+						 id="usernameInput"
 						 :counter="10"
 						 :rules="userNameRules"
 						 label="Username"
@@ -28,6 +29,7 @@
 
 					 <v-select
 						 v-model="roleValue"
+						 id="roles"
 						 :items="roles"
 						 :rules="[v => !!v || 'Item is required']"
 						 label="Role"
@@ -36,6 +38,7 @@
 
 					 <v-btn
 						 color="#333"
+						 id="submitCreateUser"
 						 @click="submitCreateUser"
 					 >
 						 Submit
@@ -43,6 +46,7 @@
 
 					 <v-btn
 						 color="#333"
+						 id="cancelCreateUser"
 						 @click="cancelCreateUser"
 					 >
 						 Cancel
