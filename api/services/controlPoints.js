@@ -32,7 +32,7 @@ module.exports.submitControlPoint = async (cp) => {
 		INSERT INTO [dbo].[Frequency] VALUES (@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
     	SELECT @FreqID = scope_identity();
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, 0 );
+    	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
@@ -41,7 +41,6 @@ module.exports.submitControlPoint = async (cp) => {
 	cp.frequencies.forEach((entry, index) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
 	})
-	con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
 
 	switch (cp.type) {
 		case "number":
@@ -55,8 +54,9 @@ module.exports.submitControlPoint = async (cp) => {
 			break;
 	}
 	con.input('type', mssql.mssql.Int, cp.type)
+	con.input('measurementType', mssql.mssql.Int, cp.measurementType)
 
-
+	con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
 	con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
 	con.input('image', mssql.mssql.NVarChar, cp.image)
 
