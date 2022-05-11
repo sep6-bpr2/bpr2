@@ -7,55 +7,55 @@ describe('released order', () => {
         cy.clearLocalStorage()
     })
 
-    it('Released order ERROR No attributes', () => {
-        // Logging in to the correct user
-        cy.get('#enterUsername').type('worker')
-        cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
-        cy.get('#submitLogin').click()
+    // it('Released order ERROR No attributes', () => {
+    //     // Logging in to the correct user
+    //     cy.get('#enterUsername').type('worker')
+    //     cy.get('#selectLocation').click({ force: true })
+    //     cy.contains("object").click()
+    //     cy.get('#submitLogin').click()
 
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        // cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
-        // Check order that has no attributes
-        cy.get('#customTable0').click()
-        cy.contains('Failed').should('be.visible')
-    })
+    //     // Check order that has no attributes
+    //     cy.get('#customTable0').click()
+    //     cy.contains('Failed').should('be.visible')
+    // })
 
-    it('Released order ERROR order does not exist', () => {
-        // Logging in to the correct user
-        cy.get('#enterUsername').type('worker')
-        cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
-        cy.get('#submitLogin').click()
+    // it('Released order ERROR order does not exist', () => {
+    //     // Logging in to the correct user
+    //     cy.get('#enterUsername').type('worker')
+    //     cy.get('#selectLocation').click({ force: true })
+    //     cy.contains("object").click()
+    //     cy.get('#submitLogin').click()
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        // cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
 
-        // Check order that has no attributes
-        cy.get('#customTable0').click()
-        cy.contains('Failed').should('be.visible')
-    })
+    //     // Check order that has no attributes
+    //     cy.get('#customTable0').click()
+    //     cy.contains('Failed').should('be.visible')
+    // })
 
-    it('Released order ERROR order does not exist', () => {
-        // Logging in to the correct user
-        cy.get('#enterUsername').type('worker')
-        cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
-        cy.get('#submitLogin').click()
+    // it('Released order ERROR order does not exist', () => {
+    //     // Logging in to the correct user
+    //     cy.get('#enterUsername').type('worker')
+    //     cy.get('#selectLocation').click({ force: true })
+    //     cy.contains("object").click()
+    //     cy.get('#submitLogin').click()
 
 
-        // Check order without logging in or 
-        cy.visit('http://localhost:3000/releasedOrders/4345')
+    //     // Check order without logging in or 
+    //     cy.visit('http://localhost:3000/releasedOrders/4345')
 
-        // Check order that has no attributes
-        cy.contains('Failed').should('be.visible')
-    })
+    //     // Check order that has no attributes
+    //     cy.contains('Failed').should('be.visible')
+    // })
 
     it('Released order OK validate what is shown to user', () => {
         // Logging in to the correct user
@@ -292,9 +292,9 @@ describe('released order', () => {
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('-390').should('have.css', 'color', 'rgb(255, 0, 0)')
 
             // Check out of tolerance values
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('397').should('have.css', 'color', 'rgb(255, 140, 0)')
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('347').should('have.css', 'color', 'rgb(255, 140, 0)')
 
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('388').should('have.css', 'color', 'rgb(255, 140, 0)')
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('338').should('have.css', 'color', 'rgb(255, 140, 0)')
 
             // Check numbers above max lenght
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').first().clear().type('555555555555555555555555555555555555555555555555555').should('have.css', 'color', 'rgb(255, 0, 0)')

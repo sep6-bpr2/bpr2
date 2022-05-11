@@ -11,7 +11,7 @@ const service = require("../services/orders")
  * @param username - name of the user for valiation
  * @param location - location of the employee to narrow down what orders
  *
- * @example - GET {BaseURL}/api/orders//releasedList/minimal/worker/denmark
+ * @example - GET {BaseURL}/api/orders/releasedList/minimal/worker/denmark
  */
 router.get("/releasedList/minimal/:username/:location",
     param("username").isLength({ min: 4, max: 50 }),
@@ -20,6 +20,24 @@ router.get("/releasedList/minimal/:username/:location",
     validateUserQA,
     async (req, res) => {
         const data = await service.releasedOrders(req.params.location)
+        res.send(data)
+    }
+)
+
+/**
+ * @description - Get the completed orders
+ * @param username - name of the user for valiation
+ * @param location - location of the employee to narrow down what orders
+ *
+ * @example - GET {BaseURL}/api/orders/completedList/minimal/worker/denmark
+ */
+router.get("/completedList/minimal/:username/:location",
+    param("username").isLength({ min: 4, max: 50 }),
+    param("location").isLength({ min: 1, max: 50 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const data = await service.completedOrders(req.params.location)
         res.send(data)
     }
 )

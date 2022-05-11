@@ -1538,6 +1538,31 @@ describe("Orders service testing", () => {
         })
     })
 
+    describe("completed orders", () => {
+        it("completed orders OK", async () => {
+
+            sinon.stub(ordersModel, "getCompletedQAReports").returns([{ itemId: "1", }, { itemId: "2" }])
+            // CHeck input for this function
+            sinon.stub(ordersModel, "getOrdersByIdList").returns([{ itemId: "1", deadline: "Sun Jun 12 2022 19:00:00 GMT+0200" }, { itemId: "2", deadline: "Sun Jun 12 2022 19:00:00 GMT+0200" }])
+
+            const data = await ordersService.completedOrders("denmark")
+
+            assertEquals(data.length, 2)
+            assertEquals(data[0].itemId, '1')
+            assertEquals(data[1].itemId, '2')
+        })
+
+        it("completed orders OK no orders", async () => {
+
+            sinon.stub(ordersModel, "getCompletedQAReports").returns([])
+            // CHeck input for this function
+
+            const data = await ordersService.completedOrders("denmark")
+
+            assertEquals(data.length, 0)
+        })
+    })
+
     describe("released order", () => {
         it("released order OK", async () => {
 

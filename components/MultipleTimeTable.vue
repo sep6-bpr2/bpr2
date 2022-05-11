@@ -1,22 +1,20 @@
 <template>
 	<table class="customTable">
-		<thead>
-			<tr>
-				<th
-					v-for="header in getTableHeaders"
-					:key="header.id.toString() + header.letter.toString()"
-				>
-					<Translate :text="header.letter" />
-				</th>
-			</tr>
-		</thead>
 		<tbody>
-			<td 
+			<tr 
                 v-for="(column, index) in getColumns" 
                 :key="index" 
                 :id="'multipleTimeTable' + index"
             >
-				<tr
+                <!-- This is the header. The style is because font is overriden and the border didnt work normaly -->
+                <td 
+                    :style="{'font-size': '1em', 'border-radius': getColumns.length == index+ 1 ?'0px 5px 0px 0px': '0px'}"
+                    class="tableHeader"
+                    :key="getTableHeaders[index].id.toString() + getTableHeaders[index].letter.toString()"
+                    >
+                    <Translate :text="getTableHeaders[index].letter" />
+                </td>
+				<td
 					v-for="(cell, cellIndex) in column"
 					:key="cellIndex + Object.values(cell)[0].toString()"
 				>
@@ -64,8 +62,8 @@
 							}"
 						/>
 					</div>
-				</tr>
-			</td>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </template>
@@ -161,6 +159,32 @@ export default {
 </script>
 
 <style scoped>
+table tbody{
+    display: table;
+}
+
+table tbody tr {
+    display: table-cell;
+}
+
+table thead tr {
+    display: table-cell;
+}
+
+table tbody tr td{
+    display: block;
+}
+
+.tableHeader{
+    color: #ffffff;
+	text-align: center;
+    background-color: #333;
+    font-size: 0.9em;
+	font-family: sans-serif;
+    font-weight: bold;
+}
+
+
 .customTable {
 	border-collapse: collapse;
 	font-size: 0.9em;
@@ -171,20 +195,8 @@ export default {
 	margin: 5px;
 }
 
-.customTable thead tr {
-	color: #ffffff;
-	text-align: center;
-}
-
-.customTable th {
-	background-color: #333;
-}
-
-.customTable thead th,
-.customTable thead td {
-	padding: 12px 15px;
-}
-.cell {
+.customTable th,
+.customTable td {
 	padding: 12px 15px;
 }
 
@@ -196,17 +208,17 @@ export default {
 	background-color: #f3f3f3;
 }
 
-.customTable tbody tr:last-of-type {
+.customTable tbody td:last-of-type {
 	border-bottom: 4px solid #333;
 }
 
-.cell input {
+input {
 	border-bottom: 2px solid #333;
 	padding-left: 1rem;
 	padding-right: 1rem;
 }
 
-.cell button {
+button {
 	border: solid #333 2px;
 	border-radius: 5px 5px 5px 5px;
 	padding: 0.2rem;
@@ -214,7 +226,7 @@ export default {
 	color: #ffffff;
 }
 
-.cell select {
+select {
 	cursor: pointer;
 	/* To align the select boxes with the input boxes */
 	border-bottom: 2px solid transparent;
