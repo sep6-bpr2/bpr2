@@ -47,10 +47,10 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
             point.id, 
             MAX(point.image) as image,
             MAX(point.frequencyId) as frequencyId, 
-            MAX(point.type) as type, 
+            MAX(point.inputType) as inputType, 
             MAX(point.lowerTolerance) as lowerTolerance,
             MAX(point.upperTolerance) as upperTolerance, 
-            MAX(point.controlPointType) as controlPointType, 
+            MAX(point.measurementType) as measurementType, 
             MAX(CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer
@@ -73,10 +73,10 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
             point.id, 
             MAX(point.image) as image,
             MAX(point.frequencyId) as frequencyId, 
-            MAX(point.type) as type, 
+            MAX(point.inputType) as inputType, 
             MAX(point.lowerTolerance) as lowerTolerance,
             MAX(point.upperTolerance) as upperTolerance, 
-            MAX(point.controlPointType) as controlPointType, 
+            MAX(point.measurementType) as measurementType, 
             MAX(connection.author) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer
@@ -143,7 +143,7 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
             ControlPoint.id, 
             ControlPoint.frequencyId, 
             ControlPoint.image, 
-            ControlPoint.type, 
+            ControlPoint.inputType, 
             ControlPoint.lowerTolerance, 
             ControlPoint.upperTolerance  
             FROM [ControlPoint]

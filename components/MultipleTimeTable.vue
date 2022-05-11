@@ -20,13 +20,13 @@
 				>
 					<div class="cell">
 						<input
-							v-if="cell.type == 3 || cell.type == 1"
+							v-if="cell.inputType == 3 || cell.inputType == 1"
 							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:input="updateParent(index - 1, cellIndex)"
                             :style="{color: validated(index - 1, cellIndex), 'border-color': validated(index - 1, cellIndex)}"
 						/>
 						<select
-							v-else-if="cell.type == 0"
+							v-else-if="cell.inputType == 0"
 							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:change="updateParent(index - 1, cellIndex)"
                             :style="{color: validated(index - 1, cellIndex)}"
@@ -44,7 +44,7 @@
 							</option>
 						</select>
 						<input
-							v-else-if="cell.type == -1"
+							v-else-if="cell.inputType == -1"
 							class="number"
 							disabled
 							:value="cell.answer"
@@ -101,7 +101,7 @@ export default {
 
 					for (let j = 0; j < iterations; j++) {
 						column.push({
-							type: -2,
+							inputType: -2,
 						});
 					}
 
@@ -111,7 +111,7 @@ export default {
 				let numbersColumn = [];
 				for (let i = 0; i < max; i++) {
 					numbersColumn.push({
-						type: -1,
+						inputType: -1,
 						answer: i + 1,
 					});
 				}

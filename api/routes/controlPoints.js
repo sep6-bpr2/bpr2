@@ -3,7 +3,7 @@ const router = Router()
 const { param, body } = require('express-validator')
 const { validateUserAdmin, validateUserQA, validateAllVerifiedUsers } = require("../middleware/validateUser")
 const path = require("path");
-const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt, validateListEntriesNotEmpty} = require("../middleware/validateMiddleware")
+const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt, validateListEntriesNotEmpty } = require("../middleware/validateMiddleware")
 const controlPointService = require("../services/controlPoints")
 
 
@@ -13,8 +13,7 @@ const controlPointService = require("../services/controlPoints")
  *
  * @example - GET {BaseURL}/api/controlPoints/allTypes/rafal
  */
-router.get(
-    "/allTypes/:username",
+router.get("/allTypes/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
     validateUserAdmin,
@@ -30,8 +29,7 @@ router.get(
  *
  * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */
-router.get(
-    "/allAttributesNames/:username",
+router.get("/allAttributesNames/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
     validateUserAdmin,
@@ -56,8 +54,7 @@ router.get(
  *
  * @example - POST {BaseURL}/api/controlPoints/submitControlPoint/rafal
  */
-router.post(
-    "/submitControlPoint/:username",
+router.post("/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
     // body("frequencies").isArray(),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
@@ -93,6 +90,7 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
         res.send(result)
     }
 )
+
 /**
  * @description - Get all control points with enough information for list
  * @param username - username of the user
@@ -100,15 +98,15 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
  *
  * @example - GET {BaseURL}/api/controlPoints/listMinimal/rokas/gb
  */
- router.get("/listMinimal/:username/:language",
- param("username").isLength({ min: 1, max: 35 }),
- param("language").isLength({ min: 2, max: 2 }),
- validate,
- validateUserAdmin,
- async (req, res) => {
-     const data = await controlPointService.controlPointsMinimal(req.params.language)
-     res.send(data)
- }
+router.get("/listMinimal/:username/:language",
+    param("username").isLength({ min: 1, max: 35 }),
+    param("language").isLength({ min: 2, max: 2 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const data = await controlPointService.controlPointsMinimal(req.params.language)
+        res.send(data)
+    }
 )
 
 router.get("/picture/:username/:pictureName",

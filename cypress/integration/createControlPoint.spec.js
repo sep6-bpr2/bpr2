@@ -3,7 +3,7 @@ describe('create control point', () => {
 		cy.visit('http://localhost:3000/login')
 		cy.get('#enterUsername').type('admin')
 		cy.get('#selectLocation').click({force: true})
-		cy.contains("object").click()
+		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 		cy.visit('http://localhost:3000/controlPoints/createControlPoint')
 	})

@@ -88,6 +88,11 @@ CREATE TABLE [KonfAir DRIFT$Item Category] (
     [Last Modified Date Time] datetime,
     [Id] INT
 );
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('1', '234', 'DK', N'2022-05-03 20:38:59.000', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('2', '345', 'DK', N'2022-05-05 09:53:58.000', 56, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('3', '239', 'LIT', N'2022-05-05 09:54:26.000', 2000, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('4', '534', 'DK', N'2022-05-05 09:55:10.000', 98, 2);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('5', '16', N'DK', N'2022-05-09 22:31:05.000', 50, 3);
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Production Order];
 CREATE TABLE [KonfAir DRIFT$Production Order] (
@@ -99,14 +104,16 @@ CREATE TABLE [KonfAir DRIFT$Production Order] (
     [status] int
 );
 -- This is not a real one 
-INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '123456789', 'Denmark, Give', '2022-06-12 17:00:00', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '123456789', 'DK', '2022-06-12 17:00:00', 240, 3);
 
 -- Real one
-INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '47827', 'Denmark, Give', '2022-06-12 17:00:00', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '47827', 'DK', '2022-06-12 17:00:00', 240, 3);
 
--- Completed one
-INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '1111', 'Denmark, Give', '2022-06-12 17:00:00', 240, 3);
-
+-- Completed oneac
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '1111', 'DK', '2022-06-12 17:00:00', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '65656', 'LT', '2022-06-12 17:00:00', 240, 3);
+INSERT INTO [KonfAir DRIFT$Item Category] (Code, [Parent Category], Description, Indentation, [Presentation Order], [Has Children], [Last Modified Date Time], Id) VALUES ('193345', null, null, null, null, null, null, null);
+INSERT INTO [KonfAir DRIFT$Item Category] (Code, [Parent Category], Description, Indentation, [Presentation Order], [Has Children], [Last Modified Date Time], Id) VALUES ('204567', null, null, null, null, null, null, null);
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item];
 CREATE TABLE [KonfAir DRIFT$Item] (

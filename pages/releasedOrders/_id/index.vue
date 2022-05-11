@@ -206,13 +206,12 @@ export default {
 
 			let inputValidated = 0;
 
-
 			// Validate the input
             if (this.currentOrder.oneTimeControlPoints[index].answer == "") {
 				inputValidated = 1; 
 			} else if( this.currentOrder.oneTimeControlPoints[index].answer.length > 50){
                 inputValidated = 0
-            }else if (this.currentOrder.oneTimeControlPoints[index].type == 0) {
+            }else if (this.currentOrder.oneTimeControlPoints[index].inputType == 0) {
 				//Option
 
 				for (
@@ -232,13 +231,13 @@ export default {
 					}
 				}
 			} else if (
-				this.currentOrder.oneTimeControlPoints[index].type == 1 && // Text
+				this.currentOrder.oneTimeControlPoints[index].inputType == 1 && // Text
 				typeof this.currentOrder.oneTimeControlPoints[index].answer ===
 					"string"
 			) {
 				inputValidated = 1;
 			} else if (
-				this.currentOrder.oneTimeControlPoints[index].type == 3 // Number
+				this.currentOrder.oneTimeControlPoints[index].inputType == 3 // Number
 			) {
 				let str = this.currentOrder.oneTimeControlPoints[index].answer;
 				if (typeof str != "string") {
@@ -254,7 +253,7 @@ export default {
              // Check tolerances
             if(
                 inputValidated == 1 && 
-                this.currentOrder.oneTimeControlPoints[index].type == 3 && 
+                this.currentOrder.oneTimeControlPoints[index].inputType == 3 && 
                 this.currentOrder.oneTimeControlPoints[index].lowerTolerance &&
                 this.currentOrder.oneTimeControlPoints[index].upperTolerance &&
                 this.currentOrder.oneTimeControlPoints[index].answer != ""
@@ -269,9 +268,9 @@ export default {
                 ){
                     inputValidated = 2
                 }
-            }else if (                
+            }else if (
                 inputValidated == 1 && 
-                this.currentOrder.oneTimeControlPoints[index].type == 3 && 
+                this.currentOrder.oneTimeControlPoints[index].inputType == 3 && 
                 this.currentOrder.oneTimeControlPoints[index].lowerTolerance == null &&
                 this.currentOrder.oneTimeControlPoints[index].upperTolerance == null &&
                 this.currentOrder.oneTimeControlPoints[index].answer != ""
@@ -302,7 +301,7 @@ export default {
                 inputValidated = 0
             }else if (
 				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.type == 0
+					.inputType == 0
 			) {
 				//Option
 
@@ -326,7 +325,7 @@ export default {
 				}
 			} else if (
 				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.type == 1 && // Text
+					.inputType == 1 && // Text
 				typeof this.currentOrder.multipleTimeAnswers[indexColumn][
 					indexCell
 				].answer === "string"
@@ -334,7 +333,7 @@ export default {
 				inputValidated = 1;
 			} else if (
 				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.type == 3 // Number
+					.inputType == 3 // Number
 			) {
 				let str =
 					this.currentOrder.multipleTimeAnswers[indexColumn][
@@ -353,7 +352,7 @@ export default {
             // Check tolerances
             if(
                 inputValidated == 1 && 
-                this.currentOrder.multipleTimeControlPoints[indexColumn].type == 3 && 
+                this.currentOrder.multipleTimeControlPoints[indexColumn].inputType == 3 && 
                 this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance &&
                 this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance &&
                 this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer != ""
@@ -370,7 +369,7 @@ export default {
                 }
             }else if (                
                 inputValidated == 1 && 
-                this.currentOrder.multipleTimeControlPoints[indexColumn].type == 3 &&
+                this.currentOrder.multipleTimeControlPoints[indexColumn].inputType == 3 &&
                 this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance == null &&
                 this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance == null && 
                 this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer != ""

@@ -11,7 +11,7 @@ describe('Completed orders', () => {
         // Logging in to the correct user
 		cy.get('#enterUsername').type('admin')
 		cy.get('#selectLocation').click({force: true})
-		cy.contains("object").click()
+		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 
         cy.get('#nav1').click({force: true})

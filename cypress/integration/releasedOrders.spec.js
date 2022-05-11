@@ -20,14 +20,14 @@ describe('login', () => {
 
 		cy.get('#enterUsername').type('worker')
 		cy.get('#selectLocation').click({force: true})
-		cy.contains("object").click()
+		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3); 
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2); 
 
         // Check header
         cy.contains('Item Number').should('be.visible')
@@ -58,6 +58,8 @@ describe('login', () => {
     it('Check released order list with 0 items', () => {
         // Go to page without logging in
 		cy.visit('http://localhost:3000/releasedOrders')
+        cy.clearLocalStorage()
+
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')

@@ -7,6 +7,9 @@ module.exports.releasedOrders = async (location) => {
     // CHECK IF THEY ARE COMPLETED BY QUERYING THE OWN DATABASE
     let orders = await model.getReleasedOrders(location)
 
+    if(orders.length == 0){
+        return []
+    }
     let qaReports = await model.getMultipleQAReports(listToCommaString(orders, 'id'))
 
     let uncompletedOrders = []
@@ -184,7 +187,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             controlPoints[i].frequency = null
             controlPoints[i].frequency = await model.getReleasedOrderControlPointsFrequencies(controlPoints[i].frequencyId)
 
-            if (controlPoints[i].type == 0) {
+            if (controlPoints[i].inputType == 0) {
                 controlPoints[i].options = null
                 controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id)
             }
@@ -217,7 +220,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             // controlPoints/picture/worker/
 
             // One time measurement
-            if (controlPoints[i].controlPointType == 1) {
+            if (controlPoints[i].measurementType == 1) {
                 itemData.oneTimeControlPoints.push(controlPoints[i])
             } else {
                 itemData.multipleTimeControlPoints.push(controlPoints[i])
@@ -230,7 +233,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                 controlPoints[i].toleranceText = "+" + controlPoints[i].upperTolerance + "/-" + controlPoints[i].lowerTolerance + controlPoints[i].units
             }
 
-            if (controlPoints[i].type == 0) {
+            if (controlPoints[i].inputType == 0) {
                 let allUnits = ""
 
                 for (let j = 0; j < controlPoints[i].options.length; j++) {
@@ -242,7 +245,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                 }
 
                 controlPoints[i].units = allUnits
-            } else if (controlPoints[i].type == 1) {
+            } else if (controlPoints[i].inputType == 1) {
                 controlPoints[i].units = "Text"
             }
         }
@@ -335,7 +338,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                         connectionId: connectionId,
                         id: itemData.multipleTimeControlPoints[i].id,
                         answer: answer,
-                        type: itemData.multipleTimeControlPoints[i].type,
+                        inputType: itemData.multipleTimeControlPoints[i].inputType,
                         author: author
                     })
             }
@@ -407,7 +410,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                         if(editedQAReport.oneTimeControlPoints[i].answer.length > 50){
                             inputValidated = false
-                        }else if (originalOrder.oneTimeControlPoints[i].type == 0) { //Option
+                        }else if (originalOrder.oneTimeControlPoints[i].inputType == 0) { //Option
 
                             for (let j = 0; j < originalOrder.oneTimeControlPoints[i].options.length; j++) {
                                 if (originalOrder.oneTimeControlPoints[i].options[j].value == editedQAReport.oneTimeControlPoints[i].answer) {
@@ -415,11 +418,11 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                                     break;
                                 }
                             }
-                        } else if (originalOrder.oneTimeControlPoints[i].type == 1 &&  // Text
+                        } else if (originalOrder.oneTimeControlPoints[i].inputType == 1 &&  // Text
                             typeof editedQAReport.oneTimeControlPoints[i].answer === 'string'
                         ) {
                             inputValidated = true
-                        } else if (originalOrder.oneTimeControlPoints[i].type == 3 && // Number
+                        } else if (originalOrder.oneTimeControlPoints[i].inputType == 3 && // Number
                             isNumeric(editedQAReport.oneTimeControlPoints[i].answer) && 
                             Number(editedQAReport.oneTimeControlPoints[i].answer) >= 0
                         ) {
@@ -454,7 +457,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                             if(editedQAReport.multipleTimeAnswers[i][j].answer.length > 50){
                                 inputValidated = false
-                            }else if (originalOrder.multipleTimeAnswers[i][j].type == 0) { //Option
+                            }else if (originalOrder.multipleTimeAnswers[i][j].inputType == 0) { //Option
 
                                 for (let k = 0; k < originalOrder.multipleTimeControlPoints[i].options.length; k++) {
                                     if (originalOrder.multipleTimeControlPoints[i].options[k].value == editedQAReport.multipleTimeAnswers[i][j].answer) {
@@ -462,11 +465,11 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                                         break;
                                     }
                                 }
-                            } else if (originalOrder.multipleTimeAnswers[i][j].type == 1 &&  // Text
+                            } else if (originalOrder.multipleTimeAnswers[i][j].inputType == 1 &&  // Text
                                 typeof editedQAReport.multipleTimeAnswers[i][j].answer === 'string'
                             ) {
                                 inputValidated = true
-                            } else if (originalOrder.multipleTimeAnswers[i][j].type == 3 && // Number
+                            } else if (originalOrder.multipleTimeAnswers[i][j].inputType == 3 && // Number
                                 isNumeric(editedQAReport.multipleTimeAnswers[i][j].answer) &&
                                 Number(editedQAReport.multipleTimeAnswers[i][j].answer) >= 0
                             ) {

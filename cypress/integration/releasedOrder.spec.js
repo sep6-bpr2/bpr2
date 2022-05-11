@@ -7,67 +7,67 @@ describe('released order', () => {
         cy.clearLocalStorage()
     })
 
-    // it('Released order ERROR No attributes', () => {
-    //     // Logging in to the correct user
-    //     cy.get('#enterUsername').type('worker')
-    //     cy.get('#selectLocation').click({ force: true })
-    //     cy.contains("object").click()
-    //     cy.get('#submitLogin').click()
-
-
-        // Released orders validation
-        // cy.contains('This is the released orders page').should('be.visible')
-        // Check that there are 2 rows in the table
-        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
-
-    //     // Check order that has no attributes
-    //     cy.get('#customTable0').click()
-    //     cy.contains('Failed').should('be.visible')
-    // })
-
-    // it('Released order ERROR order does not exist', () => {
-    //     // Logging in to the correct user
-    //     cy.get('#enterUsername').type('worker')
-    //     cy.get('#selectLocation').click({ force: true })
-    //     cy.contains("object").click()
-    //     cy.get('#submitLogin').click()
-
-        // Released orders validation
-        // cy.contains('This is the released orders page').should('be.visible')
-        // Check that there are 2 rows in the table
-        // cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
-
-    //     // Check order that has no attributes
-    //     cy.get('#customTable0').click()
-    //     cy.contains('Failed').should('be.visible')
-    // })
-
-    // it('Released order ERROR order does not exist', () => {
-    //     // Logging in to the correct user
-    //     cy.get('#enterUsername').type('worker')
-    //     cy.get('#selectLocation').click({ force: true })
-    //     cy.contains("object").click()
-    //     cy.get('#submitLogin').click()
-
-
-    //     // Check order without logging in or 
-    //     cy.visit('http://localhost:3000/releasedOrders/4345')
-
-    //     // Check order that has no attributes
-    //     cy.contains('Failed').should('be.visible')
-    // })
-
-    it('Released order OK validate what is shown to user', () => {
+    it('Released order ERROR No attributes', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
         cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
+        cy.contains("DK").click()
+        cy.get('#submitLogin').click()
+
+
+        // Released orders validation
+        cy.contains('This is the released orders page').should('be.visible')
+        // Check that there are 2 rows in the table
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+
+        // Check order that has no attributes
+        cy.get('#customTable0').click()
+        cy.contains('Failed').should('be.visible')
+    })
+
+    it('Released order ERROR order does not exist', () => {
+        // Logging in to the correct user
+        cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({ force: true })
+        cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+
+        // Check order that has no attributes
+        cy.get('#customTable0').click()
+        cy.contains('Failed').should('be.visible')
+    })
+
+    it('Released order ERROR order does not exist', () => {
+        // Logging in to the correct user
+        cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({ force: true })
+        cy.contains("DK").click()
+        cy.get('#submitLogin').click()
+
+
+        // Check order without logging in or 
+        cy.visit('http://localhost:3000/releasedOrders/4345')
+
+        // Check order that has no attributes
+        cy.contains('Failed').should('be.visible')
+    })
+
+    it('Released order OK validate what is shown to user', () => {
+        // Logging in to the correct user
+        cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({ force: true })
+        cy.contains("DK").click()
+        cy.get('#submitLogin').click()
+
+        // Released orders validation
+        cy.contains('This is the released orders page').should('be.visible')
+        // Check that there are 2 rows in the table
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -84,7 +84,7 @@ describe('released order', () => {
         cy.contains('Panelfilter 390x300x47').should('be.visible')
         cy.contains('32110').should('be.visible')
         cy.contains('2022-06-12').should('be.visible')
-        cy.contains('Denmark, Give').should('be.visible')
+        cy.contains('DK').should('be.visible')
         cy.contains('incomplete').should('be.visible')
         // Check if the qa form contains all the elements it needs to 
 
@@ -136,7 +136,8 @@ describe('released order', () => {
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').find("select").should('be.visible')
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("Show guide").click()
-            cy.get('img').should('be.visible')
+            // Check that image is visible and that it is of width bigger than 0 (this means it loaded good)
+            cy.get('img').should('be.visible').and(($img) => { expect($img[0].naturalWidth).to.be.greaterThan(0)})
             cy.get('span').should('be.visible')
             cy.get('span').click()
             cy.get('img').should('not.be.visible')
@@ -175,7 +176,7 @@ describe('released order', () => {
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("Fiber").should('be.visible')
 
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("Show guide").click()
-            cy.get('img').should('be.visible')
+            cy.get('img').should('be.visible').and(($img) => { expect($img[0].naturalWidth).to.be.greaterThan(0)})
             cy.get('span').should('be.visible')
             cy.get('span').click()
             cy.get('img').should('not.be.visible')
@@ -211,13 +212,13 @@ describe('released order', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
         cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
+        cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -330,13 +331,13 @@ describe('released order', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
         cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
+        cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
@@ -507,13 +508,13 @@ describe('released order', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
         cy.get('#selectLocation').click({ force: true })
-        cy.contains("object").click()
+        cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
         // Released orders validation
         cy.contains('This is the released orders page').should('be.visible')
         // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 3);
+        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()

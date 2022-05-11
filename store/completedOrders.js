@@ -20,7 +20,7 @@ export const mutations = {
 export const actions = {
     loadCompletedOrders({ commit, rootState }, { }) {
         const user = rootState.login.user;
-        const location = rootState.login.selectedLocation;
+        const location = rootState.login.chosenLocation;
         if (user) {
             fetch(`api/orders/completedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
                 for (let i = 0; i < result.length; i++) {
