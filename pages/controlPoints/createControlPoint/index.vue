@@ -23,6 +23,18 @@
 							/>
 						</div>
 					</div>
+					<div class="innerElement row">
+						<p>
+							<Translate :text="'Control point measurement type'"/>
+						</p>
+						<v-select
+							id="measurementType"
+							:items="allMeasurementTypes"
+							:item-text="item=>item.name"
+							:item-value="item=>item.value"
+							v-model="measurementType"
+						/>
+					</div>
 				</v-card>
 
 				<v-card elevation="24">
@@ -31,7 +43,7 @@
 					</h3>
 					<div class="innerElement row">
 						<p>
-							<Translate :text="'Type'"/>
+							<Translate :text="'Value Type'"/>
 						</p>
 						<v-select
 							id="type"
@@ -84,13 +96,13 @@
 						class="innerElement row"
 					>
 						<p>
-							<Translate :text="'LowerTolerance'"/>
+							<Translate :text="'Lower Tolerance'"/>
 						</p>
 						<v-text-field
 							v-model="lowerTolerance"
 						/>
 						<p>
-							<Translate :text="'UpperTolerance'"/>
+							<Translate :text="'Upper Tolerance'"/>
 						</p>
 						<v-text-field
 							v-model="upperTolerance"
@@ -320,6 +332,17 @@ export default {
 		descriptions() {
 			return this.$store.state.createControlPoint.descriptions
 		},
+		allMeasurementTypes() {
+			return this.$store.state.createControlPoint.allMeasurementTypes
+		},
+		measurementType: {
+			get() {
+				return this.$store.state.createControlPoint.measurementType
+			},
+			set(value) {
+				this.$store.commit('createControlPoint/setMeasurementType', value)
+			}
+		},
 		type: {
 			get() {
 				return this.$store.state.createControlPoint.type
@@ -370,7 +393,6 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
-
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {option: option, index: index})
 		},
@@ -430,11 +452,14 @@ export default {
 				return false
 			}
 
-			if (this.validate([{value: this.type}], this.translateText('type can not be empty')) === false) return false
+			if(this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
+
+			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
+				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
 
 			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
@@ -495,6 +520,7 @@ export default {
 			if (this.validateAll()) {
 				this.$store.dispatch('createControlPoint/submitControlPoint', {
 					descriptions: this.descriptions,
+					measurementType: this.measurementType,
 					type: this.type,
 					upperTolerance: this.upperTolerance,
 					lowerTolerance: this.lowerTolerance,

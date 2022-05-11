@@ -1,15 +1,19 @@
 describe('create control point', () => {
 	beforeEach(() => {
+		cy.clearLocalStorage()
 		cy.visit('http://localhost:3000/login')
 		cy.get('#enterUsername').type('admin')
 		cy.get('#selectLocation').click({force: true})
 		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
+		cy.wait(1000)
 		cy.visit('http://localhost:3000/controlPoints/createControlPoint')
 	})
 
 	it('sunny scenario', () => {
 		cy.get('#description').type('test control point')
+		cy.get('#measurementType').click({force: true})
+		cy.contains('one time').click()
 		cy.get('#type').click({force: true})
 		cy.contains('text').click()
 		cy.get('#categoryItemCode').type('32456')
