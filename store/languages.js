@@ -172,8 +172,8 @@ const translations = {
 		"dk": "bla bla"
 	},
 	// alerts
-	"there must be at least one option for the options type": {
-		"gb": "there must be at least one option for the options type",
+	"there must be at least two option for the options type": {
+		"gb": "there must be at least two option for the options type",
 		"lt": "bla bla",
 		"dk": "bla bla"
 	},"control point must have at least one item category code": {

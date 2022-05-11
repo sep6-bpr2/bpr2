@@ -1,6 +1,39 @@
 const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 // need to take this to some static file
-const defaultFrequencyValue = [{"id":0,"to25":2,"to50":3,"to100":4,"to200":7,"to300":10,"to500":16,"to700":22,"to1000":30,"to1500":40,"to2000":50,"to3000":60,"to4000":65,"to5000":70}]
+
+module.exports.getAllTypes = async () => {
+	const result = await konfairDB()
+		.request()
+		.query(`SELECT type from [KonfAir DRIFT$Item Attribute] GROUP BY type`)
+	return result.recordset
+}
+module.exports.getFrequenciesOfControlPoint = async (controlPointId) => {
+
+	const result = await localDB()
+		.request()
+		.query(`select F.id,[to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
+				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
+				[to5000] from [dbo].[ControlPoint] C JOIN [dbo].[Frequency] F
+				on C.frequencyId = F.id where C.id = ${controlPointId}
+`)
+	if(result.recordset[0] == undefined){
+		// result.recordset = defaultFrequencyValue
+	}
+	return result.recordset
+}
+
+
+module.exports.getAllAttributesNames = async () => {
+	const result = await konfairDB()
+		.request()
+		.query(`SELECT id, name from [KonfAir DRIFT$Item Attribute]`)
+	return result.recordset
+}
+
+module.exports.insertControlPoint = async (sqlString,con) => {
+	con.query(sqlString)
+		.catch(err => (console.error(err)))
+}
 
 module.exports.getControlPointsMinimal = async () => {
     const result = await localDB()
