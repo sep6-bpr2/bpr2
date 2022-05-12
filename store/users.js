@@ -25,6 +25,23 @@ export const actions = {
 			})
 		}
 	},
+	deleteUser({commit, rootState }, deletingUser) {
+		const user = rootState.login.user;
+		if(user) {
+			let fetchData = {
+				method: 'DELETE',
+				body: JSON.stringify(deletingUser),
+				headers: {
+					'Content-Type': 'application/json'
+				},
+			}
+			if (user) {
+				 fetch(`api/users/deleteUser/${user.username}`, fetchData).then(res=> res.json()).then(result => {
+					commit('setUsers', result)
+				})
+			}
+		}
+	},
 	async createUser({commit, rootState}, creatingUser) {
 		const user = rootState.login.user;
 		let fetchData = {
@@ -35,7 +52,7 @@ export const actions = {
 			},
 		}
 		if (user) {
-			await fetch(`api/users/addUser`, fetchData).then(res=> res.json()).then(result => {
+			await fetch(`api/users/addUser/${user.username}`, fetchData).then(res=> res.json()).then(result => {
 				commit('setNewUser', result)
 			})
 		}

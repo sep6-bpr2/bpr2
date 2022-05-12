@@ -14,6 +14,7 @@
 			:rows="controlPoints"
 			:tableHeaders="headers"
 			:callback="controlPointClickCallback"
+			:delete-row-callback="deleteRowCallback"
 		/>
 	</div>
 </template>
@@ -42,6 +43,9 @@ export default {
 		},
 	},
 	methods: {
+		deleteRowCallback(row){
+			confirm("Are you sure you want to delete user with username: " + row.username  )
+		},
 		controlPointClickCallback(row) {
 			this.$router.push("/controlPoints/" + row.id);
 		},

@@ -3,6 +3,7 @@ const router = Router()
 const { param, body } = require('express-validator')
 const { validate } = require("../middleware/validateMiddleware")
 const service = require("../services/users")
+const {validateUserAdmin} = require("../middleware/validateUser");
 
 
 /**
@@ -31,14 +32,33 @@ router.get("/getAllUsers", async (req, res) => {
 })
 
 
+//{username: "", role:""}
 /**
  * @description - add user to the system
  * @body - user to add to the system
  *
- * @example - POST {BaseURL}/api/users/
+ * @example - POST {BaseURL}/api/users/addUser/rokas
  */
-router.post("/addUser", async (req, res) => {
-    const result = await service.addUser(req.body)
+router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 }),validateUserAdmin, async (req, res) => {
+	body("username").isString()
+	body("role").isString()
+	console.log(JSON.stringify(req.body) + "##########")
+	const result = await service.addUser(req.body)
+
+    res.send(result)
+})
+
+/**
+ * @description - delete user from the system
+ * @body - user to remove from the system
+ *
+ * @example - POST {BaseURL}/api/users/deleteUser/rokas
+ */
+router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 35 }), async (req, res) => {
+	body("username").isString()
+	body("role").isString()
+	console.log(JSON.stringify(req.body) + "##########")
+	const result = await service.removeUser(req.body)
 
     res.send(result)
 })

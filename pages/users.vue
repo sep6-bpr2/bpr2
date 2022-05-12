@@ -11,6 +11,7 @@
 			 :allowedHeaders="allowedHeaders"
 			 :rows="userList"
 			 :tableHeaders="headers"
+			 :deleteRowCallback="deleteRowCallback"
 		 />
 		 <Transition>
 			 <div v-if="shouldCreateUser" class="create_User_form ml-5">
@@ -100,6 +101,12 @@ export default {
 					}
 
 				}
+			}
+		},
+		deleteRowCallback(row){
+			let user ={username: row.username,role: row.role}
+			if(confirm("Are you sure you want to delete user with username: " + row.username )==true){
+				this.$store.dispatch("users/deleteUser",user)
 			}
 		},
 		cancelCreateUser(){
