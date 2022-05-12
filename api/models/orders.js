@@ -5,7 +5,8 @@ module.exports.getReleasedOrders = async (location) => {
         .request()
         .input("location", mssql.NVarChar(40), location)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3
         `)
@@ -24,14 +25,22 @@ module.exports.getOrders = async (location) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderInformation = async (id) => {
+module.exports.getOrderInformation = async (id) => {
     const result = await konfairDB()
         .request()
         .input("id", mssql.NVarChar(40), id)
         .query(`
-            SELECT item.No_ as id, item.Description as description, item.[Item Category Code] as categoryCode, pOrder.status, pOrder.[Due Date] as deadline, pOrder.[Location Code] as location, pOrder.Quantity as quantity FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.No_ as id, 
+            item.Description as description, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.status, 
+            pOrder.[Due Date] as deadline, 
+            pOrder.[Location Code] as location, 
+            pOrder.Quantity as quantity
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE item.[No_] = @id AND pOrder.status = 3
+            WHERE item.[No_] = @id
         `)
     return result.recordset
 }
@@ -51,7 +60,7 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
             MAX(point.lowerTolerance) as lowerTolerance,
             MAX(point.upperTolerance) as upperTolerance, 
             MAX(point.measurementType) as measurementType, 
-            MAX(CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
+            MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = ''THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer
             FROM [QAReportControlPointValue] connection
@@ -94,7 +103,10 @@ module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT Description.id, Description.language, Description.description from ControlPoint
+            SELECT 
+            Description.id, 
+            Description.language, 
+            Description.description from ControlPoint
             INNER JOIN Description on ControlPoint.id = Description.controlPointId
             WHERE ControlPoint.id = @id
         `)
@@ -112,7 +124,19 @@ module.exports.getReleasedOrderControlPointsOptions = async (id) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPointsFrequencies = async (id) => {
+module.exports.getFrequenciesForCategory = async (code) => {
+    const result = await localDB()
+        .request()
+        .input("code", mssql.NVarChar(40), code)
+        .query(`
+            SELECT * FROM [ItemCategoryFrequency]
+            INNER JOIN [Frequency] ON [Frequency].id = [ItemCategoryFrequency].frequencyId
+            WHERE [ItemCategoryFrequency].code = @code
+        `)
+    return result.recordset
+}
+
+module.exports.getFrequencies = async (id) => {
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)

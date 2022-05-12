@@ -56,11 +56,29 @@ router.get("/released/full/:username/:id/:language",
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.releasedOrderFull(req.params.id, req.params.language, false)
+        const data = await service.getQAReport(req.params.id, req.params.language, false, false)
         res.send(data)
     }
 )
 
+/**
+ * @description - Get the released order by id
+ * @param username - name of the user for validation
+ * @param id - id of the selected order
+ *
+ * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
+ */
+router.get("/completed/full/:username/:id/:language",
+    param("username").isLength({ min: 4, max: 50 }),
+    param("id").isInt().isLength({ min: 1, max: 35 }),
+    param("language").isLength({ min: 2, max: 2 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const data = await service.getQAReport(req.params.id, req.params.language, true, true)
+        res.send(data)
+    }
+)
 /**
  * @description - Save changes to the qa report
  * @param username - name of the user for validation

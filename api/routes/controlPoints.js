@@ -81,7 +81,6 @@ router.post("/submitControlPoint/:username",
  *
  * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/rafal
  */
-
 router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,

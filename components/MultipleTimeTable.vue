@@ -24,12 +24,14 @@
 							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:input="updateParent(index - 1, cellIndex)"
                             :style="{color: validated(index - 1, cellIndex), 'border-color': validated(index - 1, cellIndex)}"
+                            :disabled="inputsDisabled != null && inputsDisabled"
 						/>
 						<select
 							v-else-if="cell.inputType == 0"
 							v-model="originalColumns[index - 1][cellIndex].answer"
 							v-on:change="updateParent(index - 1, cellIndex)"
-                            :style="{color: validated(index - 1, cellIndex)}"
+                            :style="{color: validated(index - 1, cellIndex), cursor: (inputsDisabled != null && inputsDisabled ? 'default': 'pointer')}"
+                            :disabled="inputsDisabled != null && inputsDisabled"
 						>
 							<option disabled selected value="">
 								-- select an option --
@@ -75,7 +77,7 @@ export default {
 	components: {
 		Translate,
 	},
-	props: ["tableHeaders", "columns", "valueUpdateCallback"],
+	props: ["tableHeaders", "columns", "valueUpdateCallback", "inputsDisabled"],
 	data() {
 		return {
 			originalColumns: this.columns,
@@ -227,7 +229,6 @@ button {
 }
 
 select {
-	cursor: pointer;
 	/* To align the select boxes with the input boxes */
 	border-bottom: 2px solid transparent;
 }

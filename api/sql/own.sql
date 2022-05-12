@@ -64,8 +64,6 @@ CREATE TABLE [dbo].[SystemUser](
 INSERT INTO [dbo].[SystemUser] VALUES ('admin', 'admin');
 INSERT INTO [dbo].[SystemUser] VALUES ('worker', 'qa employee');
 
-DROP TABLE IF EXISTS [dbo].[SystemUserQAReport];
-
 
 DROP TABLE IF EXISTS [dbo].[Frequency];
 create table [dbo].[Frequency]
@@ -91,11 +89,15 @@ create table [dbo].[ItemCategoryFrequency]
 (
     id          int identity(1,1),
     code        nvarchar(1000),
-    frequencyid int
+    frequencyId int
 )
+
+INSERT INTO [dbo].[ItemCategoryFrequency] (code, frequencyId) VALUES ('32110', 3);
+
 
 INSERT INTO [dbo].[Frequency] (to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000) VALUES (23, 2, 343, 5, 5, 6, 66, 7, 5, 76, 76, 766, 69);
 INSERT INTO [dbo].[Frequency] (to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000) VALUES (25, 5, 345, 7, 7, 8, 68, 9, 7, 78, 78, 768, 71);
+INSERT INTO [dbo].[Frequency] (to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000) VALUES (63, 2, 343, 3, 8, 6, 66, 7, 5, 76, 76, 766, 69);
 
 -- INCOMPLETE ORDER
 -- ONE TIME CONTROL POINTS
@@ -162,7 +164,7 @@ insert into [Option] (controlPointId, value) values (7, 'No')
 
 -- MULTIPLE TIME CONTROL POINTS
 ----------------
-insert into ControlPoint (frequencyid, image, inputType, upperTolerance, lowerTolerance, measurementType) values (1, 'File1652206892425298.png', 3, 6, 1, 0)
+insert into ControlPoint (frequencyid, image, inputType, upperTolerance, lowerTolerance, measurementType) values (null, 'File1652206892425298.png', 3, 6, 1, 0)
 
 insert into ItemCategoryControlPoint (itemCategoryCode, controlPointId) values (32110, 8)
 insert into AttributeControlPoint (attributeId, controlPointId, minValue, maxValue) values (110, 8, 300, 400)

@@ -1,0 +1,341 @@
+{
+	"id": "47827",
+	"description": "Panelfilter 390x300x47",
+	"categoryCode": "32110",
+	"status": "incomplete",
+	"deadline": "2022-06-12",
+	"location": "DK",
+	"quantity": 240,
+	"qaReportId": 2,
+	"oneTimeControlPoints": [
+		{
+			"id": 1,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 9,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "300.00",
+			"units": "mm",
+			"toleranceText": ""
+		},
+		{
+			"id": 2,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 1,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 10,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "390.00",
+			"units": "mm",
+			"toleranceText": "+/-1mm"
+		},
+		{
+			"id": 3,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 11,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "47",
+			"units": "mm",
+			"toleranceText": "+6/-1mm"
+		},
+		{
+			"id": 4,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 12,
+			"answer": "afdaff",
+			"description": "This is a description",
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"toleranceText": ""
+		},
+		{
+			"id": 5,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 13,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
+			],
+			"expectedValue": "Ja",
+			"units": "Yes/No",
+			"toleranceText": ""
+		},
+		{
+			"id": 6,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 14,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 3, "controlPointId": 6, "value": "Yes" },
+				{ "id": 4, "controlPointId": 6, "value": "No" }
+			],
+			"expectedValue": "Z-line",
+			"units": "Yes/No",
+			"toleranceText": ""
+		},
+		{
+			"id": 7,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 15,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 5, "controlPointId": 7, "value": "Yes" },
+				{ "id": 6, "controlPointId": 7, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"toleranceText": ""
+		}
+	],
+	"multipleTimeControlPoints": [
+		{
+			"id": 8,
+			"image": "File1652206892425298.png",
+			"frequencyId": null,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 25,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "340.00",
+			"units": "mm",
+			"toleranceText": "+6/-1mm",
+			"letter": "A"
+		},
+		{
+			"id": 9,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 29,
+			"answer": "afdaff",
+			"description": "This is a description",
+			"expectedValue": "ISO e",
+			"units": "Text",
+			"toleranceText": "",
+			"letter": "B"
+		},
+		{
+			"id": 10,
+			"image": "File1652206892425298.png",
+			"frequencyId": 2,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 35,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 7, "controlPointId": 10, "value": "Yes" },
+				{ "id": 8, "controlPointId": 10, "value": "No" }
+			],
+			"expectedValue": "Fiber glass",
+			"units": "Yes/No",
+			"toleranceText": "",
+			"letter": "C"
+		}
+	],
+	"multipleTimeAnswers": [
+		[
+			{
+				"connectionId": 16,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 19,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 20,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 21,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 22,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 23,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 24,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 25,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			}
+		],
+		[
+			{
+				"connectionId": 17,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 26,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 27,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 28,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 29,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			}
+		],
+		[
+			{
+				"connectionId": 18,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 30,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 31,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 32,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 33,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 34,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 35,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			}
+		]
+	]
+}
