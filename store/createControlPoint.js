@@ -2,7 +2,16 @@ const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-		frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},{name:"to200",value:7},{name:"to300",value:10},{name:"to500",value:16},{name:"to700",value:22},{name:"to1000",value:30},{name:"to1500", value:40},{name:"to2000",value:50},{name:"to3000",value:60},{name:"to4000",value:65},{name:"to5000",value:70}],
+		frequencies: [{name: "to25", value: 2}, {name: "to50", value: 3}, {name: "to100", value: 4}, {
+			name: "to200",
+			value: 7
+		}, {name: "to300", value: 10}, {name: "to500", value: 16}, {name: "to700", value: 22}, {
+			name: "to1000",
+			value: 30
+		}, {name: "to1500", value: 40}, {name: "to2000", value: 50}, {name: "to3000", value: 60}, {
+			name: "to4000",
+			value: 65
+		}, {name: "to5000", value: 70}],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
 		type: null,
@@ -42,8 +51,24 @@ export const mutations = {
 		state.descriptions[obj.index].value = obj.desc
 	},
 
-	setMeasurementType(state, measurementType){
+	setMeasurementType(state, measurementType) {
 		state.measurementType = measurementType
+	},
+
+
+	setAllDescriptions(state, obj) {
+		console.log("Hello")
+		// obj.forEach(desc => {
+		// 	let specDesc = state.descriptions.find(o => o.lang.toLowerCase() === desc.language)
+		// 	console.log(specDesc)
+		// 	specDesc = desc.description
+		// })
+		let eng = obj.find(o => o.language.toLowerCase() === "english")
+		state.descriptions[0].value = eng.description
+		let dk = obj.find(o => o.language.toLowerCase() === "danish")
+		state.descriptions[1].value = dk.description
+		let lt = obj.find(o => o.language.toLowerCase() === "lithuanian")
+		state.descriptions[2].value = lt.description
 	},
 
 	setType(state, type) {
@@ -78,6 +103,9 @@ export const mutations = {
 	addAttribute(state) {
 		state.attributes.push({id: '', minValue: null, maxValue: null})
 	},
+	addAttributeSpecific(state, id, minValue, maxValue) {
+		state.attributes.push({id: id, minValue: minValue, maxValue: maxValue})
+	},
 	removeAttribute(state, index) {
 		state.attributes.splice(index, 1)
 	},
@@ -87,6 +115,9 @@ export const mutations = {
 	},
 	addCode(state) {
 		state.codes.push({value: null})
+	},
+	addCodeSpecific(state, code) {
+		state.codes.push({value: code})
 	},
 	removeCode(state, index) {
 		state.codes.splice(index, 1)
@@ -130,26 +161,57 @@ export const actions = {
 				})
 		}
 	},
+	async getControlPointData({commit, rootState}, cpId) {
+		const user = rootState.login.user;
+		if (user) {
+			await fetch(`http://localhost:3000/api/controlPoints/controlPointData/${user.username}/${cpId}`)
+				.then(res => res.json())
+				.then(res => {
+					console.log(res)
+					commit('setAllDescriptions', res.descriptions)
+
+					let mainInfo = res.mainInformation
+
+					commit('setMeasurementType', mainInfo.measurementtype)
+					commit('setType', mainInfo.inputtype)
+					if (mainInfo.inputtype === "options") {
+						// do options stuff
+					} else if (mainInfo.inputtype === "number") {
+						commit('setUpperTolerance', mainInfo.uppertolerance)
+						commit('setLowerTolerance', mainInfo.lowertolerance)
+					}
+
+					//attributes
+					let att = res.attributes
+					att.forEach(o => commit('addAttributeSpecific', att.attributeId, att.minValue, att.maxValue))
+
+
+					//codes
+					commit('removeCode', 0)
+					res.categoryCodes.forEach(o => commit("addCodeSpecific", o.itemCategoryCode))
+				})
+		}
+	},
 	async submitControlPoint({commit, rootState}, cp) {
 		console.log(cp)
 		const user = rootState.login.user;
 		const request = (commit, cp) => {
 			return new Promise((resolve, reject) => {
-			fetch(`http://localhost:3000/api/controlPoints/submitControlPoint/${user.username}`, {
-				method: 'POST',
-				body: JSON.stringify(cp),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(response => {
-					if (response.ok) {
-						resolve(true)
-						commit('resetState')
-					}else{
-						resolve(false)
+				fetch(`http://localhost:3000/api/controlPoints/submitControlPoint/${user.username}`, {
+					method: 'POST',
+					body: JSON.stringify(cp),
+					headers: {
+						'Content-Type': 'application/json'
 					}
-				}
-			)
+				}).then(response => {
+						if (response.ok) {
+							resolve(true)
+							commit('resetState')
+						} else {
+							resolve(false)
+						}
+					}
+				)
 			})
 		}
 		if (user) {

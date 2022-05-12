@@ -30,6 +30,54 @@ module.exports.getAllAttributesNames = async () => {
 	return result.recordset
 }
 
+module.exports.getControlMainInformation = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`SELECT frequencyid, image, uppertolerance, lowertolerance, inputtype, measurementtype  FROM ControlPoint WHERE id = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.getControlPointFrequency = async (freqId) => {
+	const result = await localDB()
+		.request()
+		.input('freqId', mssql.Int, freqId)
+		.query(`SELECT to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000 FROM Frequency WHERE id = @freqId`)
+
+	return result.recordset
+}
+
+module.exports.getControlPointDescriptions = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`SELECT language, description FROM Description WHERE Description.controlPointId=@CpId`)
+
+	// let sqlString = `SELECT  language, description FROM [dbo].[Descriptions] WHERE controlPointId = @CpId`
+	// con.input('CpId', mssql.Int, cpId)
+	// const result = con.query(sqlString).catch(err => (console.error(err)))
+	return result.recordset
+}
+
+module.exports.getControlPointAttributes = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`SELECT attributeId, minValue, maxValue FROM [dbo].[AttributeControlPoint] WHERE controlPointId = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.getControlPointItemCategoryCodes = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`SELECT itemCategoryCode FROM [dbo].[ItemCategoryControlPoint] WHERE controlPointId = @CpId`)
+
+	return result.recordset
+}
+
 module.exports.insertControlPoint = async (sqlString,con) => {
 	con.query(sqlString)
 		.catch(err => (console.error(err)))

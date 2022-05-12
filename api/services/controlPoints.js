@@ -2,22 +2,57 @@ const controlPointModel = require("../models/controlPoints")
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
 
+const typeSwitchToText = (value) => {
+	switch (value) {
+		case 3:
+			return "number"
+		case 1:
+			return "text"
+		case 0:
+			return "options"
+	}
+}
+
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
 	return allTypes.map(obj => {
-		switch (obj.type) {
-			case 3:
-				return "number"
-			case 1:
-				return "text"
-			case 0:
-				return "options"
-		}
+		return typeSwitchToText(obj.type)
 	})
 }
 
 module.exports.getAttributes = async () => {
 	return await controlPointModel.getAllAttributesNames()
+}
+
+module.exports.getControlPointData = async (cpId) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	mainInformation = mainInformation[0]
+	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
+
+
+	// let y = fs.readFileSync(`api/pictures/${mainInformation.image}`)
+	// console.log(y)
+	// let image = new File(y,`api/pictures/${mainInformation.image}`)
+	// console.log(image)
+	// mainInformation.image = fs.readFileSync(`api/pictures/${mainInformation.image}`)
+
+	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
+	const attributes = await controlPointModel.getControlPointAttributes(cpId)
+	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
+
+	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
+	console.log(mainInformation)
+	console.log(frequency)
+	console.log(descriptions)
+	console.log(attributes)
+	console.log(categoryCodes)
+	const result = {
+		mainInformation: mainInformation,
+		descriptions: descriptions,
+		attributes: attributes,
+		categoryCodes: categoryCodes
+	}
+	return result
 }
 
 module.exports.submitControlPoint = async (cp) => {
