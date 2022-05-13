@@ -14,12 +14,14 @@
 <script>
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
+import {authorizeUser} from "../../mixins/authorizeUser.js"
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
+    mixins: [authorizeUser],
 	created() {
         if (!this.$store.state || !this.$store.state.login.user) {
 			this.$router.push("/login");

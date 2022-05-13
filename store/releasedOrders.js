@@ -21,7 +21,7 @@ export const actions = {
     loadReleasedOrders({ commit, rootState }, { }) {
         const user = rootState.login.user;
         const location = rootState.login.chosenLocation;
-        if (user) {
+        if (user && user.role == "qa employee") {
             fetch(`api/orders/releasedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
                 for (let i = 0; i < result.length; i++) {
                     const date = new Date(result[i].deadline);

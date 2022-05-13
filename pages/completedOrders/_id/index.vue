@@ -77,6 +77,7 @@ import ImageModal from "../../../components/ImageModal.vue";
 import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
 import DataDisplay from "../../../components/DataDisplay.vue";
 import AlertModal from "../../../components/AlertModal.vue";
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {
 	components: {
@@ -88,6 +89,7 @@ export default {
 		DataDisplay,
 		AlertModal,
 	},
+    mixins: [authorizeUser],
 	data() {
 		return {
 			currentOrder: null,

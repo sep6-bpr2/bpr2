@@ -3,7 +3,11 @@
 </template>
 
 <script>
-export default {};
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
+
+export default {
+    mixins: [authorizeUser],
+};
 </script>
 
 <style></style>

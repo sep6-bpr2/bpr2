@@ -304,11 +304,12 @@
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate.js"
 import {alerts} from "../../../mixins/alerts.js";
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {
 	name: "index",
 	components: {Translate},
-	mixins: [translate, alerts],
+	mixins: [translate, alerts, authorizeUser],
 	data: () => ({
 		successAlert: {show: false, text: ''},
 		warningAlert: {show: false, text: ''},

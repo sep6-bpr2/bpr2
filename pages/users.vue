@@ -63,10 +63,12 @@
 import CustomTable from "../components/CustomTable";
 import colors from "../styles/colors";
 import login from "./login";
+import {authorizeUser} from "../mixins/authorizeUser.js"
 
 export default {
 	name: "users",
 	components: {CustomTable},
+    mixins: [authorizeUser],
 	data:()=>({
 		cols:colors,
 		users: [],
@@ -98,7 +100,6 @@ export default {
 					else {
 						alert('User already exists!')
 					}
-
 				}
 			}
 		},

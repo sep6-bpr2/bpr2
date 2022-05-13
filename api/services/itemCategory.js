@@ -26,7 +26,6 @@ module.exports.getItemCatCodes = async (location) => {
 
 module.exports.getFrequenciesOfItem = async (itemCode) => {
 	let value = await model.getFrequenciesOfItem(itemCode)
-	console.log(JSON.stringify(value) + "######")
 	if (value[0] == undefined) {
 		value = defaultFrequencyValue
 	}

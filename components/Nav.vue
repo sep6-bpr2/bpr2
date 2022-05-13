@@ -3,7 +3,7 @@
 		<h1 class="title">KONFAIR</h1>
 		<div>
 			<ul>
-				<li v-for="link in allLinks" :key="link.id">
+				<li v-for="link in links" :key="link.id">
 					<nuxt-link
                         :id="'nav'+link.id"
 						:to="{ path: link.link }"
@@ -36,7 +36,6 @@ export default {
 		return {
 			cols: colors,
 			links: [],
-            // showLogout: 'none'
 		};
 	},
 	created() {
@@ -48,6 +47,7 @@ export default {
 		},
 		logout() {
 			this.$store.dispatch("nav/logout");
+            localStorage.clear()
 			this.$router.push("/login");
 		},
 	},
@@ -67,6 +67,11 @@ export default {
 		currentLinkName() {
 			const paths = this.$nuxt.$route.path.split("/");
 			return "/" + paths[1];
+		},
+	},
+    watch: {
+		"$store.state.nav.availableLinks": function () {
+			this.links = this.$store.state.nav.availableLinks;
 		},
 	},
 };

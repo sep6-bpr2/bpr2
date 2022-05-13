@@ -21,7 +21,7 @@ export const actions = {
     loadCompletedOrders({ commit, rootState }, { }) {
         const user = rootState.login.user;
         const location = rootState.login.chosenLocation;
-        if (user) {
+        if (user && user.role == "admin") {
             fetch(`api/orders/completedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
                 for (let i = 0; i < result.length; i++) {
                     const date = new Date(result[i].deadline);

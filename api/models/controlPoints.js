@@ -46,7 +46,7 @@ module.exports.getDescriptionsByControlPointId = async (id) => {
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
-        .query(`SELECT id, language, description FROM Description WHERE Description.controlPointId=id`)
+        .query(`SELECT id, language, description FROM Description WHERE Description.controlPointId=@id`)
     return result.recordset
 }
 

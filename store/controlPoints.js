@@ -23,7 +23,7 @@ export const mutations = {
 export const actions = {
     loadControlPoints({ commit, rootState }, { }) {
         const user = rootState.login.user;
-        if (user) {
+        if (user && user.role == "admin") {
             const language = rootState.login.chosenLanguage.flag;
             fetch(`api/controlPoints/listMinimal/${user.username}/${language}`).then(res => res.json()).then(result => {
                 commit('setControlPoints', result)
