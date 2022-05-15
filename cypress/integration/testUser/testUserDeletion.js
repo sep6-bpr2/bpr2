@@ -1,5 +1,5 @@
 /* eslint-disable */
-describe('testCreationOfUser', () => {
+describe('testDeletionOfUser', () => {
 
 	let val2 = Math.random().toString(36).substring(2,7)
 
