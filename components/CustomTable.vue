@@ -23,7 +23,7 @@
 				<td v-for="value in allowedHeaders" :key="value + index">
 					{{ rows[index][value] }}
 				</td>
-				<td v-if="deleteRowCallback" @click="deleteRow(row)"  class="trashCan"><v-icon color="red" v-if="showId === _key">{{ svgPath }}</v-icon></td>
+				<td v-if="deleteRowCallback" @click="deleteRow(row)"  class="trashCan"><v-icon color="red" v-if="showId === index">{{ svgPath }}</v-icon></td>
 			</tr>
 		</tbody>
 	</table>

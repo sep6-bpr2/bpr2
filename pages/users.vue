@@ -6,15 +6,15 @@
 		 <Translate :text="'Create User'" />
 	 </button>
 
-	 <div style="display: flex; min-height: 248px">
+	 <div style="display: flex; align-items:flex-start">
 		 <CustomTable
 			 :allowedHeaders="allowedHeaders"
 			 :rows="userList"
 			 :tableHeaders="headers"
 			 :deleteRowCallback="deleteRowCallback"
 		 />
-		 <Transition>
-			 <div v-if="shouldCreateUser" class="create_User_form ml-5">
+		 <Transition >
+			 <div style="height: 248px" v-if="shouldCreateUser" class="create_User_form ml-5">
 				 <v-form ref="form">
 
 					 <h4>New User</h4>

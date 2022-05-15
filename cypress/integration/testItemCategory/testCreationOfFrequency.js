@@ -4,8 +4,8 @@ describe('testCreationOfFrequency', () => {
 	 let chosenItemCode
 		it('should login', () => {
 			cy.visit('http://localhost:3000/login');
-			cy.get('#username').click();
-			cy.get('#username').type('admin');
+			cy.get('#enterUsername').click();
+			cy.get('#enterUsername').type('admin');
 			cy.get('.v-btn__content > div').click();
 		})
 
