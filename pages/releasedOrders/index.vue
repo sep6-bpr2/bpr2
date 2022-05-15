@@ -1,6 +1,9 @@
 <template>
+	<div>
+		<div class="pageHeader">
+			<h1>This is the released orders page</h1>
+		</div>
 	<div class="releasedOrders">
-		<h1>This is the released orders page</h1>
 		<CustomTable
             id="releasedOrderList"
 			:allowedHeaders="allowedHeaders"
@@ -8,6 +11,7 @@
 			:tableHeaders="headers"
 			:callback="releasedOrderClickCallback"
 		/>
+	</div>
 	</div>
 </template>
 
