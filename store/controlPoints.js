@@ -27,7 +27,6 @@ export const actions = {
             const language = rootState.login.chosenLanguage.flag;
             fetch(`api/controlPoints/listMinimal/${user.username}/${language}`).then(res => res.json()).then(result => {
                 commit('setControlPoints', result)
-                console.log(result)
             })
         }
     }

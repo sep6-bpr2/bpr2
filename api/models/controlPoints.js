@@ -14,7 +14,7 @@ module.exports.getFrequenciesOfControlPoint = async (controlPointId) => {
 		.query(`select F.id,[to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
 				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
 				[to5000] from [dbo].[ControlPoint] C JOIN [dbo].[Frequency] F
-				on C.frequency = F.id where C.id = ${controlPointId}
+				on C.frequencyId = F.id where C.id = ${controlPointId}
 `)
 	if(result.recordset[0] == undefined){
 		// result.recordset = defaultFrequencyValue

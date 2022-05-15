@@ -1,12 +1,12 @@
 <template>
-	<div class="releasedOrders">
-		<h1>This is the released orders page</h1>
+	<div class="completedOrders">
+		<h1>This is the completed orders page</h1>
 		<CustomTable
-            id="releasedOrderList"
+            id="completedOrderList"
 			:allowedHeaders="allowedHeaders"
-			:rows="releasedOrders"
+			:rows="completedOrders"
 			:tableHeaders="headers"
-			:callback="releasedOrderClickCallback"
+			:callback="completedOrderClickCallback"
 		/>
 	</div>
 </template>
@@ -24,29 +24,29 @@ export default {
         if (!this.$store.state || !this.$store.state.login.user) {
 			this.$router.push("/login");
 		}
-		this.$store.dispatch("releasedOrders/loadReleasedOrders", {});
+		this.$store.dispatch("completedOrders/loadCompletedOrders", {});
 	},
 	computed: {
 		headers() {
-			return this.$store.state.releasedOrders.tableHeaders;
+			return this.$store.state.completedOrders.tableHeaders;
 		},
 		allowedHeaders() {
-			return this.$store.state.releasedOrders.allowedHeaders;
+			return this.$store.state.completedOrders.allowedHeaders;
 		},
-		releasedOrders() {
-			return this.$store.state.releasedOrders.orders;
+		completedOrders() {
+			return this.$store.state.completedOrders.orders;
 		},
 	},
 	methods: {
-		releasedOrderClickCallback(row) {
-			this.$router.push("/releasedOrders/" + row.id);
+		completedOrderClickCallback(row) {
+			this.$router.push("/completedOrders/" + row.id);
 		},
 	},
 };
 </script>
 
 <style>
-.releasedOrders {
+.completedOrders {
 	margin: 10px;
 }
 </style>

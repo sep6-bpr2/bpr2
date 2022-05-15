@@ -15,6 +15,14 @@ INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item
 INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '10906', '70');
 INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '11657', '104');
 INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '11672', '109');
+INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '12000', '110');
+INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '12001', '111');
+INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '47827', '12002', '112');
+
+-- Completed
+INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '1111', '111111', '3');
+INSERT INTO [KonfAir DRIFT$Item Attribute Value Mapping] ([Table ID], No_, [Item Attribute Value ID], [Item Attribute ID]) VALUES ('27', '1111', '2222222', '112');
+
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item Attribute];
 CREATE TABLE [KonfAir DRIFT$Item Attribute] (
@@ -33,11 +41,13 @@ INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Me
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (70, 'Webshop', null, 0, null);
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (104, 'Paneltype', null, 0, null);
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (109, 'Ramme (panelfilter)', null, 0, null);
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (110, 'Number example', null, 3, 'mm');
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (111, 'Text example', null, 0, null);
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (112, 'Option example', null, 0, null);
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (1, 'height mm', null, 1, 'mm');
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (2, 'height cm', null, 1, 'cm');
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (5, 'color', null, 2, 'text');
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (6, 'label', null, 3, 0);
-
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item Atrribute Value];
 CREATE TABLE [KonfAir DRIFT$Item Atrribute Value] (
@@ -58,6 +68,13 @@ INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Nu
 INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (70, 10906, 'Ja', 0, 0, null, null);
 INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (104, 11657, 'Z-line', 0, 0, null, null);
 INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (109, 11672, 'Fiber', 0, 0, null, null);
+INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (110, 12000, '340.00', 340, 0, null, null);
+INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (111, 12001, 'ISO e', 0, 0, null, null);
+INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (112, 12002, 'Fiber glass', 0, 0, null, null);
+
+-- For completed one
+INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (3, 111111, '301.00', 301, 0, null, null);
+INSERT INTO [KonfAir DRIFT$Item Atrribute Value] ([Attribute ID], ID, Value, [Numeric Value], Blocked, Datasheet_C, [Vendor Datasheet_C]) VALUES (112, 2222222, 'Fiber', 0, 0, null, null);
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item Category];
 CREATE TABLE [KonfAir DRIFT$Item Category] (
@@ -87,6 +104,8 @@ INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Cod
 -- Real one
 INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '47827', 'Denmark, Give', '2022-06-12 17:00:00', 240, 3);
 
+-- Completed one
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '1111', 'Denmark, Give', '2022-06-12 17:00:00', 240, 3);
 
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item];
@@ -101,4 +120,6 @@ INSERT INTO [KonfAir DRIFT$Item] ([No_], [Description], [Item Category Code]) VA
 -- Real one
 INSERT INTO [KonfAir DRIFT$Item] ([No_], [Description], [Item Category Code]) VALUES ('47827', 'Panelfilter 390x300x47', '32110');
 
+-- Completed one
+INSERT INTO [KonfAir DRIFT$Item] ([No_], [Description], [Item Category Code]) VALUES ('1111', 'Filterfilter 390x300x47', '32110');
 

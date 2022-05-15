@@ -12,23 +12,23 @@ export const state = () => ({
 })
 
 export const mutations = {
-    setReleasedOrders(state, releasedOrders) {
-        state.orders = releasedOrders
+    setCompletedOrders(state, completedOrders) {
+        state.orders = completedOrders
     },
 }
 
 export const actions = {
-    loadReleasedOrders({ commit, rootState }, { }) {
+    loadCompletedOrders({ commit, rootState }, { }) {
         const user = rootState.login.user;
         const location = rootState.login.selectedLocation;
         if (user) {
-            fetch(`api/orders/releasedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
+            fetch(`api/orders/completedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
                 for (let i = 0; i < result.length; i++) {
                     const date = new Date(result[i].deadline);
                     result[i].deadline = moment(date).format('YYYY-MM-DD');
                 }
 
-                commit('setReleasedOrders', result)
+                commit('setCompletedOrders', result)
             })
         }
     },

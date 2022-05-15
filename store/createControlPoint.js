@@ -1,9 +1,11 @@
 const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
+		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},{name:"to200",value:7},{name:"to300",value:10},{name:"to500",value:16},{name:"to700",value:22},{name:"to1000",value:30},{name:"to1500", value:40},{name:"to2000",value:50},{name:"to3000",value:60},{name:"to4000",value:65},{name:"to5000",value:70}],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-		type: 0,
+		measurementType: null,
+		type: null,
 		upperTolerance: null,
 		lowerTolerance: null,
 		optionValues: [{value: null}, {value: null}],// {value: '',}
@@ -39,6 +41,11 @@ export const mutations = {
 	setDescription(state, obj) {
 		state.descriptions[obj.index].value = obj.desc
 	},
+
+	setMeasurementType(state, measurementType){
+		state.measurementType = measurementType
+	},
+
 	setType(state, type) {
 		state.type = type
 	},

@@ -1,5 +1,7 @@
 const supertest = require("supertest")
 process.env.environment = "testing"
+process.env.LOGGING = "false"
+
 const server = require("../../server")
 const app = server.startServer()
 const request = supertest(app)
@@ -45,6 +47,7 @@ describe("Control points api testing", () => {
 						{name:"to2000",value:50},{name:"to3000",value:60},
 						{name:"to4000",value:65},{name:"to5000",value:70}],
 					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+					measurementType: 0,
 					type: "number",
 					upperTolerance: null,
 					lowerTolerance: null,

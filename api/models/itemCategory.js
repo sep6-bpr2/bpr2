@@ -30,7 +30,7 @@ module.exports.getFrequenciesOfItem = async (itemCode) => {
 				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
 				[to5000] from [dbo].[ItemCategoryFrequency] I JOIN [dbo].[Frequency] F
 				on I.frequencyid = F.id where I.code = @itemCode
-`)
+        `)
 	return result.recordset
 }
 module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {

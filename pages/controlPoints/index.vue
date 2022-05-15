@@ -29,6 +29,10 @@ export default {
 		Translate,
 	},
 	created() {
+        if (!this.$store.state || !this.$store.state.login.user) {
+			this.$router.push("/login");
+		}
+
 		this.$store.dispatch("controlPoints/loadControlPoints", {});
 	},
 	computed: {

@@ -1,5 +1,7 @@
 const supertest = require("supertest")
 process.env.environment = "testing"
+process.env.LOGGING = "false"
+
 const server = require("../../server")
 const app = server.startServer()
 const request = supertest(app)
@@ -27,5 +29,5 @@ describe("Users api testing", () => {
 })
 
 function assertEquals(value1, value2) {
-    if (value1 != value2) throw Error("Failed assert values: " + value1 + " and " + value2)
+    if (value1 != value2) throw Error("Failed assert values: '" + value1 + "' is not '" + value2 + "'")
 }

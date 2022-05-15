@@ -1,44 +1,69 @@
 <template>
 	<table class="customTable">
-		<thead>
-			<tr>
-				<th
-					v-for="header in getHeaders"
-					:key="header.id.toString() + header.letter.toString()"
-				>
-					<Translate :text="header.letter" />
-				</th>
-			</tr>
-		</thead>
 		<tbody>
-			<td v-for="(column, index) in getColumns" :key="index">
-				<tr
+			<tr 
+                v-for="(column, index) in getColumns" 
+                :key="index" 
+                :id="'multipleTimeTable' + index"
+            >
+                <!-- This is the header. The style is because font is overriden and the border didnt work normaly -->
+                <td 
+                    :style="{'font-size': '1em', 'border-radius': getColumns.length == index+ 1 ?'0px 5px 0px 0px': '0px'}"
+                    class="tableHeader"
+                    :key="getTableHeaders[index].id.toString() + getTableHeaders[index].letter.toString()"
+                    >
+                    <Translate :text="getTableHeaders[index].letter" />
+                </td>
+				<td
 					v-for="(cell, cellIndex) in column"
-					:key="cellIndex + cell.id"
+					:key="cellIndex + Object.values(cell)[0].toString()"
 				>
-					<div class="">
+					<div class="cell">
 						<input
 							v-if="cell.type == 3 || cell.type == 1"
-							v-model="cell.answer"
+							v-model="originalColumns[index - 1][cellIndex].answer"
+							v-on:input="updateParent(index - 1, cellIndex)"
+                            :style="{color: validated(index - 1, cellIndex), 'border-color': validated(index - 1, cellIndex)}"
 						/>
 						<select
 							v-else-if="cell.type == 0"
-							name="cars"
-							id="cars"
+							v-model="originalColumns[index - 1][cellIndex].answer"
+							v-on:change="updateParent(index - 1, cellIndex)"
+                            :style="{color: validated(index - 1, cellIndex)}"
 						>
-							<option disabled selected value>
+							<option disabled selected value="">
 								-- select an option --
 							</option>
 							<option
-								v-for="option in getHeaders[index].options"
-								:key="value + index + option.value"
+								v-for="option in tableHeaders[index - 1]
+									.options"
+								:key="index + option.value"
+								:value="option.value"
 							>
 								{{ option.value }}
 							</option>
 						</select>
+						<input
+							v-else-if="cell.type == -1"
+							class="number"
+							disabled
+							:value="cell.answer"
+							:style="{
+								'border-bottom': '2px solid transparent',
+								width: '57px',
+								color: 'black',
+							}"
+						/>
+						<input
+							v-else
+							disabled
+							:style="{
+								'border-bottom': '2px solid transparent',
+							}"
+						/>
 					</div>
-				</tr>
-			</td>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </template>
@@ -50,7 +75,7 @@ export default {
 	components: {
 		Translate,
 	},
-	props: ["tableHeaders", "columns"],
+	props: ["tableHeaders", "columns", "valueUpdateCallback"],
 	data() {
 		return {
 			originalColumns: this.columns,
@@ -59,25 +84,107 @@ export default {
 	computed: {
 		getColumns() {
 			if (this.columns) {
-				console.log(this.columns[0]);
+				let oldColumns = JSON.parse(JSON.stringify(this.columns));
+				let max = 0;
 
-				return this.columns;
-			} else {
-				return [];
-			}
+				for (let i = 0; i < oldColumns.length; i++) {
+					if (oldColumns[i].length > max) {
+						max = oldColumns[i].length;
+					}
+				}
+
+				let newColumnList = [];
+				for (let i = 0; i < oldColumns.length; i++) {
+					// Add enough data to the columns that are below max. This way all the columns are at the same level in the table
+					let column = oldColumns[i];
+					let iterations = max - column.length;
+
+					for (let j = 0; j < iterations; j++) {
+						column.push({
+							type: -2,
+						});
+					}
+
+					newColumnList.push(column);
+				}
+
+				let numbersColumn = [];
+				for (let i = 0; i < max; i++) {
+					numbersColumn.push({
+						type: -1,
+						answer: i + 1,
+					});
+				}
+				newColumnList.unshift(numbersColumn);
+
+				return newColumnList;
+			}else{
+                return [];
+            }
 		},
-		getHeaders() {
+		getTableHeaders() {
 			if (this.tableHeaders) {
-				return this.tableHeaders;
+				let oldHeaders = JSON.parse(JSON.stringify(this.tableHeaders));
+
+				oldHeaders.unshift({
+					id: -1,
+					letter: "No.",
+				});
+
+				return oldHeaders;
 			} else {
 				return [];
 			}
 		},
 	},
+	methods: {
+		updateParent(columnIndex, cellIndex) {
+			this.valueUpdateCallback(
+				columnIndex,
+				cellIndex,
+				this.originalColumns[columnIndex][cellIndex].answer
+			);
+		},
+        validated(columnIndex, cellIndex){
+            if(this.originalColumns[columnIndex][cellIndex].validated == null || this.originalColumns[columnIndex][cellIndex].validated == 1){
+                return 'black'
+            }else if (this.originalColumns[columnIndex][cellIndex].validated == 2){
+                return 'DarkOrange'
+            }else if (this.originalColumns[columnIndex][cellIndex].validated == 0){
+                return 'red'
+            }
+        }
+	},
 };
 </script>
 
 <style scoped>
+table tbody{
+    display: table;
+}
+
+table tbody tr {
+    display: table-cell;
+}
+
+table thead tr {
+    display: table-cell;
+}
+
+table tbody tr td{
+    display: block;
+}
+
+.tableHeader{
+    color: #ffffff;
+	text-align: center;
+    background-color: #333;
+    font-size: 0.9em;
+	font-family: sans-serif;
+    font-weight: bold;
+}
+
+
 .customTable {
 	border-collapse: collapse;
 	font-size: 0.9em;
@@ -85,34 +192,13 @@ export default {
 	min-width: 400px;
 	border-radius: 5px 5px 0 0;
 	overflow: hidden;
+	margin: 5px;
 }
 
-.customTable thead tr {
-	color: #ffffff;
-	text-align: left;
+.customTable th,
+.customTable td {
+	padding: 12px 15px;
 }
-
-.customTable th {
-	background-color: #333;
-}
-
-.customTable th {
-	padding-top: 12px;
-	padding-left: 12px;
-	padding-right: 12px;
-
-	/* 15px */
-}
-
-/* .customTable td,
-.customTable td  {
-    padding: 12px 15px;
-} */
-
-.cell {
-    padding: 12px 15px;
-}
-
 
 .customTable tbody tr {
 	border-bottom: 1px solid #dddddd;
@@ -122,17 +208,12 @@ export default {
 	background-color: #f3f3f3;
 }
 
-.customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+.customTable tbody td:last-of-type {
+	border-bottom: 4px solid #333;
 }
-/*
-.customTable tbody tr:hover {
-	background-color: #ccc;
-	cursor: pointer;
-} */
 
-/* input {
-	border-bottom: solid black 2px;
+input {
+	border-bottom: 2px solid #333;
 	padding-left: 1rem;
 	padding-right: 1rem;
 }
@@ -147,5 +228,7 @@ button {
 
 select {
 	cursor: pointer;
-} */
+	/* To align the select boxes with the input boxes */
+	border-bottom: 2px solid transparent;
+}
 </style>

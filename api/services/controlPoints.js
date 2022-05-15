@@ -1,18 +1,17 @@
 const controlPointModel = require("../models/controlPoints")
 const mssql = require("../connections/MSSQLConnection");
+const fs = require('fs')
 
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
 	return allTypes.map(obj => {
 		switch (obj.type) {
-			case 1:
-				return "number"
-			case 2:
-				return "text"
 			case 3:
+				return "number"
+			case 1:
+				return "text"
+			case 0:
 				return "options"
-			default:
-				return "unknown"
 		}
 	})
 }
@@ -22,6 +21,9 @@ module.exports.getAttributes = async () => {
 }
 
 module.exports.submitControlPoint = async (cp) => {
+	if(cp.image != null && cp.image != undefined){
+		cp.image = saveImage(cp.image)
+	}
 	const nVarchar = mssql.mssql.NVarChar(1000)
 	const con = await mssql.localDB().request()
 	let sqlString = `
@@ -30,7 +32,7 @@ module.exports.submitControlPoint = async (cp) => {
 		INSERT INTO [dbo].[Frequency] VALUES (@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
     	SELECT @FreqID = scope_identity();
     	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (@FreqID, @type, @upperTolerance, @lowerTolerance, @image);
+    	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
@@ -39,9 +41,22 @@ module.exports.submitControlPoint = async (cp) => {
 	cp.frequencies.forEach((entry, index) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
 	})
-	con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
 
-	con.input('type', nVarchar, cp.type)
+	switch (cp.type) {
+		case "number":
+			cp.type = 3
+			break;
+		case "text":
+			cp.type = 1
+			break;
+		case "options":
+			cp.type = 0
+			break;
+	}
+	con.input('type', mssql.mssql.Int, cp.type)
+	con.input('measurementType', mssql.mssql.Int, cp.measurementType)
+
+	con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
 	con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
 	con.input('image', mssql.mssql.NVarChar, cp.image)
 
@@ -68,12 +83,39 @@ module.exports.submitControlPoint = async (cp) => {
 		con.input('code'+index, nVarchar, item.value)
 	})
 
-	sqlString += `COMMIT`
+	sqlString += ` COMMIT`
 	return await controlPointModel.insertControlPoint(sqlString, con)
 }
 
 module.exports.getFrequenciesOfControlPoint = async (cpId) => {
 	return await controlPointModel.getFrequenciesOfControlPoint(cpId)
+}
+
+function saveImage(baseImage) {
+    /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
+    let path = __dirname.split('\\')
+    let localPath = ""
+    for (let i = 0; i < path.length - 1; i++) {
+        localPath += path[i] + "\\"
+    }
+    localPath += "pictures\\"
+
+    //Find extension of file
+    const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
+    const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
+
+    //Forming regex to extract base64 data of file.
+    const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
+
+    //Extract base64 data.
+    const base64Data = baseImage.replace(regex, "");
+    const rand = Math.ceil(Math.random() * 1000);
+
+    //Random photo name with timeStamp so it will not overide previous images.
+    const filename = `File${Date.now()}${rand}.${ext}`;
+
+    fs.writeFileSync(localPath + filename, base64Data, 'base64');
+    return filename
 }
 
 module.exports.controlPointsMinimal = async (language) => {

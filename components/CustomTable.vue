@@ -13,17 +13,15 @@
 		</thead>
 		<tbody>
 			<tr
-				v-for="(row,_key) in filteredRows"
-				:key="Object.values(row)[0].toString()"
+				v-for="(row, index) in rows"
+                :id="'customTable'+index"
+				:key="Object.values(row)[0].toString() + index"
 				v-on:click="clickList(row)"
-				@mouseover="activeOver(_key)"
-				@mouseleave="removeOver(_key)"
+				@mouseover="activeOver(index)"
+				@mouseleave="removeOver(index)"
 			>
-				<td
-					v-for="[key, value] in Object.entries(row)"
-					:key="key + value"
-				>
-					{{ value }}
+				<td v-for="value in allowedHeaders" :key="value + index">
+					{{ rows[index][value] }}
 				</td>
 				<td v-if="deleteRowCallback" @click="deleteRow(row)"  class="trashCan"><v-icon color="red" v-if="showId === _key">{{ svgPath }}</v-icon></td>
 			</tr>
@@ -126,7 +124,7 @@ export default {
 }
 
 .customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+	border-bottom: 4px solid #333;
 }
 
 .customTable tbody tr:hover {

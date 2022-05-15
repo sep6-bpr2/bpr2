@@ -12,25 +12,30 @@
 		</thead>
 		<tbody>
 			<tr
-				v-for="(row, index) in filteredRows"
+				v-for="(row, index) in originalRows"
 				:key="Object.keys(row)[0].toString() + index"
+                :id="'customTableInput'+index"
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
 						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
-						v-model="filteredRows[index][value]"
+						v-model="originalRows[index].answer"
+                        v-on:input="updateParent(index)"
+                        :style="{color: validated(index), 'border-color': validated(index)}"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].type == 0"
-						name="cars"
-						id="cars"
+						v-model="originalRows[index].answer"
+                        v-on:change="updateParent(index)"
+                        :style="{color: validated(index)}"
 					>
-						<option disabled selected value>
+						<option disabled selected value="">
 							-- select an option --
 						</option>
 						<option
 							v-for="option in originalRows[index].options"
 							:key="value + index + option.value"
+                            :value="option.value"
 						>
 							{{ option.value }}
 						</option>
@@ -41,7 +46,7 @@
 					>
 						Show guide
 					</button>
-					<basic v-else>{{ filteredRows[index][value] }}</basic>
+					<div v-else>{{ originalRows[index][value] }}</div>
 				</td>
 			</tr>
 		</tbody>
@@ -62,36 +67,11 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback"],
+	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback", "valueUpdateCallback"],
 	data() {
 		return {
 			originalRows: this.rows,
 		};
-	},
-	computed: {
-		filteredRows() {
-			//Filter to only have the wanted headers shown in table
-
-			let filteredTemp = JSON.parse(JSON.stringify(this.rows));
-
-			const allowedHeaders = this.allowedHeaders;
-
-			if (filteredTemp) {
-				for (let i = 0; i < filteredTemp.length; i++) {
-					for (const [key, value] of Object.entries(
-						filteredTemp[i]
-					)) {
-						if (!allowedHeaders.includes(key)) {
-							delete filteredTemp[i][key];
-						}
-					}
-				}
-
-				return filteredTemp;
-			} else {
-				return [];
-			}
-		},
 	},
 	methods: {
 		clickList(row) {
@@ -99,6 +79,20 @@ export default {
 		},
         showImageCallback(image){
             if (this.imageCallback) this.imageCallback(image);
+        },
+        updateParent(index){
+            if(this.valueUpdateCallback){
+                this.valueUpdateCallback(index, this.originalRows[index].answer)
+            }
+        },
+        validated(index){
+            if(this.originalRows[index].validated == null || this.originalRows[index].validated == 1){
+                return 'black'
+            }else if (this.originalRows[index].validated == 2){
+                return 'DarkOrange'
+            }else if (this.originalRows[index].validated == 0){
+                return 'red'
+            }
         }
 	},
 };
@@ -112,6 +106,7 @@ export default {
 	min-width: 400px;
 	border-radius: 5px 5px 0 0;
 	overflow: hidden;
+    margin: 5px;
 }
 
 .customTable thead tr {
@@ -137,7 +132,7 @@ export default {
 }
 
 .customTable tbody tr:last-of-type {
-	border-bottom: 2px solid #333;
+	border-bottom: 4px solid #333;
 }
 /* 
 .customTable tbody tr:hover {
