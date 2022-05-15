@@ -1,7 +1,11 @@
 <template>
 	<div>
+		<div class="pageHeader">
+			<Translate text="Create control point"/>
+		</div>
 		<ControlPoint
 			:submit="submit"
+			:is-edit="false"
 		></ControlPoint>
 	</div>
 </template>
@@ -9,13 +13,17 @@
 <script>
 import {translate} from "../../../mixins/translate.js"
 import ControlPoint from "../../../components/ControlPoint";
+import Translate from "../../../components/Translate";
 
 export default {
 	name: "index",
-	components: {ControlPoint},
+	components: {Translate, ControlPoint},
 	mixins: [translate],
 	data: () => ({
 	}),
+	created() {
+		this.$store.commit('createControlPoint/resetState')
+	},
 	methods: {
 
 		submit(validateAll, showAlert) {
@@ -30,10 +38,11 @@ export default {
 					optionValues: value.optionValues,
 					attributes: value.attributes,
 					codes: value.codes,
-					image: value.currentImage,
+					image: value.image,
 					frequencies: value.frequencies,
 				}).then(result => {
 					if (result) {
+						this.$store.commit('createControlPoint/resetState')
 						showAlert('success', this.translateText('control point has been created'))
 					}else{
 						showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))

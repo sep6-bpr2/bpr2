@@ -12,6 +12,17 @@ const typeSwitchToText = (value) => {
 			return "options"
 	}
 }
+const typeSwitchToNumber = (value) => {
+	switch (value) {
+		case "number":
+			return 3
+		case "text":
+			return 1
+		case "options":
+			return 0
+	}
+}
+
 
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
@@ -29,16 +40,12 @@ module.exports.getControlPointData = async (cpId) => {
 	mainInformation = mainInformation[0]
 	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
-
-	// let y = fs.readFileSync(`api/pictures/${mainInformation.image}`)
-	// console.log(y)
-	// let image = new File(y,`api/pictures/${mainInformation.image}`)
-	// console.log(image)
-	// mainInformation.image = fs.readFileSync(`api/pictures/${mainInformation.image}`)
-
 	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
 	const attributes = await controlPointModel.getControlPointAttributes(cpId)
 	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
+	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
+	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
+	console.log(frequencies)
 
 	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
 	console.log(mainInformation)
@@ -49,14 +56,46 @@ module.exports.getControlPointData = async (cpId) => {
 	const result = {
 		mainInformation: mainInformation,
 		descriptions: descriptions,
+		optionValues: optionValues,
 		attributes: attributes,
-		categoryCodes: categoryCodes
+		categoryCodes: categoryCodes,
+		frequencies
 	}
 	return result
 }
 
+module.exports.updateControlPoint = async (data) => {
+	data.type = typeSwitchToNumber(data.type)
+	if (data.image != null && data.image != undefined) {
+		data.image = saveImage(data.image)
+	}
+	await controlPointModel.updateControlMainInformation(data)
+
+	await controlPointModel.updateControlPointFrequency(data.controlPointId, data.frequencies)
+
+	data.descriptions.forEach(async desc => {
+		await controlPointModel.updateControlPointDescription(data.controlPointId, desc.lang.toLowerCase(), desc.value)
+	})
+
+	//options
+	await controlPointModel.deleteControlPointOptionValues(data.controlPointId)
+	data.optionValues.forEach(async obj => {
+		await controlPointModel.insertControlPointOptionValue(data.controlPointId, obj.value)
+	})
+	//attributes
+	await controlPointModel.deleteControlPointAttributes(data.controlPointId)
+	data.attributes.forEach(async obj => {
+		await controlPointModel.insertControlPointAttributes(data.controlPointId, obj.id, obj.minValue, obj.maxValue)
+	})
+	//codes
+	await controlPointModel.deleteControlPointItemCategoryCodes(data.controlPointId)
+	data.codes.forEach(async obj => {
+		await controlPointModel.insertControlPointItemCategoryCodes(data.controlPointId, obj.value)
+	})
+}
+
 module.exports.submitControlPoint = async (cp) => {
-	if(cp.image != null && cp.image != undefined){
+	if (cp.image != null && cp.image != undefined) {
 		cp.image = saveImage(cp.image)
 	}
 	const nVarchar = mssql.mssql.NVarChar(1000)
@@ -77,17 +116,7 @@ module.exports.submitControlPoint = async (cp) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
 	})
 
-	switch (cp.type) {
-		case "number":
-			cp.type = 3
-			break;
-		case "text":
-			cp.type = 1
-			break;
-		case "options":
-			cp.type = 0
-			break;
-	}
+	cp.type = typeSwitchToNumber(cp.type)
 	con.input('type', mssql.mssql.Int, cp.type)
 	con.input('measurementType', mssql.mssql.Int, cp.measurementType)
 
@@ -98,24 +127,27 @@ module.exports.submitControlPoint = async (cp) => {
 	con.input('engDescription', nVarchar, cp.descriptions[0].value)
 	con.input('dkDescription', nVarchar, cp.descriptions[1].value)
 	con.input('ltDescription', nVarchar, cp.descriptions[2].value)
-
-	if(cp.type === "options"){
+	if (cp.type == 0) {
 		cp.optionValues.forEach((item, index) => {
-			sqlString+=`INSERT INTO [Option] VALUES (@option${index}, @CpID); `
-			con.input('option'+index, nVarchar, item.value)
+			sqlString += `INSERT INTO [
+						  Option] (controlPointId, value )
+						  VALUES (@CpID, @option ${index}); `
+			con.input('option' + index, nVarchar, item.value)
 		})
 	}
 
 	cp.attributes.forEach((item, index) => {
-		sqlString+=`INSERT INTO AttributeControlPoint VALUES (@id${index}, @CpID, @min${index}, @max${index}) `
+		sqlString += `INSERT INTO AttributeControlPoint
+					  VALUES (@id${index}, @CpID, @min${index}, @max${index}) `
 		con.input(`id${index}`, nVarchar, item.id)
 		con.input(`min${index}`, nVarchar, item.minValue)
 		con.input(`max${index}`, nVarchar, item.maxValue)
 	})
 
 	cp.codes.forEach((item, index) => {
-		sqlString+=`INSERT INTO ItemCategoryControlPoint VALUES (@code${index}, @CpID) `
-		con.input('code'+index, nVarchar, item.value)
+		sqlString += `INSERT INTO ItemCategoryControlPoint
+					  VALUES (@code${index}, @CpID) `
+		con.input('code' + index, nVarchar, item.value)
 	})
 
 	sqlString += ` COMMIT`
@@ -127,53 +159,53 @@ module.exports.getFrequenciesOfControlPoint = async (cpId) => {
 }
 
 function saveImage(baseImage) {
-    /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
-    let path = __dirname.split('\\')
-    let localPath = ""
-    for (let i = 0; i < path.length - 1; i++) {
-        localPath += path[i] + "\\"
-    }
-    localPath += "pictures\\"
+	/*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
+	let path = __dirname.split('\\')
+	let localPath = ""
+	for (let i = 0; i < path.length - 1; i++) {
+		localPath += path[i] + "\\"
+	}
+	localPath += "pictures\\"
 
-    //Find extension of file
-    const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
-    const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
+	//Find extension of file
+	const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
+	const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
 
-    //Forming regex to extract base64 data of file.
-    const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
+	//Forming regex to extract base64 data of file.
+	const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
 
-    //Extract base64 data.
-    const base64Data = baseImage.replace(regex, "");
-    const rand = Math.ceil(Math.random() * 1000);
+	//Extract base64 data.
+	const base64Data = baseImage.replace(regex, "");
+	const rand = Math.ceil(Math.random() * 1000);
 
-    //Random photo name with timeStamp so it will not overide previous images.
-    const filename = `File${Date.now()}${rand}.${ext}`;
+	//Random photo name with timeStamp so it will not overide previous images.
+	const filename = `File${Date.now()}${rand}.${ext}`;
 
-    fs.writeFileSync(localPath + filename, base64Data, 'base64');
-    return filename
+	fs.writeFileSync(localPath + filename, base64Data, 'base64');
+	return filename
 }
 
 module.exports.controlPointsMinimal = async (language) => {
-    let controlPoints = await controlPointModel.getControlPointsMinimal()
+	let controlPoints = await controlPointModel.getControlPointsMinimal()
 
-    for (let i = 0; i < controlPoints.length; i++) {
-        const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
-        let englishIndex = -1;
-        for (let j = 0; j < descriptions.length; j++) {
-            if (descriptions[j].language == language) {
-                controlPoints[i].description = descriptions[j].description
-            }
+	for (let i = 0; i < controlPoints.length; i++) {
+		const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
+		let englishIndex = -1;
+		for (let j = 0; j < descriptions.length; j++) {
+			if (descriptions[j].language == language) {
+				controlPoints[i].description = descriptions[j].description
+			}
 
-            // Backup of english
-            if (descriptions[j].language == "gb") {
-                englishIndex = j
-            }
-        }
+			// Backup of english
+			if (descriptions[j].language == "gb") {
+				englishIndex = j
+			}
+		}
 
-        // Backup of english
-        if (controlPoints[i].description == null && englishIndex != -1) {
-            controlPoints[i].description = descriptions[englishIndex].description
-        }
-    }
-    return controlPoints
+		// Backup of english
+		if (controlPoints[i].description == null && englishIndex != -1) {
+			controlPoints[i].description = descriptions[englishIndex].description
+		}
+	}
+	return controlPoints
 }

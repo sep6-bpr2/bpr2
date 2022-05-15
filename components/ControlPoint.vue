@@ -1,5 +1,7 @@
 <template>
-	<div>
+	<div
+		style="margin-inline: 100pt"
+	>
 		<v-form
 			ref="controlPointForm"
 		>
@@ -123,7 +125,8 @@
 						<div class="attributes"
 							 v-for="(attribute, index) in attributes"
 						>
-							<v-card class="valueEntry" elevation="24">
+							<v-card class="valueEntry" elevation="24"
+							>
 								<p>
 									<Translate :text="'Name'"/>
 								</p>
@@ -132,7 +135,7 @@
 									:item-text="item=>item.name"
 									:item-value="item=>item.id"
 									:value="attribute.id"
-									v-on:input="attributeChange($event, index, 'Id')"
+									v-on:input="attributeIdChange($event, index)"
 									class="manualValidation"
 								/>
 								<p>
@@ -140,7 +143,7 @@
 								</p>
 								<v-text-field required
 											  :value="attribute.minValue"
-											  v-on:input="attributeChange($event, index, 'MinValue')"
+											  v-on:input="attributeMinValueChange($event, index,)"
 								/>
 								<p>
 									<Translate :text="'Max value'"/>
@@ -148,7 +151,7 @@
 								<v-text-field
 									class="shrink"
 									:value="attribute.maxValue"
-									v-on:input="attributeChange($event, index, 'MaxValue')"
+									v-on:input="attributeMaxValueChange($event, index)"
 								/>
 								<v-btn
 									id="deleteAttribute"
@@ -273,7 +276,7 @@
 			</div>
 
 			<div class="bottomButtons">
-				<v-btn
+				<v-btn v-if="this.isEdit"
 					v-on:click="deleteControlPoint"
 				>
 					<Translate :text="'Delete Control Point'"/>
@@ -308,7 +311,7 @@ import {alerts} from "../mixins/alerts";
 
 export default {
 	name: "ControlPoint",
-	props: ["submit"],
+	props: ["submit", "isEdit"],
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
@@ -383,6 +386,7 @@ export default {
 				return this.$store.state.createControlPoint.image
 			},
 			set(value) {
+				console.log("AAAAAAAAAAAAWWWWWW"+value)
 				this.$store.commit('createControlPoint/setImage', value)
 			}
 		},
@@ -397,10 +401,16 @@ export default {
 		},
 
 		optionValueChange(option, index) {
-			this.$store.commit('createControlPoint/setOptionValues', {option: option, index: index})
+			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
 		},
-		attributeChange(att, index, prop) {
-			this.$store.commit(`createControlPoint/setAttribute${prop}`, {att: att, index: index})
+		attributeIdChange(id, index) {
+			this.$store.commit(`createControlPoint/setAttributeId`, {id: id, index: index})
+		},
+		attributeMinValueChange(minVal, index) {
+			this.$store.commit(`createControlPoint/setAttributeMinValue`,{minVal: minVal, index: index})
+		},
+		attributeMaxValueChange(maxVal, index) {
+			this.$store.commit(`createControlPoint/setAttributeMaxValue`, {maxVal: maxVal, index: index})
 		},
 		codeChange(code, index) {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
@@ -459,13 +469,14 @@ export default {
 
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
+				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
 
-			if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
+			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},

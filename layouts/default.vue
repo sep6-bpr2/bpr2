@@ -42,6 +42,16 @@ ul {
 	list-style: none;
 }
 
+.pageHeader{
+	background-color: #555555;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-size: 20pt;
+	padding: 7pt;
+}
+
 .container {
 	/* max-width: 800px; */
 	/* margin: 2rem auto; */

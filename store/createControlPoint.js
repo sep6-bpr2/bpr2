@@ -57,12 +57,6 @@ export const mutations = {
 
 
 	setAllDescriptions(state, obj) {
-		console.log("Hello")
-		// obj.forEach(desc => {
-		// 	let specDesc = state.descriptions.find(o => o.lang.toLowerCase() === desc.language)
-		// 	console.log(specDesc)
-		// 	specDesc = desc.description
-		// })
 		let eng = obj.find(o => o.language.toLowerCase() === "english")
 		state.descriptions[0].value = eng.description
 		let dk = obj.find(o => o.language.toLowerCase() === "danish")
@@ -82,7 +76,7 @@ export const mutations = {
 	},
 
 	setOptionValues(state, obj) {
-		state.optionValues[obj.index].value = obj.option
+		state.optionValues[obj.index].value = obj.value
 	},
 	addOptionValue(state) {
 		state.optionValues.push({value: null})
@@ -92,19 +86,16 @@ export const mutations = {
 	},
 
 	setAttributeId(state, obj) {
-		state.attributes[obj.index].id = obj.att
+		state.attributes[obj.index].id = obj.id
 	},
 	setAttributeMinValue(state, obj) {
-		state.attributes[obj.index].minValue = obj.att
+		state.attributes[obj.index].minValue = obj.minVal
 	},
 	setAttributeMaxValue(state, obj) {
-		state.attributes[obj.index].maxValue = obj.att
+		state.attributes[obj.index].maxValue = obj.maxVal
 	},
 	addAttribute(state) {
 		state.attributes.push({id: '', minValue: null, maxValue: null})
-	},
-	addAttributeSpecific(state, id, minValue, maxValue) {
-		state.attributes.push({id: id, minValue: minValue, maxValue: maxValue})
 	},
 	removeAttribute(state, index) {
 		state.attributes.splice(index, 1)
@@ -127,6 +118,9 @@ export const mutations = {
 		state.image = image
 		state.imagePreview = image ? URL.createObjectURL(image) : null
 	},
+	setImagePreview(state, obj) {
+		state.imagePreview = `http://localhost:3000/api/controlPoints/picture/${obj.username}/${obj.image}`
+	}
 }
 
 export const actions = {
@@ -167,24 +161,42 @@ export const actions = {
 			await fetch(`http://localhost:3000/api/controlPoints/controlPointData/${user.username}/${cpId}`)
 				.then(res => res.json())
 				.then(res => {
-					console.log(res)
 					commit('setAllDescriptions', res.descriptions)
 
+					// main info
 					let mainInfo = res.mainInformation
-
 					commit('setMeasurementType', mainInfo.measurementtype)
+					if(mainInfo.image!=null){
+						commit('setImagePreview', {image: mainInfo.image, username: user.username})
+					}
+
+					//type and values based on options
 					commit('setType', mainInfo.inputtype)
 					if (mainInfo.inputtype === "options") {
 						// do options stuff
+						commit('removeOptionValue', 0)
+						commit('removeOptionValue', 0)
+						for (let i = 0; i < res.optionValues.length; i++) {
+
+							commit('addOptionValue')
+							commit('setOptionValues', {index: i, value: res.optionValues[i].value })
+						}
 					} else if (mainInfo.inputtype === "number") {
+
 						commit('setUpperTolerance', mainInfo.uppertolerance)
 						commit('setLowerTolerance', mainInfo.lowertolerance)
 					}
 
 					//attributes
 					let att = res.attributes
-					att.forEach(o => commit('addAttributeSpecific', att.attributeId, att.minValue, att.maxValue))
-
+					if(att.length > 0) {
+						for (let i = 0; i < att.length; i++) {
+							commit('addAttribute')
+							commit('setAttributeId', {index: i, id: att[i].attributeId})
+							commit('setAttributeMinValue', {index: i, minVal: att[i].minValue})
+							commit('setAttributeMaxValue', {index: i, maxVal: att[i].maxValue})
+						}
+					}
 
 					//codes
 					commit('removeCode', 0)
@@ -193,7 +205,6 @@ export const actions = {
 		}
 	},
 	async submitControlPoint({commit, rootState}, cp) {
-		console.log(cp)
 		const user = rootState.login.user;
 		const request = (commit, cp) => {
 			return new Promise((resolve, reject) => {
@@ -206,7 +217,39 @@ export const actions = {
 				}).then(response => {
 						if (response.ok) {
 							resolve(true)
-							commit('resetState')
+						} else {
+							resolve(false)
+						}
+					}
+				)
+			})
+		}
+		if (user) {
+			if (cp.image == null) {
+				return request(commit, cp)
+			} else {
+				let reader = new FileReader()
+				reader.onload = async function (e) {
+					cp.image = e.target.result
+					return request(commit, cp)
+				}
+				reader.readAsDataURL(cp.image)
+			}
+		}
+	},
+	async submitEditControlPoint({commit, rootState}, cp) {
+		const user = rootState.login.user;
+		const request = (commit, cp) => {
+			return new Promise((resolve, reject) => {
+				fetch(`http://localhost:3000/api/controlPoints/submitEditControlPoint/${user.username}`, {
+					method: 'PUT',
+					body: JSON.stringify(cp),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}).then(response => {
+						if (response.ok) {
+							resolve(true)
 						} else {
 							resolve(false)
 						}

@@ -47,7 +47,7 @@ const translations = {
     "Create control point": {
         "gb": "Create control point",
         "lt": "Sukurti kontroles taska",
-        "dk": "Opret kontrolpunkt",
+        "dk": "Opret kontrolpunkt ",
     },
     "Control points map the characteristics of items to what things the employee has to check on the item": {
         "gb": "Control points map the characteristics of items to what things the employee has to check on the item.",
@@ -70,6 +70,21 @@ const translations = {
         "dk": "Log på",
     },
 	//---------------------- Control point details
+
+
+	"Edit control point": {
+		"gb": "Edit control point",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+	"Control point": {
+		"gb": "Control point",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+
+
 	// Main information card
 	"Main information": {
 		"gb": "Main information",

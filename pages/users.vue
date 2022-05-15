@@ -1,6 +1,6 @@
 <template>
  <div class="users">
-	 <h1><Translate :text="'User management'" /></h1>
+	 <h1 ><Translate :text="'User management'" /></h1>
 
 	 <button id="createUser" v-on:click="handleCreateUser">
 		 <Translate :text="'Create User'" />
