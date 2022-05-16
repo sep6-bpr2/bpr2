@@ -326,7 +326,7 @@ export default {
 	},
 	computed: {
 		frequencies() {
-			return this.$store.state.createControlPoint.frequencies
+			return this.$store.state.createControlPoint.frequencies[0]
 		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes

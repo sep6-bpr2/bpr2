@@ -105,6 +105,11 @@ export default {
 		},
 		deleteRowCallback(row){
 			let user ={username: row.username,role: row.role}
+			let currentUser = this.$store.state.login.user
+			if(user.username === currentUser.username){
+				alert("You cannot delete user with username: " + user.username)
+			}
+			else
 			if(confirm("Are you sure you want to delete user with username: " + row.username )==true){
 				this.$store.dispatch("users/deleteUser",user)
 			}

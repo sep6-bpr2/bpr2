@@ -2,16 +2,22 @@ const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-		frequencies: [{name: "to25", value: 2}, {name: "to50", value: 3}, {name: "to100", value: 4}, {
-			name: "to200",
-			value: 7
-		}, {name: "to300", value: 10}, {name: "to500", value: 16}, {name: "to700", value: 22}, {
-			name: "to1000",
-			value: 30
-		}, {name: "to1500", value: 40}, {name: "to2000", value: 50}, {name: "to3000", value: 60}, {
-			name: "to4000",
-			value: 65
-		}, {name: "to5000", value: 70}],
+		frequencies:[{
+			"id": 0,
+			"to25": 2,
+			"to50": 3,
+			"to100": 4,
+			"to200": 7,
+			"to300": 10,
+			"to500": 16,
+			"to700": 22,
+			"to1000": 30,
+			"to1500": 40,
+			"to2000": 50,
+			"to3000": 60,
+			"to4000": 65,
+			"to5000": 70
+		}],
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
 		type: null,
@@ -141,7 +147,7 @@ export const actions = {
 			await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${cpId.controlPointId}/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
-					commit('setFrequencies', res)
+					// commit('setFrequencies', res)
 				})
 		}
 	},
