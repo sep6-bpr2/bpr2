@@ -82,10 +82,8 @@ module.exports.getControlPointOptionValues = async (cpId) => {
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`SELECT value
-				FROM [
-				Option]
-				WHERE [
-				Option].controlPointId=@CpId`)
+				FROM [Option]
+				WHERE [Option].controlPointId=@CpId`)
 
 	return result.recordset
 }
@@ -189,8 +187,7 @@ module.exports.deleteControlPointOptionValues = async (cpId) => {
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.query(`DELETE
-				FROM [
-				Option]
+				FROM [Option]
 				WHERE controlPointId = @cpId`)
 
 	return result.recordset
@@ -201,8 +198,7 @@ module.exports.insertControlPointOptionValue = async (cpId, value) => {
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('value', mssql.NVarChar, value)
-		.query(`INSERT INTO [
-				Option] (controlPointId, value)
+		.query(`INSERT INTO [Option] (controlPointId, value)
 				VALUES (@cpId, @value)`)
 
 	return result.recordset

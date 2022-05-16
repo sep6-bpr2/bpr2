@@ -1,5 +1,5 @@
 <template>
-	<div class="completedOrders">
+	<div v-if="this.$store.state.login.user" class="completedOrders">
 		<h1>This is the completed orders page</h1>
 		<CustomTable
             id="completedOrderList"
