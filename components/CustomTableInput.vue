@@ -18,13 +18,13 @@
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
 					<input
-						v-if="value == 'answer' && (originalRows[index].type == 3 || originalRows[index].type == 1)"
+						v-if="value == 'answer' && (originalRows[index].inputType == 3 || originalRows[index].inputType == 1)"
 						v-model="originalRows[index].answer"
                         v-on:input="updateParent(index)"
                         :style="{color: validated(index), 'border-color': validated(index)}"
 					/>
 					<select
-						v-else-if="value == 'answer' && originalRows[index].type == 0"
+						v-else-if="value == 'answer' && originalRows[index].inputType == 0"
 						v-model="originalRows[index].answer"
                         v-on:change="updateParent(index)"
                         :style="{color: validated(index)}"

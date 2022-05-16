@@ -11,7 +11,7 @@ let finishedOrder = {
 	"categoryCode": "32110",
 	"status": "incomplete",
 	"deadline": "2022-06-12",
-	"location": "Denmark, Give",
+	"location": "DK",
 	"quantity": 240,
 	"qaReportId": 1,
 	"oneTimeControlPoints": [
@@ -512,7 +512,7 @@ let finishedOrderAuthorMain = {
 	"categoryCode": "32110",
 	"status": "incomplete",
 	"deadline": "2022-06-12",
-	"location": "Denmark, Give",
+	"location": "DK",
 	"quantity": 240,
 	"qaReportId": 1,
 	"oneTimeControlPoints": [
@@ -1013,7 +1013,7 @@ let unfinishedOrderMain = {
     "categoryCode": "32110",
     "status": "incomplete",
     "deadline": "2022-06-12",
-    "location": "Denmark, Give",
+    "location": "DK",
     "quantity": 240,
     "qaReportId": 1,
     "oneTimeControlPoints": [
@@ -1866,7 +1866,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240
                 }
             ])
@@ -1886,7 +1886,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240
                 }
             ])
@@ -1907,7 +1907,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240,
                     "qaReportId": 1,
                 }
@@ -2258,7 +2258,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240,
                     "qaReportId": 1,
                 }
@@ -2495,7 +2495,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240,
                     "qaReportId": 1,
                 }
@@ -2846,7 +2846,7 @@ describe("Orders service testing", () => {
                     categoryCode: '32110',
                     status: 3,
                     deadline: "Sun Jun 12 2022 19:00:00 GMT+0200",
-                    location: 'Denmark, Give',
+                    location: 'DK',
                     quantity: 240,
                     "qaReportId": 1,
                 }

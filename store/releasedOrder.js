@@ -49,22 +49,18 @@ export const actions = {
         const user = rootState.login.user
         if (user) {
             let badInputs = false
-            console.log(JSON.stringify(changedOrder))
             for(let i = 0; i < changedOrder.oneTimeControlPoints.length; i++){
-                console.log("VAlue")
-                console.log(changedOrder.oneTimeControlPoints[i].validated)
                 if(changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].validated == 0){
                     badInputs = true
-                    console.log("THERE WAS A MISTAKE")
                     break;
                 }
             }
             
             if(!badInputs){
                 multipleTimeCheck:
-                for(let i = 0; i < changedOrder.multipleTimeControlPoints.length; i++){
-                    for(let j = 0; j < changedOrder.multipleTimeControlPoints[i].length; j++){
-                        if(changedOrder.multi[i][j].validated != null && changedOrder.multipleTimeControlPoints[i][j].validated == 0){
+                for(let i = 0; i < changedOrder.multipleTimeAnswers.length; i++){
+                    for(let j = 0; j < changedOrder.multipleTimeAnswers[i].length; j++){
+                        if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].validated == 0){
                             badInputs = true
                             break multipleTimeCheck
                         }
@@ -72,8 +68,6 @@ export const actions = {
                 }
             }
 
-            console.log("ERRors: " + badInputs)
-            
             if(!badInputs){
                 fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
                     headers: {
@@ -103,7 +97,7 @@ export const actions = {
                 if(changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].validated == 0){
                     badInputs = true
                     break;
-                }else if(changedOrder.oneTimeControlPoints[i].answer == ''){
+                }else if(changedOrder.oneTimeControlPoints[i].validated != null &&changedOrder.oneTimeControlPoints[i].answer == ''){
                     completed = false
                     break;
                 }
@@ -111,22 +105,18 @@ export const actions = {
             
             if(!badInputs && completed){
                 multipleTimeCheck:
-                for(let i = 0; i < changedOrder.multipleTimeControlPoints.length; i++){
-                    for(let j = 0; j < changedOrder.multipleTimeControlPoints[i].length; j++){
-                        if(changedOrder.multipleTimeControlPoints[i][j].validated != null && changedOrder.multipleTimeControlPoints[i][j].validated == 0 ){
+                for(let i = 0; i < changedOrder.multipleTimeAnswers.length; i++){
+                    for(let j = 0; j < changedOrder.multipleTimeAnswers[i].length; j++){
+                        if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].validated == 0 ){
                             badInputs = true
                             break multipleTimeCheck
-                        }else if(changedOrder.multipleTimeControlPoints[i][j].answer == ''){
+                        }else if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].answer == ''){
                             completed = false
                             break;
                         }
                     }
                 }
             }
-
-
-            console.log("ERRors: " + badInputs)
-            console.log("fileld in: " + completed)
 
             if(!badInputs && completed){
                 fetch(`http://localhost:3000/api/orders/complete/${user.username}`, {
