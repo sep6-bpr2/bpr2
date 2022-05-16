@@ -9,6 +9,7 @@
 			:callback="releasedOrderClickCallback"
 		/>
 	</div>
+	</div>
 </template>
 
 <script>

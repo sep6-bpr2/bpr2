@@ -40,6 +40,24 @@ router.get("/allAttributesNames/:username",
 )
 
 /**
+ * @description - Returns all available attributes to pick while creating control point
+ * @param username - username of the user
+ *
+ * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
+ */
+router.get(
+	"/controlPointData/:username/:cpid",
+	param("username").isLength({ min: 1, max: 35 }),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		console.log(req.params.cpid)
+		const result = await controlPointService.getControlPointData(req.params.cpid)
+		res.send(result)
+	}
+)
+
+/**
  * @description - Inserts new control point
  * @param username - username of the user
  * @body frequencies - list with frequencies
@@ -50,7 +68,6 @@ router.get("/allAttributesNames/:username",
  * @body optionValues - list with options
  * @body attributes - list with attributes
  * @body codes - list with codes where all of them can not be null or empty
- * @body images - image
  *
  * @example - POST {BaseURL}/api/controlPoints/submitControlPoint/rafal
  */
@@ -65,7 +82,6 @@ router.post("/submitControlPoint/:username",
     body("optionValues").isArray(),
     body("attributes").isArray(),
     body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
-    body("image").exists(),
     validate,
     validateUserAdmin,
     async (req, res) => {
@@ -74,12 +90,49 @@ router.post("/submitControlPoint/:username",
     }
 )
 
+
+/**
+ * @description - Inserts new control point
+ * @param username - username of the user
+ * @body controlPointId - id of control point to change
+ * @body frequencies - list with frequencies
+ * @body descriptions - list of descriptions where at least one has some value
+ * @body type - type of control point value
+ * @body upperTolerance - upper tolerance for measure
+ * @body lowerTolerance - lower tolerance for measure
+ * @body optionValues - list with options
+ * @body attributes - list with attributes
+ * @body codes - list with codes where all of them can not be null or empty
+ *
+ * @example - PUT {BaseURL}/api/controlPoints/submitEditControlPoint/rafal
+ */
+router.put(
+	"/submitEditControlPoint/:username",
+	param("username").isLength({ min: 1, max: 35 }),
+	body("controlPointId").isInt(),
+	body("frequencies").isArray(),
+	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
+	body("measurementType").isInt(),
+	body("type").isString(),
+	body("upperTolerance").custom(value => validateNullOrInt(value)),
+	body("lowerTolerance").custom(value => validateNullOrInt(value)),
+	body("optionValues").isArray(),
+	body("attributes").isArray(),
+	body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const result = await controlPointService.updateControlPoint(req.body)
+		res.send({})
+	}
+)
+
 /**
  * @description - Returns frequencies for specific control point
  * @param username - username of the user
  * @param controlPointId - id of control point
  *
- * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/rafal
+ * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/simon
  */
 
 router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
