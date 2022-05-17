@@ -6,8 +6,9 @@ export const state = () => ({
         { name: "Item Category Code", id: 1 },
         { name: "Quantity", id: 2 },
         { name: "Deadline", id: 3 },
+        { name: "Completion date", id: 4 },
     ],
-    allowedHeaders: ["id", "categoryCode", "quantity", "deadline"],
+    allowedHeaders: ["id", "categoryCode", "quantity", "deadline", "completionDate"],
     orders: [],
 })
 

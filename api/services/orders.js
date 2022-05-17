@@ -67,9 +67,17 @@ module.exports.completedOrders = async (location) => {
 
     let orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
 
-    for (let i = 0; i < orders.length; i++) {
-        const date = new Date(orders[i].deadline)
-        orders[i].deadline = moment(date).format('YYYY-MM-DD')
+    for (let i = 0; i < qaReports.length; i++) {
+
+        for (let j = 0; j < orders.length; j++) {
+            if (qaReports[i].itemId == orders[j].id) {
+                const deadline = new Date(orders[j].deadline)
+                orders[j].deadline = moment(deadline).format('YYYY-MM-DD')
+
+                const completionDate = new Date(qaReports[i].completionDate)
+                orders[j].completionDate = moment(completionDate).format('YYYY-MM-DD')
+            }
+        }
     }
 
     return orders

@@ -393,7 +393,7 @@ module.exports.setQaReportStatusToFinished = async (itemId) => {
         .input("itemId", mssql.NVarChar, itemId)
         .query(`
             UPDATE [QAReport]
-            SET status = 1
+            SET status = 1, completionDate = GETDATE()
             WHERE itemId = @itemId; 
         `)
     return result.recordset

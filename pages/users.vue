@@ -6,7 +6,7 @@
 		 <Translate :text="'Create User'" />
 	 </button>
 
-	 <div style="display: flex; min-height: 248px">
+	 <div style="display: flex;">
 		 <CustomTable
 			 :allowedHeaders="allowedHeaders"
 			 :rows="userList"
