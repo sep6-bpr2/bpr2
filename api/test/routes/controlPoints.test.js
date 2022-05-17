@@ -34,6 +34,14 @@ describe("Control points api testing", () => {
 			chai.expect(response.body).to.deep.equal(["width", "height", "radius"])
 		})
 	})
+	describe("controlPointData", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "getControlPointData").returns()
+			const response = await request.get("/controlPoints/controlPointData/admin/1")
+			chai.expect(response.body).to.deep.equal({})
+		})
+	})
 	describe("submitControlPoint", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
