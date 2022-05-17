@@ -225,16 +225,19 @@ export const actions = {
 			})
 		}
 		if (user) {
-			if (cp.image == null) {
-				return request(commit, cp)
-			} else {
-				let reader = new FileReader()
-				reader.onload = async function (e) {
-					cp.image = e.target.result
-					return request(commit, cp)
+			return new Promise(async (resolve, reject) =>
+			{
+				if (cp.image == null) {
+					resolve( await request(commit, cp))
+				} else {
+					let reader = new FileReader()
+					reader.onload = async function (e) {
+						cp.image = e.target.result
+						resolve( await request(commit, cp))
+					}
+					reader.readAsDataURL(cp.image)
 				}
-				reader.readAsDataURL(cp.image)
-			}
+			})
 		}
 	},
 	async submitEditControlPoint({commit, rootState}, cp) {

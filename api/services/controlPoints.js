@@ -37,6 +37,9 @@ module.exports.getAttributes = async () => {
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		throw new Error(`control point with id: ${cpId} does not exist in database`)
+	}
 	mainInformation = mainInformation[0]
 	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
@@ -65,6 +68,11 @@ module.exports.getControlPointData = async (cpId) => {
 }
 
 module.exports.updateControlPoint = async (data) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
+	if(mainInformation.length === 0){
+		throw new Error(`control point with id: ${data.controlPointId} does not exist in database`)
+	}
+
 	data.type = typeSwitchToNumber(data.type)
 	if (data.image != null && data.image != undefined) {
 		data.image = saveImage(data.image)
@@ -129,9 +137,8 @@ module.exports.submitControlPoint = async (cp) => {
 	con.input('ltDescription', nVarchar, cp.descriptions[2].value)
 	if (cp.type == 0) {
 		cp.optionValues.forEach((item, index) => {
-			sqlString += `INSERT INTO [
-						  Option] (controlPointId, value )
-						  VALUES (@CpID, @option ${index}); `
+			sqlString += `INSERT INTO [Option] (controlPointId, value )
+						  VALUES (@CpID, @option${index}); `
 			con.input('option' + index, nVarchar, item.value)
 		})
 	}

@@ -92,7 +92,7 @@ router.post("/submitControlPoint/:username",
 
 
 /**
- * @description - Inserts new control point
+ * @description - Edits existing control point
  * @param username - username of the user
  * @body controlPointId - id of control point to change
  * @body frequencies - list with frequencies
@@ -122,7 +122,15 @@ router.put(
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
-		const result = await controlPointService.updateControlPoint(req.body)
+		try{
+			await controlPointService.updateControlPoint(req.body)
+		}catch (e){
+			if(e.message.includes("does not exist in database")){
+				res.status(404)
+			}else {
+				throw e
+			}
+		}
 		res.send({})
 	}
 )

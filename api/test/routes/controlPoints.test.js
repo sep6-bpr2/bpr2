@@ -42,7 +42,7 @@ describe("Control points api testing", () => {
 			chai.expect(response.body).to.deep.equal({})
 		})
 	})
-	describe("submitControlPoint", () => {
+	describe("submit create control point", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 			sinon.stub(controlPointsService, "submitControlPoint").returns()
@@ -65,6 +65,57 @@ describe("Control points api testing", () => {
 					image: null,
 				})
 			chai.expect(response.status).to.deep.equal(200)
+		})
+	})
+	describe("submit edit control point", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "updateControlPoint").returns()
+			const response = await request.put("/controlPoints/submitEditControlPoint/rafal")
+				.send({
+					controlPointId: 13,
+					frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},
+						{name:"to200",value:7},{name:"to300",value:10},
+						{name:"to500",value:16},{name:"to700",value:22},
+						{name:"to1000",value:30},{name:"to1500", value:40},
+						{name:"to2000",value:50},{name:"to3000",value:60},
+						{name:"to4000",value:65},{name:"to5000",value:70}],
+					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+					measurementType: 0,
+					type: "number",
+					upperTolerance: null,
+					lowerTolerance: null,
+					optionValues: [{value: null}, {value: null}],// {value: '',}
+					attributes: [],//{id: '', minValue: 0, maxValue: 0}
+					codes: [{value: 25674}, {value: 25674}],
+					image: null,
+				})
+			chai.expect(response.status).to.deep.equal(200)
+		})
+
+		it("non existing control point id", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "updateControlPoint").throws(new Error('control point does not exist in database'))
+			const response = await request.put("/controlPoints/submitEditControlPoint/rafal")
+				.send({
+					controlPointId: 13,
+					frequencies: [{name:"to25", value:2},{name:"to50",value:3},{name:"to100",value:4},
+						{name:"to200",value:7},{name:"to300",value:10},
+						{name:"to500",value:16},{name:"to700",value:22},
+						{name:"to1000",value:30},{name:"to1500", value:40},
+						{name:"to2000",value:50},{name:"to3000",value:60},
+						{name:"to4000",value:65},{name:"to5000",value:70}],
+					descriptions: [{lang: "English", value: "test desc"}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+					measurementType: 0,
+					type: "number",
+					upperTolerance: null,
+					lowerTolerance: null,
+					optionValues: [{value: null}, {value: null}],// {value: '',}
+					attributes: [],//{id: '', minValue: 0, maxValue: 0}
+					codes: [{value: 25674}, {value: 25674}],
+					image: null,
+				})
+			chai.expect(response.status).to.deep.equal(404)
 		})
 	})
 	describe("getFrequenciesOfControlPoint", () => {
