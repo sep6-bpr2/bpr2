@@ -118,8 +118,9 @@ export const mutations = {
 		state.image = image
 		state.imagePreview = image ? URL.createObjectURL(image) : null
 	},
-	setImagePreview(state, obj) {
+	setFetchedImage(state, obj) {
 		state.imagePreview = `http://localhost:3000/api/controlPoints/picture/${obj.username}/${obj.image}`
+		state.image = obj.image
 	}
 }
 
@@ -167,7 +168,8 @@ export const actions = {
 					let mainInfo = res.mainInformation
 					commit('setMeasurementType', mainInfo.measurementtype)
 					if(mainInfo.image!=null){
-						commit('setImagePreview', {image: mainInfo.image, username: user.username})
+						console.log("QQQQQQQQQQQAAAAAAAAAAAAQQ"+mainInfo.image)
+						commit('setFetchedImage', {image: mainInfo.image, username: user.username})
 					}
 
 					//type and values based on options
@@ -261,16 +263,18 @@ export const actions = {
 			})
 		}
 		if (user) {
-			if (cp.image == null) {
-				return request(commit, cp)
-			} else {
-				let reader = new FileReader()
-				reader.onload = async function (e) {
-					cp.image = e.target.result
-					return request(commit, cp)
+			return new Promise(async (resolve, reject) => {
+				if (cp.image == null || typeof cp.image === 'string') {
+					resolve( await request(commit, cp))
+				} else {
+					let reader = new FileReader()
+					reader.onload = async function (e) {
+						cp.image = e.target.result
+						resolve( await request(commit, cp))
+					}
+					reader.readAsDataURL(cp.image)
 				}
-				reader.readAsDataURL(cp.image)
-			}
+			})
 		}
 	},
 }

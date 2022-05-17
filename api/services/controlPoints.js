@@ -48,14 +48,8 @@ module.exports.getControlPointData = async (cpId) => {
 	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
 	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
 	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
-	console.log(frequencies)
 
 	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
-	console.log(mainInformation)
-	console.log(frequency)
-	console.log(descriptions)
-	console.log(attributes)
-	console.log(categoryCodes)
 	const result = {
 		mainInformation: mainInformation,
 		descriptions: descriptions,
@@ -74,7 +68,20 @@ module.exports.updateControlPoint = async (data) => {
 	}
 
 	data.type = typeSwitchToNumber(data.type)
-	if (data.image != null && data.image != undefined) {
+	if (data.image != null && !data.image.includes('File')) {
+		if(mainInformation[0].image!=null){
+			let path = __dirname.split('\\')
+			let localPath = ""
+			for (let i = 0; i < path.length - 1; i++) {
+				localPath += path[i] + "\\"
+			}
+			localPath += `pictures\\${mainInformation[0].image}`
+			try {
+				fs.unlinkSync(localPath)
+			} catch(err) {
+				console.error(err)
+			}
+		}
 		data.image = saveImage(data.image)
 	}
 	await controlPointModel.updateControlMainInformation(data)
@@ -103,7 +110,7 @@ module.exports.updateControlPoint = async (data) => {
 }
 
 module.exports.submitControlPoint = async (cp) => {
-	if (cp.image != null && cp.image != undefined) {
+	if (cp.image != null) {
 		cp.image = saveImage(cp.image)
 	}
 	const nVarchar = mssql.mssql.NVarChar(1000)
