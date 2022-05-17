@@ -60,7 +60,7 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
             MAX(point.lowerTolerance) as lowerTolerance,
             MAX(point.upperTolerance) as upperTolerance, 
             MAX(point.measurementType) as measurementType, 
-            MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = ''THEN '' ELSE 'taken' END) as author,
+            MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = '' THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer
             FROM [QAReportControlPointValue] connection

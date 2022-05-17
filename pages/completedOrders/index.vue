@@ -1,5 +1,8 @@
 <template>
-	<div :v-if="this.$store.state.login.user" class="completedOrders">
+	<div 
+        v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
+        class="completedOrders"
+    >
 		<h1>This is the completed orders page</h1>
         ADD A COMPLETED DAT HEADER
 		<CustomTable

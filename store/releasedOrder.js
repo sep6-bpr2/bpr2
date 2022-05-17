@@ -36,6 +36,8 @@ export const actions = {
             const language = rootState.login.chosenLanguage.flag
             return new Promise((resolve, reject) => {
                 fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
+                    console.log("Got the thing")
+                    console.log(result)
                     if (result) {
                         resolve(result)
                     } else {
@@ -48,43 +50,19 @@ export const actions = {
     saveContent({ commit, rootState }, changedOrder) {
         const user = rootState.login.user
         if (user && user.role == "qa employee") {
-            let badInputs = false
-            for(let i = 0; i < changedOrder.oneTimeControlPoints.length; i++){
-                if(changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].validated == 0){
-                    badInputs = true
-                    break;
+            fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(changedOrder),
+                method: 'PUT'
+            }).then(res => res.json()).then(result => {
+                if (result != null) {
+                    commit('setNotification', result)
+                } else {
+                    commit('setNotification', { response: 0, message: "No response from server" })
                 }
-            }
-            
-            if(!badInputs){
-                multipleTimeCheck:
-                for(let i = 0; i < changedOrder.multipleTimeAnswers.length; i++){
-                    for(let j = 0; j < changedOrder.multipleTimeAnswers[i].length; j++){
-                        if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].validated == 0){
-                            badInputs = true
-                            break multipleTimeCheck
-                        }
-                    }
-                }
-            }
-
-            if(!badInputs){
-                fetch(`http://localhost:3000/api/orders/save/${user.username}`, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(changedOrder),
-                    method: 'PUT'
-                }).then(res => res.json()).then(result => {
-                    if (result != null) {
-                        commit('setNotification', result)
-                    } else {
-                        commit('setNotification', { response: 0, message: "No response from server" })
-                    }
-                })
-            }else{
-                commit('setNotification', { response: 0, message: "There are errors in the input, please fix them before saving" })
-            }
+            })
         }
     },
     completeContent({ commit, rootState }, changedOrder) {
@@ -93,24 +71,24 @@ export const actions = {
             let badInputs = false
             let completed = true
 
-            for(let i = 0; i < changedOrder.oneTimeControlPoints.length; i++){
-                if(changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].validated == 0){
+            for (let i = 0; i < changedOrder.oneTimeControlPoints.length; i++) {
+                if (changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].validated == 0) {
                     badInputs = true
                     break;
-                }else if(changedOrder.oneTimeControlPoints[i].validated != null &&changedOrder.oneTimeControlPoints[i].answer == ''){
+                } else if (changedOrder.oneTimeControlPoints[i].validated != null && changedOrder.oneTimeControlPoints[i].answer == '') {
                     completed = false
                     break;
                 }
             }
-            
-            if(!badInputs && completed){
+
+            if (!badInputs && completed) {
                 multipleTimeCheck:
-                for(let i = 0; i < changedOrder.multipleTimeAnswers.length; i++){
-                    for(let j = 0; j < changedOrder.multipleTimeAnswers[i].length; j++){
-                        if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].validated == 0 ){
+                for (let i = 0; i < changedOrder.multipleTimeAnswers.length; i++) {
+                    for (let j = 0; j < changedOrder.multipleTimeAnswers[i].length; j++) {
+                        if (changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].validated == 0) {
                             badInputs = true
                             break multipleTimeCheck
-                        }else if(changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].answer == ''){
+                        } else if (changedOrder.multipleTimeAnswers[i][j].validated != null && changedOrder.multipleTimeAnswers[i][j].answer == '') {
                             completed = false
                             break;
                         }
@@ -118,7 +96,7 @@ export const actions = {
                 }
             }
 
-            if(!badInputs && completed){
+            if (!badInputs && completed) {
                 fetch(`http://localhost:3000/api/orders/complete/${user.username}`, {
                     headers: {
                         'Content-Type': 'application/json'
@@ -132,13 +110,16 @@ export const actions = {
                         commit('setNotification', { response: 0, message: "No response from server" })
                     }
                 })
-            }else{
-                if(badInputs){
+            } else {
+                if (badInputs) {
                     commit('setNotification', { response: 0, message: "There are errors in the input, please fix them before completing" })
-                }else if(!completed){
+                } else if (!completed) {
                     commit('setNotification', { response: 0, message: "All inputs must be completed before completing" })
                 }
             }
         }
+    },
+    setNotification({ commit, rootState }, notification) {
+        commit('setNotification', notification)
     }
 }

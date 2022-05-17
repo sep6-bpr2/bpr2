@@ -133,7 +133,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         // We cannot expect their database state of released or whatever item to change when the order is
         // finished on our part of the system. So a released order can only be released and completed
         // can be whatever status
-        if (!getCompleted && itemData.status != 3){
+        if (!getCompleted && itemData.status != 3) {
             return { response: 0, message: "Order has not been released" }
         }
 
@@ -157,7 +157,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
             // Get all the attributes and item categories of these control points 
             // Will later validate which one connects to which one
-            for (let i = 0; i < controlPoints.length; i++){
+            for (let i = 0; i < controlPoints.length; i++) {
                 controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
             }
 
@@ -228,15 +228,15 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not
-        if (showAuthors){
+        if (showAuthors) {
             controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id)
         }
-        else{
+        else {
             controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
         }
 
         // Get all the attributes and item categories of these control points 
-        for (let i = 0; i < controlPoints.length; i++){
+        for (let i = 0; i < controlPoints.length; i++) {
             controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
         }
 
@@ -267,7 +267,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
                 controlPoints[i].frequency = null
 
             // Get options if the control poi
-            if (controlPoints[i].inputType == 0){
+            if (controlPoints[i].inputType == 0) {
                 controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id)
             }
         }
@@ -461,10 +461,10 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
         // Clean up the data before sending to reduce size of payload
         delete itemData.frequency
-        for (let i = 0; i< itemData.oneTimeControlPoints.length; i++){
+        for (let i = 0; i < itemData.oneTimeControlPoints.length; i++) {
             delete itemData.oneTimeControlPoints[i].frequency
-        }   
-        for (let i = 0; i< itemData.multipleTimeControlPoints.length; i++){
+        }
+        for (let i = 0; i < itemData.multipleTimeControlPoints.length; i++) {
             delete itemData.multipleTimeControlPoints[i].frequency
         }
 
@@ -523,17 +523,24 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                 for (let i = 0; i < editedQAReport.oneTimeControlPoints.length; i++) {
                     // Insert The one time measurement
 
-                    if ((editedQAReport.oneTimeControlPoints[i].author != originalOrder.oneTimeControlPoints[i].author && editedQAReport.oneTimeControlPoints[i].author != 'taken') ||
+                    if (
+                        (
+                            editedQAReport.oneTimeControlPoints[i].author != originalOrder.oneTimeControlPoints[i].author &&
+                            editedQAReport.oneTimeControlPoints[i].author != 'taken' &&
+                            originalOrder.oneTimeControlPoints[i].author != null
+                        ) ||
                         editedQAReport.oneTimeControlPoints[i].answer != originalOrder.oneTimeControlPoints[i].answer
                     ) {
 
                         let inputValidated = false
 
                         // input is too long
-                        if (editedQAReport.oneTimeControlPoints[i].answer.length > 50) {
+
+                        if (editedQAReport.oneTimeControlPoints[i].answer == '') {
+                            inputValidated = false
+                        } else if (editedQAReport.oneTimeControlPoints[i].answer.length > 50) {
                             inputValidated = false
                         }
-
                         // input is option
                         else if (originalOrder.oneTimeControlPoints[i].inputType == 0) { //Option
 
@@ -582,13 +589,21 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         // Insert The one time measurement
 
 
-                        if ((editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author && editedQAReport.multipleTimeAnswers[i][j].author != 'taken') ||
+                        if (
+                            (
+                                editedQAReport.multipleTimeAnswers[i][j].author != originalOrder.multipleTimeAnswers[i][j].author &&
+                                editedQAReport.multipleTimeAnswers[i][j].author != 'taken' &&
+                                originalOrder.multipleTimeAnswers[i][j].author != null
+                            ) ||
                             editedQAReport.multipleTimeAnswers[i][j].answer != originalOrder.multipleTimeAnswers[i][j].answer
                         ) {
 
                             let inputValidated = false
 
-                            if (editedQAReport.multipleTimeAnswers[i][j].answer.length > 50) {
+                            if (editedQAReport.multipleTimeAnswers[i][j].answer == '') {
+                                inputValidated = false
+                            } 
+                            else if (editedQAReport.multipleTimeAnswers[i][j].answer.length > 50) {
                                 inputValidated = false
                             }
 

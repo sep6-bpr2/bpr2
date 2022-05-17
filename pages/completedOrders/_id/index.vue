@@ -1,5 +1,5 @@
 <template>
-	<div :v-if="this.$store.state.login.user">
+	<div v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'">
 		<AlertModal
 			:id="1"
 			:message="currentOrder && currentOrder.message"

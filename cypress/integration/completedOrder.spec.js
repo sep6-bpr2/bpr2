@@ -3,6 +3,7 @@
 
 describe('Completed orders', () => {
 	beforeEach(() => {
+        cy.clearLocalStorage()
 		cy.visit('http://localhost:3000/login')
         cy.clearLocalStorage()
 	})

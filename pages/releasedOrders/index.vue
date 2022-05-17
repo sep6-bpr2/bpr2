@@ -1,5 +1,8 @@
 <template>
-	<div :v-if="this.$store.state.login.user" class="releasedOrders">
+	<div 
+        v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'qa employee'" 
+        class="releasedOrders"
+    >
 		<h1>This is the released orders page</h1>
 		<CustomTable
             id="releasedOrderList"

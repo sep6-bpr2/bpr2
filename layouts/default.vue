@@ -5,11 +5,11 @@
 		</div>
         <AlertModal
             :message="modalMessage"
-            :show="modalState == true"
+            :show="modalState"
             :status="modalStatus"
         />
-		<v-main>
-			<Nuxt :v-show="modalState == false" />
+		<v-main v-show="!modalState">
+			<Nuxt  />
 		</v-main>
 	</v-app>
 </template>
@@ -26,7 +26,7 @@ export default {
 	data() {
 		return {
 			modalState: false,
-			modalMessage: "sdfsfsg",
+			modalMessage: "",
 			modalStatus: "danger",
 		};
 	},

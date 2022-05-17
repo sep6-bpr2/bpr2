@@ -25,6 +25,8 @@
 							v-on:input="updateParent(index - 1, cellIndex)"
                             :style="{color: validated(index - 1, cellIndex), 'border-color': validated(index - 1, cellIndex)}"
                             :disabled="inputsDisabled != null && inputsDisabled"
+                            :title="'Author: ' + originalColumns[index - 1][cellIndex].author"
+
 						/>
 						<select
 							v-else-if="cell.inputType == 0"
@@ -32,6 +34,7 @@
 							v-on:change="updateParent(index - 1, cellIndex)"
                             :style="{color: validated(index - 1, cellIndex), cursor: (inputsDisabled != null && inputsDisabled ? 'default': 'pointer')}"
                             :disabled="inputsDisabled != null && inputsDisabled"
+                            :title="'Author: ' + originalColumns[index - 1][cellIndex].author"
 						>
 							<option disabled selected value="">
 								-- select an option --
