@@ -380,6 +380,12 @@ describe('released order', () => {
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('90')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -389,6 +395,12 @@ describe('released order', () => {
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('100')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -397,6 +409,12 @@ describe('released order', () => {
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('300.90')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -469,6 +487,12 @@ describe('released order', () => {
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('100')
             cy.get('#saveButton').click()
+            
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -478,6 +502,12 @@ describe('released order', () => {
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('300.90')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -527,6 +557,14 @@ describe('released order', () => {
             cy.reload()
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable3').find("select").filter(':enabled').eq(1).should('have.value', 'No')
         }
+
+        cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('300.90')
+        cy.get('#saveButton').click()
+
+        cy.contains('Warning').should('be.visible')
+        cy.get('#completeButton').click()
+        cy.contains('Warning').should('not.exist');
+
     })
 
     it('Released order ERROR complete order without all fields filed in', () => {

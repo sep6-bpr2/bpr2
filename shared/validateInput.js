@@ -43,7 +43,6 @@ module.exports.validateEmpty = (value) => {
 
 module.exports.validateText = (value) => {
     return (
-        value == 1 &&
         typeof value === "string"
     )
 }
@@ -67,7 +66,7 @@ module.exports.validateOption = (value, options) => {
 
 module.exports.validateLengthOverMax = (value) => {
     value = value.toString()
-    return value > 50
+    return value.length > 50
 }
 
 module.exports.validateNumberOutTolerance = (value, expectedValue, lowerTolerance, upperTolerance) => {
