@@ -22,6 +22,8 @@ const getDefaultState = () => ({
 		codes: [{value: null}],
 		image: null,
 		imagePreview: null,
+
+		alert: {show: false, message: "", status: 0}
 	}
 )
 
@@ -121,6 +123,10 @@ export const mutations = {
 	setFetchedImage(state, obj) {
 		state.imagePreview = `http://localhost:3000/api/controlPoints/picture/${obj.username}/${obj.image}`
 		state.image = obj.image
+	},
+
+	setAlert(state, alert) {
+		state.alert = alert
 	}
 }
 
@@ -160,6 +166,13 @@ export const actions = {
 		const user = rootState.login.user;
 		if (user) {
 			await fetch(`http://localhost:3000/api/controlPoints/controlPointData/${user.username}/${cpId}`)
+				.then(res => {
+					if (res.status < 200 || res.status >= 400) {
+						commit("setAlert", {show: true, message: "control point not found", status: "danger"})
+					} else {
+						commit("setAlert", {show: false, message: "", status: ""})
+					}
+				})
 				.then(res => res.json())
 				.then(res => {
 					commit('setAllDescriptions', res.descriptions)
@@ -167,21 +180,19 @@ export const actions = {
 					// main info
 					let mainInfo = res.mainInformation
 					commit('setMeasurementType', mainInfo.measurementtype)
-					if(mainInfo.image!=null){
-						console.log("QQQQQQQQQQQAAAAAAAAAAAAQQ"+mainInfo.image)
+					if (mainInfo.image != null) {
 						commit('setFetchedImage', {image: mainInfo.image, username: user.username})
 					}
 
 					//type and values based on options
 					commit('setType', mainInfo.inputtype)
 					if (mainInfo.inputtype === "options") {
-						// do options stuff
 						commit('removeOptionValue', 0)
 						commit('removeOptionValue', 0)
 						for (let i = 0; i < res.optionValues.length; i++) {
 
 							commit('addOptionValue')
-							commit('setOptionValues', {index: i, value: res.optionValues[i].value })
+							commit('setOptionValues', {index: i, value: res.optionValues[i].value})
 						}
 					} else if (mainInfo.inputtype === "number") {
 
@@ -191,7 +202,7 @@ export const actions = {
 
 					//attributes
 					let att = res.attributes
-					if(att.length > 0) {
+					if (att.length > 0) {
 						for (let i = 0; i < att.length; i++) {
 							commit('addAttribute')
 							commit('setAttributeId', {index: i, id: att[i].attributeId})
@@ -203,6 +214,7 @@ export const actions = {
 					//codes
 					commit('removeCode', 0)
 					res.categoryCodes.forEach(o => commit("addCodeSpecific", o.itemCategoryCode))
+					
 				})
 		}
 	},
@@ -227,15 +239,14 @@ export const actions = {
 			})
 		}
 		if (user) {
-			return new Promise(async (resolve, reject) =>
-			{
+			return new Promise(async (resolve, reject) => {
 				if (cp.image == null) {
-					resolve( await request(commit, cp))
+					resolve(await request(commit, cp))
 				} else {
 					let reader = new FileReader()
 					reader.onload = async function (e) {
 						cp.image = e.target.result
-						resolve( await request(commit, cp))
+						resolve(await request(commit, cp))
 					}
 					reader.readAsDataURL(cp.image)
 				}
@@ -265,12 +276,12 @@ export const actions = {
 		if (user) {
 			return new Promise(async (resolve, reject) => {
 				if (cp.image == null || typeof cp.image === 'string') {
-					resolve( await request(commit, cp))
+					resolve(await request(commit, cp))
 				} else {
 					let reader = new FileReader()
 					reader.onload = async function (e) {
 						cp.image = e.target.result
-						resolve( await request(commit, cp))
+						resolve(await request(commit, cp))
 					}
 					reader.readAsDataURL(cp.image)
 				}

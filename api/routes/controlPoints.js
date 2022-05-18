@@ -48,11 +48,14 @@ router.get("/allAttributesNames/:username",
 router.get(
 	"/controlPointData/:username/:cpid",
 	param("username").isLength({ min: 1, max: 35 }),
+	param('cpid').isInt(),
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
-		console.log(req.params.cpid)
 		const result = await controlPointService.getControlPointData(req.params.cpid)
+		if (result.hasOwnProperty('message')) {
+			if(result.message.includes('does not exist')) res.status(404)
+		}
 		res.send(result)
 	}
 )
@@ -122,14 +125,9 @@ router.put(
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
-		try{
-			await controlPointService.updateControlPoint(req.body)
-		}catch (e){
-			if(e.message.includes("does not exist in database")){
-				res.status(404)
-			}else {
-				throw e
-			}
+		const data = await controlPointService.updateControlPoint(req.body)
+		if (data.hasOwnProperty('message')) {
+			if(data.message.includes('does not exist')) res.status(404)
 		}
 		res.send({})
 	}

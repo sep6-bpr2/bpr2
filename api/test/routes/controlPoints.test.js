@@ -34,14 +34,6 @@ describe("Control points api testing", () => {
 			chai.expect(response.body).to.deep.equal(["width", "height", "radius"])
 		})
 	})
-	describe("controlPointData", () => {
-		it("sunny scenario", async () => {
-			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
-			sinon.stub(controlPointsService, "getControlPointData").returns()
-			const response = await request.get("/controlPoints/controlPointData/admin/1")
-			chai.expect(response.body).to.deep.equal({})
-		})
-	})
 	describe("submit create control point", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
@@ -67,10 +59,26 @@ describe("Control points api testing", () => {
 			chai.expect(response.status).to.deep.equal(200)
 		})
 	})
+
+	describe("controlPointData", () => {
+		it("sunny scenario", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "getControlPointData").returns({})
+			const response = await request.get("/controlPoints/controlPointData/admin/1")
+			chai.expect(response.status).to.deep.equal(200)
+		})
+		it("non existing control point id", async () => {
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+			sinon.stub(controlPointsService, "getControlPointData").returns({message: 'control point does not exist in database'})
+			const response = await request.get("/controlPoints/controlPointData/admin/1")
+			chai.expect(response.status).to.deep.equal(404)
+		})
+	})
+
 	describe("submit edit control point", () => {
 		it("sunny scenario", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
-			sinon.stub(controlPointsService, "updateControlPoint").returns()
+			sinon.stub(controlPointsService, "updateControlPoint").returns({})
 			const response = await request.put("/controlPoints/submitEditControlPoint/rafal")
 				.send({
 					controlPointId: 13,
@@ -95,7 +103,7 @@ describe("Control points api testing", () => {
 
 		it("non existing control point id", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
-			sinon.stub(controlPointsService, "updateControlPoint").throws(new Error('control point does not exist in database'))
+			sinon.stub(controlPointsService, "updateControlPoint").returns({message: 'control point does not exist in database'})
 			const response = await request.put("/controlPoints/submitEditControlPoint/rafal")
 				.send({
 					controlPointId: 13,
