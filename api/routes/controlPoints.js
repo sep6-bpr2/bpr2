@@ -48,11 +48,14 @@ router.get("/allAttributesNames/:username",
 router.get(
 	"/controlPointData/:username/:cpid",
 	param("username").isLength({ min: 1, max: 35 }),
+	param('cpid').isInt(),
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
-		console.log(req.params.cpid)
 		const result = await controlPointService.getControlPointData(req.params.cpid)
+		if (result.hasOwnProperty('message')) {
+			if(result.message.includes('does not exist')) res.status(404)
+		}
 		res.send(result)
 	}
 )
@@ -92,7 +95,7 @@ router.post("/submitControlPoint/:username",
 
 
 /**
- * @description - Inserts new control point
+ * @description - Edits existing control point
  * @param username - username of the user
  * @body controlPointId - id of control point to change
  * @body frequencies - list with frequencies
@@ -122,7 +125,10 @@ router.put(
 	validate,
 	validateUserAdmin,
 	async (req, res) => {
-		const result = await controlPointService.updateControlPoint(req.body)
+		const data = await controlPointService.updateControlPoint(req.body)
+		if (data.hasOwnProperty('message')) {
+			if(data.message.includes('does not exist')) res.status(404)
+		}
 		res.send({})
 	}
 )
