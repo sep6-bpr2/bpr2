@@ -110,7 +110,7 @@ insert into AttributeControlPoint (attributeId, controlPointId, minValue, maxVal
 insert into [Description] (controlPointId, language, description) values (1,'gb', 'Descirption of the control point 1')
 
 ----------------
-insert into ControlPoint (frequencyid, image, inputType, upperTolerance, lowerTolerance, measurementType) values (1, 'File1652206892425298.png', 3, 1, 1, 1)
+insert into ControlPoint (frequencyid, image, inputType, upperTolerance, lowerTolerance, measurementType) values (1, null, 3, 1, 1, 1)
 
 insert into ItemCategoryControlPoint (itemCategoryCode, controlPointId) values (32110, 2)
 insert into AttributeControlPoint (attributeId, controlPointId, minValue, maxValue) values (4, 2, 300, 400)

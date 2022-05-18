@@ -45,7 +45,7 @@
 						</option>
 					</select>
 					<button
-						v-else-if="value == 'image'"
+						v-else-if="value == 'image' && originalRows[index].image"
                         v-on:click="showImageCallback(originalRows[index].image)"
 					>
 						Show guide
