@@ -378,6 +378,19 @@ module.exports.getOrdersByIdList = async (location, stringList) => {
     return result.recordset
 }
 
+module.exports.getOrdersByIdListAllLocations = async (stringList) => {
+
+    const result = await konfairDB()
+        .request()
+        .query(`
+            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
+            WHERE item.[No_] in (${stringList})
+        `)
+        
+    return result.recordset
+}
+
 module.exports.getCompletedQAReports = async () => {
     const result = await localDB()
         .request()

@@ -1,5 +1,12 @@
 <template>
-	<div :v-if="controlPoints" class="controlPoints">
+	<div 
+        :v-if="
+            this.$store.state.login.user &&
+			this.$store.state.login.user == 'admin' && 
+            controlPoints
+        " 
+        class="controlPoints"
+    >
 		<h1><Translate :text="'Control point management'" /></h1>
 
 		<p>
@@ -10,6 +17,7 @@
 			<Translate :text="'Create control point'" />
 		</button>
 		<CustomTable
+            id="controlPointList"
 			:allowedHeaders="allowedHeaders"
 			:rows="controlPoints"
 			:tableHeaders="headers"

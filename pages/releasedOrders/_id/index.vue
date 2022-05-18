@@ -246,9 +246,9 @@ export default {
                 this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer,
                 this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].inputType,
                 this.currentOrder.multipleTimeControlPoints[indexColumn].options,
-                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].lowerTolerance,
-                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].upperTolerance,
-                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].expectedValue
+                this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance,
+                this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance,
+                this.currentOrder.multipleTimeControlPoints[indexColumn].expectedValue
             )
 
 			this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].validated = inputValidated;

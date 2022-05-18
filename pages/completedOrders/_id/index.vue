@@ -1,5 +1,5 @@
 <template>
-	<div v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'">
+	<div>
 		<AlertModal
 			:id="1"
 			:message="currentOrder && currentOrder.message"
@@ -7,7 +7,7 @@
 			:status="errorStatus"
 			:closeCallback="closeAlertModal"
 		/>
-		<div v-if="currentOrder && currentOrder.response == null" class="completedOrder">
+		<div v-if="currentOrder && currentOrder.response == null && this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" class="completedOrder">
 			<ImageModal
 				:image="modalImage"
 				:show="modalImageShow"
@@ -28,6 +28,7 @@
 				<DataDisplay :name="'Deadline'" :data="currentOrder.deadline" />
 				<DataDisplay :name="'Location'" :data="currentOrder.location" />
 				<DataDisplay :name="'Status'" :data="currentOrder.status" />
+                <DataDisplay :name="'Completed date'" :data="currentOrder.completionDate" />
 			</div>
 
 			<div class="oneTimeMeasurements">
@@ -161,10 +162,12 @@ export default {
 				this.$route.params.id
 			)
 			.then((result) => {
+                console.log(result)
                 if(result && result.response != null){
                     this.modalAlertShowError = true;
+                }else{
+				    this.currentOrder = result;
                 }
-				this.currentOrder = result;
 			});
 	},
 	watch: {

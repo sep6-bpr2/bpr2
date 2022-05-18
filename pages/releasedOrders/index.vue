@@ -1,31 +1,33 @@
 <template>
-	<div 
-        v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'qa employee'" 
-        class="releasedOrders"
-    >
+	<div
+		v-if="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'qa employee'
+		"
+		class="releasedOrders"
+	>
 		<h1>This is the released orders page</h1>
 		<CustomTable
-            id="releasedOrderList"
+			id="releasedOrderList"
 			:allowedHeaders="allowedHeaders"
 			:rows="releasedOrders"
 			:tableHeaders="headers"
 			:callback="releasedOrderClickCallback"
 		/>
 	</div>
-	</div>
 </template>
 
 <script>
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
-import {authorizeUser} from "../../mixins/authorizeUser.js"
+import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
-    mixins: [authorizeUser],
+	mixins: [authorizeUser],
 	created() {
 		this.$store.dispatch("releasedOrders/loadReleasedOrders", {});
 	},

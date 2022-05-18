@@ -15,7 +15,7 @@ const service = require("../services/orders")
  */
 router.get("/releasedList/minimal/:username/:location",
     param("username").isLength({ min: 4, max: 50 }),
-    param("location").isLength({ min: 2, max: 3 }),
+    param("location").isLength({ min: 2, max: 50 }),
     validate,
     validateUserQA,
     async (req, res) => {
@@ -33,7 +33,7 @@ router.get("/releasedList/minimal/:username/:location",
  */
 router.get("/completedList/minimal/:username/:location",
     param("username").isLength({ min: 4, max: 50 }),
-    param("location").isLength({ min: 2, max: 3 }),
+    param("location").isLength({ min: 2, max: 50 }),
     validate,
     validateUserAdmin,
     async (req, res) => {

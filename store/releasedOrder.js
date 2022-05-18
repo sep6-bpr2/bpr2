@@ -36,8 +36,6 @@ export const actions = {
             const language = rootState.login.chosenLanguage.flag
             return new Promise((resolve, reject) => {
                 fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
-                    console.log("Got the thing")
-                    console.log(result)
                     if (result) {
                         resolve(result)
                     } else {

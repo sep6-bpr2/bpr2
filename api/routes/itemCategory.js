@@ -14,7 +14,7 @@ const {param, body} = require("express-validator");
  */
 router.get("/getCodes/:username/:location",
 			param("username").isLength({ min: 1, max: 35 }),
-			param("location").isLength({ min: 2, max: 3 }),
+			param("location").isLength({ min: 2, max: 50 }),
 			validate,
 			validateUserAdmin,
 			async (req, res) => {

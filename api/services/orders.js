@@ -1,5 +1,6 @@
 const moment = require("moment")
 const model = require("../models/orders")
+const inputValidation =  require("../../shared/validateInput")
 
 /**
  * get a list of orders that are released in the system. All of them
@@ -65,7 +66,13 @@ module.exports.completedOrders = async (location) => {
         return []
     }
 
-    let orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
+    let orders = []
+    
+    if(location.toLocaleLowerCase() == "all"){
+        orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'))
+    }else{
+        orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
+    }
 
     for (let i = 0; i < qaReports.length; i++) {
 
@@ -280,6 +287,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         }
 
         itemData.qaReportId = qaReport.id
+        itemData.completionDate = qaReport.completionDate
         itemData.oneTimeControlPoints = []
         itemData.multipleTimeControlPoints = []
 
@@ -458,6 +466,10 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         const date = new Date(itemData.deadline)
         itemData.deadline = moment(date).format('YYYY-MM-DD')
 
+        if(itemData.completionDate){
+            const completionDate = new Date(itemData.completionDate)
+            itemData.completionDate = moment(completionDate).format('YYYY-MM-DD')
+        }
 
         // Clean up the data before sending to reduce size of payload
         delete itemData.frequency
@@ -532,40 +544,15 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         editedQAReport.oneTimeControlPoints[i].answer != originalOrder.oneTimeControlPoints[i].answer
                     ) {
 
+                        
+
                         let inputValidated = false
 
-                        // input is too long
-
-                        if (editedQAReport.oneTimeControlPoints[i].answer == '') {
-                            inputValidated = false
-                        } else if (editedQAReport.oneTimeControlPoints[i].answer.length > 50) {
-                            inputValidated = false
-                        }
-                        // input is option
-                        else if (originalOrder.oneTimeControlPoints[i].inputType == 0) { //Option
-
-                            for (let j = 0; j < originalOrder.oneTimeControlPoints[i].options.length; j++) {
-                                if (originalOrder.oneTimeControlPoints[i].options[j].value == editedQAReport.oneTimeControlPoints[i].answer) {
-                                    inputValidated = true
-                                    break;
-                                }
-                            }
-                        }
-
-                        // input is text
-                        else if (originalOrder.oneTimeControlPoints[i].inputType == 1 &&  // Text
-                            typeof editedQAReport.oneTimeControlPoints[i].answer === 'string'
-                        ) {
-                            inputValidated = true
-                        }
-
-                        // input is number
-                        else if (originalOrder.oneTimeControlPoints[i].inputType == 3 && // Number
-                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer) &&
-                            Number(editedQAReport.oneTimeControlPoints[i].answer) >= 0
-                        ) {
-                            inputValidated = true
-                        }
+                        inputValidated = inputValidation.validateInputBackend(
+                            editedQAReport.oneTimeControlPoints[i].answer,
+                            editedQAReport.oneTimeControlPoints[i].inputType,
+                            editedQAReport.oneTimeControlPoints[i].options
+                        )
 
                         // Insert if everything is ok
                         if (inputValidated) {
@@ -600,37 +587,11 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
                             let inputValidated = false
 
-                            if (editedQAReport.multipleTimeAnswers[i][j].answer == '') {
-                                inputValidated = false
-                            } 
-                            else if (editedQAReport.multipleTimeAnswers[i][j].answer.length > 50) {
-                                inputValidated = false
-                            }
-
-                            else if (originalOrder.multipleTimeAnswers[i][j].inputType == 0) { //Option
-
-                                for (let k = 0; k < originalOrder.multipleTimeControlPoints[i].options.length; k++) {
-                                    if (originalOrder.multipleTimeControlPoints[i].options[k].value == editedQAReport.multipleTimeAnswers[i][j].answer) {
-                                        inputValidated = true
-                                        break;
-                                    }
-                                }
-                            }
-
-
-                            else if (originalOrder.multipleTimeAnswers[i][j].inputType == 1 &&  // Text
-                                typeof editedQAReport.multipleTimeAnswers[i][j].answer === 'string'
-                            ) {
-                                inputValidated = true
-                            }
-
-
-                            else if (originalOrder.multipleTimeAnswers[i][j].inputType == 3 && // Number
-                                isNumeric(editedQAReport.multipleTimeAnswers[i][j].answer) &&
-                                Number(editedQAReport.multipleTimeAnswers[i][j].answer) >= 0
-                            ) {
-                                inputValidated = true
-                            }
+                            inputValidated = inputValidation.validateInputBackend(
+                                editedQAReport.multipleTimeAnswers[i][j].answer,
+                                editedQAReport.multipleTimeAnswers[i][j].inputType,
+                                editedQAReport.multipleTimeControlPoints[i].options
+                            )
 
                             if (inputValidated) {
                                 changesMade = true

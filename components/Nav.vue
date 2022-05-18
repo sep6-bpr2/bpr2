@@ -5,19 +5,24 @@
 			<ul>
 				<li v-for="link in links" :key="link.id">
 					<nuxt-link
-                        :id="'nav'+link.id"
+						:id="'nav' + link.id"
 						:to="{ path: link.link }"
 						v-bind:style="[
 							currentLinkName == link.link
 								? { 'background-color': cols.KonfairPrimary }
 								: {},
 						]"
-						><Translate :text="link.name"
-					/></nuxt-link>
+					>
+						<Translate :text="link.name" />
+					</nuxt-link>
 				</li>
 			</ul>
 		</div>
-		<button v-on:click="logout" style="margin-left: auto" :style="{ display: show }" >
+		<button
+			v-on:click="logout"
+			style="margin-left: auto"
+			:style="{ display: show }"
+		>
 			<Translate :text="'Logout'" />
 		</button>
 	</header>
@@ -47,7 +52,7 @@ export default {
 		},
 		logout() {
 			this.$store.dispatch("nav/logout");
-            localStorage.clear()
+			localStorage.clear();
 			this.$router.push("/login");
 		},
 	},
@@ -57,11 +62,11 @@ export default {
 			return this.$store.state.nav.availableLinks;
 		},
 		show() {
-            if (this.$store.state.login.user){
-                return 'inline'
-            }else{
-                return 'none'
-            }
+			if (this.$store.state.login.user) {
+				return "inline";
+			} else {
+				return "none";
+			}
 		},
 		//For handling selected page
 		currentLinkName() {
@@ -69,7 +74,7 @@ export default {
 			return "/" + paths[1];
 		},
 	},
-    watch: {
+	watch: {
 		"$store.state.nav.availableLinks": function () {
 			this.links = this.$store.state.nav.availableLinks;
 		},

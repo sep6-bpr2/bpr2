@@ -44,6 +44,7 @@ export const actions = {
     },
     logout({ commit }) {
         commit('login/logoutUser', null, { root: true })
+        commit('resetLinks')
     },
     resetLinks({commit}){
         console.log("RESETING THE LINKS PLEAS HELP ME")

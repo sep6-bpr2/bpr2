@@ -5,12 +5,14 @@ const ordersModel = require('../../models/orders')
 const ordersService = require('../../services/orders')
 const sinon = require('sinon')
 
+
 let finishedOrder = {
 	"id": "47827",
 	"description": "Panelfilter 390x300x47",
 	"categoryCode": "32110",
-	"status": "incomplete",
+	"status": "completed",
 	"deadline": "2022-06-12",
+    "completionDate": "2022-05-12",
 	"location": "DK",
 	"quantity": 240,
 	"qaReportId": 2,
@@ -347,12 +349,356 @@ let finishedOrder = {
 	]
 }
 
-let finishedOrderAuthorMain = {
+let unfinishedOrderWithAllInputs = {
 	"id": "47827",
 	"description": "Panelfilter 390x300x47",
 	"categoryCode": "32110",
 	"status": "incomplete",
 	"deadline": "2022-06-12",
+    "completionDate": null,
+	"location": "DK",
+	"quantity": 240,
+	"qaReportId": 2,
+	"oneTimeControlPoints": [
+		{
+			"id": 1,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 9,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "300.00",
+			"units": "mm",
+			"toleranceText": ""
+		},
+		{
+			"id": 2,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 1,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 10,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "390.00",
+			"units": "mm",
+			"toleranceText": "+/-1mm"
+		},
+		{
+			"id": 3,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 11,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "47",
+			"units": "mm",
+			"toleranceText": "+6/-1mm"
+		},
+		{
+			"id": 4,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 12,
+			"answer": "afdaff",
+			"description": "This is a description",
+			"expectedValue": "ISO ePM10 50%",
+			"units": "Text",
+			"toleranceText": ""
+		},
+		{
+			"id": 5,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 13,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 1, "controlPointId": 5, "value": "Yes" },
+				{ "id": 2, "controlPointId": 5, "value": "No" }
+			],
+			"expectedValue": "Ja",
+			"units": "Yes/No",
+			"toleranceText": ""
+		},
+		{
+			"id": 6,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 14,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 3, "controlPointId": 6, "value": "Yes" },
+				{ "id": 4, "controlPointId": 6, "value": "No" }
+			],
+			"expectedValue": "Z-line",
+			"units": "Yes/No",
+			"toleranceText": ""
+		},
+		{
+			"id": 7,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 1,
+			"author": "taken",
+			"connectionId": 15,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 5, "controlPointId": 7, "value": "Yes" },
+				{ "id": 6, "controlPointId": 7, "value": "No" }
+			],
+			"expectedValue": "Fiber",
+			"units": "Yes/No",
+			"toleranceText": ""
+		}
+	],
+	"multipleTimeControlPoints": [
+		{
+			"id": 8,
+			"image": "File1652206892425298.png",
+			"frequencyId": null,
+			"inputType": 3,
+			"lowerTolerance": 1,
+			"upperTolerance": 6,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 25,
+			"answer": "31231",
+			"description": "This is a description",
+			"expectedValue": "340.00",
+			"units": "mm",
+			"toleranceText": "+6/-1mm",
+			"letter": "A"
+		},
+		{
+			"id": 9,
+			"image": "File1652206892425298.png",
+			"frequencyId": 1,
+			"inputType": 1,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 29,
+			"answer": "afdaff",
+			"description": "This is a description",
+			"expectedValue": "ISO e",
+			"units": "Text",
+			"toleranceText": "",
+			"letter": "B"
+		},
+		{
+			"id": 10,
+			"image": "File1652206892425298.png",
+			"frequencyId": 2,
+			"inputType": 0,
+			"lowerTolerance": null,
+			"upperTolerance": null,
+			"measurementType": 0,
+			"author": "taken",
+			"connectionId": 35,
+			"answer": "Yes",
+			"description": "This is a description",
+			"options": [
+				{ "id": 7, "controlPointId": 10, "value": "Yes" },
+				{ "id": 8, "controlPointId": 10, "value": "No" }
+			],
+			"expectedValue": "Fiber glass",
+			"units": "Yes/No",
+			"toleranceText": "",
+			"letter": "C"
+		}
+	],
+	"multipleTimeAnswers": [
+		[
+			{
+				"connectionId": 16,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 19,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 20,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 21,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 22,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 23,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 24,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			},
+			{
+				"connectionId": 25,
+				"id": 8,
+				"answer": "31231",
+				"inputType": 3,
+				"author": "taken"
+			}
+		],
+		[
+			{
+				"connectionId": 17,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 26,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 27,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 28,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			},
+			{
+				"connectionId": 29,
+				"id": 9,
+				"answer": "afdaff",
+				"inputType": 1,
+				"author": "taken"
+			}
+		],
+		[
+			{
+				"connectionId": 18,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 30,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 31,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 32,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 33,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 34,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			},
+			{
+				"connectionId": 35,
+				"id": 10,
+				"answer": "Yes",
+				"inputType": 0,
+				"author": "taken"
+			}
+		]
+	]
+}
+
+let unfinishedOrderAuthorMain = {
+	"id": "47827",
+	"description": "Panelfilter 390x300x47",
+	"categoryCode": "32110",
+	"status": "incomplete",
+	"deadline": "2022-06-12",
+    "completionDate": null,
 	"location": "DK",
 	"quantity": 240,
 	"qaReportId": 2,
@@ -695,6 +1041,7 @@ let unfinishedOrderMain = {
 	"categoryCode": "32110",
 	"status": "incomplete",
 	"deadline": "2022-06-12",
+    "completionDate": null,
 	"location": "DK",
 	"quantity": 240,
 	"qaReportId": 2,
@@ -1033,7 +1380,7 @@ let unfinishedOrderMain = {
 
 
 let unfinishedOrder = JSON.parse(JSON.stringify(unfinishedOrderMain))
-let finishedOrderAuthor = JSON.parse(JSON.stringify(finishedOrderAuthorMain))
+let finishedOrderAuthor = JSON.parse(JSON.stringify(unfinishedOrderAuthorMain))
 
 let order = JSON.parse(JSON.stringify(finishedOrder))
 
@@ -1043,7 +1390,7 @@ describe("Orders service testing", () => {
         sinon.restore()
         order = JSON.parse(JSON.stringify(finishedOrder))
         unfinishedOrder = JSON.parse(JSON.stringify(unfinishedOrderMain))
-        finishedOrderAuthor = JSON.parse(JSON.stringify(finishedOrderAuthorMain))
+        finishedOrderAuthor = JSON.parse(JSON.stringify(unfinishedOrderAuthorMain))
     })
 
     describe("releasedOrders", () => {
@@ -1096,6 +1443,20 @@ describe("Orders service testing", () => {
             const data = await ordersService.completedOrders("denmark")
 
             assertEquals(data.length, 0)
+        })
+
+        
+        it("OK all location", async () => {
+
+            sinon.stub(ordersModel, "getCompletedQAReports").returns([{ itemId: "1", }, { itemId: "2" }])
+            // CHeck input for this function
+            sinon.stub(ordersModel, "getOrdersByIdListAllLocations").returns([{ itemId: "1", deadline: "Sun Jun 12 2022 19:00:00 GMT+0200" }, { itemId: "2", deadline: "Sun Jun 12 2022 19:00:00 GMT+0200" }])
+
+            const data = await ordersService.completedOrders("all")
+
+            assertEquals(data.length, 2)
+            assertEquals(data[0].itemId, '1')
+            assertEquals(data[1].itemId, '2')
         })
     })
 
@@ -1213,11 +1574,11 @@ describe("Orders service testing", () => {
 
             sinon.stub(ordersModel, "alterMeasurement").returns("Completed")
 
-            sinon.stub(ordersService, "getQAReport").returns(order)
+            sinon.stub(ordersService, "getQAReport").returns(unfinishedOrderWithAllInputs)
 
             // // ONE TIME values
             // Test one time number value
-            let orderTest = JSON.parse(JSON.stringify(order))
+            let orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.oneTimeControlPoints[0].answer = "dasdasd"
             const test1 = await ordersService.saveQAReport(
                 orderTest,
@@ -1226,7 +1587,7 @@ describe("Orders service testing", () => {
             assertEquals(test1.response, 2)
 
             // Test one time text value
-            orderTest = JSON.parse(JSON.stringify(order))
+            orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.oneTimeControlPoints[3].answer = 1
             const test2 = await ordersService.saveQAReport(
                 orderTest,
@@ -1235,7 +1596,7 @@ describe("Orders service testing", () => {
             assertEquals(test2.response, 2)
 
             // Test one time option value
-            orderTest = JSON.parse(JSON.stringify(order))
+            orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.oneTimeControlPoints[4].answer = 1
             const test3 = await ordersService.saveQAReport(
                 orderTest,
@@ -1245,7 +1606,7 @@ describe("Orders service testing", () => {
 
             // // MULTI TIME values
             // Test multi time number value
-            orderTest = JSON.parse(JSON.stringify(order))
+            orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.multipleTimeAnswers[0][0].answer = "dasdasd"
             const test4 = await ordersService.saveQAReport(
                 orderTest,
@@ -1254,7 +1615,7 @@ describe("Orders service testing", () => {
             assertEquals(test4.response, 2)
 
             // Test multi time text value
-            orderTest = JSON.parse(JSON.stringify(order))
+            orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.multipleTimeAnswers[1][0].answer = 1
             const test5 = await ordersService.saveQAReport(
                 orderTest,
@@ -1263,7 +1624,7 @@ describe("Orders service testing", () => {
             assertEquals(test5.response, 2)
 
             // Test multi time option value
-            orderTest = JSON.parse(JSON.stringify(order))
+            orderTest = JSON.parse(JSON.stringify(unfinishedOrderWithAllInputs))
             orderTest.multipleTimeAnswers[2][0].answer = 1
             const test6 = await ordersService.saveQAReport(
                 orderTest,
@@ -1747,7 +2108,7 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
                 {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
@@ -1920,8 +2281,12 @@ describe("Orders service testing", () => {
 
             assertEquals(test1.qaReportId, unfinishedOrder.qaReportId)
             assertEquals(test1.status, unfinishedOrder.status)
+            assertEquals(test1.completionDate, unfinishedOrder.completionDate)
+
             delete unfinishedOrder.status
             delete test1.status
+            delete unfinishedOrder.completionDate
+            delete test1.completionDate
             delete unfinishedOrder.qaReportId
             delete test1.qaReportId
             assertEquals(JSON.stringify(test1), JSON.stringify(unfinishedOrder))
@@ -1941,7 +2306,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -2100,7 +2465,7 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
                 {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
@@ -2273,8 +2638,12 @@ describe("Orders service testing", () => {
 
             assertEquals(test1.qaReportId, unfinishedOrder.qaReportId)
             assertEquals(test1.status, unfinishedOrder.status)
+            assertEquals(test1.completionDate, unfinishedOrder.completionDate)
+
             delete unfinishedOrder.status
             delete test1.status
+            delete unfinishedOrder.completionDate
+            delete test1.completionDate
             delete unfinishedOrder.qaReportId
             delete test1.qaReportId
             assertEquals(JSON.stringify(test1), JSON.stringify(unfinishedOrder))
@@ -2294,7 +2663,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -2453,7 +2822,7 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
                 {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
@@ -2765,13 +3134,17 @@ describe("Orders service testing", () => {
 
             // This key bounces around and disrupts the string  
 
-            assertEquals(test1.qaReportId, finishedOrder.qaReportId)
-            assertEquals(test1.status, finishedOrder.status)
-            delete finishedOrder.status
+            assertEquals(test1.qaReportId, unfinishedOrderWithAllInputs.qaReportId)
+            assertEquals(test1.status, unfinishedOrderWithAllInputs.status)
+            assertEquals(test1.completionDate, unfinishedOrderWithAllInputs.completionDate)
+
+            delete unfinishedOrderWithAllInputs.status
             delete test1.status
-            delete finishedOrder.qaReportId
+            delete unfinishedOrderWithAllInputs.completionDate
+            delete test1.completionDate
+            delete unfinishedOrderWithAllInputs.qaReportId
             delete test1.qaReportId
-            assertEquals(JSON.stringify(test1), JSON.stringify(finishedOrder))
+            assertEquals(JSON.stringify(test1), JSON.stringify(unfinishedOrderWithAllInputs))
         })
         // Qa report is already created with valued filled in AND AUTHOR SHOWN
         it("OK Qa report is already created with valued filled in AND AUTHOR SHOWN", async () => {
@@ -2787,7 +3160,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -2946,7 +3319,7 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
                 {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
@@ -3258,13 +3631,17 @@ describe("Orders service testing", () => {
 
             // This key bounces around and disrupts the string  
 
-            assertEquals(test1.qaReportId, finishedOrderAuthorMain.qaReportId)
-            assertEquals(test1.status, finishedOrderAuthorMain.status)
-            delete finishedOrderAuthorMain.status
+            assertEquals(test1.qaReportId, unfinishedOrderAuthorMain.qaReportId)
+            assertEquals(test1.status, unfinishedOrderAuthorMain.status)
+            assertEquals(test1.completionDate, unfinishedOrderAuthorMain.completionDate)
+
+            delete unfinishedOrderAuthorMain.status
             delete test1.status
-            delete finishedOrderAuthorMain.qaReportId
+            delete unfinishedOrderAuthorMain.completionDate
+            delete test1.completionDate
+            delete unfinishedOrderAuthorMain.qaReportId
             delete test1.qaReportId
-            assertEquals(JSON.stringify(test1), JSON.stringify(finishedOrderAuthorMain))
+            assertEquals(JSON.stringify(test1), JSON.stringify(unfinishedOrderAuthorMain))
         })
         // Completed order doesn't have enough answers
         it("ERROR Completed order doesn't have enough answers", async () => {
@@ -3280,7 +3657,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": "Sun May 12 2022 19:00:00 GMT+0200"}])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -3439,7 +3816,7 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false}])
+            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
                 {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
