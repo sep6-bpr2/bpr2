@@ -4,21 +4,30 @@ export const state = () => ({
 })
 
 export const mutations = {
-	setItemCodes(state, itemCodes) {
-		state.itemCodes = itemCodes
-	},
 	setFrequencies(state,frequencies){
 		state.frequencies = frequencies
-	}
+	},
+    appendItemCodes(state, itemCodes) {
+        for (let i = 0; i < itemCodes.length; i ++){
+            state.itemCodes.push(itemCodes[i])
+        }
+    },
+    setItemCodes(state, itemCodes) {
+        state.itemCodes = itemCodes
+    },
 }
 
 export const actions = {
-	loadItemCategoryCodes({ commit, rootState }) {
+	loadItemCategoryCodes({ commit, rootState }, options) {
 		const user = rootState.login.user;
 		const location = rootState.login.chosenLocation
 		if (user) {
-			fetch(`api/itemCategory/getCodes/${user.username}/${location}`).then(res => res.json()).then(result => {
-				commit('setItemCodes', result)
+			fetch(`api/itemCategory/getCodes/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+                if(options.offset == 0){
+                    commit('setItemCodes', result)
+                }else{
+                    commit('appendItemCodes', result)
+                }
 			})
 		}
 	},

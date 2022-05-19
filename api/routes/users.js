@@ -2,6 +2,8 @@ const { Router } = require('express')
 const router = Router()
 const { param, body } = require('express-validator')
 const { validate } = require("../middleware/validateMiddleware")
+const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
+
 const service = require("../services/users")
 
 
@@ -15,7 +17,7 @@ router.get("/getUser/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
     async (req, res) => {
-	    const data = await service.login(req.params.username)
+        const data = await service.login(req.params.username)
         res.send(data)
     }
 )
@@ -25,10 +27,15 @@ router.get("/getUser/:username",
  *
  * @example - GET {BaseURL}/api/users/
  */
-router.get("/getAllUsers", async (req, res) => {
-	const result = await service.getAllUsers()
-	res.send(result)
-})
+router.get("/getAllUsers/:offset/:limit",
+    param("offset").isInt({ min: 0, max: 999999999 }),
+    param("limit").isInt({ min: 0, max: 100 }),
+    validate,
+    async (req, res) => {
+        const result = await service.getAllUsers(parseInt(req.params.offset), parseInt(req.params.limit))
+        res.send(result)
+    }
+)
 
 
 /**

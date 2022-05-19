@@ -8,7 +8,7 @@ module.exports.addUser = async (body) => {
     return model.addUser(body)
 }
 
-module.exports.getAllUsers = async () => {
-	return model.getAllUsers()
+module.exports.getAllUsers = async (offset, limit) => {
+	return model.getAllUsers(offset, limit)
 }
 

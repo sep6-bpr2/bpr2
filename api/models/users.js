@@ -8,10 +8,17 @@ module.exports.getUserByUsername = async (username) => {
     return result.recordset
 }
 
-module.exports.getAllUsers = async () => {
+module.exports.getAllUsers = async (offset, limit) => {
 	const result = await localDB()
 		.request()
-		.query('SELECT * FROM SystemUser')
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
+		.query(`
+            SELECT * 
+            FROM SystemUser
+            ORDER BY id ASC 
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+        `)
 
 	return result.recordset
 }
