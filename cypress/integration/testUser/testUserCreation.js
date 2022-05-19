@@ -11,7 +11,8 @@ describe('testCreationOfUser', () => {
 	})
 
 	it('should get user page',()=>{
-		cy.visit('http://localhost:3000/users')
+		cy.get('header > div > ul >li:nth-child(4) > a').click();
+		cy.get('header > div > ul >li:nth-child(4) > a').should('contain.text','Users');
 	})
 
 	it('should validate user that already exists',()=>{

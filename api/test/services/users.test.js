@@ -23,6 +23,7 @@ describe("User service testing", () => {
     describe("delete User", () => {
         it("delete User OK", async () => {
             sinon.stub(usersModel, "removeUser").returns("removed")
+            sinon.stub(usersModel, "getAllUsers").returns("removed")
 
             const data = await usersService.removeUser({username: "Orochimaru", role:"admin"})
 
