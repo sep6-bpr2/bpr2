@@ -1,6 +1,7 @@
 const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
+		allItemCodes: [],
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		frequencies: [{name: "to25", value: 2}, {name: "to50", value: 3}, {name: "to100", value: 4}, {
 			name: "to200",
@@ -43,6 +44,10 @@ export const mutations = {
 
 	setFrequencies(state, frequencies) {
 		state.frequencies = frequencies
+	},
+
+	setAllItemCodes(state, itemCodes) {
+		state.allItemCodes = itemCodes
 	},
 
 	setAllAttributesNames(state, attributesNames) {
@@ -162,6 +167,15 @@ export const actions = {
 				})
 		}
 	},
+	loadItemCategoryCodes({ commit, rootState }) {
+		const user = rootState.login.user;
+		if (user) {
+			fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
+				console.log("PQFQFWQ"+JSON.stringify(result))
+				commit('setAllItemCodes', result)
+			})
+		}
+	},
 	async getControlPointData({commit, rootState}, cpId) {
 		const user = rootState.login.user;
 		if (user) {
@@ -214,7 +228,7 @@ export const actions = {
 					//codes
 					commit('removeCode', 0)
 					res.categoryCodes.forEach(o => commit("addCodeSpecific", o.itemCategoryCode))
-					
+
 				})
 		}
 	},
