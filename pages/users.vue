@@ -11,6 +11,7 @@
 				:allowedHeaders="allowedHeaders"
 				:rows="userList"
 				:tableHeaders="headers"
+                :scrolledToBottomCallback="loadMoreUsers"
 			/>
 			<Transition>
 				<div v-if="shouldCreateUser" class="create_User_form ml-5">
@@ -113,6 +114,7 @@ export default {
 			}
 		},
 		loadMoreUsers() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("users/loadUsers", {
 				offset: this.offset,
 				limit: this.limit,
@@ -138,16 +140,6 @@ export default {
 			offset: this.offset,
 			limit: this.limit,
 		});
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-				this.offset = this.offset + this.limit;
-				this.loadMoreUsers();
-				console.log("Reached the end of the list");
-			}
-		};
 	},
 };
 </script>

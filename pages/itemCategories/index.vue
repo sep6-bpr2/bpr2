@@ -11,6 +11,7 @@
 			:rows="codeList"
 			:tableHeaders="headers"
 			:callback="itemCatCodeClickCallback"
+            :scrolledToBottomCallback="loadMoreItemCategories"
 		/>
 	</div>
 </template>
@@ -38,16 +39,6 @@ export default {
 		this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
 			offset: this.offset, limit: this.limit
 		});
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-				this.offset = this.offset + this.limit;
-				this.loadMoreItemCategories();
-				console.log("Reached the end of the list");
-			}
-		};
 	},
 	methods: {
 		itemCatCodeClickCallback(row) {
@@ -57,6 +48,7 @@ export default {
 			this.$router.push("/itemCategories/" + row.Code);
 		},
 		loadMoreItemCategories() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("releasedOrders/loadItemCategoryCodes", {
 				offset: this.offset,
 				limit: this.limit,

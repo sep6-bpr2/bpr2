@@ -22,13 +22,14 @@
 		"nuxt": "^2.15.8",
 		"nuxt-helmet": "^2.1.1",
 		"vue-flag-icon": "1.0.6",
+		"vue-observe-visibility": "^1.0.0",
 		"vuex-persistedstate": "^4.1.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^27.4.1",
+		"chai": "^4.3.6",
 		"cypress": "^9.6.0",
 		"jest": "^28.0.3",
-        "chai": "^4.3.6",
 		"sinon": "^12.0.1",
 		"supertest": "^6.1.6"
 	}

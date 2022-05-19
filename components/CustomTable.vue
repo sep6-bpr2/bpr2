@@ -1,28 +1,31 @@
 <template>
-	<table class="customTable">
-		<thead>
-			<tr>
-				<th
-					v-for="header in tableHeaders"
-					:key="header.id.toString() + header.name.toString()"
+	<div>
+		<table class="customTable">
+			<thead>
+				<tr>
+					<th
+						v-for="header in tableHeaders"
+						:key="header.id.toString() + header.name.toString()"
+					>
+						<Translate :text="header.name" />
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					v-for="(row, index) in rows"
+					:id="'customTable' + index"
+					:key="Object.values(row)[0].toString() + index"
+					v-on:click="clickList(row)"
 				>
-					<Translate :text="header.name" />
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				v-for="(row, index) in rows"
-                :id="'customTable'+index"
-				:key="Object.values(row)[0].toString() + index"
-				v-on:click="clickList(row)"
-			>
-				<td v-for="value in allowedHeaders" :key="value + index">
-					{{ rows[index][value] }}
-				</td>
-			</tr>
-		</tbody>
-	</table>
+					<td v-for="value in allowedHeaders" :key="value + index">
+						{{ rows[index][value] }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div v-observe-visibility="visibilityChanged" />
+	</div>
 </template>
 
 <script>
@@ -39,10 +42,20 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback"],
+	props: [
+		"allowedHeaders",
+		"rows",
+		"tableHeaders",
+		"callback",
+		"scrolledToBottomCallback",
+	],
 	methods: {
 		clickList(row) {
 			if (this.callback) this.callback(row);
+		},
+		visibilityChanged(isVisible) {
+            if(!isVisible) return
+			if (this.scrolledToBottomCallback) this.scrolledToBottomCallback();
 		},
 	},
 };

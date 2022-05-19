@@ -11,6 +11,7 @@
 			:rows="completedOrders"
 			:tableHeaders="headers"
 			:callback="completedOrderClickCallback"
+            :scrolledToBottomCallback="loadMoreCompletedOrders"
 		/>
 	</div>
 </template>
@@ -33,25 +34,10 @@ export default {
 		};
 	},
 	created() {
-		if (!this.$store.state || !this.$store.state.login.user) {
-			this.$router.push("/login");
-		}
 		this.$store.dispatch("completedOrders/loadCompletedOrders", {
 			offset: this.offset,
 			limit: this.limit,
 		});
-	},
-	mounted() {
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-				this.offset = this.offset + this.limit;
-				this.loadMoreCompletedOrders();
-				console.log("Reached the end of the list");
-			}
-		};
 	},
 	computed: {
 		headers() {
@@ -69,6 +55,7 @@ export default {
 			this.$router.push("/completedOrders/" + row.id);
 		},
 		loadMoreCompletedOrders() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("completedOrders/loadCompletedOrders", {
 				offset: this.offset,
 				limit: this.limit,

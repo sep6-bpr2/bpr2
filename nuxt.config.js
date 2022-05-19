@@ -25,6 +25,8 @@ export default {
     plugins: [
         '~/plugins/vue-flag-icon',
         { src: '~/plugins/persistedState.client.js' },
+        { src: '~/plugins/observe-visibility.client.js' },
+
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
