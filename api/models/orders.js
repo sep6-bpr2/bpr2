@@ -49,11 +49,12 @@ module.exports.getOrderInformation = async (id) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPoints = async (id) => {
+module.exports.getReleasedOrderControlPoints = async (id, language) => {
     // The max statements are to help group by
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
+        .input("language", mssql.NVarChar(40), language)
         .query(`
             SELECT 
             DISTINCT
@@ -66,20 +67,23 @@ module.exports.getReleasedOrderControlPoints = async (id) => {
             MAX(point.measurementType) as measurementType, 
             MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = '' THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
-            MAX(connection.value) as answer
+            MAX(connection.value) as answer,
+            MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
-            WHERE connection.[qaReportId] = @id
+            INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
+            WHERE connection.[qaReportId] = @id AND description.language = @language
             Group by point.id
         `)
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
+module.exports.getReleasedOrderControlPointsAuthors = async (id, language) => {
     // The max statements are to help group by
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
+        .input("language", mssql.NVarChar(40), language)
         .query(`
             SELECT 
             DISTINCT
@@ -92,10 +96,12 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id) => {
             MAX(point.measurementType) as measurementType, 
             MAX(connection.author) as author,
             MAX(connection.id) as connectionId, 
-            MAX(connection.value) as answer
+            MAX(connection.value) as answer,
+            MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
-            WHERE connection.[qaReportId] = @id
+            INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
+            WHERE connection.[qaReportId] = @id AND description.language = @language
             Group by point.id
         `)
     return result.recordset

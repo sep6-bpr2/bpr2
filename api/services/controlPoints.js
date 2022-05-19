@@ -25,11 +25,10 @@ const typeSwitchToNumber = (value) => {
 
 
 module.exports.getTypes = async () => {
-    const allTypes = await controlPointModel.getAllTypes()
+	const allTypes = await controlPointModel.getAllTypes()
 	return allTypes.map(obj => {
-		return obj.type
+		return typeSwitchToText(obj.type)
 	})
-
 }
 
 module.exports.getAttributes = async () => {
@@ -39,6 +38,7 @@ module.exports.getAttributes = async () => {
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
 	mainInformation = mainInformation[0]
+	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
 	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
 	const attributes = await controlPointModel.getControlPointAttributes(cpId)
@@ -108,9 +108,9 @@ module.exports.submitControlPoint = async (cp) => {
     	DECLARE @CpID int;
     	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
-    	INSERT INTO Description VALUES (@CpID,'gb', @engDescription)
-    	INSERT INTO Description VALUES (@CpID,'dk', @dkDescription)
-    	INSERT INTO Description VALUES (@CpID,'lt', @ltDescription) `
+    	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
+    	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
+    	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
 
 	cp.frequencies.forEach((entry, index) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
@@ -186,27 +186,27 @@ function saveImage(baseImage) {
 }
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
-	let controlPoints = await controlPointModel.getControlPointsMinimal(offset, limit)
+	return controlPointModel.getControlPointsMinimal(language, offset, limit)
 
-	for (let i = 0; i < controlPoints.length; i++) {
-		const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
-		let englishIndex = -1;
-		for (let j = 0; j < descriptions.length; j++) {
-			if (descriptions[j].language == language) {
-				controlPoints[i].description = descriptions[j].description
-			}
+	// for (let i = 0; i < controlPoints.length; i++) {
+	// 	const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
+	// 	let englishIndex = -1;
+	// 	for (let j = 0; j < descriptions.length; j++) {
+	// 		if (descriptions[j].language == language) {
+	// 			controlPoints[i].description = descriptions[j].description
+	// 		}
 
-			// Backup of english
-			if (descriptions[j].language == "gb") {
-				englishIndex = j
-			}
-		}
+	// 		// Backup of english
+	// 		if (descriptions[j].language == "english") {
+	// 			englishIndex = j
+	// 		}
+	// 	}
 
-		// Backup of english
-		if (controlPoints[i].description == null && englishIndex != -1) {
-			controlPoints[i].description = descriptions[englishIndex].description
-		}
-	}
+	// 	// Backup of english
+	// 	if (controlPoints[i].description == null && englishIndex != -1) {
+	// 		controlPoints[i].description = descriptions[englishIndex].description
+	// 	}
+	// }
 
 
 	return controlPoints

@@ -153,7 +153,7 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
  */
 router.get("/listMinimal/:username/:language/:offset/:limit",
     param("username").isLength({ min: 1, max: 35 }),
-    param("language").isLength({ min: 2, max: 2 }),
+    param("language").isLength({ min: 2, max: 20 }),
     param("offset").isInt({ min:0, max: 999999999}),
     param("limit").isInt({ min:0, max: 100}),
     validate,

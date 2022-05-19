@@ -1,256 +1,256 @@
 const translations = {
     "This is a description for a control point": {
-        "gb": "This is a description for a control point",
-        "lt": "Cia yra kontroles tasko aprasymas",
-        "dk": "Dette er beskrivelsen af kontrolpunktet",
+        "english": "This is a description for a control point",
+        "lithuanian": "Cia yra kontroles tasko aprasymas",
+        "danish": "Dette er beskrivelsen af kontrolpunktet",
     },
     "Control point management": {
-        "gb": "Control point management",
-        "lt": "Kontroles tasku valdymas",
-        "dk": "Styring af kontrolpunkter",
+        "english": "Control point management",
+        "lithuanian": "Kontroles tasku valdymas",
+        "danish": "Styring af kontrolpunkter",
     },
     "Control Points": {
-        "gb": "Control Points",
-        "lt": "Kontroles taskai",
-        "dk": "Kontrolpunkter",
+        "english": "Control Points",
+        "lithuanian": "Kontroles taskai",
+        "danish": "Kontrolpunkter",
     },
     "Completed Orders": {
-        "gb": "Completed Orders",
-        "lt": "Pabaigti uzakymai",
-        "dk": "Afsluttede ordrer",
+        "english": "Completed Orders",
+        "lithuanian": "Pabaigti uzakymai",
+        "danish": "Afsluttede ordrer",
     },
     "Item Categories": {
-        "gb": "Item Categories",
-        "lt": "Daiktu kategorijos",
-        "dk": "Varekategorier",
+        "english": "Item Categories",
+        "lithuanian": "Daiktu kategorijos",
+        "danish": "Varekategorier",
     },
     "Users": {
-        "gb": "Users",
-        "lt": "Naudotojai",
-        "dk": "Brugere",
+        "english": "Users",
+        "lithuanian": "Naudotojai",
+        "danish": "Brugere",
     },
     "Released Orders": {
-        "gb": "Released Orders",
-        "lt": "Paleisti uzsakymai",
-        "dk": "Frigivne ordrer",
+        "english": "Released Orders",
+        "lithuanian": "Paleisti uzsakymai",
+        "danish": "Frigivne ordrer",
     },
     "Logout": {
-        "gb": "Logout",
-        "lt": "Atsijungti",
-        "dk": "Log ud",
+        "english": "Logout",
+        "lithuanian": "Atsijungti",
+        "danish": "Log ud",
     },
     "Description": {
-        "gb": "Description",
-        "lt": "Aprasymas",
-        "dk": "Beskrivelse",
+        "english": "Description",
+        "lithuanian": "Aprasymas",
+        "danish": "Beskrivelse",
     },
     "Create control point": {
-        "gb": "Create control point",
-        "lt": "Sukurti kontroles taska",
-        "dk": "Opret kontrolpunkt ",
+        "english": "Create control point",
+        "lithuanian": "Sukurti kontroles taska",
+        "danish": "Opret kontrolpunkt ",
     },
     "Control points map the characteristics of items to what things the employee has to check on the item": {
-        "gb": "Control points map the characteristics of items to what things the employee has to check on the item.",
-        "lt": "Bla bla bla",
-        "dk": "Bla bla bla",
+        "english": "Control points map the characteristics of items to what things the employee has to check on the item.",
+        "lithuanian": "Bla bla bla",
+        "danish": "Bla bla bla",
     },
     "username": {
-        "gb": "username",
-        "lt": "vartotojo vardas",
-        "dk": "brugernavn",
+        "english": "username",
+        "lithuanian": "vartotojo vardas",
+        "danish": "brugernavn",
     },
     "choose location": {
-        "gb": "choose location",
-        "lt": "pasirinkti vieta",
-        "dk": "vælge placering",
+        "english": "choose location",
+        "lithuanian": "pasirinkti vieta",
+        "danish": "vælge placering",
     },
     "Login": {
-        "gb": "Login",
-        "lt": "Prisijungti",
-        "dk": "Log på",
+        "english": "Login",
+        "lithuanian": "Prisijungti",
+        "danish": "Log på",
     },
 	//---------------------- Control point details
 
 
 	"Edit control point": {
-		"gb": "Edit control point",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Edit control point",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"Control point": {
-		"gb": "Control point",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Control point",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 
 	// Main information card
 	"Main information": {
-		"gb": "Main information",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Main information",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	}
 	,"Control point measurement type": {
-		"gb": "Control point measurement type",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Control point measurement type",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Name": {
-		"gb": "Name",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Name",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"Value Type":{
-		"gb": "Value Type",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Value Type",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Lower Tolerance":{
-		"gb": "LowerTolerance",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "LowerTolerance",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Upper Tolerance":{
-		"gb": "Upper Tolerance",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Upper Tolerance",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Option":{
-		"gb": "Option",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Option",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"new option":{
-		"gb": "new option",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "new option",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 
 
 	"Delete Control Point":{
-		"gb": "Delete Control Point",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Delete Control Point",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Submit":{
-		"gb": "Submit",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Submit",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	// Image card
 	"Image": {
-		"gb": "Image",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Image",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	// Check frequency card
 	"Check frequency": {
-		"gb": "Check frequency",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Check frequency",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	// Relationship with category items and attributes card
 	"Relationship with category items and attributes": {
-		"gb": "Relationship with category items and attributes",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Relationship with category items and attributes",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Attributes":{
-		"gb": "Attributes",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Attributes",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Min value": {
-		"gb": "Min value",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Min value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Max value": {
-		"gb": "Max value",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Max value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"new attribute": {
-		"gb": "new attribute",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "new attribute",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"Category Item Codes": {
-		"gb": "Category Item Codes",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Category Item Codes",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"Code": {
-		"gb": "Code",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "Code",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"new code": {
-		"gb": "new code",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "new code",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	// alerts
 	"there must be at least two option for the options type": {
-		"gb": "there must be at least two option for the options type",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "there must be at least two option for the options type",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},"control point must have at least one item category code": {
-		"gb": "control point must have at least one item category code",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "control point must have at least one item category code",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"control point must have at least one description": {
-		"gb": "control point must have at least one DESCRIPTION",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "control point must have at least one DESCRIPTION",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},"upper tolerance can not be empty": {
-		"gb": "UPPER TOLERANCE can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "UPPER TOLERANCE can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},"lower tolerance can not be empty": {
-		"gb": "LOWER TOLERANCE can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "LOWER TOLERANCE can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	}
 	,"measurement type con not be empty": {
-		"gb": "MEASUREMENT TYPE con not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "MEASUREMENT TYPE con not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"value type can not be empty": {
-		"gb": "VALUE TYPE can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "VALUE TYPE can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"option can not be empty": {
-		"gb": "OPTION can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "OPTION can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"attribute name can not be empty": {
-		"gb": "ATTRIBUTE NAME can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "ATTRIBUTE NAME can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"code can not be empty": {
-		"gb": "CODE can not be empty",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "CODE can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 
 	"control point has been created": {
-		"gb": "control point has been created",
-		"lt": "bla bla",
-		"dk": "bla bla"
+		"english": "control point has been created",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	}
 
 	// ---------------------

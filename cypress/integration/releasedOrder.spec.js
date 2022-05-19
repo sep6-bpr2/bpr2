@@ -123,7 +123,7 @@ describe('released order', () => {
 
             // Row two symmetric tolerance
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("This is a description 2").should('be.visible')
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("Show guide").should('not.be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("Show guide").should('not.exist');
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("+/-1mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("390.00").should('be.visible')

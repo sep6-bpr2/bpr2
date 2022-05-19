@@ -1752,7 +1752,7 @@ describe("Orders service testing", () => {
 
             sinon.stub(ordersModel, "getOrderInformation").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1770,7 +1770,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ status: 1 }])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1788,7 +1788,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ status: 0 }])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, true)
+            const test1 = await ordersService.getQAReport("12213", "english", false, true)
             assertEquals(test1.response, 0)
         })
 
@@ -1806,7 +1806,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, true)
+            const test1 = await ordersService.getQAReport("12213", "english", false, true)
             assertEquals(test1.response, 0)
         })
 
@@ -1824,7 +1824,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1843,7 +1843,7 @@ describe("Orders service testing", () => {
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1931,7 +1931,7 @@ describe("Orders service testing", () => {
 
             sinon.stub(ordersModel, "getSpecificControlPoints").returns([])
     
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
         
@@ -2239,17 +2239,17 @@ describe("Orders service testing", () => {
                 ]
             )
 
-            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
-            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "english", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "english", "description": "This is a description" }]);
 
 
             let getFrequencies = sinon.stub(ordersModel, "getFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
@@ -2275,7 +2275,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -2596,17 +2596,17 @@ describe("Orders service testing", () => {
                 ]
             )
 
-            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
-            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "english", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "english", "description": "This is a description" }]);
 
 
             let getFrequencies = sinon.stub(ordersModel, "getFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
@@ -2632,7 +2632,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -2953,17 +2953,17 @@ describe("Orders service testing", () => {
                 ]
             )
 
-            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
-            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "english", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "english", "description": "This is a description" }]);
 
 
             let getFrequencies = sinon.stub(ordersModel, "getFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
@@ -3130,7 +3130,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "gb", false, false)
+            const test1 = await ordersService.getQAReport("12213", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -3450,17 +3450,17 @@ describe("Orders service testing", () => {
                 ]
             )
 
-            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
-            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "english", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "english", "description": "This is a description" }]);
 
 
             let getFrequencies = sinon.stub(ordersModel, "getFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
@@ -3627,7 +3627,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "gb", true, false)
+            const test1 = await ordersService.getQAReport("12213", "english", true, false)
 
             // This key bounces around and disrupts the string  
 
@@ -3947,17 +3947,17 @@ describe("Orders service testing", () => {
                 ]
             )
 
-            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "gb", "description": "This is a description" }])
-            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "gb", "description": "This is a description" }]);
-            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "gb", "description": "This is a description" }]);
+            let getReleasedOrderControlPointsDescriptions = sinon.stub(ordersModel, "getReleasedOrderControlPointsDescriptions").returns([{ "id": 1, "language": "english", "description": "This is a description" }])
+            getReleasedOrderControlPointsDescriptions.onCall(0).returns([{ "id": 1, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(1).returns([{ "id": 2, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(2).returns([{ "id": 3, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(3).returns([{ "id": 4, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(4).returns([{ "id": 5, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(5).returns([{ "id": 6, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(6).returns([{ "id": 7, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(7).returns([{ "id": 8, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(8).returns([{ "id": 9, "language": "english", "description": "This is a description" }]);
+            getReleasedOrderControlPointsDescriptions.onCall(9).returns([{ "id": 10, "language": "english", "description": "This is a description" }]);
 
 
             let getFrequencies = sinon.stub(ordersModel, "getFrequencies").returns([{ "id": 1, "to25": 23, "to50": 2, "to100": 343, "to200": 5, "to300": 5, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }])
@@ -4117,7 +4117,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "gb", true, true)
+            const test1 = await ordersService.getQAReport("12213", "english", true, true)
 
             // This key bounces around and disrupts the string  
 
