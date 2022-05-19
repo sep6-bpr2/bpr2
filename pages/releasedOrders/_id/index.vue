@@ -88,6 +88,7 @@ import ImageModal from "../../../components/ImageModal.vue";
 import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
 import DataDisplay from "../../../components/DataDisplay.vue";
 import AlertModal from "../../../components/AlertModal.vue";
+import inputValidation from "../../../shared/validateInput"
 
 export default {
 	components: {
@@ -207,6 +208,16 @@ export default {
 			let inputValidated = 0;
 
 			// Validate the input
+
+            // inputValidated = inputValidation.validateInput(
+            //     this.currentOrder.oneTimeControlPoints[index].answer,
+            //     this.currentOrder.oneTimeControlPoints[index].inputType,
+            //     this.currentOrder.oneTimeControlPoints[index].options,
+            //     this.currentOrder.oneTimeControlPoints[index].lowerTolerance,
+            //     this.currentOrder.oneTimeControlPoints[index].upperTolerance,
+            //     this.currentOrder.oneTimeControlPoints[index].expectedValue,
+            // )
+
             if (this.currentOrder.oneTimeControlPoints[index].answer == "") {
 				inputValidated = 1; 
 			} else if( this.currentOrder.oneTimeControlPoints[index].answer.length > 50){
@@ -293,6 +304,15 @@ export default {
 			].author = this.$store.state.login.user.username;
 
 			let inputValidated = 0
+
+            // inputValidated = inputValidation.validateInput(
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer,
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].inputType,
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].options,
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].lowerTolerance,
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].upperTolerance,
+            //     this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].expectedValue
+            // )
 
 			// Validate the input
             if ( this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer == ""){

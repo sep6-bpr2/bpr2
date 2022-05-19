@@ -1,13 +1,23 @@
 <template>
 	<div>
-		<div class="pageHeader">
-			<Translate text="Edit control point"/>
-			<p style="margin: 0pt" >&nbsp-&nbspID: {{ $route.params.id }}</p>
+		<AlertModal
+			:id="1"
+			:message="alert.message"
+			:show="alert.show"
+			:status="alert.status"
+		/>
+		<div
+			v-if="!alert.show"
+		>
+			<div class="pageHeader">
+				<Translate text="Edit control point"/>
+				<p style="margin: 0pt">&nbsp-&nbspID: {{ $route.params.id }}</p>
+			</div>
+			<ControlPoint
+				:submit="submit"
+				:is-edit="true"
+			></ControlPoint>
 		</div>
-		<ControlPoint
-		:submit="submit"
-		:is-edit="true"
-		></ControlPoint>
 	</div>
 </template>
 
@@ -15,6 +25,7 @@
 import ControlPoint from "../../../components/ControlPoint";
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate";
+
 export default {
 	components: {Translate, ControlPoint},
 	mixins: [translate],
@@ -22,7 +33,12 @@ export default {
 		this.$store.commit('createControlPoint/resetState')
 		this.$store.dispatch("createControlPoint/getControlPointData", this.$route.params.id)
 	},
-	methods:{
+	computed: {
+		alert() {
+			return this.$store.state.createControlPoint.alert
+		}
+	},
+	methods: {
 		submit(validateAll, showAlert) {
 			if (validateAll()) {
 				let value = this.$store.state.createControlPoint
@@ -41,7 +57,7 @@ export default {
 				}).then(result => {
 					if (result) {
 						showAlert('success', this.translateText('control point has been created'))
-					}else{
+					} else {
 						showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
 					}
 				})

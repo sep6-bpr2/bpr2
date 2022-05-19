@@ -37,6 +37,9 @@ module.exports.getAttributes = async () => {
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
 	mainInformation = mainInformation[0]
 	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
@@ -46,11 +49,7 @@ module.exports.getControlPointData = async (cpId) => {
 	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
 	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
 
-	console.log(frequencies[0])
-	// console.log(mainInformation)
-	// console.log(descriptions)
-	// console.log(attributes)
-	// console.log(categoryCodes)
+
 
 	const result = {
 		mainInformation: mainInformation,
@@ -64,8 +63,26 @@ module.exports.getControlPointData = async (cpId) => {
 }
 
 module.exports.updateControlPoint = async (data) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
+
 	data.type = typeSwitchToNumber(data.type)
-	if (data.image != null && data.image != undefined) {
+	if (data.image != null && !data.image.includes('File')) {
+		if(mainInformation[0].image!=null){
+			let path = __dirname.split('\\')
+			let localPath = ""
+			for (let i = 0; i < path.length - 1; i++) {
+				localPath += path[i] + "\\"
+			}
+			localPath += `pictures\\${mainInformation[0].image}`
+			try {
+				fs.unlinkSync(localPath)
+			} catch(err) {
+				console.error(err)
+			}
+		}
 		data.image = saveImage(data.image)
 	}
 	await controlPointModel.updateControlMainInformation(data)
@@ -97,10 +114,12 @@ module.exports.updateControlPoint = async (data) => {
 	data.codes.forEach(async obj => {
 		await controlPointModel.insertControlPointItemCategoryCodes(data.controlPointId, obj.value)
 	})
+
+	return {}
 }
 
 module.exports.submitControlPoint = async (cp) => {
-	if (cp.image != null && cp.image != undefined) {
+	if (cp.image != null) {
 		cp.image = saveImage(cp.image)
 	}
 	const nVarchar = mssql.mssql.NVarChar(1000)
@@ -135,9 +154,8 @@ module.exports.submitControlPoint = async (cp) => {
 	con.input('ltDescription', nVarchar, cp.descriptions[2].value)
 	if (cp.type == 0) {
 		cp.optionValues.forEach((item, index) => {
-			sqlString += `INSERT INTO [
-						  Option] (controlPointId, value )
-						  VALUES (@CpID, @option ${index}); `
+			sqlString += `INSERT INTO [Option] (controlPointId, value )
+						  VALUES (@CpID, @option${index}); `
 			con.input('option' + index, nVarchar, item.value)
 		})
 	}
