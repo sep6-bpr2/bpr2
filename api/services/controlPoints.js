@@ -45,21 +45,20 @@ module.exports.getControlPointData = async (cpId) => {
 	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
 	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
 	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
-	console.log(frequencies)
 
-	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
-	console.log(mainInformation)
-	console.log(frequency)
-	console.log(descriptions)
-	console.log(attributes)
-	console.log(categoryCodes)
+	console.log(frequencies[0])
+	// console.log(mainInformation)
+	// console.log(descriptions)
+	// console.log(attributes)
+	// console.log(categoryCodes)
+
 	const result = {
 		mainInformation: mainInformation,
 		descriptions: descriptions,
 		optionValues: optionValues,
 		attributes: attributes,
 		categoryCodes: categoryCodes,
-		frequencies
+		frequencies: frequencies[0]
 	}
 	return result
 }
@@ -71,7 +70,13 @@ module.exports.updateControlPoint = async (data) => {
 	}
 	await controlPointModel.updateControlMainInformation(data)
 
-	await controlPointModel.updateControlPointFrequency(data.controlPointId, data.frequencies)
+	let frequencyId = await controlPointModel.getFrequencyId(data.controlPointId)
+
+	if(data.frequencies == null) await controlPointModel.updateControlPointFrequencyWhenDataNull(data.controlPointId)
+	else if(frequencyId == null) await controlPointModel.updateControlPointFrequencyWhenFreqIdNull(data.controlPointId, data.frequencies)
+	else await controlPointModel.updateControlPointFrequencyWhenFreqIdNotNull(data.controlPointId, data.frequencies)
+
+
 
 	data.descriptions.forEach(async desc => {
 		await controlPointModel.updateControlPointDescription(data.controlPointId, desc.lang.toLowerCase(), desc.value)
@@ -112,8 +117,9 @@ module.exports.submitControlPoint = async (cp) => {
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
 
-	cp.frequencies.forEach((entry, index) => {
-		con.input(`val${index}`, mssql.mssql.Int, entry.value)
+	Object.entries(cp.frequencies).forEach((frequency,index) => {
+		let value = frequency[1]
+		con.input(`val${index}`, mssql.mssql.Int, value)
 	})
 
 	cp.type = typeSwitchToNumber(cp.type)

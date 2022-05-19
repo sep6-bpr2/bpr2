@@ -37,18 +37,18 @@ module.exports.releasedOrders = async (location) => {
 
 module.exports.completedOrders = async (location) => {
     let qaReports = await model.getCompletedQAReports()
-    
+
     if(qaReports.length == 0){
         return []
     }
-    
+
     let orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
 
     for (let i = 0; i < orders.length; i++) {
         const date = new Date(orders[i].deadline)
         orders[i].deadline = moment(date).format('YYYY-MM-DD')
     }
-    
+
     return orders
 }
 
@@ -87,9 +87,9 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             if(attributes.length == 0){
                 return { response: 0, message: "This order does not have any attributes in it" }
             }
-            
+
             controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
-            // Get all the attributes and item categories of these control points 
+            // Get all the attributes and item categories of these control points
             for (let i = 0; i < controlPoints.length; i++) {
                 controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
             }
@@ -109,7 +109,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
                     for (let k = 0; k < attributes.length; k++) {
                         // The control point must be linked to at least one attribute
                         if (attributes[k].id == controlPoints[i].attributes[j].id) {
-                            // Control point without a range 
+                            // Control point without a range
 
                             if (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) {
                                 added.push(controlPoints[i])
@@ -131,7 +131,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             controlPoints = added
 
             if (added.length != 0) {
-                // Add qa report 
+                // Add qa report
                 qaReport = await model.createQAReport(id)
                 qaReport = qaReport[0]
 
@@ -157,7 +157,7 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
             controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
         }
 
-        // Get all the attributes and item categories of these control points 
+        // Get all the attributes and item categories of these control points
         for (let i = 0; i < controlPoints.length; i++) {
             if (Array.isArray(controlPoints[i].id)) {
                 controlPoints[i].id = controlPoints[i].id[0]
@@ -309,9 +309,9 @@ module.exports.releasedOrderFull = async (id, language, showAuthors) => {
 
             let assignedFrequency = null
             if (itemData.multipleTimeControlPoints[i].frequency == null && itemData.frequency != null) {
-                assignedFrequency = itemData.frequency[0][frequencyCategoryKey]
+				assignedFrequency = itemData.frequency[0][frequencyCategoryKey]
             } else {
-                assignedFrequency = itemData.multipleTimeControlPoints[i].frequency[0][frequencyCategoryKey]
+				assignedFrequency = itemData.multipleTimeControlPoints[i].frequency[0][frequencyCategoryKey]
             }
 
 
@@ -423,7 +423,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         ) {
                             inputValidated = true
                         } else if (originalOrder.oneTimeControlPoints[i].inputType == 3 && // Number
-                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer) && 
+                            isNumeric(editedQAReport.oneTimeControlPoints[i].answer) &&
                             Number(editedQAReport.oneTimeControlPoints[i].answer) >= 0
                         ) {
                             inputValidated = true
@@ -510,7 +510,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 
 function isNumeric(str) {
     if (typeof str != "string") {
-        return false // we only process strings!  
+        return false // we only process strings!
     } else {
         // @ts-ignore
         return !isNaN(str) && !isNaN(parseFloat(str))

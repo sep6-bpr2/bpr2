@@ -2,7 +2,7 @@ const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-		frequencies:[{
+		defaultFrequency: {
 			"id": 0,
 			"to25": 2,
 			"to50": 3,
@@ -17,7 +17,8 @@ const getDefaultState = () => ({
 			"to3000": 60,
 			"to4000": 65,
 			"to5000": 70
-		}],
+		},
+		frequencies:null,
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
 		type: null,
@@ -44,6 +45,15 @@ export const mutations = {
 	setAllTypes(state, types) {
 		state.allTypes = types
 	},
+
+	setDefaultFrequencies(state){
+		state.frequencies = state.defaultFrequency
+	},
+
+	clearFrequency(state) {
+		state.frequencies = null
+	}
+	,
 
 	setFrequencies(state, frequencies) {
 		state.frequencies = frequencies
@@ -167,6 +177,8 @@ export const actions = {
 			await fetch(`http://localhost:3000/api/controlPoints/controlPointData/${user.username}/${cpId}`)
 				.then(res => res.json())
 				.then(res => {
+					commit('setFrequencies',res.frequencies)
+
 					commit('setAllDescriptions', res.descriptions)
 
 					// main info

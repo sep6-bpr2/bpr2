@@ -14,7 +14,6 @@
 			:rows="controlPoints"
 			:tableHeaders="headers"
 			:callback="controlPointClickCallback"
-			:delete-row-callback="deleteRowCallback"
 		/>
 	</div>
 </template>

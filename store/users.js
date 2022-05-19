@@ -3,7 +3,8 @@ export const state = () => ({
 	tableHeaders: [{ name: "Username", id: 0 }, { name: "Role", id: 1 }],
 	allowedHeaders: ["username", "role"],
 	roles:["qa employee","admin"],
-	userList: []
+	userList: [],
+	QAUsers: []
 })
 
 export const mutations = {
@@ -13,13 +14,15 @@ export const mutations = {
 	setNewUser(state, userList) {
 		state.userList.push(...userList)
 	},
+	setQAUsers(state, QAUserList){
+		state.QAUsers.push(...QAUserList)
+	}
 }
 
 export const actions = {
 	loadUsers({ commit, rootState }) {
 		const user = rootState.login.user;
 		if (user) {
-			const language = rootState.login.chosenLanguage.flag;
 			fetch(`api/users/getAllUsers`).then(res => res.json()).then(result => {
 				commit('setUsers', result)
 			})
@@ -42,6 +45,16 @@ export const actions = {
 			}
 		}
 	},
+	getAllWorkingQAUsers({commit, rootState}){
+		let user = rootState.login.user;
+		if(user) {
+			fetch(`api/users/getQAUsers/${user.username}`).then(res=> res.json()).then(result => {
+				commit('setQAUsers', result)
+			})
+		}
+	},
+
+
 	async createUser({commit, rootState}, creatingUser) {
 		const user = rootState.login.user;
 		let fetchData = {

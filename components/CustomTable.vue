@@ -49,26 +49,6 @@ export default {
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
 	props: ["allowedHeaders", "rows", "tableHeaders", "callback","deleteRowCallback"],
-	computed: {
-		filteredRows() {
-			//Filter to only have the wanted headers shown in table
-			let filtered = this.rows;
-			const allowedHeaders = this.allowedHeaders;
-
-			if (filtered) {
-				for (let i = 0; i < filtered.length; i++) {
-					for (const [key, value] of Object.entries(filtered[i])) {
-						if (!allowedHeaders.includes(key)) {
-							delete filtered[i][key];
-						}
-					}
-				}
-				return filtered;
-			} else {
-				return [];
-			}
-		},
-	},
 	methods: {
 		clickList(row) {
 			if (this.callback)this.callback(row)

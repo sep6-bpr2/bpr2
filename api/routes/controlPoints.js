@@ -60,7 +60,7 @@ router.get(
 /**
  * @description - Inserts new control point
  * @param username - username of the user
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -73,7 +73,6 @@ router.get(
  */
 router.post("/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
-    body("frequencies").isArray(),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
 	body("type").isString(),
@@ -85,6 +84,7 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
+		console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }
@@ -95,7 +95,7 @@ router.post("/submitControlPoint/:username",
  * @description - Inserts new control point
  * @param username - username of the user
  * @body controlPointId - id of control point to change
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -110,7 +110,6 @@ router.put(
 	"/submitEditControlPoint/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	body("controlPointId").isInt(),
-	body("frequencies").isArray(),
 	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
 	body("measurementType").isInt(),
 	body("type").isString(),

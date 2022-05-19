@@ -35,14 +35,13 @@ router.get("/getAllUsers", async (req, res) => {
 //{username: "", role:""}
 /**
  * @description - add user to the system
- * @body - user to add to the system
+ * @body - username to add to the system
+ * @body - role to add to the system
  *
  * @example - POST {BaseURL}/api/users/addUser/rokas
  */
-router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 }),validateUserAdmin, async (req, res) => {
-	body("username").isString()
-	body("role").isString()
-	console.log(JSON.stringify(req.body) + "##########")
+router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 }),body("username").isLength({ min: 1, max: 35 }),body("role").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
+
 	const result = await service.addUser(req.body)
 
     res.send(result)
@@ -57,10 +56,19 @@ router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 })
 router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 35 }), async (req, res) => {
 	body("username").isString()
 	body("role").isString()
-	console.log(JSON.stringify(req.body) + "##########")
 	const result = await service.removeUser(req.body)
 
     res.send(result)
+})
+
+/**
+ * @description - get all users in the system who are currently qa working
+ *
+ * @example - GET {BaseURL}/api/users/getQAUsers/simon
+ */
+router.get("/getQAUsers/:username",param("username").isLength({ min: 1, max: 35 }), async (req, res) => {
+	const result = await service.getAllQAUsers()
+	res.send(result)
 })
 
 module.exports = router

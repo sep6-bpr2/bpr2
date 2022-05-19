@@ -1,16 +1,26 @@
 <template>
-	<div class="freq">
-		<div class="heading">
-			<h1>Item Code</h1>
-			<h4>Code: {{ $route.params.code }}</h4>
-			<p>Edit Item category frequencies</p>
-		</div>
-		<div v-if="isDoneFetching">
-			<Frequency
-				:frequencies = frequencies
-				:push-back-callback="pushBack"
-				:submit-frequencies-callback="submitFrequencies"
-			/>
+	<div>
+		<AlertModal
+			class="alert"
+			v-if="notification"
+			:id="1"
+			:message="notification.message"
+			:show="modalAlertShowSubmit"
+			:status="notificationStatus"
+		/>
+		<div class="freq" v-else-if="isDoneFetching">
+			<div class="heading">
+				<h1>Item Code</h1>
+				<h4>Code: {{ $route.params.code }}</h4>
+				<p>Edit Item category frequencies</p>
+			</div>
+			<div >
+				<Frequency
+					:frequencies = frequencies
+					:push-back-callback="pushBack"
+					:submit-frequencies-callback="submitFrequencies"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -21,8 +31,27 @@ export default {
 	name: "index",
 	components: {Frequency},
 	data: () => ({
-		notStartedForm :true,
+		modalAlertShowSubmit: false,
+		modalAlertShowError: false,
+		notFoundCode: false,
+		notification: null
 	}),
+	mounted() {
+		this.$store
+			.dispatch(`itemCategory/getFrequencyOfItemCode`, {itemCode: this.$route.params.code})
+
+		this.$store
+			.dispatch("itemCategory/loadItemCategoryCodes").then(result =>{
+			if(result){
+				if(!result.some((obj) => obj.Code === this.$route.params.code)){
+					this.notification = { response: 0, message: "Item Code "+ this.$route.params.code + " does not exist"}
+					this.modalAlertShowSubmit = true;
+					return
+				}
+			}
+		})
+
+	},
 	computed: {
 		frequencies() {
 			return this.$store.state.itemCategory.frequencies[0]
@@ -32,7 +61,20 @@ export default {
 				return true
 			}
 			return false
-		}
+		},
+		notificationStatus() {
+			if (this.notification) {
+				if (this.notification.response == 0) {
+					return "danger";
+				} else if (this.notification.response == 1) {
+					return "success";
+				} else if (this.notification.response == 2) {
+					return "warning";
+				} else {
+					return "other";
+				}
+			}
+		},
 	},
 	methods: {
 		submitFrequencies(stateFrequencies,localFrequencies) {
@@ -52,8 +94,6 @@ export default {
 				to4000 : 0,
 				to5000 : 0
 			}
-			console.log(JSON.stringify(localFrequencies))
-			console.log(JSON.stringify(stateFrequencies))
 			for (let x in localFrequencies) {
 				if(localFrequencies[x].changed == false){
 					tempFrequencies[x] = stateFrequencies[x]
@@ -66,30 +106,29 @@ export default {
 			let text = "Are you sure you want to update frequency for this item Category?"
 
 			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			console.log(JSON.stringify(tempFrequencies) + existsNegVal)
 
 			if(!existsNegVal){
-				alert("There is an invalid input")
+				this.notification = { response: 0, message: "There is an invalid input"}
 			}
 			else{
-				if (confirm(text) == true) {
+					this.$store.commit("itemCategory/updateStatus",{status: "success",value: this.$route.params.code})
 					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
 					this.$router.push("/itemCategories");
-				}
 			}
 
+			return this.notification
 		},
 		pushBack(){
-			let text = "Are you sure you want to cancel this process?"
-			if (confirm(text) == true) {
 				this.$router.push("/itemCategories");
-			}
 		}
 	}
 }
 </script>
 
 <style scoped>
+.alert{
+	padding: 10px;
+}
 .freq {
 	display: flex;
 	margin: 10px;
