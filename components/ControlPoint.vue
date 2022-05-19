@@ -313,7 +313,7 @@ import {alerts} from "../mixins/alerts";
 
 export default {
 	name: "ControlPoint",
-	props: ["submit", "isEdit"],
+	props: ["submit", "isEdit", "deleteCp"],
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
@@ -392,7 +392,6 @@ export default {
 				return this.$store.state.createControlPoint.image
 			},
 			set(value) {
-				console.log("AAAAAAAAAAAAWWWWWW"+value)
 				this.$store.commit('createControlPoint/setImage', value)
 			}
 		},
@@ -458,7 +457,7 @@ export default {
 			this.$store.commit('createControlPoint/removeAttribute', index)
 		},
 		deleteControlPoint() {
-			alert("this will work only on edit control point while reusing this component")
+			this.deleteCp()
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
@@ -475,7 +474,6 @@ export default {
 
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
-				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false

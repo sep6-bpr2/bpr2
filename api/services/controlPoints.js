@@ -23,6 +23,20 @@ const typeSwitchToNumber = (value) => {
 	}
 }
 
+const deletePicture = (pictureName) => {
+	let path = __dirname.split('\\')
+	let localPath = ""
+	for (let i = 0; i < path.length - 1; i++) {
+		localPath += path[i] + "\\"
+	}
+	localPath += `pictures\\${pictureName}`
+	try {
+		fs.unlinkSync(localPath)
+	} catch(err) {
+		console.error(err)
+	}
+}
+
 
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
@@ -34,6 +48,25 @@ module.exports.getTypes = async () => {
 module.exports.getAttributes = async () => {
 	return await controlPointModel.getAllAttributesNames()
 }
+
+module.exports.deleteControlPoint = async (cpId) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
+
+	if(mainInformation[0].frequencyid != null){
+		await controlPointModel.deleteFrequency(mainInformation[0].frequencyid)
+	}
+
+	await controlPointModel.deleteControlPoint(cpId)
+	await controlPointModel.deleteControlPointDescriptions(cpId)
+	await controlPointModel.deleteControlPointAttributes(cpId)
+	await controlPointModel.deleteControlPointOptionValues(cpId)
+	await controlPointModel.deleteControlPointItemCategoryCodes(cpId)
+	return {}
+}
+
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
@@ -70,17 +103,7 @@ module.exports.updateControlPoint = async (data) => {
 	data.type = typeSwitchToNumber(data.type)
 	if (data.image != null && !data.image.includes('File')) {
 		if(mainInformation[0].image!=null){
-			let path = __dirname.split('\\')
-			let localPath = ""
-			for (let i = 0; i < path.length - 1; i++) {
-				localPath += path[i] + "\\"
-			}
-			localPath += `pictures\\${mainInformation[0].image}`
-			try {
-				fs.unlinkSync(localPath)
-			} catch(err) {
-				console.error(err)
-			}
+			deletePicture(mainInformation[0].image)
 		}
 		data.image = saveImage(data.image)
 	}

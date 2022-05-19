@@ -175,6 +175,24 @@ export const actions = {
 			})
 		}
 	},
+	deleteControlPoint({ commit, rootState }, cpId) {
+		const user = rootState.login.user;
+		if (user) {
+			fetch(`http://localhost:3000/api/controlPoints/delete/${user.username}/${cpId}`, {
+				method: 'DELETE',
+			})
+				.then(res => {
+					if (res.status >= 200 && res.status < 400) {
+						commit("setAlert", {show: false, message: "", status: ""})
+					} else if(res.status== 404) {
+						commit("setAlert", {show: true, message: "control point not found", status: "danger"})
+					}else {
+						commit("setAlert", {show: true, message: "Oops something went wrong", status: "danger"})
+					}
+					return res
+				})
+		}
+	},
 	async getControlPointData({commit, rootState}, cpId) {
 		const user = rootState.login.user;
 		if (user) {

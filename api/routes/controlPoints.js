@@ -42,6 +42,29 @@ router.get("/allAttributesNames/:username",
 /**
  * @description - Returns all available attributes to pick while creating control point
  * @param username - username of the user
+ * @param cpid - id of the control point
+ *
+ * @example - DELETE {BaseURL}/api/controlPoints/delete/rafal/1
+ */
+router.delete("/delete/:username/:cpid",
+	param("username").isLength({ min: 1, max: 35 }),
+	param('cpid').isInt(),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const result = await controlPointService.deleteControlPoint(req.params.cpid)
+		if (result.hasOwnProperty('message')) {
+			if(result.message.includes('does not exist')) res.status(404)
+		}
+		res.send(result)
+	}
+)
+
+
+/**
+ * @description - Returns all available attributes to pick while creating control point
+ * @param username - username of the user
+ * @param cpid - id of the control point
  *
  * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */

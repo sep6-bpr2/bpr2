@@ -239,6 +239,39 @@ module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
 	return result.recordset
 }
 
+module.exports.deleteControlPoint = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`DELETE
+				FROM [dbo].[ControlPoint]
+				WHERE id = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.deleteControlPointDescriptions = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`DELETE
+				FROM [dbo].[Description]
+				WHERE controlPointId = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.deleteFrequency = async (id) => {
+	const result = await localDB()
+		.request()
+		.input('id', mssql.Int, id)
+		.query(`DELETE
+				FROM [dbo].[Frequency]
+				WHERE id = @id`)
+
+	return result.recordset
+}
+
 module.exports.insertControlPointItemCategoryCodes = async (cpId, itemCategoryCode) => {
 	const result = await localDB()
 		.request()
