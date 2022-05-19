@@ -167,11 +167,14 @@ export const actions = {
 		if (user) {
 			await fetch(`http://localhost:3000/api/controlPoints/controlPointData/${user.username}/${cpId}`)
 				.then(res => {
-					if (res.status < 200 || res.status >= 400) {
-						commit("setAlert", {show: true, message: "control point not found", status: "danger"})
-					} else {
+					if (res.status >= 200 && res.status < 400) {
 						commit("setAlert", {show: false, message: "", status: ""})
+					} else if(res.status== 404) {
+						commit("setAlert", {show: true, message: "control point not found", status: "danger"})
+					}else {
+						commit("setAlert", {show: true, message: "Oops something went wrong", status: "danger"})
 					}
+					return res
 				})
 				.then(res => res.json())
 				.then(res => {
@@ -214,7 +217,7 @@ export const actions = {
 					//codes
 					commit('removeCode', 0)
 					res.categoryCodes.forEach(o => commit("addCodeSpecific", o.itemCategoryCode))
-					
+
 				})
 		}
 	},

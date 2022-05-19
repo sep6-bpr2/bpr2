@@ -29,11 +29,6 @@ import {translate} from "../../../mixins/translate";
 export default {
 	components: {Translate, ControlPoint},
 	mixins: [translate],
-	data: ()=>{
-		return {
-			showAlert: false
-		}
-	},
 	created() {
 		this.$store.commit('createControlPoint/resetState')
 		this.$store.dispatch("createControlPoint/getControlPointData", this.$route.params.id)
@@ -42,10 +37,6 @@ export default {
 		alert() {
 			return this.$store.state.createControlPoint.alert
 		}
-	},
-	watch:{
-		// "$store.state.createControlPoint.alert": ()=>{
-		// }
 	},
 	methods: {
 		submit(validateAll, showAlert) {
