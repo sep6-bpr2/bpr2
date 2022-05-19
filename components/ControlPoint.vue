@@ -188,9 +188,11 @@
 								<p>
 									<Translate :text="'Code'"/>
 								</p>
-								<v-text-field
+								<v-autocomplete
+									:items="codesChoice"
 									id="categoryItemCode"
-									:value="code.value"
+									:item-text="item=>item.Code"
+									:item-value="item=>item.Code"
 									v-on:input="codeChange($event, index)"
 									type="number"
 									class="manualValidation"
@@ -323,6 +325,7 @@ export default {
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
+		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
 	},
 	computed: {
 		frequencies() {
@@ -330,6 +333,9 @@ export default {
 		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes
+		},
+		codesChoice() {
+			return this.$store.state.createControlPoint.allItemCodes
 		},
 		attributesChoice() {
 			return this.$store.state.createControlPoint.attributesNames
