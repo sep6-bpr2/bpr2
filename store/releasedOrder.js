@@ -35,7 +35,7 @@ export const actions = {
     loadReleasedOrderFull({ commit, rootState }, itemId) {
         const user = rootState.login.user
         if (user && user.role == "qa employee") {
-            const language = rootState.login.chosenLanguage.flag
+            const language = rootState.login.chosenLanguage.name
             
             if( inputValidation.validateNumber(itemId)){
                 return new Promise((resolve, reject) => {

@@ -133,7 +133,7 @@ export default {
 		translateText(text) {
 			return lanugages.translateFunction(
 				text,
-				this.$store.state.login.chosenLanguage.flag
+				this.$store.state.login.chosenLanguage.name
 			);
 		},
 	},

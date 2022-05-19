@@ -36,7 +36,7 @@ module.exports.getControlMainInformation = async (cpId) => {
 	const result = await localDB()
 		.request()
 		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT frequencyId, image, upperTolerance, lowerTolerance, inputType, measurementType
+		.query(`SELECT frequencyid, image, uppertolerance, lowertolerance, inputtype, measurementtype
 				FROM ControlPoint
 				WHERE id = @CpId`)
 
@@ -267,15 +267,17 @@ module.exports.insertControlPoint = async (sqlString, con) => {
 		.catch(err => (console.error(err)))
 }
 
-module.exports.getControlPointsMinimal = async (offset, limit) => {
+module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 	const result = await localDB()
 		.request()
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
+        .input("language", mssql.NVarChar(40), language)
 		.query(`
-            SELECT id
-            FROM ControlPoint
-            Order By id DESC
+            SELECT controlPointId as id, description
+            FROM Description
+            WHERE Description.language = @language
+            Order By controlPointId DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
 	return result.recordset

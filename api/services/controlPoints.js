@@ -25,11 +25,10 @@ const typeSwitchToNumber = (value) => {
 
 
 module.exports.getTypes = async () => {
-    const allTypes = await controlPointModel.getAllTypes()
+	const allTypes = await controlPointModel.getAllTypes()
 	return allTypes.map(obj => {
-		return obj.type
+		return typeSwitchToText(obj.type)
 	})
-
 }
 
 module.exports.getAttributes = async () => {
@@ -38,21 +37,19 @@ module.exports.getAttributes = async () => {
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
 	mainInformation = mainInformation[0]
+	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
 	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
 	const attributes = await controlPointModel.getControlPointAttributes(cpId)
 	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
 	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
 	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
-	console.log(frequencies)
 
 	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
-	console.log(mainInformation)
-	console.log(frequency)
-	console.log(descriptions)
-	console.log(attributes)
-	console.log(categoryCodes)
 	const result = {
 		mainInformation: mainInformation,
 		descriptions: descriptions,
@@ -65,8 +62,26 @@ module.exports.getControlPointData = async (cpId) => {
 }
 
 module.exports.updateControlPoint = async (data) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
+
 	data.type = typeSwitchToNumber(data.type)
-	if (data.image != null && data.image != undefined) {
+	if (data.image != null && !data.image.includes('File')) {
+		if(mainInformation[0].image!=null){
+			let path = __dirname.split('\\')
+			let localPath = ""
+			for (let i = 0; i < path.length - 1; i++) {
+				localPath += path[i] + "\\"
+			}
+			localPath += `pictures\\${mainInformation[0].image}`
+			try {
+				fs.unlinkSync(localPath)
+			} catch(err) {
+				console.error(err)
+			}
+		}
 		data.image = saveImage(data.image)
 	}
 	await controlPointModel.updateControlMainInformation(data)
@@ -92,10 +107,12 @@ module.exports.updateControlPoint = async (data) => {
 	data.codes.forEach(async obj => {
 		await controlPointModel.insertControlPointItemCategoryCodes(data.controlPointId, obj.value)
 	})
+
+	return {}
 }
 
 module.exports.submitControlPoint = async (cp) => {
-	if (cp.image != null && cp.image != undefined) {
+	if (cp.image != null) {
 		cp.image = saveImage(cp.image)
 	}
 	const nVarchar = mssql.mssql.NVarChar(1000)
@@ -108,9 +125,9 @@ module.exports.submitControlPoint = async (cp) => {
     	DECLARE @CpID int;
     	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
-    	INSERT INTO Description VALUES (@CpID,'gb', @engDescription)
-    	INSERT INTO Description VALUES (@CpID,'dk', @dkDescription)
-    	INSERT INTO Description VALUES (@CpID,'lt', @ltDescription) `
+    	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
+    	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
+    	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
 
 	cp.frequencies.forEach((entry, index) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
@@ -129,9 +146,8 @@ module.exports.submitControlPoint = async (cp) => {
 	con.input('ltDescription', nVarchar, cp.descriptions[2].value)
 	if (cp.type == 0) {
 		cp.optionValues.forEach((item, index) => {
-			sqlString += `INSERT INTO [
-						  Option] (controlPointId, value )
-						  VALUES (@CpID, @option ${index}); `
+			sqlString += `INSERT INTO [Option] (controlPointId, value )
+						  VALUES (@CpID, @option${index}); `
 			con.input('option' + index, nVarchar, item.value)
 		})
 	}
@@ -186,27 +202,27 @@ function saveImage(baseImage) {
 }
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
-	let controlPoints = await controlPointModel.getControlPointsMinimal(offset, limit)
+	return controlPointModel.getControlPointsMinimal(language, offset, limit)
 
-	for (let i = 0; i < controlPoints.length; i++) {
-		const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
-		let englishIndex = -1;
-		for (let j = 0; j < descriptions.length; j++) {
-			if (descriptions[j].language == language) {
-				controlPoints[i].description = descriptions[j].description
-			}
+	// for (let i = 0; i < controlPoints.length; i++) {
+	// 	const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
+	// 	let englishIndex = -1;
+	// 	for (let j = 0; j < descriptions.length; j++) {
+	// 		if (descriptions[j].language == language) {
+	// 			controlPoints[i].description = descriptions[j].description
+	// 		}
 
-			// Backup of english
-			if (descriptions[j].language == "gb") {
-				englishIndex = j
-			}
-		}
+	// 		// Backup of english
+	// 		if (descriptions[j].language == "english") {
+	// 			englishIndex = j
+	// 		}
+	// 	}
 
-		// Backup of english
-		if (controlPoints[i].description == null && englishIndex != -1) {
-			controlPoints[i].description = descriptions[englishIndex].description
-		}
-	}
+	// 	// Backup of english
+	// 	if (controlPoints[i].description == null && englishIndex != -1) {
+	// 		controlPoints[i].description = descriptions[englishIndex].description
+	// 	}
+	// }
 
 
 	return controlPoints

@@ -237,10 +237,9 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not
         if (showAuthors) {
-            controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id)
-        }
-        else {
-            controlPoints = await model.getReleasedOrderControlPoints(qaReport.id)
+            controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id, language)
+        } else {
+            controlPoints = await model.getReleasedOrderControlPoints(qaReport.id, language)
         }
 
         // Get all the attributes and item categories of these control points 
@@ -250,23 +249,6 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
         // Get all the data for the control point: descriptions, frequency, options
         for (let i = 0; i < controlPoints.length; i++) {
-            // Get descriptions for this order
-            let descriptions = await model.getReleasedOrderControlPointsDescriptions(controlPoints[i].id)
-            // Pick the correct language
-            let englishIndex = -1;
-            for (let j = 0; j < descriptions.length; j++) {
-                if (descriptions[j].language == language)
-                    controlPoints[i].description = descriptions[j].description
-                // Backup of english
-                if (descriptions[j].language == "gb")
-                    englishIndex = j
-            }
-
-            // Use english if correct langue is not there
-            if (controlPoints[i].description == null && englishIndex != -1)
-                controlPoints[i].description = descriptions[englishIndex].description
-
-
             // Get frequency of the control point
             controlPoints[i].frequency = await model.getFrequencies(controlPoints[i].frequencyId)
             if (controlPoints[i].frequency && controlPoints[i].frequency.length != 0)
@@ -393,7 +375,6 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             }
         }
 
-        // let gf = 0
         for (let i = 0; i < itemData.multipleTimeControlPoints.length; i++) {
             // TUrn the character to uppercase
             itemData.multipleTimeControlPoints[i].letter = currentChar.toUpperCase()
@@ -495,7 +476,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
  */
 module.exports.saveQAReport = async (editedQAReport, username) => {
 
-    const originalOrder = await module.exports.getQAReport(editedQAReport.id, 'gb', true, false)
+    const originalOrder = await module.exports.getQAReport(editedQAReport.id, 'english', true, false)
 
     if (originalOrder != null) {
         //Check surface level requirements
