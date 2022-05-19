@@ -171,7 +171,6 @@ export const actions = {
 		const user = rootState.login.user;
 		if (user) {
 			fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
-				console.log("PQFQFWQ"+JSON.stringify(result))
 				commit('setAllItemCodes', result)
 			})
 		}
