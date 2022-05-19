@@ -1,34 +1,37 @@
-import moment from "moment";
-
 export const state = () => ({
     tableHeaders: [
         { name: "Item Number", id: 0 },
         { name: "Item Category Code", id: 1 },
         { name: "Quantity", id: 2 },
         { name: "Deadline", id: 3 },
+        { name: "Completion date", id: 4 },
     ],
-    allowedHeaders: ["id", "categoryCode", "quantity", "deadline"],
+    allowedHeaders: ["id", "categoryCode", "quantity", "deadline", "completionDate"],
     orders: [],
 })
 
 export const mutations = {
+    appendCompletedOrders(state, completedOrders) {
+        for (let i = 0; i < completedOrders.length; i ++){
+            state.orders.push(completedOrders[i])
+        }
+    },
     setCompletedOrders(state, completedOrders) {
         state.orders = completedOrders
     },
 }
 
 export const actions = {
-    loadCompletedOrders({ commit, rootState }, { }) {
+    loadCompletedOrders({ commit, rootState },options) {
         const user = rootState.login.user;
         const location = rootState.login.chosenLocation;
-        if (user) {
-            fetch(`api/orders/completedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
-                for (let i = 0; i < result.length; i++) {
-                    const date = new Date(result[i].deadline);
-                    result[i].deadline = moment(date).format('YYYY-MM-DD');
+        if (user && user.role == "admin") {
+            fetch(`api/orders/completedList/minimal/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+                if(options.offset == 0){
+                    commit('setCompletedOrders', result)
+                }else{
+                    commit('appendCompletedOrders', result)
                 }
-
-                commit('setCompletedOrders', result)
             })
         }
     },

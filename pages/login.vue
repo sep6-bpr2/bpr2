@@ -62,6 +62,7 @@ import FlagIcon from "vue-flag-icon";
 import Vue from "vue";
 import Translate from "../components/Translate.vue";
 import lanugages from "../store/languages";
+import {authorizeUser} from "../mixins/authorizeUser.js"
 
 Vue.use(FlagIcon);
 
@@ -69,6 +70,7 @@ export default {
 	components: {
 		Translate,
 	},
+    mixins: [authorizeUser],
 	name: "LogIn",
 	data: function () {
 		return {
@@ -131,7 +133,7 @@ export default {
 		translateText(text) {
 			return lanugages.translateFunction(
 				text,
-				this.$store.state.login.chosenLanguage.flag
+				this.$store.state.login.chosenLanguage.name
 			);
 		},
 	},

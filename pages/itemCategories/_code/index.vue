@@ -17,9 +17,13 @@
 
 <script>
 import Frequency from "../../../components/Frequency";
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
+
+
 export default {
 	name: "index",
 	components: {Frequency},
+    mixins: [authorizeUser],
 	data: () => ({
 		notStartedForm :true,
 	}),

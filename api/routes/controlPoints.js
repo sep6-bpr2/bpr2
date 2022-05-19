@@ -140,7 +140,6 @@ router.put(
  *
  * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/simon
  */
-
 router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
@@ -158,13 +157,15 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
  *
  * @example - GET {BaseURL}/api/controlPoints/listMinimal/rokas/gb
  */
-router.get("/listMinimal/:username/:language",
+router.get("/listMinimal/:username/:language/:offset/:limit",
     param("username").isLength({ min: 1, max: 35 }),
-    param("language").isLength({ min: 2, max: 2 }),
+    param("language").isLength({ min: 2, max: 20 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await controlPointService.controlPointsMinimal(req.params.language)
+        const data = await controlPointService.controlPointsMinimal(req.params.language, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )

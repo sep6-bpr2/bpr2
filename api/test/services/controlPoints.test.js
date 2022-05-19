@@ -48,11 +48,11 @@ describe("Control points service testing", () => {
         it("get control points minimal OK", async () => {
             sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", }, { id: "2" }])
             sinon.stub(controlPointsModel, "getDescriptionsByControlPointId").returns([
-                { language: "de", description: "sdasdasfafaffad" },
-                { language: "gb", description: "sdasdasd" }
+                { language: "danish", description: "sdasdasfafaffad" },
+                { language: "english", description: "sdasdasd" }
             ]);
 
-            const data = await controlPointsService.controlPointsMinimal("gb")
+            const data = await controlPointsService.controlPointsMinimal("english")
 
             assertEquals(data.length, 2)
             assertEquals(data[1].id, "2")
@@ -62,11 +62,11 @@ describe("Control points service testing", () => {
         it("get control points minimal NOT found specified language", async () => {
             sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", }, { id: "2" }])
             sinon.stub(controlPointsModel, "getDescriptionsByControlPointId").returns([
-                { language: "de", description: "sdasdasfafaffad" },
-                { language: "gb", description: "sdasdasd" }
+                { language: "danish", description: "sdasdasfafaffad" },
+                { language: "english", description: "sdasdasd" }
             ]);
 
-            const data = await controlPointsService.controlPointsMinimal("lt")
+            const data = await controlPointsService.controlPointsMinimal("lithuanian")
 
             assertEquals(data.length, 2)
             assertEquals(data[1].id, "2")
@@ -76,7 +76,7 @@ describe("Control points service testing", () => {
         it("get control points minimal NOT FOUND any language", async () => {
             sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([])
 
-            const data = await controlPointsService.controlPointsMinimal("lt")
+            const data = await controlPointsService.controlPointsMinimal("lithuanian")
 
             assertEquals(data.length, 0)
         })

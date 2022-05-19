@@ -306,11 +306,9 @@
 </template>
 
 <script>
-
 import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
-
 export default {
 	name: "ControlPoint",
 	props: ["submit", "isEdit"],
@@ -405,7 +403,6 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
-
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
 		},
@@ -441,7 +438,6 @@ export default {
 		removeOptionValue(index) {
 			if (this.optionValues.length === 2) {
 				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
-
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)
 			}
@@ -452,7 +448,6 @@ export default {
 			} else {
 				this.$store.commit('createControlPoint/removeCode', index)
 			}
-
 		},
 		removeAttribute(index) {
 			this.$store.commit('createControlPoint/removeAttribute', index)
@@ -470,9 +465,7 @@ export default {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
 				return false
 			}
-
 			if(this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
-
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
@@ -481,7 +474,6 @@ export default {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
-
 			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
@@ -496,7 +488,6 @@ export default {
 			}
 			return true
 		},
-
 		submitFrequencies() {
 			if (typeof this.$refs.frequencyChild === 'undefined') {
 				return null
@@ -526,15 +517,12 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-
 			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
-
 			if (!existsNegVal) {
 				alert("There is an invalid input")
 			} else {
 				return tempFrequencies
 			}
-
 		},
 		submitForm() {
 			this.submit(this.validateAll, this.showAlert)
@@ -548,33 +536,27 @@ export default {
 	width: 50%;
 	float: left;
 }
-
 .v-card {
 	width: -webkit-fill-available;
 	margin: 15pt;
 	padding: 5pt;
 	float: left;
 }
-
 p {
 	margin-inline: 10pt;
 }
-
 .row {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
 }
-
 .innerElement {
 	margin: 5pt;
 }
-
 .multiValueCard {
 	display: flex;
 	flex-direction: column;
 }
-
 .valueEntry {
 	display: flex;
 	flex-direction: row;
@@ -582,12 +564,10 @@ p {
 	margin: 5pt;
 	justify-content: space-between;
 }
-
 .image {
 	max-width: 300pt;
 	max-height: 300pt;
 }
-
 .bottomButtons {
 	width: 100%;
 	float: left;
@@ -595,18 +575,14 @@ p {
 	flex-direction: row;
 	justify-content: space-evenly;
 	margin-bottom: 10pt;
-
 }
-
 button {
 	background-color: #555 !important;
 	color: white !important;
 }
-
 v-input {
 	width: inherit !important;
 }
-
 .alert {
 	position: fixed;
 	top: 90%;
@@ -615,4 +591,3 @@ v-input {
 	left: 20%;
 }
 </style>
-

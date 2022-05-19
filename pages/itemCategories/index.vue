@@ -19,12 +19,14 @@
 <script>
 import CustomTable from "../../components/CustomTable";
 import Translate from "../../components/Translate";
+import {authorizeUser} from "../../mixins/authorizeUser.js"
 
 export default {
 	data:()=>({
 		allowedHeaders: ["Code"],
 		headers: [{ name: "Item Codes", id: 0 }]
 	}),
+    mixins: [authorizeUser],
 	components: {Translate, CustomTable},
 	computed:{
 		codeList(){

@@ -13,13 +13,15 @@ const service = require("../services/orders")
  *
  * @example - GET {BaseURL}/api/orders/releasedList/minimal/worker/denmark
  */
-router.get("/releasedList/minimal/:username/:location",
+router.get("/releasedList/minimal/:username/:location/:offset/:limit",
     param("username").isLength({ min: 4, max: 50 }),
-    param("location").isLength({ min: 1, max: 50 }),
+    param("location").isLength({ min: 2, max: 50 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.releasedOrders(req.params.location)
+        const data = await service.releasedOrders(req.params.location, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )
@@ -31,13 +33,15 @@ router.get("/releasedList/minimal/:username/:location",
  *
  * @example - GET {BaseURL}/api/orders/completedList/minimal/worker/denmark
  */
-router.get("/completedList/minimal/:username/:location",
+router.get("/completedList/minimal/:username/:location/:offset/:limit",
     param("username").isLength({ min: 4, max: 50 }),
-    param("location").isLength({ min: 1, max: 50 }),
+    param("location").isLength({ min: 2, max: 50 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await service.completedOrders(req.params.location)
+        const data = await service.completedOrders(req.params.location, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )
@@ -52,15 +56,33 @@ router.get("/completedList/minimal/:username/:location",
 router.get("/released/full/:username/:id/:language",
     param("username").isLength({ min: 4, max: 50 }),
     param("id").isInt().isLength({ min: 1, max: 35 }),
-    param("language").isLength({ min: 2, max: 2 }),
+    param("language").isLength({ min: 2, max: 20 }),
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.releasedOrderFull(req.params.id, req.params.language, false)
+        const data = await service.getQAReport(req.params.id, req.params.language, false, false)
         res.send(data)
     }
 )
 
+/**
+ * @description - Get the released order by id
+ * @param username - name of the user for validation
+ * @param id - id of the selected order
+ *
+ * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
+ */
+router.get("/completed/full/:username/:id/:language",
+    param("username").isLength({ min: 4, max: 50 }),
+    param("id").isInt().isLength({ min: 1, max: 35 }),
+    param("language").isLength({ min: 2, max: 20 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const data = await service.getQAReport(req.params.id, req.params.language, true, true)
+        res.send(data)
+    }
+)
 /**
  * @description - Save changes to the qa report
  * @param username - name of the user for validation

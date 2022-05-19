@@ -267,21 +267,27 @@ module.exports.insertControlPoint = async (sqlString, con) => {
 		.catch(err => (console.error(err)))
 }
 
-module.exports.getControlPointsMinimal = async () => {
+module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 	const result = await localDB()
 		.request()
-		.query(`SELECT id
-				FROM ControlPoint`)
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
+        .input("language", mssql.NVarChar(40), language)
+		.query(`
+            SELECT controlPointId as id, description
+            FROM Description
+            WHERE Description.language = @language
+            Order By controlPointId DESC
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+        `)
 	return result.recordset
 }
 
 module.exports.getDescriptionsByControlPointId = async (id) => {
-	const result = await localDB()
-		.request()
-		.input("id", mssql.Int, id)
-		.query(`SELECT id, language, description
-				FROM Description
-				WHERE Description.controlPointId=id`)
-	return result.recordset
+    const result = await localDB()
+        .request()
+        .input("id", mssql.Int, id)
+        .query(`SELECT id, language, description FROM Description WHERE Description.controlPointId=@id`)
+    return result.recordset
 }
 
