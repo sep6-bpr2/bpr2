@@ -1,14 +1,18 @@
 const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 
-module.exports.getReleasedOrders = async (location) => {
+module.exports.getReleasedOrders = async (location, offset, limit) => {
     const result = await konfairDB()
         .request()
         .input("location", mssql.NVarChar(40), location)
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
         .query(`
             SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE pOrder.[Location Code] = @location AND pOrder.status = 3
+            WHERE pOrder.[Location Code] = @location AND pOrder.status = 3  
+            ORDER BY item.[No_] ASC 
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset
 }
@@ -364,28 +368,36 @@ module.exports.getMultipleQAReports = async (stringList) => {
     return result.recordset
 }
 
-module.exports.getOrdersByIdList = async (location, stringList) => {
+module.exports.getOrdersByIdList = async (location, stringList, offset, limit) => {
 
     const result = await konfairDB()
         .request()
         .input("location", mssql.NVarChar(40), location)
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
         .query(`
             SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringList})
+            ORDER BY item.[No_] ASC 
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset
 }
 
-module.exports.getOrdersByIdListAllLocations = async (stringList) => {
+module.exports.getOrdersByIdListAllLocations = async (stringList, offset, limit) => {
 
     const result = await konfairDB()
         .request()
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
         .query(`
             SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE item.[No_] in (${stringList})
+            ORDER BY item.[No_] ASC 
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset

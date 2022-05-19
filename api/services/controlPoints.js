@@ -25,10 +25,11 @@ const typeSwitchToNumber = (value) => {
 
 
 module.exports.getTypes = async () => {
-	const allTypes = await controlPointModel.getAllTypes()
+    const allTypes = await controlPointModel.getAllTypes()
 	return allTypes.map(obj => {
-		return typeSwitchToText(obj.type)
+		return obj.type
 	})
+
 }
 
 module.exports.getAttributes = async () => {
@@ -38,7 +39,6 @@ module.exports.getAttributes = async () => {
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
 	mainInformation = mainInformation[0]
-	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
 	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
 	const attributes = await controlPointModel.getControlPointAttributes(cpId)
@@ -108,9 +108,9 @@ module.exports.submitControlPoint = async (cp) => {
     	DECLARE @CpID int;
     	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
-    	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
-    	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
-    	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
+    	INSERT INTO Description VALUES (@CpID,'gb', @engDescription)
+    	INSERT INTO Description VALUES (@CpID,'dk', @dkDescription)
+    	INSERT INTO Description VALUES (@CpID,'lt', @ltDescription) `
 
 	cp.frequencies.forEach((entry, index) => {
 		con.input(`val${index}`, mssql.mssql.Int, entry.value)
@@ -185,8 +185,8 @@ function saveImage(baseImage) {
 	return filename
 }
 
-module.exports.controlPointsMinimal = async (language) => {
-	let controlPoints = await controlPointModel.getControlPointsMinimal()
+module.exports.controlPointsMinimal = async (language, offset, limit) => {
+	let controlPoints = await controlPointModel.getControlPointsMinimal(offset, limit)
 
 	for (let i = 0; i < controlPoints.length; i++) {
 		const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
@@ -207,5 +207,7 @@ module.exports.controlPointsMinimal = async (language) => {
 			controlPoints[i].description = descriptions[englishIndex].description
 		}
 	}
+
+
 	return controlPoints
 }

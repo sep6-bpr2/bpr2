@@ -1,5 +1,3 @@
-import moment from "moment";
-
 export const state = () => ({
     tableHeaders: [
         { name: "Item Number", id: 0 },
@@ -12,24 +10,29 @@ export const state = () => ({
 })
 
 export const mutations = {
+    appendReleasedOrders(state, releasedOrders) {
+        for (let i = 0; i < releasedOrders.length; i ++){
+            state.orders.push(releasedOrders[i])
+        }
+    },
     setReleasedOrders(state, releasedOrders) {
         state.orders = releasedOrders
     },
 }
 
 export const actions = {
-    loadReleasedOrders({ commit, rootState }, { }) {
+    loadReleasedOrders({ commit, rootState }, options) {
         const user = rootState.login.user;
         const location = rootState.login.chosenLocation;
         if (user && user.role == "qa employee") {
-            fetch(`api/orders/releasedList/minimal/${user.username}/${location}`).then(res => res.json()).then(result => {
-                for (let i = 0; i < result.length; i++) {
-                    const date = new Date(result[i].deadline);
-                    result[i].deadline = moment(date).format('YYYY-MM-DD');
+            fetch(`api/orders/releasedList/minimal/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+                if(options.offset == 0){
+                    commit('setReleasedOrders', result)
+                }else{
+                    commit('appendReleasedOrders', result)
                 }
-
-                commit('setReleasedOrders', result)
             })
         }
     },
+
 }

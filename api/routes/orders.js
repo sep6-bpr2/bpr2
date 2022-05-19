@@ -13,13 +13,15 @@ const service = require("../services/orders")
  *
  * @example - GET {BaseURL}/api/orders/releasedList/minimal/worker/denmark
  */
-router.get("/releasedList/minimal/:username/:location",
+router.get("/releasedList/minimal/:username/:location/:offset/:limit",
     param("username").isLength({ min: 4, max: 50 }),
     param("location").isLength({ min: 2, max: 50 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.releasedOrders(req.params.location)
+        const data = await service.releasedOrders(req.params.location, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )
@@ -31,13 +33,15 @@ router.get("/releasedList/minimal/:username/:location",
  *
  * @example - GET {BaseURL}/api/orders/completedList/minimal/worker/denmark
  */
-router.get("/completedList/minimal/:username/:location",
+router.get("/completedList/minimal/:username/:location/:offset/:limit",
     param("username").isLength({ min: 4, max: 50 }),
     param("location").isLength({ min: 2, max: 50 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await service.completedOrders(req.params.location)
+        const data = await service.completedOrders(req.params.location, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )

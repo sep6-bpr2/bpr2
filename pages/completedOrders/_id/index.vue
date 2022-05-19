@@ -165,9 +165,8 @@ export default {
                 console.log(result)
                 if(result && result.response != null){
                     this.modalAlertShowError = true;
-                }else{
-				    this.currentOrder = result;
                 }
+				this.currentOrder = result;
 			});
 	},
 	watch: {

@@ -12,9 +12,9 @@ const inputValidation =  require("../../shared/validateInput")
  *      deadline: string(date)
  * }]
  */
-module.exports.releasedOrders = async (location) => {
+module.exports.releasedOrders = async (location, offset, limit) => {
     // Get released orders from konfair
-    let orders = await model.getReleasedOrders(location)
+    let orders = await model.getReleasedOrders(location, offset, limit)
 
     // No released orders in the konfair database
     if (orders.length == 0) {
@@ -59,8 +59,9 @@ module.exports.releasedOrders = async (location) => {
  *      deadline: string(date)
  * }]
  */
-module.exports.completedOrders = async (location) => {
+module.exports.completedOrders = async (location, offset, limit) => {
     let qaReports = await model.getCompletedQAReports()
+    // THIS NEEDS TO BE FIXED
 
     if (qaReports.length == 0) {
         return []
@@ -69,9 +70,9 @@ module.exports.completedOrders = async (location) => {
     let orders = []
     
     if(location.toLocaleLowerCase() == "all"){
-        orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'))
+        orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'), offset, limit)
     }else{
-        orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'))
+        orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'), offset, limit)
     }
 
     for (let i = 0; i < qaReports.length; i++) {

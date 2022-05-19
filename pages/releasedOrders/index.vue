@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="
+		v-show="
 			this.$store.state.login.user &&
 			this.$store.state.login.user.role == 'qa employee'
 		"
@@ -28,8 +28,28 @@ export default {
 		Translate,
 	},
 	mixins: [authorizeUser],
+    data() {
+		return {
+			offset: 0,
+            limit: 25
+		};
+	},
 	created() {
-		this.$store.dispatch("releasedOrders/loadReleasedOrders", {});
+		this.$store.dispatch("releasedOrders/loadReleasedOrders", {
+			offset: this.offset, limit: this.limit
+		});
+	},
+	mounted() {
+		window.onscroll = () => {
+			if (
+				window.innerHeight + window.scrollY >=
+				document.body.offsetHeight
+			) {
+                this.offset = this.offset + this.limit
+				this.loadMoreReleasedOrders();
+                console.log("Reached the end of the list")
+			}
+		};
 	},
 	computed: {
 		headers() {
@@ -45,6 +65,11 @@ export default {
 	methods: {
 		releasedOrderClickCallback(row) {
 			this.$router.push("/releasedOrders/" + row.id);
+		},
+		loadMoreReleasedOrders() {
+			this.$store.dispatch("releasedOrders/loadReleasedOrders", {
+				offset: this.offset, limit: this.limit
+			});
 		},
 	},
 };

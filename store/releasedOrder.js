@@ -1,3 +1,5 @@
+const inputValidation =  require("../shared/validateInput")
+
 export const state = () => ({
     oneTimeTableHeaders: [
         { name: "Description", id: 0 },
@@ -30,19 +32,26 @@ export const mutations = {
 }
 
 export const actions = {
-    loadReleasedOrderFull({ rootState }, itemId) {
+    loadReleasedOrderFull({ commit, rootState }, itemId) {
         const user = rootState.login.user
         if (user && user.role == "qa employee") {
             const language = rootState.login.chosenLanguage.flag
-            return new Promise((resolve, reject) => {
-                fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
-                    if (result) {
-                        resolve(result)
-                    } else {
-                        resolve(null)
-                    }
+            
+            if( inputValidation.validateNumber(itemId)){
+                return new Promise((resolve, reject) => {
+                    fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result && result.errors == null) {
+                            resolve(result)
+                        } else {
+                            resolve(null)
+                        }
+                    })
                 })
-            })
+            }else{
+                return { response: 0, message: "There are letters in the url" }
+            }
         }
     },
     saveContent({ commit, rootState }, changedOrder) {

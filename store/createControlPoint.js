@@ -12,7 +12,7 @@ const getDefaultState = () => ({
 			name: "to4000",
 			value: 65
 		}, {name: "to5000", value: 70}],
-		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
+		descriptions: [{lang: "gb", value: ""}, {lang: "dk", value: ""}, {lang: "lt", value: ""}],
 		measurementType: null,
 		type: null,
 		upperTolerance: null,
@@ -57,12 +57,12 @@ export const mutations = {
 
 
 	setAllDescriptions(state, obj) {
-		let eng = obj.find(o => o.language.toLowerCase() === "english")
+		let eng = obj.find(o => o.language.toLowerCase() == "gb")
 		state.descriptions[0].value = eng.description
-		let dk = obj.find(o => o.language.toLowerCase() === "danish")
-		state.descriptions[1].value = dk.description
-		let lt = obj.find(o => o.language.toLowerCase() === "lithuanian")
-		state.descriptions[2].value = lt.description
+		// let dk = obj.find(o => o.language.toLowerCase() == "dk")
+		// state.descriptions[1].value = dk.description
+		// let lt = obj.find(o => o.language.toLowerCase() == "lt")
+		// state.descriptions[2].value = lt.description
 	},
 
 	setType(state, type) {
@@ -165,14 +165,15 @@ export const actions = {
 
 					// main info
 					let mainInfo = res.mainInformation
-					commit('setMeasurementType', mainInfo.measurementtype)
+					commit('setMeasurementType', mainInfo.measurementType)
 					if(mainInfo.image!=null){
 						commit('setImagePreview', {image: mainInfo.image, username: user.username})
 					}
 
+                    console.log(mainInfo.inputType)
 					//type and values based on options
-					commit('setType', mainInfo.inputtype)
-					if (mainInfo.inputtype === "options") {
+					commit('setType', mainInfo.inputType)
+					if (mainInfo.inputType === 0) {
 						// do options stuff
 						commit('removeOptionValue', 0)
 						commit('removeOptionValue', 0)
@@ -181,10 +182,10 @@ export const actions = {
 							commit('addOptionValue')
 							commit('setOptionValues', {index: i, value: res.optionValues[i].value })
 						}
-					} else if (mainInfo.inputtype === "number") {
+					} else if (mainInfo.inputType === 3) {
 
-						commit('setUpperTolerance', mainInfo.uppertolerance)
-						commit('setLowerTolerance', mainInfo.lowertolerance)
+						commit('setUpperTolerance', mainInfo.upperTolerance)
+						commit('setLowerTolerance', mainInfo.lowerTolerance)
 					}
 
 					//attributes

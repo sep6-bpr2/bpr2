@@ -1,12 +1,12 @@
 <template>
-	<div 
-        :v-if="
-            this.$store.state.login.user &&
-			this.$store.state.login.user == 'admin' && 
-            controlPoints
-        " 
-        class="controlPoints"
-    >
+	<div
+		:v-if="
+			this.$store.state.login.user &&
+			this.$store.state.login.user == 'admin' &&
+			controlPoints
+		"
+		class="controlPoints"
+	>
 		<h1><Translate :text="'Control point management'" /></h1>
 
 		<p>
@@ -17,7 +17,7 @@
 			<Translate :text="'Create control point'" />
 		</button>
 		<CustomTable
-            id="controlPointList"
+			id="controlPointList"
 			:allowedHeaders="allowedHeaders"
 			:rows="controlPoints"
 			:tableHeaders="headers"
@@ -29,16 +29,37 @@
 <script>
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
-import {authorizeUser} from "../../mixins/authorizeUser.js"
+import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
-    mixins: [authorizeUser],
+	mixins: [authorizeUser],
+	data() {
+		return {
+			offset: 0,
+			limit: 25,
+		};
+	},
 	created() {
-		this.$store.dispatch("controlPoints/loadControlPoints", {});
+		this.$store.dispatch("controlPoints/loadControlPoints", {
+			offset: this.offset,
+			limit: this.limit,
+		});
+	},
+	mounted() {
+		window.onscroll = () => {
+			if (
+				window.innerHeight + window.scrollY >=
+				document.body.offsetHeight
+			) {
+				this.offset = this.offset + this.limit;
+				this.loadMoreControlPoints();
+				console.log("Reached the end of the list");
+			}
+		};
 	},
 	computed: {
 		headers() {
@@ -57,6 +78,12 @@ export default {
 		},
 		handleCreate() {
 			this.$router.push("/controlPoints/createControlPoint");
+		},
+		loadMoreControlPoints() {
+			this.$store.dispatch("controlPoints/loadControlPoints", {
+				offset: this.offset,
+				limit: this.limit,
+			});
 		},
 	},
 };

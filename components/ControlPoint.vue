@@ -468,10 +468,10 @@ export default {
 			if(this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
 
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
-			if (this.type === 'options') {
+			if (this.type == 0) {
 				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
-			} else if (this.type === 'number') {
+			} else if (this.type == 3) {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
