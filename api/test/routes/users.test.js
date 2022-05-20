@@ -9,6 +9,7 @@ const sinon = require('sinon')
 
 //Imports in file being tested
 const usersService = require('../../services/users')
+const userModel = require("../../models/users");
 
 describe("Users api testing", () => {
 
@@ -21,11 +22,21 @@ describe("Users api testing", () => {
         it("get user OK", async () => {
             sinon.stub(usersService, "login").returns("Test worked")
 
-            const response = await request.get("/users/rokas")
-
+			const response = await request.get("/users/getUser/rokas")
             assertEquals(response.text, "Test worked")
         })
     })
+
+	describe('delete user',()=>{
+		it('deletes user OK', async() =>{
+			sinon.stub(usersService, "removeUser").returns("Test worked")
+			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+
+
+			const response = await request.delete("/users/deleteUser/rokas").send({username: "Orochimaru", role: "admin"})
+			assertEquals(response.text, "Test worked")
+		})
+	})
 })
 
 function assertEquals(value1, value2) {

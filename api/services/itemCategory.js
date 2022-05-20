@@ -19,7 +19,7 @@ const defaultFrequencyValue = [{
 
 module.exports.getItemCatCodes = async (location) => {
 	if (location !== 'All') {
-		return model.getItemCatCodesWhenLocationNotAll()
+		return model.getItemCatCodesWhenLocationNotAll(location)
 	}
 	return model.getItemCatCodesWhenLocationAll()
 }

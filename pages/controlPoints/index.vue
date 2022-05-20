@@ -73,6 +73,9 @@ export default {
 		},
 	},
 	methods: {
+		deleteRowCallback(row){
+			confirm("Are you sure you want to delete user with username: " + row.username  )
+		},
 		controlPointClickCallback(row) {
 			this.$router.push("/controlPoints/" + row.id);
 		},

@@ -1,19 +1,28 @@
 <template>
  <div class="users">
+	 <AlertModal
+		 class="alert"
+		 v-if="notification"
+		 :id="1"
+		 :message="notification.message"
+		 :show="modalAlertShowSubmit"
+		 :status="notificationStatus"
+		 :closeCallback="closeAlertModal"
+	 />
 	 <h1 ><Translate :text="'User management'" /></h1>
+		 <button id="createUser" v-on:click="handleCreateUser">
+			 <Translate :text="'Create User'" />
+		 </button>
 
-	 <button id="createUser" v-on:click="handleCreateUser">
-		 <Translate :text="'Create User'" />
-	 </button>
-
-	 <div style="display: flex;">
+	 <div style="display: flex; align-items:flex-start">
 		 <CustomTable
 			 :allowedHeaders="allowedHeaders"
 			 :rows="userList"
 			 :tableHeaders="headers"
+			 :deleteRowCallback="deleteRowCallback"
 		 />
-		 <Transition>
-			 <div v-if="shouldCreateUser" class="create_User_form ml-5">
+		 <Transition >
+			 <div style="min-height: 248px; display: table" v-if="shouldCreateUser" class="create_User_form ml-5">
 				 <v-form ref="form">
 
 					 <h4>New User</h4>
@@ -37,17 +46,26 @@
 					 </v-select>
 
 					 <v-btn
+						 v-if="!shouldConfirm"
 						 color="#333"
 						 id="submitCreateUser"
-						 @click="submitCreateUser"
+						 @click="handleSubmitClick"
 					 >
 						 Submit
 					 </v-btn>
 
 					 <v-btn
+						 v-if="shouldConfirm"
+						 color="#b22222"
+						 @click="handleConfirmClick"
+					 >
+						 confirm
+					 </v-btn>
+
+					 <v-btn
 						 color="#333"
 						 id="cancelCreateUser"
-						 @click="cancelCreateUser"
+						 @click="handleCancelClick"
 					 >
 						 Cancel
 					 </v-btn>
@@ -64,13 +82,19 @@ import CustomTable from "../components/CustomTable";
 import colors from "../styles/colors";
 import login from "./login";
 import {authorizeUser} from "../mixins/authorizeUser.js"
+import {translate} from "../mixins/translate";
+import {alerts} from "../mixins/alerts";
 
 export default {
 	name: "users",
 	components: {CustomTable},
-    mixins: [authorizeUser],
 	data:()=>({
+		notification: null,
+		modalAlertShowSubmit: false,
+		modalAlertShowError: false,
 		cols:colors,
+		shouldConfirm: false,
+		isConfirmed: "",
 		users: [],
 		roleValue:"",
 		shouldCreateUser:false,
@@ -79,39 +103,102 @@ export default {
 			v => !!v || 'Name is required',
 		],
 	}),
+	mixins: [authorizeUser,translate, alerts],
 	methods:{
 		handleCreateUser(){
 			this.shouldCreateUser = true
 		},
-		submitCreateUser(){
-			if(this.$refs.form.validate()){
-				let text = "You are about to create a user!\npress OK to continue";
-				let user ={username: this.userName,role: this.roleValue}
+		handleSubmitClick(){
+			if(this.$refs.form.validate()) {
+				this.handleOperation("Are you sure you want to create a user?","create")
+			}
+		},
+		handleCancelClick(){
+			this.handleOperation("Are you sure you want to cancel?","cancel")
 
-				if (confirm(text) == true) {
+		},
+
+		handleOperation(text,value){
+			this.shouldConfirm = true
+			this.notification = { response: 2, message: text }
+			this.modalAlertShowSubmit = true;
+			this.isConfirmed = value
+		},
+
+		handleConfirmClick(){
+			console.log(this.isConfirmed)
+			if(this.isConfirmed === "create"){
+				this.submitCreateUser()
+			}
+			else this.cancelCreateUser()
+		},
+		submitCreateUser(){
+				let user ={username: this.userName,role: this.roleValue}
 					if(!this.userList.some(userListVal => userListVal.username === user.username))
 					{
 						this.$store
 							.dispatch("users/createUser", user)
-						alert("You have created a user!")
+						this.notification = { response: 1, message: "User has been created" }
+						this.modalAlertShowSubmit = true;
 						this.shouldCreateUser = false
 						this.$refs.form.reset()
 					}
 					else {
-						alert('User already exists!')
+						this.notification = { response: 0, message: "User already exists in System!" }
+						this.modalAlertShowSubmit = true;
+					}
+					this.shouldConfirm = false
+		},
+		deleteRowCallback(row){
+			let user ={username: row.username,role: row.role}
+			let currentUser = this.$store.state.login.user
+			let workingUsers = this.$store.state.users.QAUsers
+			if(user.username === currentUser.username){
+				this.notification = { response: 0, message: "You cannot delete user with username: " + user.username }
+				this.modalAlertShowSubmit = true;
+			}
+			else{
+				if (workingUsers.some(e => e.author === user.username)) {
+					this.notification = { response: 0, message: "You cannot delete user with username: " + user.username }
+					this.modalAlertShowSubmit = true;
+
+				}
+				else {
+					if(confirm("Are you sure you want to delete user with username: " + row.username )==true){
+						this.$store.dispatch("users/deleteUser",user)
+						this.notification = { response: 1, message: "You have successfully deleted user: " + user.username }
+						this.modalAlertShowSubmit = true;
+
 					}
 				}
 			}
 		},
 		cancelCreateUser(){
-			let text = "Are you sure you want to cancel?\npress OK to continue";
-			if (confirm(text) == true) {
 				this.shouldCreateUser = false
 				this.$refs.form.reset()
-			}
+				this.shouldConfirm=false
+		},
+		closeAlertModal(id) {
+			if (id == 1) this.modalAlertShowSubmit = false;
 		},
 	},
 	computed:{
+		notificationStatus() {
+			if (this.notification) {
+				if (this.notification.response == 0) {
+					return "danger";
+				} else if (this.notification.response == 1) {
+					return "success";
+				} else if (this.notification.response == 2) {
+					return "warning";
+				} else {
+					return "other";
+				}
+			}
+		},
+		workinguser(){
+		 return this.$store.state.users.QAUsers
+		},
 		userList(){
 			return  this.$store.state.users.userList;
 		},
@@ -126,8 +213,10 @@ export default {
 		}
 	},
 	mounted() {
-		return this.$store
+		 this.$store
 			.dispatch("users/loadUsers", {username: this.username})
+
+		 this.$store.dispatch("users/getAllWorkingQAUsers")
 	}
 }
 </script>
@@ -165,6 +254,11 @@ export default {
 .v-leave-to {
 	opacity: 0;
 	transform: translate(0,-8%);
+}
+
+.alert{
+	padding: 10px;
+	width: 600px;
 }
 
 </style>

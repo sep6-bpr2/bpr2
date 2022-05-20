@@ -250,8 +250,8 @@
 					</h3>
 					<v-btn
 						id="addFreq"
-						v-if="!showFreq"
-						v-on:click="showFrequencies()"
+						v-if="!frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-pencil-plus-outline
@@ -261,15 +261,15 @@
 
 					<v-btn
 						id="deleteFreq"
-						v-if="showFreq"
-						v-on:click="showFreq=!showFreq"
+						v-if="frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-delete
 						</v-icon>
 						<Translate :text="'Delete Frequency'"/>
 					</v-btn>
-					<Frequency v-if="showFreq"
+					<Frequency v-if="frequencies"
 							   ref="frequencyChild"
 							   :frequencies="frequencies"
 					/>
@@ -317,7 +317,6 @@ export default {
 	data: () => ({
 		successAlert: {show: false, text: ''},
 		warningAlert: {show: false, text: ''},
-		showFreq: false,
 		id: 0
 	}),
 	created() {
@@ -390,7 +389,6 @@ export default {
 				return this.$store.state.createControlPoint.image
 			},
 			set(value) {
-				console.log("AAAAAAAAAAAAWWWWWW"+value)
 				this.$store.commit('createControlPoint/setImage', value)
 			}
 		},
@@ -403,6 +401,15 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
+		changeShow(){
+			if(this.frequencies){
+				this.$store.commit('createControlPoint/clearFrequency')
+			}
+			else {
+				this.$store.commit('createControlPoint/setDefaultFrequencies')
+			}
+		},
+
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
 		},
@@ -417,10 +424,6 @@ export default {
 		},
 		codeChange(code, index) {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
-		},
-		showFrequencies() {
-			this.showFreq = true
-			this.$store.dispatch('createControlPoint/getFrequencies', {controlPointId: this.id})
 		},
 		newValue(list) {
 			switch (list) {
@@ -474,7 +477,6 @@ export default {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
-			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},
@@ -517,15 +519,21 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
+
+			delete tempFrequencies.id;
+
+			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+
 			if (!existsNegVal) {
 				alert("There is an invalid input")
 			} else {
-				return tempFrequencies
+				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
 			}
 		},
 		submitForm() {
+			this.submitFrequencies()
 			this.submit(this.validateAll, this.showAlert)
+
 		},
 	}
 }
