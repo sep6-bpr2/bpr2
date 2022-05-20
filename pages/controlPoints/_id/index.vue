@@ -66,6 +66,9 @@ export default {
 		},
 		deleteControlPoint(){
 				this.$store.dispatch('createControlPoint/deleteControlPoint', this.$route.params.id)
+					.then( resolved => {
+						if(resolved){ this.$router.push('/controlPoints');}
+					})
 		}
 	}
 };

@@ -178,19 +178,24 @@ export const actions = {
 	deleteControlPoint({ commit, rootState }, cpId) {
 		const user = rootState.login.user;
 		if (user) {
-			fetch(`http://localhost:3000/api/controlPoints/delete/${user.username}/${cpId}`, {
-				method: 'DELETE',
-			})
-				.then(res => {
-					if (res.status >= 200 && res.status < 400) {
-						commit("setAlert", {show: false, message: "", status: ""})
-					} else if(res.status== 404) {
-						commit("setAlert", {show: true, message: "control point not found", status: "danger"})
-					}else {
-						commit("setAlert", {show: true, message: "Oops something went wrong", status: "danger"})
-					}
-					return res
+			return new Promise((resolve, reject) => {
+				fetch(`http://localhost:3000/api/controlPoints/delete/${user.username}/${cpId}`, {
+					method: 'DELETE',
 				})
+					.then(res => {
+						if (res.status >= 200 && res.status < 400) {
+							commit("setAlert", {show: false, message: "", status: ""})
+							resolve(true)
+						} else if (res.status == 404) {
+							commit("setAlert", {show: true, message: "control point not found", status: "danger"})
+							resolve(false)
+						} else {
+							commit("setAlert", {show: true, message: "Oops something went wrong", status: "danger"})
+							resolve(false)
+						}
+						return res
+					})
+			})
 		}
 	},
 	async getControlPointData({commit, rootState}, cpId) {
@@ -244,10 +249,10 @@ export const actions = {
 							commit('setAttributeMaxValue', {index: i, maxVal: att[i].maxValue})
 						}
 					}
-
+					console.log("QQQQQQQQQQS"+JSON.stringify(res))
 					//codes
 					commit('removeCode', 0)
-					res.categoryCodes.forEach(o => commit("addCodeSpecific", o.itemCategoryCode))
+					res.categoryCodes.forEach(o => commit("addCodeSpecific", JSON.stringify(o.itemCategoryCode)))
 
 				})
 		}

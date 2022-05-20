@@ -97,7 +97,7 @@ module.exports.getControlPointData = async (cpId) => {
 module.exports.updateControlPoint = async (data) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
 	if(mainInformation.length === 0){
-		return {message: `control point with id: ${cpId} does not exist in database`}
+		return {message: `control point with id: ${data.controlPointId} does not exist in database`}
 	}
 
 	data.type = typeSwitchToNumber(data.type)

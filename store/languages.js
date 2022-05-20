@@ -130,7 +130,22 @@ const translations = {
 
 
 
-	"Delete Control Point":{
+	"Are you sure?":{
+		"gb": "Are you sure?",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Confirm":{
+		"gb": "Confirm",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	},
+	"Cancel":{
+		"gb": "Cancel",
+		"lt": "bla bla",
+		"dk": "bla bla"
+	}
+	,"Delete Control Point":{
 		"gb": "Delete Control Point",
 		"lt": "bla bla",
 		"dk": "bla bla"
