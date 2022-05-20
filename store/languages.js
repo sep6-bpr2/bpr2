@@ -146,12 +146,7 @@ const translations = {
 		"english": "Delete Control Point",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
-  },
-	"Delete Control Point":{
-		"english": "Delete Control Point",
-		"lithuanian": "bla bla",
-		"danish": "bla bla"
-	},
+    },
 	"Submit":{
 		"english": "Submit",
 		"lithuanian": "bla bla",
