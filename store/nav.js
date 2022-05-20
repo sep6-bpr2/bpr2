@@ -47,7 +47,6 @@ export const actions = {
         commit('resetLinks')
     },
     resetLinks({commit}){
-        console.log("RESETING THE LINKS PLEAS HELP ME")
         commit('resetLinks')
     }
 }

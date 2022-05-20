@@ -13,7 +13,6 @@ module.exports.validateInput = (value, inputType, options, lowerTolerance, upper
         inputValidated = 1
     }
 
-    console.log("Validating inside")
     if (
         inputValidated == 1 &&
         inputType == 3 &&

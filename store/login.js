@@ -44,10 +44,8 @@ export const actions = {
 	},
 	getLocations({commit}) {
 		fetch(`api/location/getLocations`).then(res => res.json()).then(result => {
-			console.log(JSON.stringify(result))
 				let resultLocation = []
 				result.forEach(element => resultLocation.push(element['Location Code']))
-				console.log(resultLocation)
 				commit('addToLocations', resultLocation)
 		})
 	}
