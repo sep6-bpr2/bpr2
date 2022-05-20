@@ -14,11 +14,12 @@
 import {translate} from "../../../mixins/translate.js"
 import ControlPoint from "../../../components/ControlPoint";
 import Translate from "../../../components/Translate";
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {
 	name: "index",
 	components: {Translate, ControlPoint},
-	mixins: [translate],
+	mixins: [translate, authorizeUser],
 	data: () => ({
 	}),
 	created() {

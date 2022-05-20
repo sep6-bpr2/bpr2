@@ -1,6 +1,6 @@
-const languages = [{name: "English", flag: "gb"}, {name: "Dansk", flag: "dk"}, {name: "Lietuviu", flag: "lt"}]
+const languages = [{name: "English", flag: "english"}, {name: "Dansk", flag: "danish"}, {name: "Lietuviu", flag: "lithuanian"}]
 const locations = ["All"]
-const defaultLanguage = {name: "English", flag: "gb"}
+const defaultLanguage = {name: "English", flag: "english"}
 
 export const state = () => ({
 	allLanguages: languages,
@@ -29,13 +29,18 @@ export const mutations = {
 }
 
 export const actions = {
-	loginUser({commit, dispatch}, {username}) {
+	loginUser({commit, dispatch, rootState}, {username}) {
 		return new Promise((resolve, reject) => {
 			fetch(`api/users/getUser/${username}`).then(res => res.json()).then(result => {
 				if (result != null && result.length != 0) {
-					commit('setUser', result)
-					dispatch('nav/loadLinks', {}, {root: true})
-					resolve(true)
+					if(rootState.login.chosenLocation === "All" && result[0].role === "qa employee"){
+						resolve("This user is not allowed to login with specified department!")
+					}
+					else{
+						commit('setUser', result)
+						dispatch('nav/loadLinks', {}, {root: true})
+						resolve(true)
+					}
 				} else {
 					resolve(false)
 				}
@@ -47,7 +52,6 @@ export const actions = {
 			console.log(JSON.stringify(result))
 				let resultLocation = []
 				result.forEach(element => resultLocation.push(element['Location Code']))
-				console.log(resultLocation)
 				commit('addToLocations', resultLocation)
 		})
 	}

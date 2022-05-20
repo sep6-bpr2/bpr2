@@ -3,6 +3,7 @@
 
 describe('login', () => {
 	beforeEach(() => {
+        cy.clearLocalStorage()
 		cy.visit('http://localhost:3000/login')
         cy.clearLocalStorage()
 	})
@@ -55,31 +56,21 @@ describe('login', () => {
         cy.get('#nav0').click({force: true})
 	})
 
-    it('Check released order list with 0 items', () => {
-        // Go to page without logging in
+    it('ERROR user with wrong role', () => {
+        cy.get('#enterUsername').type('admin')
+		cy.get('#submitLogin').click()
+
 		cy.visit('http://localhost:3000/releasedOrders')
-        cy.clearLocalStorage()
 
-
-        // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 0); 
-
-        // Check header
-        cy.contains('Item Number').should('be.visible')
-        cy.contains('Item Category Code').should('be.visible')
-        cy.contains('Quantity').should('be.visible')
-        cy.contains('Deadline').should('be.visible')
-
-        // Check rows to contain predefined information
-        cy.contains('123456789').should('not.exist')
-        cy.contains('65487').should('not.exist')
-        cy.contains('240').should('not.exist')
-        cy.contains('2022-06-12').should('not.exist')
-
-        cy.contains('47827').should('not.exist')
-        cy.contains('32110').should('not.exist')
-
-        cy.contains('English').should('be.visible')
+        // Should see notification and failed
+        cy.contains('Failed').should('be.visible')
 	})
+
+    it('ERROR non authorized user', () => {
+		cy.visit('http://localhost:3000/releasedOrders')
+
+        // Should see login screen
+        cy.contains('English').should('be.visible')
+        cy.contains('All').should('be.visible')
+    })
 })

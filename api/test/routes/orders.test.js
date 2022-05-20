@@ -19,8 +19,8 @@ describe("Orders api testing", () => {
         process.env.environment = "testing"
     })
 
-    describe("released orders", () => {
-        it("released orders OK", async () => {
+    describe("Released orders", () => {
+        it("Released orders OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
             sinon.stub(ordersService, "releasedOrders").returns("Test worked")
@@ -31,8 +31,8 @@ describe("Orders api testing", () => {
         })
     })
 
-    describe("completed orders", () => {
-        it("released orders OK", async () => {
+    describe("Completed orders", () => {
+        it("Completed orders OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 
             sinon.stub(ordersService, "completedOrders").returns("Test worked")
@@ -43,11 +43,11 @@ describe("Orders api testing", () => {
         })
     })
 
-    describe("released order full", () => {
-        it("released order full OK", async () => {
+    describe("Released order full", () => {
+        it("Released order full OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
-            sinon.stub(ordersService, "releasedOrderFull").returns("Test worked")
+            sinon.stub(ordersService, "getQAReport").returns("Test worked")
 
             const response = await request.get("/orders/released/full/worker/47827/gb")
 
@@ -55,8 +55,20 @@ describe("Orders api testing", () => {
         })
     })
 
+    describe("Completed order full", () => {
+        it("Completed order full OK", async () => {
+            sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
+
+            sinon.stub(ordersService, "getQAReport").returns("Test worked")
+
+            const response = await request.get("/orders/completed/full/worker/47827/gb")
+
+            assertEquals(response.text, "Test worked")
+        })
+    })
+
     describe("Save order", () => {
-        it("released orders OK", async () => {
+        it("Save order OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
             sinon.stub(ordersService, "saveQAReport").returns("Test worked")
@@ -76,7 +88,7 @@ describe("Orders api testing", () => {
     })
 
     describe("Complete order", () => {
-        it("released orders OK", async () => {
+        it("Complete order OK", async () => {
             sinon.stub(userModel, "getUserByUsername").returns([{ "role": "qa employee" }])
 
             sinon.stub(ordersService, "completeQAReport").returns("Test worked")
