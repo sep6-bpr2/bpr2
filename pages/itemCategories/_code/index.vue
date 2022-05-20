@@ -108,19 +108,20 @@ export default {
 			}
 			tempFrequencies.Code = parseInt(this.$route.params.code)
 			let text = "Are you sure you want to update frequency for this item Category?"
+			let existsNegVal
+			 existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			 existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
-			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-
-			if(!existsNegVal){
-				this.notification = { response: 0, message: "There is an invalid input"}
+			let localNotification;
+			if(existsNegVal === false){
+				localNotification = { response: 0, message: "There is an invalid input"}
 			}
 			else{
 					this.$store.commit("itemCategory/updateStatus",{status: "success",value: this.$route.params.code})
 					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
 					this.$router.push("/itemCategories");
 			}
-
-			return this.notification
+			return localNotification
 		},
 		pushBack(){
 				this.$router.push("/itemCategories");

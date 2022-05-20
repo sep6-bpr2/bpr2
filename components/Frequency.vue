@@ -150,7 +150,7 @@ export default {
 		},
 		submitFrequencies() {
 			if (this.submitFrequenciesCallback){
-			 let value =this.submitFrequenciesCallback(this.frequencies, this.localFrequencies );
+				let value =this.submitFrequenciesCallback(this.frequencies, this.localFrequencies );
 			 if(value !== null){
 				 this.shouldConfirm = false
 				 this.notification = value
