@@ -1,6 +1,8 @@
 const controlPointModel = require("../models/controlPoints")
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
+const {updateControlPoint} = require("./controlPoints");
+const {updateControlPointFrequencyId} = require("../models/controlPoints");
 
 const typeSwitchToText = (value) => {
 	switch (value) {
@@ -87,10 +89,15 @@ module.exports.updateControlPoint = async (data) => {
 	}
 	await controlPointModel.updateControlMainInformation(data)
 
-	let frequencyId = await controlPointModel.getFrequencyId(data.controlPointId)
+	let frequencyResult = await controlPointModel.getFrequencyId(data.controlPointId)
+	let frequencyId = frequencyResult[0][""]
 
 	if(data.frequencies == null) await controlPointModel.updateControlPointFrequencyWhenDataNull(data.controlPointId)
-	else if(frequencyId == null) await controlPointModel.updateControlPointFrequencyWhenFreqIdNull(data.controlPointId, data.frequencies)
+	else if(frequencyId == null){
+		let freqResult = await controlPointModel.updateControlPointFrequencyWhenFreqIdNull(data.controlPointId, data.frequencies)
+		let freqId = freqResult[0][""]
+		await updateControlPointFrequencyId(data.controlPointId,freqId)
+	}
 	else await controlPointModel.updateControlPointFrequencyWhenFreqIdNotNull(data.controlPointId, data.frequencies)
 
 
@@ -122,24 +129,29 @@ module.exports.submitControlPoint = async (cp) => {
 	if (cp.image != null) {
 		cp.image = saveImage(cp.image)
 	}
+	let insertFrequencyString = ''
 	const nVarchar = mssql.mssql.NVarChar(1000)
 	const con = await mssql.localDB().request()
+	if(cp.frequencies !== null){
+		Object.entries(cp.frequencies).forEach((frequency,index) => {
+			let value = frequency[1]
+			con.input(`val${index}`, mssql.mssql.Int, value)
+		})
+
+		insertFrequencyString=`INSERT INTO [dbo].[Frequency] VALUES
+								(@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
+								SELECT @FreqID = scope_identity();`
+	}
 	let sqlString = `
 	BEGIN TRANSACTION
 		DECLARE @FreqID int;
-		INSERT INTO [dbo].[Frequency] VALUES (@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
-    	SELECT @FreqID = scope_identity();
+		${insertFrequencyString}
     	DECLARE @CpID int;
     	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
-
-	Object.entries(cp.frequencies).forEach((frequency,index) => {
-		let value = frequency[1]
-		con.input(`val${index}`, mssql.mssql.Int, value)
-	})
 
 	cp.type = typeSwitchToNumber(cp.type)
 	con.input('type', mssql.mssql.Int, cp.type)

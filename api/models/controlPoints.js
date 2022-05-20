@@ -111,9 +111,9 @@ module.exports.getFrequencyId = async (cpId) => {
 	const result = await localDB()
 		.request()
 		.input('cpId', mssql.Int, cpId)
-		.query(`select frequencyid from ControlPoint WHERE id = @cpId`)
+		.query(`select frequencyId from ControlPoint WHERE id = @cpId`)
 
-	return result.recordset[0][""]
+	return result.recordset
 }
 
 module.exports.updateControlPointFrequencyWhenFreqIdNotNull = async (cpId, data) => {
@@ -179,11 +179,15 @@ module.exports.updateControlPointFrequencyWhenFreqIdNull = async (cpId, data) =>
 				VALUES (@to25,@to50,@to100,@to200,@to300,@to500,@to700,@to1000,@to1500,@to2000,@to3000,@to4000,@to5000);
 				SELECT SCOPE_IDENTITY()
 				`)
-	const freqId = value.recordset[0][""]
 
+	return value.recordset
+}
+
+module.exports.updateControlPointFrequencyId = async (cpId,freqId) => {
 	const result = await localDB()
 		.request()
 		.input('cpId', mssql.Int, cpId)
+		.input('freqId', mssql.Int, freqId)
 		.query(`UPDATE ControlPoint SET frequencyid = ${freqId} WHERE id = @cpId`)
 
 	return result.recordset

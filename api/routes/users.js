@@ -53,7 +53,7 @@ router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 })
  *
  * @example - POST {BaseURL}/api/users/deleteUser/rokas
  */
-router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 35 }), async (req, res) => {
+router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
 	body("username").isString()
 	body("role").isString()
 	const result = await service.removeUser(req.body)
@@ -66,7 +66,7 @@ router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 
  *
  * @example - GET {BaseURL}/api/users/getQAUsers/simon
  */
-router.get("/getQAUsers/:username",param("username").isLength({ min: 1, max: 35 }), async (req, res) => {
+router.get("/getQAUsers/:username",param("username").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
 	const result = await service.getAllQAUsers()
 	res.send(result)
 })
