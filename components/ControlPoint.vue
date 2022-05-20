@@ -523,7 +523,9 @@ export default {
 			delete tempFrequencies.id;
 
 			let messageForNotification;
-			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			let existsNegVal
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
 			if (!existsNegVal) {
 				messageForNotification = { response: 2, message: "There is an invalid input" }
