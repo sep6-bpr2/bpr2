@@ -82,11 +82,12 @@ import CustomTable from "../components/CustomTable";
 import colors from "../styles/colors";
 import login from "./login";
 import {authorizeUser} from "../mixins/authorizeUser.js"
+import {translate} from "../mixins/translate";
+import {alerts} from "../mixins/alerts";
 
 export default {
 	name: "users",
 	components: {CustomTable},
-    mixins: [authorizeUser],
 	data:()=>({
 		notification: null,
 		modalAlertShowSubmit: false,
@@ -102,7 +103,7 @@ export default {
 			v => !!v || 'Name is required',
 		],
 	}),
-	mixins: [translate, alerts],
+	mixins: [authorizeUser,translate, alerts],
 	methods:{
 		handleCreateUser(){
 			this.shouldCreateUser = true
