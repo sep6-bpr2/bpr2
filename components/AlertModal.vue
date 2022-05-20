@@ -11,7 +11,8 @@
 			}"
 		>
 			<button
-                id="closeAlertButton"
+				v-if="closeCallback"
+				id="closeAlertButton"
 				style="
 					text-decoration: none;
 					float: right;
@@ -44,12 +45,32 @@ export default {
 	 * message - the message(string) you want to display in the modal
 	 * status - this can be "success", "danger", "warning". Indicates what color the modal is.
 	 * show - modal is show or not, control by passing bool values of "true" or "false"
-	 * timing - how long the modal should be shown. In seconds
+	 * timing - how long the modal should be shown. In milliseconds
 	 * closeCallback - callback to change the state of the modal showing in the parent
 	 */
-	props: ["id", "message", "status", "show", "closeCallback"],
+	props: ["id", "message", "status", "show", "closeCallback", "timing"],
 	components: {
 		Translate,
+	},
+    mounted(){
+        if (this.timing && this.show) {
+            console.log("      ")
+            setTimeout(() => this.closeModal(), this.timing);
+        }
+    },
+    watch: {
+		show: function () {
+            // THIS is needed because otherwise this is not called.
+            // I assume the compiler optimizes it out
+            // This is a bud in the code but it actually ads functionality
+            // This watch only works after the user closes the alert using the x button.
+            // This makes a lot of sense for a user. Who closes the Falert and does not
+            // want to look at them for long afterwards
+            if (this.timing && this.show) {
+                console.log("      ")
+                setTimeout(() => this.closeModal(), this.timing);
+            }
+		},
 	},
 	computed: {
 		getColor() {
