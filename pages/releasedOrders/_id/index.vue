@@ -78,7 +78,6 @@
 				:show="modalAlertShowSubmit"
 				:status="notificationStatus"
 				:closeCallback="closeAlertModal"
-                :timing="3000"
 			/>
 
 			<div>
