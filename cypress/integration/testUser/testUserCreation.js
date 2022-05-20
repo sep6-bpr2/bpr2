@@ -5,13 +5,14 @@ describe('testCreationOfUser', () => {
 
 	it('should login', () => {
 		cy.visit('http://localhost:3000/login');
-		cy.get('#username').click();
-		cy.get('#username').type('admin');
+		cy.get('#enterUsername').click();
+		cy.get('#enterUsername').type('admin');
 		cy.get('.v-btn__content > div').click();
 	})
 
 	it('should get user page',()=>{
-		cy.visit('http://localhost:3000/users')
+		cy.get('header > div > ul >li:nth-child(4) > a').click();
+		cy.get('header > div > ul >li:nth-child(4) > a').should('contain.text','Users');
 	})
 
 	it('should validate user that already exists',()=>{

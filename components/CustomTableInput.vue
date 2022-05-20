@@ -22,12 +22,16 @@
 						v-model="originalRows[index].answer"
                         v-on:input="updateParent(index)"
                         :style="{color: validated(index), 'border-color': validated(index)}"
+                        :disabled="inputsDisabled != null && inputsDisabled"
+                        :title="'Author: ' + originalRows[index].author"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].inputType == 0"
 						v-model="originalRows[index].answer"
                         v-on:change="updateParent(index)"
-                        :style="{color: validated(index)}"
+                        :style="{color: validated(index), cursor: (inputsDisabled != null && inputsDisabled ? 'default': 'pointer')}"
+                        :disabled="inputsDisabled != null && inputsDisabled"
+                        :title="'Author: ' + originalRows[index].author"
 					>
 						<option disabled selected value="">
 							-- select an option --
@@ -41,7 +45,7 @@
 						</option>
 					</select>
 					<button
-						v-else-if="value == 'image'"
+						v-else-if="value == 'image' && originalRows[index].image"
                         v-on:click="showImageCallback(originalRows[index].image)"
 					>
 						Show guide
@@ -67,7 +71,7 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback", "valueUpdateCallback"],
+	props: ["allowedHeaders", "rows", "tableHeaders", "callback", "imageCallback", "valueUpdateCallback", "inputsDisabled"],
 	data() {
 		return {
 			originalRows: this.rows,
@@ -152,10 +156,6 @@ button {
     padding: 0.2rem;
     background: #333;
     color: #ffffff;
-}
-
-select {
-	cursor: pointer;
 }
 
 </style>

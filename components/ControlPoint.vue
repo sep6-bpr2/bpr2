@@ -257,8 +257,8 @@
 					<v-btn
 						:color="col.KonfairPrimary"
 						id="addFreq"
-						v-if="!showFreq"
-						v-on:click="showFrequencies()"
+						v-if="!frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-pencil-plus-outline
@@ -269,15 +269,15 @@
 					<v-btn
 						:color="col.KonfairPrimary"
 						id="deleteFreq"
-						v-if="showFreq"
-						v-on:click="showFreq=!showFreq"
+						v-if="frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-delete
 						</v-icon>
 						<Translate :text="'Delete Frequency'"/>
 					</v-btn>
-					<Frequency v-if="showFreq"
+					<Frequency v-if="frequencies"
 							   ref="frequencyChild"
 							   :frequencies="frequencies"
 					/>
@@ -327,7 +327,6 @@
 </template>
 
 <script>
-
 import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
@@ -429,6 +428,14 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
+		changeShow(){
+			if(this.frequencies){
+				this.$store.commit('createControlPoint/clearFrequency')
+			}
+			else {
+				this.$store.commit('createControlPoint/setDefaultFrequencies')
+			}
+		},
 
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
@@ -444,10 +451,6 @@ export default {
 		},
 		codeChange(code, index) {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
-		},
-		showFrequencies() {
-			this.showFreq = true
-			this.$store.dispatch('createControlPoint/getFrequencies', {controlPointId: this.id})
 		},
 		newValue(list) {
 			switch (list) {
@@ -465,7 +468,6 @@ export default {
 		removeOptionValue(index) {
 			if (this.optionValues.length === 2) {
 				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
-
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)
 			}
@@ -476,7 +478,6 @@ export default {
 			} else {
 				this.$store.commit('createControlPoint/removeCode', index)
 			}
-
 		},
 		removeAttribute(index) {
 			this.$store.commit('createControlPoint/removeAttribute', index)
@@ -507,8 +508,6 @@ export default {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
-
-			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},
@@ -522,7 +521,6 @@ export default {
 			}
 			return true
 		},
-
 		submitFrequencies() {
 			if (typeof this.$refs.frequencyChild === 'undefined') {
 				return null
@@ -553,17 +551,20 @@ export default {
 				}
 			}
 
-			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			delete tempFrequencies.id;
+
+			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
 
 			if (!existsNegVal) {
 				alert("There is an invalid input")
 			} else {
-				return tempFrequencies
+				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
 			}
-
 		},
 		submitForm() {
+			this.submitFrequencies()
 			this.submit(this.validateAll, this.showAlert)
+
 		},
 	}
 }
@@ -574,33 +575,27 @@ export default {
 	width: 50%;
 	float: left;
 }
-
 .v-card {
 	width: -webkit-fill-available;
 	margin: 15pt;
 	padding: 5pt;
 	float: left;
 }
-
 p {
 	margin-inline: 10pt;
 }
-
 .row {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
 }
-
 .innerElement {
 	margin: 5pt;
 }
-
 .multiValueCard {
 	display: flex;
 	flex-direction: column;
 }
-
 .valueEntry {
 	display: flex;
 	flex-direction: row;
@@ -608,12 +603,10 @@ p {
 	margin: 5pt;
 	justify-content: space-between;
 }
-
 .image {
 	max-width: 300pt;
 	max-height: 300pt;
 }
-
 .bottomButtons {
 	width: 100%;
 	float: left;
@@ -621,17 +614,13 @@ p {
 	flex-direction: row;
 	justify-content: space-evenly;
 	margin-bottom: 10pt;
-
 }
-
 button {
 	color: white !important;
 }
-
 v-input {
 	width: inherit !important;
 }
-
 .alert {
 	position: fixed;
 	top: 90%;
@@ -640,4 +629,3 @@ v-input {
 	left: 20%;
 }
 </style>
-

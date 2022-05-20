@@ -8,6 +8,7 @@
 				>
 					<Translate :text="header.name" />
 				</th>
+				<th v-if="deleteRowCallback"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -16,10 +17,13 @@
                 :id="'customTable'+index"
 				:key="Object.values(row)[0].toString() + index"
 				v-on:click="clickList(row)"
+				@mouseover="activeOver(index)"
+				@mouseleave="removeOver(index)"
 			>
 				<td v-for="value in allowedHeaders" :key="value + index">
 					{{ rows[index][value] }}
 				</td>
+				<td v-if="deleteRowCallback" @click="deleteRow(row)"  class="trashCan"><v-icon color="red" v-if="showId === index">{{ svgPath }}</v-icon></td>
 			</tr>
 		</tbody>
 	</table>
@@ -27,11 +31,16 @@
 
 <script>
 import Translate from "./Translate.vue";
+import { mdiDeleteEmpty } from '@mdi/js'
 
 export default {
 	components: {
 		Translate,
 	},
+	data:()=> ({
+		svgPath: mdiDeleteEmpty,
+		showId: null
+	}),
 	/**
 	 * Needs:
 	 *  Rows - that it is going to display (Just the raw objects)
@@ -39,10 +48,24 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback"],
+	props: ["allowedHeaders", "rows", "tableHeaders", "callback","deleteRowCallback"],
 	methods: {
 		clickList(row) {
-			if (this.callback) this.callback(row);
+			if (this.callback)this.callback(row)
+
+		},
+		deleteRow(row){
+			if(this.deleteRowCallback){
+				this.deleteRowCallback(row)
+				event.stopPropagation()
+			}
+		},
+		activeOver(key) {
+			this.showId = key
+			return this.showId
+		},
+		removeOver() {
+			this.showId = null;
 		},
 	},
 };
@@ -87,5 +110,10 @@ export default {
 .customTable tbody tr:hover {
 	background-color: #ccc;
 	cursor: pointer;
+}
+
+.trashCan{
+	width: 80px;
+	height: 50px;
 }
 </style>

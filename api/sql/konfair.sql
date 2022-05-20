@@ -111,7 +111,7 @@ INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Cod
 
 -- Completed oneac
 INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '1111', 'DK', '2022-06-12 17:00:00', 240, 3);
-INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '65656', 'LT', '2022-06-12 17:00:00', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '65656', 'LIT', '2022-06-12 17:00:00', 240, 3);
 INSERT INTO [KonfAir DRIFT$Item Category] (Code, [Parent Category], Description, Indentation, [Presentation Order], [Has Children], [Last Modified Date Time], Id) VALUES ('193345', null, null, null, null, null, null, null);
 INSERT INTO [KonfAir DRIFT$Item Category] (Code, [Parent Category], Description, Indentation, [Presentation Order], [Has Children], [Last Modified Date Time], Id) VALUES ('204567', null, null, null, null, null, null, null);
 

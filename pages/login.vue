@@ -21,6 +21,7 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
+						v-on:keyup.enter="hanldeLogin"
 						id="enterUsername"
 						:rules="usernameRules"
 						required
@@ -62,6 +63,7 @@ import FlagIcon from "vue-flag-icon";
 import Vue from "vue";
 import Translate from "../components/Translate.vue";
 import lanugages from "../store/languages";
+import {authorizeUser} from "../mixins/authorizeUser.js"
 
 Vue.use(FlagIcon);
 
@@ -69,6 +71,7 @@ export default {
 	components: {
 		Translate,
 	},
+    mixins: [authorizeUser],
 	name: "LogIn",
 	data: function () {
 		return {
@@ -115,7 +118,7 @@ export default {
 							username: this.username,
 						})
 						.then((result) => {
-							if (result) {
+							if (result === true) {
 								if (
 									this.$store.state.login.user.role == "admin"
 								) {
@@ -124,6 +127,9 @@ export default {
 									this.$router.push("/releasedOrders");
 								}
 							}
+							else if(result !== false){
+								alert(result)
+							}
 						});
 				}
 			}
@@ -131,11 +137,15 @@ export default {
 		translateText(text) {
 			return lanugages.translateFunction(
 				text,
-				this.$store.state.login.chosenLanguage.flag
+				this.$store.state.login.chosenLanguage.name
 			);
 		},
 	},
 };
 </script>
 
-<style scoped></style>
+<style>
+ .v-btn__content{
+	 color: white;
+ }
+</style>

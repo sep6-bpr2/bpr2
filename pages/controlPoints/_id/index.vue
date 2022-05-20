@@ -26,10 +26,11 @@
 import ControlPoint from "../../../components/ControlPoint";
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate";
+import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {
 	components: {Translate, ControlPoint},
-	mixins: [translate],
+	mixins: [translate, authorizeUser],
 	created() {
 		this.$store.commit('createControlPoint/resetState')
 		this.$store.dispatch("createControlPoint/getControlPointData", this.$route.params.id)

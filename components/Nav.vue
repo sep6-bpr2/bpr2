@@ -3,21 +3,26 @@
 		<h1 class="title">KONFAIR</h1>
 		<div>
 			<ul>
-				<li v-for="link in allLinks" :key="link.id">
+				<li v-for="link in links" :key="link.id">
 					<nuxt-link
-                        :id="'nav'+link.id"
+						:id="'nav' + link.id"
 						:to="{ path: link.link }"
 						v-bind:style="[
 							currentLinkName == link.link
 								? { 'background-color': cols.KonfairPrimary }
 								: {},
 						]"
-						><Translate :text="link.name"
-					/></nuxt-link>
+					>
+						<Translate :text="link.name" />
+					</nuxt-link>
 				</li>
 			</ul>
 		</div>
-		<button v-on:click="logout" style="margin-left: auto" :style="{ display: show }" >
+		<button
+			v-on:click="logout"
+			style="margin-left: auto"
+			:style="{ display: show }"
+		>
 			<Translate :text="'Logout'" />
 		</button>
 	</header>
@@ -36,7 +41,6 @@ export default {
 		return {
 			cols: colors,
 			links: [],
-            // showLogout: 'none'
 		};
 	},
 	created() {
@@ -48,6 +52,7 @@ export default {
 		},
 		logout() {
 			this.$store.dispatch("nav/logout");
+			localStorage.clear();
 			this.$router.push("/login");
 		},
 	},
@@ -57,16 +62,21 @@ export default {
 			return this.$store.state.nav.availableLinks;
 		},
 		show() {
-            if (this.$store.state.login.user){
-                return 'inline'
-            }else{
-                return 'none'
-            }
+			if (this.$store.state.login.user) {
+				return "inline";
+			} else {
+				return "none";
+			}
 		},
 		//For handling selected page
 		currentLinkName() {
 			const paths = this.$nuxt.$route.path.split("/");
 			return "/" + paths[1];
+		},
+	},
+	watch: {
+		"$store.state.nav.availableLinks": function () {
+			this.links = this.$store.state.nav.availableLinks;
 		},
 	},
 };

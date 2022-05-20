@@ -6,8 +6,11 @@ const links = [
     { name: "Released Orders", link: "/releasedOrders", roles: ["qa employee"] },
 ]
 
+// 'unauthenticated' is a role as well
+
 export const state = () => ({
     availableLinks: [],
+    allLinks: links
 })
 
 
@@ -15,7 +18,7 @@ export const mutations = {
     setLinks(state, links) {
         state.availableLinks = links
     },
-    resetLinks(state, links) {
+    resetLinks(state) {
         state.availableLinks = []
     }
 }
@@ -41,6 +44,10 @@ export const actions = {
     },
     logout({ commit }) {
         commit('login/logoutUser', null, { root: true })
-        commit('resetLinks', null)
+        commit('resetLinks')
+    },
+    resetLinks({commit}){
+        console.log("RESETING THE LINKS PLEAS HELP ME")
+        commit('resetLinks')
     }
 }

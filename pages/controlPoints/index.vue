@@ -1,5 +1,12 @@
 <template>
-	<div class="controlPoints">
+	<div
+		:v-if="
+			this.$store.state.login.user &&
+			this.$store.state.login.user == 'admin' &&
+			controlPoints
+		"
+		class="controlPoints"
+	>
 		<h1><Translate :text="'Control point management'" /></h1>
 
 		<p>
@@ -10,6 +17,7 @@
 			<Translate :text="'Create control point'" />
 		</button>
 		<CustomTable
+			id="controlPointList"
 			:allowedHeaders="allowedHeaders"
 			:rows="controlPoints"
 			:tableHeaders="headers"
@@ -21,18 +29,37 @@
 <script>
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
+import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
+	mixins: [authorizeUser],
+	data() {
+		return {
+			offset: 0,
+			limit: 25,
+		};
+	},
 	created() {
-        if (!this.$store.state || !this.$store.state.login.user) {
-			this.$router.push("/login");
-		}
-
-		this.$store.dispatch("controlPoints/loadControlPoints", {});
+		this.$store.dispatch("controlPoints/loadControlPoints", {
+			offset: this.offset,
+			limit: this.limit,
+		});
+	},
+	mounted() {
+		window.onscroll = () => {
+			if (
+				window.innerHeight + window.scrollY >=
+				document.body.offsetHeight
+			) {
+				this.offset = this.offset + this.limit;
+				this.loadMoreControlPoints();
+				console.log("Reached the end of the list");
+			}
+		};
 	},
 	computed: {
 		headers() {
@@ -46,11 +73,20 @@ export default {
 		},
 	},
 	methods: {
+		deleteRowCallback(row){
+			confirm("Are you sure you want to delete user with username: " + row.username  )
+		},
 		controlPointClickCallback(row) {
 			this.$router.push("/controlPoints/" + row.id);
 		},
 		handleCreate() {
 			this.$router.push("/controlPoints/createControlPoint");
+		},
+		loadMoreControlPoints() {
+			this.$store.dispatch("controlPoints/loadControlPoints", {
+				offset: this.offset,
+				limit: this.limit,
+			});
 		},
 	},
 };

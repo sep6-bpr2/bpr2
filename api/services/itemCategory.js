@@ -19,14 +19,13 @@ const defaultFrequencyValue = [{
 
 module.exports.getItemCatCodes = async (location) => {
 	if (location !== 'All') {
-		return model.getItemCatCodesWhenLocationNotAll()
+		return model.getItemCatCodesWhenLocationNotAll(location)
 	}
 	return model.getItemCatCodesWhenLocationAll()
 }
 
 module.exports.getFrequenciesOfItem = async (itemCode) => {
 	let value = await model.getFrequenciesOfItem(itemCode)
-	console.log(JSON.stringify(value) + "######")
 	if (value[0] == undefined) {
 		value = defaultFrequencyValue
 	}

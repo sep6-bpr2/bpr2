@@ -3,6 +3,7 @@
 
 describe('released order', () => {
     beforeEach(() => {
+        cy.clearLocalStorage()
         cy.visit('http://localhost:3000/login')
         cy.clearLocalStorage()
     })
@@ -32,29 +33,44 @@ describe('released order', () => {
         cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
-        // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
-        // Check that there are 2 rows in the table
-        cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
+        // Check order without logging in or 
+        cy.visit('http://localhost:3000/releasedOrders/4345')
 
         // Check order that has no attributes
-        cy.get('#customTable0').click()
         cy.contains('Failed').should('be.visible')
     })
 
-    it('Released order ERROR order does not exist', () => {
+    it('Released order ERROR order is already completed', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
         cy.get('#selectLocation').click({ force: true })
         cy.contains("DK").click()
         cy.get('#submitLogin').click()
 
-
         // Check order without logging in or 
-        cy.visit('http://localhost:3000/releasedOrders/4345')
+        cy.visit('http://localhost:3000/releasedOrders/1111')
 
         // Check order that has no attributes
         cy.contains('Failed').should('be.visible')
+    })
+
+    it('Released order ERROR non authorized user', () => {
+		cy.visit('http://localhost:3000/releasedOrders/53323')
+
+       cy.contains('English').should('be.visible')
+       cy.contains('All').should('be.visible')
+       cy.contains('Information').should('not.exist');
+
+    })
+
+    it('Released order ERROR non valid role', () => {
+        cy.get('#enterUsername').type('admin')
+		cy.get('#submitLogin').click()
+
+		cy.visit('http://localhost:3000/releasedOrders/53323')
+
+        cy.contains('Failed').should('be.visible')
+        cy.contains('Information').should('not.exist');
     })
 
     it('Released order OK validate what is shown to user', () => {
@@ -99,22 +115,22 @@ describe('released order', () => {
             cy.get('#oneTimeMeasurements').children().contains("Answer").should('be.visible')
 
             // Row one no tolerance
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("This is a description").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("Descirption of the control point 1").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("Show guide").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("300.00").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").should('be.visible')
 
             // Row two symmetric tolerance
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("This is a description").should('be.visible')
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("Show guide").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("This is a description 2").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("Show guide").should('not.exist');
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("+/-1mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').contains("390.00").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput1').find("input").should('be.visible')
 
             // Row three asymmetric tolerance 
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').contains("This is a description").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').contains("This is a description 3").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').contains("Show guide").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').contains("mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').contains("+6/-1mm").should('be.visible')
@@ -122,14 +138,14 @@ describe('released order', () => {
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput2').find("input").should('be.visible')
 
             // Row four text
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').contains("This is a description").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').contains("This is a description 4").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').contains("Show guide").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').contains("Text").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').contains("ISO ePM10 50%").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput3').find("input").should('be.visible')
 
             // Row five options
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').contains("This is a description").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').contains("This is a description 5").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').contains("Show guide").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').contains("Yes/No").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput4').contains("Ja").should('be.visible')
@@ -156,21 +172,21 @@ describe('released order', () => {
 
             // Row one no tolerance
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("A").should('be.visible')
-            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("This is a description").should('be.visible')
+            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("This is a description 8").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("Show guide").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("mm").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("340.00").should('be.visible')
 
             // Row two symmetric tolerance
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("A").should('be.visible')
-            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput1').contains("This is a description").should('be.visible')
+            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput1').contains("This is a description 9").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput1').contains("Show guide").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput1').contains("Text").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput1').contains("ISO e").should('be.visible')
 
             // Row three asymmetric tolerance 
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput0').contains("A").should('be.visible')
-            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("This is a description").should('be.visible')
+            cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("This is a description 10").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("Show guide").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("Yes/No").should('be.visible')
             cy.get('#multipleTimeMeasurementsInfo').children('tbody').children('#customTableInput2').contains("Fiber").should('be.visible')
@@ -191,22 +207,22 @@ describe('released order', () => {
             cy.get('#multipleTimeMeasurementsAnswers').children().contains("C").should('be.visible')
 
             // Column one with numbers ( they are inputs )
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable0').find("input").should('have.length', 7)
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable0').find("input").should('have.length', 8)
 
             // Column with number inputs for number
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').should('have.length', 5)
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':disabled').should('have.length', 2)
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').should('have.length', 8)
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':disabled').should('have.length', 0)
 
             // Column with text inputs for number
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable2').find("input").filter(':enabled').should('have.length', 5)
-            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable2').find("input").filter(':disabled').should('have.length', 2)
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable2').find("input").filter(':disabled').should('have.length', 3)
 
             // Column with text inputs for number
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable3').find("select").should('have.length', 7)
+            cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable3').find("input").filter(':disabled').should('have.length', 1)
         }
 
     })
-
 
     it('Released order OK validate error detection of the inputs', () => {
         // Logging in to the correct user
@@ -326,7 +342,6 @@ describe('released order', () => {
         }
     })
 
-
     it('Released order OK save inputs', () => {
         // Logging in to the correct user
         cy.get('#enterUsername').type('worker')
@@ -362,8 +377,30 @@ describe('released order', () => {
             cy.reload()
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").should('not.have.value', '555555555555555555555555555555555555555555555555555')
 
+
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('90')
+            cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
+            cy.contains('Success').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Success').should('not.exist');
+            cy.reload()
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").should('have.value', '90')
+
+
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('100')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -372,6 +409,12 @@ describe('released order', () => {
 
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').find("input").clear().type('300.90')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -444,6 +487,12 @@ describe('released order', () => {
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('100')
             cy.get('#saveButton').click()
+            
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -453,6 +502,12 @@ describe('released order', () => {
 
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('300.90')
             cy.get('#saveButton').click()
+
+            cy.contains('Warning').should('be.visible')
+            cy.get('#closeAlertButton').click()
+            cy.contains('Warning').should('not.exist');
+            cy.get('#saveButton').click()
+
             cy.contains('Success').should('be.visible')
             cy.get('#closeAlertButton').click()
             cy.contains('Success').should('not.exist');
@@ -502,6 +557,14 @@ describe('released order', () => {
             cy.reload()
             cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable3').find("select").filter(':enabled').eq(1).should('have.value', 'No')
         }
+
+        cy.get('#multipleTimeMeasurementsAnswers').find('#multipleTimeTable1').find("input").filter(':enabled').eq(1).clear().type('300.90')
+        cy.get('#saveButton').click()
+
+        cy.contains('Warning').should('be.visible')
+        cy.get('#completeButton').click()
+        cy.contains('Warning').should('not.exist');
+
     })
 
     it('Released order ERROR complete order without all fields filed in', () => {

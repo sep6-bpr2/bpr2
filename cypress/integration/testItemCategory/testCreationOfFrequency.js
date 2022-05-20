@@ -4,8 +4,8 @@ describe('testCreationOfFrequency', () => {
 	 let chosenItemCode
 		it('should login', () => {
 			cy.visit('http://localhost:3000/login');
-			cy.get('#username').click();
-			cy.get('#username').type('admin');
+			cy.get('#enterUsername').click();
+			cy.get('#enterUsername').type('admin');
 			cy.get('.v-btn__content > div').click();
 		})
 
@@ -36,7 +36,7 @@ describe('testCreationOfFrequency', () => {
 			cy.get('#to25').invoke('val').then(someVal => to25Value = someVal)
 			cy.get('#to25').clear();
 			cy.get('#to25').should('be.empty')
-			cy.get('.col-sm-3:nth-child(1) .v-btn__content').click();
+			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
 			cy.on("window:alert", (str) => {
 				expect(str).to.equal("There is an invalid input");
 			});
@@ -53,13 +53,15 @@ describe('testCreationOfFrequency', () => {
 			cy.get('#to25').click();
 			cy.get('#to25').clear();
 			cy.get('#to25').type('233457');
-			cy.get('.col-sm-3:nth-child(1) .v-btn__content').click();
+			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
 		})
 
 		it('should check inputted value and cancel', () => {
 			cy.get('td').first().click();
 			cy.get('#to25').should('have.value','233457')
-			cy.get('.col-sm-3:nth-child(3) .v-btn__content').click();
+			cy.get('.col-sm-4:nth-child(3) .v-btn__content').click();
+			cy.get('.alert').should('be.visible')
+			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
 			cy.url().should('eq', 'http://localhost:3000/itemCategories')
 		})
 
@@ -67,7 +69,11 @@ describe('testCreationOfFrequency', () => {
 			cy.get('tr:nth-child(2) > td').invoke('val').then(someVal => chosenItemCode = someVal)
 			cy.get('tr:nth-child(2) > td').click();
 			cy.get('.heading > h4').should('contain',chosenItemCode)
-			cy.get('.col-sm-3:nth-child(3) .v-btn__content').click();
+			cy.get('.col-sm-4:nth-child(3) .v-btn__content').click();
+			cy.get('.alert').should('be.visible')
+			cy.get('.col-sm-4:nth-child(1) .v-btn__content').should('contain.text','Confirm');
+			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
 			cy.url().should('eq', 'http://localhost:3000/itemCategories')
+			cy.get('.alert').should('be.visible')
 		})
 })

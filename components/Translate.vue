@@ -15,7 +15,7 @@ export default {
 				try {
 					const translated =
 						lanugages.translations[this.text][
-							this.$store.state.login.chosenLanguage.flag
+							this.$store.state.login.chosenLanguage.name
 						];
 					if (translated) {
 						return translated;

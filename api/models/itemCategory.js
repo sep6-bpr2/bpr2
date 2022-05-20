@@ -1,6 +1,7 @@
 const {mssql, konfairDB, localDB} = require('../connections/MSSQLConnection')
 
 module.exports.getItemCatCodesWhenLocationNotAll = async (location) => {
+
 	const result = await konfairDB()
 		.request()
 		.input("location", mssql.NVarChar(1000), location)

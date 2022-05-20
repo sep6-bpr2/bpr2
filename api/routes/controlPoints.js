@@ -86,7 +86,7 @@ router.get(
 /**
  * @description - Inserts new control point
  * @param username - username of the user
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -99,7 +99,6 @@ router.get(
  */
 router.post("/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
-    body("frequencies").isArray(),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
 	body("type").isString(),
@@ -111,6 +110,7 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
+		console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }
@@ -121,7 +121,7 @@ router.post("/submitControlPoint/:username",
  * @description - Edits existing control point
  * @param username - username of the user
  * @body controlPointId - id of control point to change
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -136,7 +136,6 @@ router.put(
 	"/submitEditControlPoint/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	body("controlPointId").isInt(),
-	body("frequencies").isArray(),
 	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
 	body("measurementType").isInt(),
 	body("type").isString(),
@@ -163,7 +162,6 @@ router.put(
  *
  * @example - GET {BaseURL}/api/controlPoints/getFrequenciesOfControlPoint/1/simon
  */
-
 router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
     param("username").isLength({ min: 1, max: 35 }),
     validate,
@@ -181,13 +179,15 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
  *
  * @example - GET {BaseURL}/api/controlPoints/listMinimal/rokas/gb
  */
-router.get("/listMinimal/:username/:language",
+router.get("/listMinimal/:username/:language/:offset/:limit",
     param("username").isLength({ min: 1, max: 35 }),
-    param("language").isLength({ min: 2, max: 2 }),
+    param("language").isLength({ min: 2, max: 20 }),
+    param("offset").isInt({ min:0, max: 999999999}),
+    param("limit").isInt({ min:0, max: 100}),
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await controlPointService.controlPointsMinimal(req.params.language)
+        const data = await controlPointService.controlPointsMinimal(req.params.language, parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )
