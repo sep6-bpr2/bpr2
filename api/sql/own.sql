@@ -4,17 +4,21 @@ CREATE TABLE [dbo].[AttributeControlPoint](
     [controlPointId] int NOT NULL,
     [minValue] float,
     [maxValue] float,
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[ControlPoint];
 CREATE TABLE [dbo].[ControlPoint](
     [id] int IDENTITY(1, 1),
-    [frequencyid] int, -- difference
-    [image] nvarchar(MAX),-- difference
+    [frequencyid] int,
+    [image] nvarchar(MAX),
     [upperTolerance] float,
     [lowerTolerance] float,
     [inputType] int,
-    [measurementType] int-- difference
+    [measurementType] int,
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[Description];
@@ -23,12 +27,16 @@ CREATE TABLE [dbo].[Description](
     [controlPointId] int,
     [language] nvarchar(1000),
     [description] nvarchar(1000),
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[ItemCategoryControlPoint];
 CREATE TABLE [dbo].[ItemCategoryControlPoint](
-    [itemCategoryCode] int, -- difference
+    [itemCategoryCode] int,
     [controlPointId] int,
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[Option];
@@ -36,6 +44,8 @@ CREATE TABLE [dbo].[Option](
     [id] int IDENTITY(1, 1),
     [controlPointId] int,
     [value] nvarchar(1000),
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[QAReport];
@@ -44,6 +54,7 @@ CREATE TABLE [dbo].[QAReport](
     [itemId] int,
     [status] bit,
     [completionDate] DATE,
+    [createdDate] DATE,
 );
 
 DROP TABLE IF EXISTS [dbo].[QAReportControlPointValue];
@@ -60,6 +71,8 @@ CREATE TABLE [dbo].[SystemUser](
     [id] int IDENTITY(1, 1),
     [username] nvarchar(50),
     [role] nvarchar(20),
+    [validFrom] DATE,
+    [validTo] DATE,
 );
 
 INSERT INTO [dbo].[SystemUser] VALUES ('admin', 'admin');
@@ -82,7 +95,9 @@ create table [dbo].[Frequency]
     [to2000] int,
     [to3000] int,
     [to4000] int,
-    [to5000] int
+    [to5000] int,
+    [validFrom] DATE,
+    [validTo] DATE,
 )
 
 DROP TABLE IF EXISTS [dbo].[ItemCategoryFrequency];
@@ -90,7 +105,9 @@ create table [dbo].[ItemCategoryFrequency]
 (
     id          int identity(1,1),
     code        nvarchar(1000),
-    frequencyId int
+    frequencyId int,
+    [validFrom] DATE,
+    [validTo] DATE,
 )
 
 INSERT INTO [dbo].[ItemCategoryFrequency] (code, frequencyId) VALUES ('32110', 3);
