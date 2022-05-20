@@ -522,13 +522,17 @@ export default {
 
 			delete tempFrequencies.id;
 
-			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			let messageForNotification;
+			let existsNegVal
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
 			if (!existsNegVal) {
-				alert("There is an invalid input")
+				messageForNotification = { response: 2, message: "There is an invalid input" }
 			} else {
 				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
 			}
+			return messageForNotification
 		},
 		submitForm() {
 			this.submitFrequencies()
