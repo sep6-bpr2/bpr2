@@ -249,7 +249,6 @@ export const actions = {
 							commit('setAttributeMaxValue', {index: i, maxVal: att[i].maxValue})
 						}
 					}
-					console.log("QQQQQQQQQQS"+JSON.stringify(res))
 					//codes
 					commit('removeCode', 0)
 					res.categoryCodes.forEach(o => commit("addCodeSpecific", JSON.stringify(o.itemCategoryCode)))

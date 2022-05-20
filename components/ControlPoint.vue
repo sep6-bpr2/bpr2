@@ -127,8 +127,6 @@
 						<div class="attributes"
 							 v-for="(attribute, index) in attributes"
 						>
-							{{ attribute }}
-							{{ attribute.id }}
 							<v-card class="valueEntry" elevation="24"
 							>
 								<p>
