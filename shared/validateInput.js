@@ -13,6 +13,7 @@ module.exports.validateInput = (value, inputType, options, lowerTolerance, upper
         inputValidated = 1
     }
 
+    console.log("Validating inside")
     if (
         inputValidated == 1 &&
         inputType == 3 &&
@@ -36,6 +37,25 @@ module.exports.validateInput = (value, inputType, options, lowerTolerance, upper
     return inputValidated
 }
 
+// Backend uses different syntax and no tolerance
+module.exports.validateInputBackend = (value, inputType, options) => {
+    let inputValidated = false;
+
+    if (module.exports.validateEmpty(value)) {
+        inputValidated = true
+    } else if (module.exports.validateLengthOverMax(value)) {
+        inputValidated = false
+    } else if (inputType == 0 && module.exports.validateOption(value, options)) {
+        inputValidated = true
+    } else if (inputType == 1 && module.exports.validateText(value)) {
+        inputValidated = true
+    } else if (inputType == 3 && module.exports.validateNumber(value)) {
+        inputValidated = true
+    }
+
+    return inputValidated
+}
+
 
 module.exports.validateEmpty = (value) => {
     return value == null || value == ""
@@ -43,7 +63,6 @@ module.exports.validateEmpty = (value) => {
 
 module.exports.validateText = (value) => {
     return (
-        value == 1 &&
         typeof value === "string"
     )
 }
@@ -67,7 +86,7 @@ module.exports.validateOption = (value, options) => {
 
 module.exports.validateLengthOverMax = (value) => {
     value = value.toString()
-    return value > 50
+    return value.length > 50
 }
 
 module.exports.validateNumberOutTolerance = (value, expectedValue, lowerTolerance, upperTolerance) => {

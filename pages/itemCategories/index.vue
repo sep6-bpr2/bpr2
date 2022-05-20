@@ -28,6 +28,7 @@
 <script>
 import CustomTable from "../../components/CustomTable";
 import Translate from "../../components/Translate";
+import {authorizeUser} from "../../mixins/authorizeUser.js"
 
 export default {
 	data:()=>({
@@ -37,6 +38,7 @@ export default {
 		modalAlertShowSubmit: false,
 
 	}),
+    mixins: [authorizeUser],
 	components: {Translate, CustomTable},
 	computed:{
 		updateStatus(){

@@ -188,9 +188,11 @@
 								<p>
 									<Translate :text="'Code'"/>
 								</p>
-								<v-text-field
+								<v-autocomplete
+									:items="codesChoice"
 									id="categoryItemCode"
-									:value="code.value"
+									:item-text="item=>item.Code"
+									:item-value="item=>item.Code"
 									v-on:input="codeChange($event, index)"
 									type="number"
 									class="manualValidation"
@@ -304,11 +306,9 @@
 </template>
 
 <script>
-
 import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
-
 export default {
 	name: "ControlPoint",
 	props: ["submit", "isEdit"],
@@ -322,9 +322,7 @@ export default {
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-	},
-	watch(){
-
+		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
 	},
 	computed: {
 		frequencies() {
@@ -332,6 +330,9 @@ export default {
 		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes
+		},
+		codesChoice() {
+			return this.$store.state.createControlPoint.allItemCodes
 		},
 		attributesChoice() {
 			return this.$store.state.createControlPoint.attributesNames
@@ -440,7 +441,6 @@ export default {
 		removeOptionValue(index) {
 			if (this.optionValues.length === 2) {
 				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
-
 			} else {
 				this.$store.commit('createControlPoint/removeOptionValue', index)
 			}
@@ -451,7 +451,6 @@ export default {
 			} else {
 				this.$store.commit('createControlPoint/removeCode', index)
 			}
-
 		},
 		removeAttribute(index) {
 			this.$store.commit('createControlPoint/removeAttribute', index)
@@ -469,9 +468,7 @@ export default {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
 				return false
 			}
-
 			if(this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
-
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
 				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
@@ -480,8 +477,6 @@ export default {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
-
-			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},
@@ -495,7 +490,6 @@ export default {
 			}
 			return true
 		},
-
 		submitFrequencies() {
 			if (typeof this.$refs.frequencyChild === 'undefined') {
 				return null
@@ -535,7 +529,6 @@ export default {
 			} else {
 				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
 			}
-
 		},
 		submitForm() {
 			this.submitFrequencies()
@@ -551,33 +544,27 @@ export default {
 	width: 50%;
 	float: left;
 }
-
 .v-card {
 	width: -webkit-fill-available;
 	margin: 15pt;
 	padding: 5pt;
 	float: left;
 }
-
 p {
 	margin-inline: 10pt;
 }
-
 .row {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
 }
-
 .innerElement {
 	margin: 5pt;
 }
-
 .multiValueCard {
 	display: flex;
 	flex-direction: column;
 }
-
 .valueEntry {
 	display: flex;
 	flex-direction: row;
@@ -585,12 +572,10 @@ p {
 	margin: 5pt;
 	justify-content: space-between;
 }
-
 .image {
 	max-width: 300pt;
 	max-height: 300pt;
 }
-
 .bottomButtons {
 	width: 100%;
 	float: left;
@@ -598,18 +583,14 @@ p {
 	flex-direction: row;
 	justify-content: space-evenly;
 	margin-bottom: 10pt;
-
 }
-
 button {
 	background-color: #555 !important;
 	color: white !important;
 }
-
 v-input {
 	width: inherit !important;
 }
-
 .alert {
 	position: fixed;
 	top: 90%;
@@ -618,4 +599,3 @@ v-input {
 	left: 20%;
 }
 </style>
-

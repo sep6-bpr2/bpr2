@@ -1,6 +1,7 @@
 const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
+		allItemCodes: [],
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		defaultFrequency: {
 			"id": 0,
@@ -37,16 +38,16 @@ const getDefaultState = () => ({
 export const state = () => getDefaultState()
 
 export const mutations = {
-	resetState(state) {
-		let keep = [state.allTypes, state.attributesNames]
-		Object.assign(state, getDefaultState())
-		state.allTypes = keep[0]
-		state.attributesNames = keep[1]
-	},
+resetState(state) {
+    let keep = [state.allTypes, state.attributesNames]
+    Object.assign(state, getDefaultState())
+    state.allTypes = keep[0]
+    state.attributesNames = keep[1]
+},
 
-	setAllTypes(state, types) {
-		state.allTypes = types
-	},
+setAllTypes(state, types) {
+    state.allTypes = types
+},
 
 	setDefaultFrequencies(state){
 		state.frequencies = state.defaultFrequency
@@ -61,76 +62,85 @@ export const mutations = {
 		state.frequencies = frequencies
 	},
 
+
+	setAllItemCodes(state, itemCodes) {
+		state.allItemCodes = itemCodes
+	},
+
 	setAllAttributesNames(state, attributesNames) {
 		state.attributesNames = attributesNames
 	},
 
-	setDescription(state, obj) {
-		state.descriptions[obj.index].value = obj.desc
-	},
+setAllAttributesNames(state, attributesNames) {
+    state.attributesNames = attributesNames
+},
 
-	setMeasurementType(state, measurementType) {
-		state.measurementType = measurementType
-	},
+setDescription(state, obj) {
+    state.descriptions[obj.index].value = obj.desc
+},
+
+setMeasurementType(state, measurementType) {
+    state.measurementType = measurementType
+},
 
 
-	setAllDescriptions(state, obj) {
-		let eng = obj.find(o => o.language.toLowerCase() === "english")
-		state.descriptions[0].value = eng.description
-		let dk = obj.find(o => o.language.toLowerCase() === "danish")
-		state.descriptions[1].value = dk.description
-		let lt = obj.find(o => o.language.toLowerCase() === "lithuanian")
-		state.descriptions[2].value = lt.description
-	},
+setAllDescriptions(state, obj) {
+    let eng = obj.find(o => o.language.toLowerCase() === "english")
+    state.descriptions[0].value = eng.description
+    let dk = obj.find(o => o.language.toLowerCase() === "danish")
+    state.descriptions[1].value = dk.description
+    let lt = obj.find(o => o.language.toLowerCase() === "lithuanian")
+    state.descriptions[2].value = lt.description
+},
 
-	setType(state, type) {
-		state.type = type
-	},
-	setUpperTolerance(state, value) {
-		state.upperTolerance = value
-	},
-	setLowerTolerance(state, value) {
-		state.lowerTolerance = value
-	},
+setType(state, type) {
+    state.type = type
+},
+setUpperTolerance(state, value) {
+    state.upperTolerance = value
+},
+setLowerTolerance(state, value) {
+    state.lowerTolerance = value
+},
 
-	setOptionValues(state, obj) {
-		state.optionValues[obj.index].value = obj.value
-	},
-	addOptionValue(state) {
-		state.optionValues.push({value: null})
-	},
-	removeOptionValue(state, index) {
-		state.optionValues.splice(index, 1)
-	},
+setOptionValues(state, obj) {
+    state.optionValues[obj.index].value = obj.value
+},
+addOptionValue(state) {
+    state.optionValues.push({value: null})
+},
+removeOptionValue(state, index) {
+    state.optionValues.splice(index, 1)
+},
 
-	setAttributeId(state, obj) {
-		state.attributes[obj.index].id = obj.id
-	},
-	setAttributeMinValue(state, obj) {
-		state.attributes[obj.index].minValue = obj.minVal
-	},
-	setAttributeMaxValue(state, obj) {
-		state.attributes[obj.index].maxValue = obj.maxVal
-	},
-	addAttribute(state) {
-		state.attributes.push({id: '', minValue: null, maxValue: null})
-	},
-	removeAttribute(state, index) {
-		state.attributes.splice(index, 1)
-	},
+setAttributeId(state, obj) {
+    state.attributes[obj.index].id = obj.id
+},
+setAttributeMinValue(state, obj) {
+    state.attributes[obj.index].minValue = obj.minVal
+},
+setAttributeMaxValue(state, obj) {
+    state.attributes[obj.index].maxValue = obj.maxVal
+},
+addAttribute(state) {
+    state.attributes.push({id: '', minValue: null, maxValue: null})
+},
+removeAttribute(state, index) {
+    state.attributes.splice(index, 1)
+},
 
-	setCodes(state, obj) {
-		state.codes[obj.index].value = obj.code
-	},
-	addCode(state) {
-		state.codes.push({value: null})
-	},
-	addCodeSpecific(state, code) {
-		state.codes.push({value: code})
-	},
-	removeCode(state, index) {
-		state.codes.splice(index, 1)
-	},
+setCodes(state, obj) {
+    state.codes[obj.index].value = obj.code
+},
+addCode(state) {
+    state.codes.push({value: null})
+},
+addCodeSpecific(state, code) {
+    state.codes.push({value: code})
+},
+removeCode(state, index) {
+    state.codes.splice(index, 1)
+},
 
 	setImage(state, image) {
 		state.image = image
@@ -147,16 +157,16 @@ export const mutations = {
 }
 
 export const actions = {
-	async getAllTypes({commit, rootState}) {
-		const user = rootState.login.user;
-		if (user) {
-			await fetch(`http://localhost:3000/api/controlPoints/allTypes/${user.username}`)
-				.then(res => res.json())
-				.then(res => {
-					commit('setAllTypes', res)
-				})
-		}
-	},
+async getAllTypes({commit, rootState}) {
+    const user = rootState.login.user;
+    if (user) {
+        await fetch(`http://localhost:3000/api/controlPoints/allTypes/${user.username}`)
+            .then(res => res.json())
+            .then(res => {
+                commit('setAllTypes', res)
+            })
+    }
+},
 
 	async getFrequencies({commit, rootState}, cpId) {
 		const user = rootState.login.user;
@@ -176,6 +186,14 @@ export const actions = {
 				.then(res => {
 					commit('setAllAttributesNames', res)
 				})
+		}
+	},
+	loadItemCategoryCodes({ commit, rootState }) {
+		const user = rootState.login.user;
+		if (user) {
+			fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
+				commit('setAllItemCodes', result)
+			})
 		}
 	},
 	async getControlPointData({commit, rootState}, cpId) {
@@ -217,9 +235,9 @@ export const actions = {
 						}
 					} else if (mainInfo.inputtype === "number") {
 
-						commit('setUpperTolerance', mainInfo.uppertolerance)
-						commit('setLowerTolerance', mainInfo.lowertolerance)
-					}
+                    commit('setUpperTolerance', mainInfo.uppertolerance)
+                    commit('setLowerTolerance', mainInfo.lowertolerance)
+                }
 
 					//attributes
 					let att = res.attributes
