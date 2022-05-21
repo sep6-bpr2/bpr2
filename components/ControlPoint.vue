@@ -104,12 +104,15 @@
 						</p>
 						<v-text-field
 							v-model="lowerTolerance"
+							type="number"
 						/>
 						<p>
 							<Translate :text="'UpperTolerance'"/>
 						</p>
 						<v-text-field
 							v-model="upperTolerance"
+							type="number"
+							min="0"
 						/>
 					</div>
 				</v-card>
@@ -133,7 +136,7 @@
 									<Translate :text="'Name'"/>
 								</p>
 								<v-autocomplete
-									:items="attributesChoice"
+									:items="attributesNames"
 									:item-text="item=>item.name"
 									:item-value="item=>item.id"
 									:value="attribute.id"
@@ -334,7 +337,7 @@ import colors from "../styles/colors";
 
 export default {
 	name: "ControlPoint",
-	props: ["submit", "isEdit", "deleteCp"],
+	props: ["submit", "isEdit", "deleteCp","cpData","codesChoice","attributesNames","allTypes"],
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
@@ -346,147 +349,135 @@ export default {
 
 		showConfirmAlert: false
 	}),
-	created() {
-		this.$store.dispatch("createControlPoint/getAllTypes")
-		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
-	},
 	computed: {
 		frequencies() {
-			return this.$store.state.createControlPoint.frequencies
-		},
-		allTypes() {
-			return this.$store.state.createControlPoint.allTypes
-		},
-		codesChoice() {
-			return this.$store.state.createControlPoint.allItemCodes
-		},
-		attributesChoice() {
-			return this.$store.state.createControlPoint.attributesNames
+			return this.cpData.frequencies
 		},
 		descriptions() {
-			return this.$store.state.createControlPoint.descriptions
+			return this.cpData.descriptions
 		},
 		allMeasurementTypes() {
-			return this.$store.state.createControlPoint.allMeasurementTypes
+			return this.cpData.allMeasurementTypes
 		},
 		measurementType: {
 			get() {
-				return this.$store.state.createControlPoint.measurementType
+				return this.cpData.measurementType
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setMeasurementType', value)
+				this.cpData.measurementType = value
 			}
 		},
 		type: {
 			get() {
-				return this.$store.state.createControlPoint.type
+				return this.cpData.type
 			},
 			set(type) {
-				this.$store.commit('createControlPoint/setType', type)
+				this.cpData.type = type
 			}
 		},
 		lowerTolerance: {
 			get() {
-				return this.$store.state.createControlPoint.lowerTolerance
+				return this.cpData.lowerTolerance
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setLowerTolerance', value)
+				this.cpData.lowerTolerance = value
 			}
 		},
 		upperTolerance: {
 			get() {
-				return this.$store.state.createControlPoint.upperTolerance
+				return this.cpData.upperTolerance
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setUpperTolerance', value)
+				this.cpData.upperTolerance = value
 			}
 		},
 		optionValues() {
-			return this.$store.state.createControlPoint.optionValues
+			return this.cpData.optionValues
 		},
 		attributes() {
-			return this.$store.state.createControlPoint.attributes
+			return this.cpData.attributes
 		},
 		codes() {
-			return this.$store.state.createControlPoint.codes
+			return this.cpData.codes
 		},
 		currentImage: {
 			get() {
-				return this.$store.state.createControlPoint.image
+				return this.cpData.image
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setImage', value)
+				this.cpData.image = value
 			}
 		},
 		previewImage() {
-			return this.$store.state.createControlPoint.imagePreview
+			return this.cpData.imagePreview
 		}
 	},
 	methods: {
 		// set computed property with v-model causes error on complex objects, see: https://vuex.vuejs.org/guide/forms.html
 		descriptionChange(desc, index) {
-			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
+			this.cpData.descriptions[index].value = desc
 		},
 		changeShow(){
 			if(this.frequencies){
-				this.$store.commit('createControlPoint/clearFrequency')
+				this.cpData.frequencies = null
 			}
 			else {
-				this.$store.commit('createControlPoint/setDefaultFrequencies')
+				this.cpData.frequencies = this.cpData.defaultFrequency
 			}
 		},
 
 		optionValueChange(option, index) {
-			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
+			this.cpData.optionValues[index].value = option
 		},
 		attributeIdChange(id, index) {
-			this.$store.commit(`createControlPoint/setAttributeId`, {id: id, index: index})
+			this.cpData.attributes[index].id = id
 		},
 		attributeMinValueChange(minVal, index) {
-			this.$store.commit(`createControlPoint/setAttributeMinValue`, {minVal: minVal, index: index})
+			this.cpData.attributes[index].minValue = minVal
+
 		},
 		attributeMaxValueChange(maxVal, index) {
-			this.$store.commit(`createControlPoint/setAttributeMaxValue`, {maxVal: maxVal, index: index})
+			this.cpData.attributes[index].maxValue = maxVal
 		},
 		codeChange(code, index) {
-			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
+			this.cpData.codes[index].value = code
 		},
 		newValue(list) {
 			switch (list) {
 				case 'optionValue':
-					this.$store.commit('createControlPoint/addOptionValue')
+					this.cpData.optionValues.push({value: null})
 					break;
 				case 'attribute':
-					this.$store.commit('createControlPoint/addAttribute')
+					this.cpData.attributes.push({id: '', minValue: null, maxValue: null})
 					break;
 				case 'code':
-					this.$store.commit('createControlPoint/addCode')
+					this.cpData.codes.push({value: null})
 					break;
 			}
 		},
 		removeOptionValue(index) {
-			if (this.optionValues.length === 2) {
+			if (this.cpData.optionValues.length === 2) {
 				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
 			} else {
-				this.$store.commit('createControlPoint/removeOptionValue', index)
+				this.cpData.optionValues.splice(index, 1)
+
 			}
 		},
 		removeCodes(index) {
-			if (this.codes.length === 1) {
+			if (this.cpData.codes.length === 1) {
 				this.showAlert('warning', this.translateText('control point must have at least one item category code'))
 			} else {
-				this.$store.commit('createControlPoint/removeCode', index)
+				this.cpData.codes.splice(index, 1)
 			}
 		},
 		removeAttribute(index) {
-			this.$store.commit('createControlPoint/removeAttribute', index)
+			this.cpData.attributes.splice(index, 1)
 		},
 		handleDelete() {
 			this.showConfirmAlert = !this.showConfirmAlert
 		},
 		handleSubmit(){
-			this.showConfirmAlert ? this.deleteCp() : this.submit()
+			this.showConfirmAlert ? this.deleteCp() : this.submitForm(this.validateAll, this.showAlert, this.submitFrequencies)
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
@@ -507,7 +498,20 @@ export default {
 			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
+				if(this.lowerTolerance < 0 || this.lowerTolerance > 2147483647){
+					this.showAlert('warning',this.translateText("lower tolerance needs to be grater than 0 and smaller than 2147483647"))
+					return false
+				}
+				if(this.upperTolerance < 0 || this.upperTolerance > 2147483647){
+					this.showAlert('warning',this.translateText("upper tolerance needs to be grater than 0 and smaller than 2147483647"))
+					return false
+				}
+				if(this.lowerTolerance >= this.upperTolerance){
+					this.showAlert('warning',this.translateText("lower tolerance can not be grater or equal to upper tolerance"))
+					return false
+				}
 			}
+
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},
@@ -520,6 +524,12 @@ export default {
 				}
 			}
 			return true
+		},
+		validatePositiveAndInt(value){
+			let existsNegVal
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+
 		},
 		submitFrequencies() {
 			if (typeof this.$refs.frequencyChild === 'undefined') {
@@ -553,22 +563,19 @@ export default {
 
 			delete tempFrequencies.id;
 
-			let messageForNotification;
-			let existsNegVal
-			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			let existsOverInt = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
-			if (!existsNegVal) {
-				messageForNotification = { response: 2, message: "There is an invalid input" }
+			if (!existsNegVal || !existsOverInt) {
+				this.showAlert('warning', this.translateText("invalid input in frequency"))
+				return false
 			} else {
-				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
+				this.cpData.frequencies = tempFrequencies
+				return true
 			}
-			return messageForNotification
 		},
-		submitForm() {
-			this.submitFrequencies()
-			this.submit(this.validateAll, this.showAlert)
-
+		submitForm(validateAll, showAlert,submitFrequencies) {
+				this.submit(validateAll, showAlert,submitFrequencies)
 		},
 	}
 }
