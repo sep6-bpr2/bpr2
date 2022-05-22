@@ -158,7 +158,7 @@ module.exports.insertFrequency = async (frequency) => {
 
     const result = await localDB()
         .request()
-        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${item.Code},${item.frequencyNumber})`)
+        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${frequency.Code},${frequency.frequencyNumber})`)
 
     return result.recordset
 }

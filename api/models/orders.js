@@ -112,10 +112,10 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date)
             WHERE 
                 connection.[qaReportId] = @id AND 
                 description.language = @language AND 
-                ControlPoint.validFrom < @date AND 
-                ( ControlPoint.validTo > @date OR ControlPoint.validTo IS NULL) AND 
-                Description.validFrom < @date AND 
-                ( Description.validTo > @date OR Description.validTo IS NULL)
+                point.validFrom < @date AND 
+                ( point.validTo > @date OR point.validTo IS NULL) AND 
+                description.validFrom < @date AND 
+                ( description.validTo > @date OR description.validTo IS NULL)
             Group by point.id
         `)
     return result.recordset

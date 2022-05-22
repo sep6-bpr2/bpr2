@@ -3,8 +3,6 @@ const itemCategoryModel = require("../models/itemCategory")
 
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
-const {updateControlPoint} = require("./controlPoints");
-const {updateControlPointFrequencyId} = require("../models/controlPoints");
 
 const typeSwitchToText = (value) => {
     switch (value) {
@@ -176,7 +174,7 @@ module.exports.updateControlPoint = async (data) => {
         data.image, 
         data.upperTolerance, 
         data.lowerTolerance, 
-        data.inputType, 
+        data.type, 
         data.measurementType
     )
 
@@ -199,7 +197,7 @@ module.exports.updateControlPoint = async (data) => {
     //Epxire all attributes
     await controlPointModel.expireAttributesForControlPoint(data.controlPointNumber)
     // Insert new attributes
-    await controlPointModel.deleteControlPointAttributes(data.controlPointId)
+    // await controlPointModel.deleteControlPointAttributes(data.controlPointId)
     data.attributes.forEach(async obj => {
         await controlPointModel.insertControlPointAttribute(data.controlPointId, obj.id, obj.minValue, obj.maxValue)
     })
@@ -208,7 +206,7 @@ module.exports.updateControlPoint = async (data) => {
     // Expire all codes
     await controlPointModel.expireCategoryCodesForControlPoint(data.controlPointNumber)
     // Insert new codes
-    await controlPointModel.deleteControlPointItemCategoryCodes(data.controlPointId)
+    // await controlPointModel.deleteControlPointItemCategoryCodes(data.controlPointId)
     data.codes.forEach(async obj => {
         await controlPointModel.insertControlPointItemCategoryCode(data.controlPointId, obj.value)
     })
@@ -241,7 +239,7 @@ module.exports.submitControlPoint = async (cp) => {
     const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
 
     let sqlString = `
-    Transaction
+    BEGIN TRANSACTION 
         ${insertFrequencyString}
 
         INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'english', @engDescription, GETDATE())
@@ -260,7 +258,11 @@ module.exports.submitControlPoint = async (cp) => {
     con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
     con.input('image', mssql.mssql.NVarChar, cp.image)
     con.input('controlPointNumber', mssql.mssql.Int, latestControlPointNumber)
-    con.input('frequencyNumber', mssql.mssql.Int, latestFrequencyNumber)
+    if(cp.frequencies !== null){
+        con.input('frequencyNumber', mssql.mssql.Int, latestFrequencyNumber)
+    }else{
+        con.input('frequencyNumber', mssql.mssql.Int, null)
+    }
 
     con.input('engDescription', mssql.mssql.NVarChar, cp.descriptions[0].value)
     con.input('dkDescription', mssql.mssql.NVarChar, cp.descriptions[1].value)
@@ -287,6 +289,7 @@ module.exports.submitControlPoint = async (cp) => {
         con.input('code' + index, mssql.mssql.NVarChar, item.value)
     })
     sqlString += ' COMMIT'
+    console.log(sqlString)
     return controlPointModel.insertControlPoint(sqlString, con)
 }
 

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Frequency from "../../../components/Frequency";
+import Frequency from "../../../components/Frequency.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 
@@ -44,21 +44,24 @@ export default {
 		this.$store
 			.dispatch(`itemCategory/getFrequencyOfItemCode`, {itemCode: this.$route.params.code})
 
-		this.$store
-			.dispatch("itemCategory/loadItemCategoryCodes").then(result =>{
-			if(result){
-				if(!result.some((obj) => obj.Code === this.$route.params.code)){
-					this.notification = { response: 0, message: "Item Code "+ this.$route.params.code + " does not exist"}
-					this.modalAlertShowSubmit = true;
-					return
-				}
-			}
-		})
+		// this.$store
+		// 	.dispatch("itemCategory/loadItemCategoryCodes").then(result =>{
+		// 	if(result){
+		// 		if(!result.some((obj) => obj.Code === this.$route.params.code)){
+		// 			this.notification = { response: 0, message: "Item Code "+ this.$route.params.code + " does not exist"}
+		// 			this.modalAlertShowSubmit = true;
+		// 			return
+		// 		}
+		// 	}
+		// })
 
 	},
 	computed: {
 		frequencies() {
-			return this.$store.state.itemCategory.frequencies[0]
+            let frequencies = JSON.parse(JSON.stringify(this.$store.state.itemCategory.frequencies[0]))
+            delete frequencies.frequencyNumber // Remove the frequencyNumber before passing
+			return frequencies
+			// return this.$store.state.itemCategory.frequencies[0]
 		},
 		isDoneFetching(){
 			if(this.$store.state.itemCategory.frequencies[0]){
@@ -117,6 +120,7 @@ export default {
 				localNotification = { response: 0, message: "There is an invalid input"}
 			}
 			else{
+                    tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber
 					this.$store.commit("itemCategory/updateStatus",{status: "success",value: this.$route.params.code})
 					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
 					this.$router.push("/itemCategories");

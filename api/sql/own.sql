@@ -222,7 +222,7 @@ insert into [Option] (controlPointId, value, validFrom) values (10, 'No', GETDAT
 
 
 --- Completed order 
-INSERT INTO QAReport (itemId, status, completionDate) VALUES (1111, 1, GETDATE())
+INSERT INTO QAReport (itemId, status, completionDate, createdDate) VALUES (1111, 1, GETDATE(), GETDATE())
 
 INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 1, '32323', 'worker');
 INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');

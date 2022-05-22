@@ -19,7 +19,7 @@ module.exports.getAllUsers = async (offset, limit) => {
 		.query(`
             SELECT * 
             FROM SystemUser
-            WHERE SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL 
+            WHERE validFrom < GETDATE() AND validTo IS NULL 
             ORDER BY id ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
@@ -70,14 +70,14 @@ module.exports.removeUser = async (user) => {
 		.query(`delete from SystemUser where username = @username`)
 }
 
-module.exports.expireUser = async (id, username) => {
+module.exports.expireUser = async (username) => {
 	await localDB()
 		.request()
 		.input("username", mssql.NVarChar(1000), username)
-        .input("id", mssql.Int, id)
+        // .input("id", mssql.Int, id)
 		.query(`
             update [dbo].[SystemUser] 
             set validTo = GETDATE()
-            where id = @id AND username = @username and validTo IS NULL
+            where username = @username AND validTo IS NULL
         `)
 }

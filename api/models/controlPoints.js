@@ -19,7 +19,7 @@ module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
 					[to5000]
             from [dbo].[ControlPoint] C 
             JOIN [dbo].[Frequency] F on C.frequencyId = F.id
-            where C.controlPointNumber = @controlPointNumber
+            where C.controlPointNumber = @controlPointNumber AND F.validFrom < GETDATE() AND F.validTo IS NULL
 		`)
 	return result.recordset
 }
@@ -361,7 +361,7 @@ module.exports.insertDescription = async (controlPointId, language, description)
 		.input('language', mssql.NVarChar, language)
 		.query(`
             INSERT INTO Description 
-            (controlPointId, language, description, validTo) 
+            (controlPointId, language, description, validFrom) 
             VALUES 
             (@controlPointId, @language, @description, GETDATE())
         `)
@@ -387,7 +387,7 @@ module.exports.insertOption = async (controlPointId, value) => {
 		.input('value', mssql.NVarChar, value)
 		.query(`
             INSERT INTO [Option] 
-            (controlPointId, value, validTO)
+            (controlPointId, value, validFrom)
             VALUES 
             (@controlPointId, @value, GETDATE())
         `)
@@ -508,8 +508,7 @@ module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 		.query(`
             SELECT controlPointId as id, description
             FROM Description
-            INNER JOIN [ControlPoint] point ON point.[controlPointNumber] = Description.[controlPointId]
-            WHERE Description.language = @language AND point.validFrom < GETDATE() AND point.validTo IS NULL 
+            WHERE Description.language = @language AND validFrom < GETDATE() AND validTo IS NULL 
             Order By controlPointId DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)

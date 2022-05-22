@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import CustomTable from "../../components/CustomTable";
-import Translate from "../../components/Translate";
+import CustomTable from "../../components/CustomTable.vue";
+import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {

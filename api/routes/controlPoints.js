@@ -3,7 +3,7 @@ const router = Router()
 const { param, body } = require('express-validator')
 const { validateUserAdmin, validateUserQA, validateAllVerifiedUsers } = require("../middleware/validateUser")
 const path = require("path");
-const { validate, validateAtLeastOneListEntryNotEmpty, validateInRange, validateNullOrInt, validateListEntriesNotEmpty } = require("../middleware/validateMiddleware")
+const { validate, validateNullOrInt, validateListEntriesNotEmpty } = require("../middleware/validateMiddleware")
 const controlPointService = require("../services/controlPoints")
 
 
@@ -47,17 +47,17 @@ router.get("/allAttributesNames/:username",
  * @example - DELETE {BaseURL}/api/controlPoints/delete/rafal/1
  */
 router.delete("/delete/:username/:cpid",
-	param("username").isLength({ min: 1, max: 35 }),
-	param('cpid').isInt(),
-	validate,
-	validateUserAdmin,
-	async (req, res) => {
-		const result = await controlPointService.deleteControlPoint(req.params.cpid)
-		if (result.hasOwnProperty('message')) {
-			if(result.message.includes('does not exist')) res.status(404)
-		}
-		res.send(result)
-	}
+    param("username").isLength({ min: 1, max: 35 }),
+    param('cpid').isInt(),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const result = await controlPointService.deleteControlPoint(req.params.cpid)
+        if (result.hasOwnProperty('message')) {
+            if (result.message.includes('does not exist')) res.status(404)
+        }
+        res.send(result)
+    }
 )
 
 
@@ -69,17 +69,17 @@ router.delete("/delete/:username/:cpid",
  * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */
 router.get("/controlPointData/:username/:cpid",
-	param("username").isLength({ min: 1, max: 35 }),
-	param('cpid').isInt(),
-	validate,
-	validateUserAdmin,
-	async (req, res) => {
-		const result = await controlPointService.getControlPointData(req.params.cpid)
-		if (result.hasOwnProperty('message')) {
-			if(result.message.includes('does not exist')) res.status(404)
-		}
-		res.send(result)
-	}
+    param("username").isLength({ min: 1, max: 35 }),
+    param('cpid').isInt(),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const result = await controlPointService.getControlPointData(req.params.cpid)
+        if (result.hasOwnProperty('message')) {
+            if (result.message.includes('does not exist')) res.status(404)
+        }
+        res.send(result)
+    }
 )
 
 /**
@@ -100,7 +100,7 @@ router.post("/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
-	body("type").isString(),
+    body("type").isString(),
     body("upperTolerance").custom(value => validateNullOrInt(value)),
     body("lowerTolerance").custom(value => validateNullOrInt(value)),
     body("optionValues").isArray(),
@@ -109,7 +109,7 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
-		console.log(req.body)
+        console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }
@@ -131,25 +131,26 @@ router.post("/submitControlPoint/:username",
  * @example - PUT {BaseURL}/api/controlPoints/submitEditControlPoint/rafal
  */
 router.put("/submitEditControlPoint/:username",
-	param("username").isLength({ min: 1, max: 35 }),
-	body("controlPointId").isInt(),
-	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
-	body("measurementType").isInt(),
-	body("type").isString(),
-	body("upperTolerance").custom(value => validateNullOrInt(value)),
-	body("lowerTolerance").custom(value => validateNullOrInt(value)),
-	body("optionValues").isArray(),
-	body("attributes").isArray(),
-	body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
-	validate,
-	validateUserAdmin,
-	async (req, res) => {
-		const data = await controlPointService.updateControlPoint(req.body)
-		if (data.hasOwnProperty('message')) {
-			if(data.message.includes('does not exist')) res.status(404)
-		}
-		res.send({})
-	}
+    param("username").isLength({ min: 1, max: 35 }),
+    body("controlPointId").isInt(),
+    body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
+    body("measurementType").isInt(),
+    body("type").isString(),
+    body("upperTolerance").custom(value => validateNullOrInt(value)),
+    body("lowerTolerance").custom(value => validateNullOrInt(value)),
+    body("optionValues").isArray(),
+    body("attributes").isArray(),
+    body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const data = await controlPointService.updateControlPoint(req.body)
+        if (data.hasOwnProperty('message')) {
+
+            if (data.message.includes('does not exist')) res.status(404)
+        }
+        res.send({})
+    }
 )
 
 /**
@@ -179,8 +180,8 @@ router.get("/getFrequenciesOfControlPoint/:controlPointId/:username",
 router.get("/listMinimal/:username/:language/:offset/:limit",
     param("username").isLength({ min: 1, max: 35 }),
     param("language").isLength({ min: 2, max: 20 }),
-    param("offset").isInt({ min:0, max: 999999999}),
-    param("limit").isInt({ min:0, max: 100}),
+    param("offset").isInt({ min: 0, max: 999999999 }),
+    param("limit").isInt({ min: 0, max: 100 }),
     validate,
     validateUserAdmin,
     async (req, res) => {

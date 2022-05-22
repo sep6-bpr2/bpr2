@@ -327,7 +327,7 @@
 </template>
 
 <script>
-import Translate from "./Translate";
+import Translate from "./Translate.vue";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
 import colors from "../styles/colors";
@@ -353,7 +353,12 @@ export default {
 	},
 	computed: {
 		frequencies() {
-			return this.$store.state.createControlPoint.frequencies
+            // FIX THIS SHIT
+            if(this.$store.state.createControlPoint.frequencies != null){
+			    return this.$store.state.createControlPoint.frequencies[0]
+            }else{
+                return null
+            }
 		},
 		allTypes() {
 			return this.$store.state.createControlPoint.allTypes
@@ -567,8 +572,9 @@ export default {
 		},
 		submitForm() {
 			this.submitFrequencies()
-			this.submit(this.validateAll, this.showAlert)
-
+            if(this.validateAll()){
+                this.submit( this.showAlert )
+            }
 		},
 	}
 }

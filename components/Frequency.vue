@@ -150,7 +150,7 @@ export default {
 		},
 		submitFrequencies() {
 			if (this.submitFrequenciesCallback){
-				let value =this.submitFrequenciesCallback(this.frequencies, this.localFrequencies );
+				let value = this.submitFrequenciesCallback(this.frequencies, this.localFrequencies );
 			 if(value !== null){
 				 this.shouldConfirm = false
 				 this.notification = value
@@ -171,6 +171,7 @@ export default {
 			}
 		},
 		createLabel(keyVal) {
+            console.log(keyVal)
 			let labelValue = keyVal.split('to')[1];
 			return '>' + labelValue
 		},

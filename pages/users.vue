@@ -86,9 +86,8 @@
 </template>
 
 <script>
-import CustomTable from "../components/CustomTable";
+import CustomTable from "../components/CustomTable.vue";
 import colors from "../styles/colors";
-import login from "./login";
 import {authorizeUser} from "../mixins/authorizeUser.js"
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
