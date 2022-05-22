@@ -77,6 +77,7 @@ export default {
 			}
 			else{
 				if (confirm(text) == true) {
+                    tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber
 					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
 					this.$router.push("/itemCategories");
 				}

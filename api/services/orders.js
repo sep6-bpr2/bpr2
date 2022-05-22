@@ -1,6 +1,6 @@
 const moment = require("moment")
 const model = require("../models/orders")
-const inputValidation =  require("../../shared/validateInput")
+const inputValidation = require("../../shared/validateInput")
 
 /**
  * get a list of orders that are released in the system. All of them
@@ -68,10 +68,10 @@ module.exports.completedOrders = async (location, offset, limit) => {
     }
 
     let orders = []
-    
-    if(location.toLocaleLowerCase() == "all"){
+
+    if (location.toLocaleLowerCase() == "all") {
         orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'), offset, limit)
-    }else{
+    } else {
         orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'), offset, limit)
     }
 
@@ -166,7 +166,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // Get all the attributes and item categories of these control points 
             // Will later validate which one connects to which one
             for (let i = 0; i < controlPoints.length; i++) {
-                controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
+                controlPoints[i].attributes = await model.getControlPointAttributesLatest(controlPoints[i].id)
             }
 
             let added = []
@@ -227,8 +227,9 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             attributes = await model.getReleasedOrderAttributes(id)
         }
 
+
         // Get the frequency of the category and apply it to the 
-        itemData.frequency = await model.getFrequenciesForCategory(parseInt(itemData.categoryCode))
+        itemData.frequency = await model.getFrequenciesForCategory(parseInt(itemData.categoryCode), qaReport.createdDate)
         if (itemData.frequency && itemData.frequency.length != 0)
             itemData.frequency = itemData.frequency[0]
         else
@@ -237,20 +238,20 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not
         if (showAuthors) {
-            controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id, language)
+            controlPoints = await model.getReleasedOrderControlPointsAuthors(qaReport.id, language, qaReport.createdDate)
         } else {
-            controlPoints = await model.getReleasedOrderControlPoints(qaReport.id, language)
+            controlPoints = await model.getReleasedOrderControlPoints(qaReport.id, language, qaReport.createdDate)
         }
 
         // Get all the attributes and item categories of these control points 
         for (let i = 0; i < controlPoints.length; i++) {
-            controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id)
+            controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id, qaReport.createdDate)
         }
 
         // Get all the data for the control point: descriptions, frequency, options
         for (let i = 0; i < controlPoints.length; i++) {
             // Get frequency of the control point
-            controlPoints[i].frequency = await model.getFrequencies(controlPoints[i].frequencyId)
+            controlPoints[i].frequency = await model.getFrequencies(controlPoints[i].frequencyId, qaReport.createdDate)
             if (controlPoints[i].frequency && controlPoints[i].frequency.length != 0)
                 controlPoints[i].frequency = controlPoints[i].frequency[0]
             else
@@ -258,7 +259,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
             // Get options if the control poi
             if (controlPoints[i].inputType == 0) {
-                controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id)
+                controlPoints[i].options = await model.getReleasedOrderControlPointsOptions(controlPoints[i].id, qaReport.createdDate)
             }
         }
 
@@ -448,7 +449,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         const date = new Date(itemData.deadline)
         itemData.deadline = moment(date).format('YYYY-MM-DD')
 
-        if(itemData.completionDate){
+        if (itemData.completionDate) {
             const completionDate = new Date(itemData.completionDate)
             itemData.completionDate = moment(completionDate).format('YYYY-MM-DD')
         }
@@ -526,7 +527,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         editedQAReport.oneTimeControlPoints[i].answer != originalOrder.oneTimeControlPoints[i].answer
                     ) {
 
-                        
+
 
                         let inputValidated = false
 

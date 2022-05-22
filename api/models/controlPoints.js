@@ -9,16 +9,17 @@ module.exports.getAllTypes = async () => {
 				GROUP BY type`)
 	return result.recordset
 }
-module.exports.getFrequenciesOfControlPoint = async (controlPointId) => {
-
+module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.query(`select [to25], [to50], [to100], [to200], [to300], [to500],
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+		.query(`
+            select [to25], [to50], [to100], [to200], [to300], [to500],
 					[to700], [to1000], [to1500], [to2000], [to3000], [to4000],
 					[to5000]
-				from [dbo].[ControlPoint] C JOIN [dbo].[Frequency] F
-				on C.frequencyId = F.id
-				where C.id = ${controlPointId}
+            from [dbo].[ControlPoint] C 
+            JOIN [dbo].[Frequency] F on C.frequencyId = F.id
+            where C.controlPointNumber = @controlPointNumber
 		`)
 	return result.recordset
 }
@@ -32,13 +33,22 @@ module.exports.getAllAttributesNames = async () => {
 	return result.recordset
 }
 
-module.exports.getControlMainInformation = async (cpId) => {
+module.exports.getControlMainInformation = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT frequencyid, image, uppertolerance, lowertolerance, inputtype, measurementtype
-				FROM ControlPoint
-				WHERE id = @CpId`)
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.query(`
+            SELECT 
+            frequencyid, 
+            controlPointNumber,
+            image, 
+            uppertolerance, 
+            lowertolerance, 
+            inputtype, 
+            measurementtype
+			FROM ControlPoint
+			WHERE controlPointNumber = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+        `)
 
 	return result.recordset
 }
@@ -66,46 +76,54 @@ module.exports.getControlPointFrequency = async (freqId) => {
 	return result.recordset
 }
 
-module.exports.getControlPointDescriptions = async (cpId) => {
+module.exports.getControlPointDescriptions = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT language, description
-				FROM Description
-				WHERE Description.controlPointId=@CpId`)
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.query(`
+            SELECT language, description
+            FROM Description
+            WHERE Description.controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+        `)
 
 	return result.recordset
 }
 
-module.exports.getControlPointOptionValues = async (cpId) => {
+module.exports.getControlPointOptionValues = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT value
-				FROM [Option]
-				WHERE [Option].controlPointId=@CpId`)
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.query(`
+            SELECT value
+            FROM [Option]
+            WHERE [Option].controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+        `)
 
 	return result.recordset
 }
 
-module.exports.getControlPointAttributes = async (cpId) => {
+module.exports.getControlPointAttributes = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT attributeId, minValue, maxValue
-				FROM [dbo].[AttributeControlPoint]
-				WHERE controlPointId = @CpId`)
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.query(`
+            SELECT attributeId, minValue, maxValue
+            FROM [dbo].[AttributeControlPoint]
+            WHERE controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+            `)
 
 	return result.recordset
 }
 
-module.exports.getControlPointItemCategoryCodes = async (cpId) => {
+module.exports.getControlPointItemCategoryCodes = async (controlPointNumber) => {
 	const result = await localDB()
 		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`SELECT itemCategoryCode
-				FROM [dbo].[ItemCategoryControlPoint]
-				WHERE controlPointId = @CpId`)
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.query(`
+            SELECT itemCategoryCode
+            FROM [dbo].[ItemCategoryControlPoint]
+            WHERE controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
+        `)
 
 	return result.recordset
 }
@@ -129,6 +147,84 @@ module.exports.updateControlMainInformation = async (data) => {
 
 	return result.recordset
 }
+
+
+module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, image, upperTolerance, lowerTolerance, inputType, measurementType) => {
+	const result = await localDB()
+		.request()
+		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.input('frequencyId', mssql.Int, frequencyId)
+		.input('image', mssql.NVarChar, image)
+		.input('upperTolerance', mssql.Int, upperTolerance)
+		.input('lowerTolerance', mssql.Int, lowerTolerance)
+		.input('inputType', mssql.Int, inputType)
+		.input('measurementType', mssql.Int, measurementType)
+		.query(`
+            insert into ControlPoint 
+            (controlPointNumber, validFrom, frequencyId, image, inputType, upperTolerance, lowerTolerance, measurementType) 
+            values 
+            (@controlPointNumber ,GETDATE(), @frequencyId, @image, @inputType, @upperTolerance, @lowerTolerance, @measurementType)
+        `)
+
+	return result.recordset
+}
+
+module.exports.expireControlPoint = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[ControlPoint] 
+            set validTo = GETDATE()
+            where controlPointNumber = @controlPointNumber and validTo IS NULL
+        `)
+}
+
+module.exports.expireDescriptionsForControlPoint = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[Description] 
+            set validTo = GETDATE()
+            where controlPointId = @controlPointNumber and validTo IS NULL
+        `)
+}
+
+module.exports.expireOptionsForControlPoint = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[Option] 
+            set validTo = GETDATE()
+            where controlPointId = @controlPointNumber and validTo IS NULL
+        `)
+}
+
+module.exports.expireAttributesForControlPoint = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[AttributeControlPoint]
+            set validTo = GETDATE()
+            where controlPointId = @controlPointNumber and validTo IS NULL
+        `)
+}
+
+module.exports.expireCategoryCodesForControlPoint = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[ItemCategoryControlPoint]
+            set validTo = GETDATE()
+            where controlPointId = @controlPointNumber and validTo IS NULL
+        `)
+}
+
+
 
 module.exports.updateControlPointFrequency = async (cpId, data) => {
 	const result = await localDB()
@@ -182,6 +278,23 @@ module.exports.updateControlPointDescription = async (cpId, language, descriptio
 	return result.recordset
 }
 
+
+module.exports.insertDescription = async (controlPointId, language, description) => {
+	const result = await localDB()
+		.request()
+		.input('controlPointId', mssql.Int, controlPointId)
+		.input('description', mssql.NVarChar, description)
+		.input('language', mssql.NVarChar, language)
+		.query(`
+            INSERT INTO Description 
+            (controlPointId, language, description, validTo) 
+            VALUES 
+            (@controlPointId, @language, @description, GETDATE())
+        `)
+
+	return result.recordset
+}
+
 module.exports.deleteControlPointOptionValues = async (cpId) => {
 	const result = await localDB()
 		.request()
@@ -193,13 +306,17 @@ module.exports.deleteControlPointOptionValues = async (cpId) => {
 	return result.recordset
 }
 
-module.exports.insertControlPointOptionValue = async (cpId, value) => {
+module.exports.insertOption = async (controlPointId, value) => {
 	const result = await localDB()
 		.request()
-		.input('cpId', mssql.Int, cpId)
+		.input('controlPointId', mssql.Int, controlPointId)
 		.input('value', mssql.NVarChar, value)
-		.query(`INSERT INTO [Option] (controlPointId, value)
-				VALUES (@cpId, @value)`)
+		.query(`
+            INSERT INTO [Option] 
+            (controlPointId, value, validTO)
+            VALUES 
+            (@controlPointId, @value, GETDATE())
+        `)
 
 	return result.recordset
 }
@@ -215,15 +332,19 @@ module.exports.deleteControlPointAttributes = async (cpId) => {
 	return result.recordset
 }
 
-module.exports.insertControlPointAttributes = async (cpId, attributeId, minValue, maxValue) => {
+module.exports.insertControlPointAttribute = async (controlPointId, attributeId, minValue, maxValue) => {
 	const result = await localDB()
 		.request()
-		.input('cpId', mssql.Int, cpId)
+		.input('controlPointId', mssql.Int, controlPointId)
 		.input('attributeId', mssql.Int, attributeId)
-		.input('minValue', mssql.NVarChar(1000), minValue)
-		.input('maxValue', mssql.NVarChar(1000), maxValue)
-		.query(`INSERT INTO [dbo].[AttributeControlPoint] (attributeId, controlPointId, minValue, maxValue)
-				VALUES (@attributeId, @cpId, @minValue, @maxValue)`)
+		.input('minValue', mssql.Float, minValue)
+		.input('maxValue', mssql.Float, maxValue)
+		.query(`
+            INSERT INTO [dbo].[AttributeControlPoint] 
+            (attributeId, controlPointId, minValue, maxValue, validFrom)
+            VALUES 
+            (@attributeId, @controlPointId, @minValue, @maxValue, GETDATE())
+        `)
 
 	return result.recordset
 }
@@ -239,13 +360,17 @@ module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
 	return result.recordset
 }
 
-module.exports.insertControlPointItemCategoryCodes = async (cpId, itemCategoryCode) => {
+module.exports.insertControlPointItemCategoryCode = async (controlPointId, itemCategoryCode) => {
 	const result = await localDB()
 		.request()
-		.input('cpId', mssql.Int, cpId)
+		.input('controlPointId', mssql.Int, controlPointId)
 		.input('itemCategoryCode', mssql.Int, itemCategoryCode)
-		.query(`INSERT INTO [dbo].[ItemCategoryControlPoint] (controlPointId, itemCategoryCode)
-				VALUES (@cpId, @itemCategoryCode)`)
+		.query(`
+            INSERT INTO [dbo].[ItemCategoryControlPoint] 
+            (controlPointId, itemCategoryCode, validFrom)
+            VALUES 
+            (@controlPointId, @itemCategoryCode, GETDATE())
+        `)
 
 	return result.recordset
 }
@@ -276,7 +401,8 @@ module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 		.query(`
             SELECT controlPointId as id, description
             FROM Description
-            WHERE Description.language = @language
+            INNER JOIN [ControlPoint] point ON point.[controlPointNumber] = Description.[controlPointId]
+            WHERE Description.language = @language AND point.validFrom < GETDATE() AND point.validTo IS NULL 
             Order By controlPointId DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
@@ -291,3 +417,27 @@ module.exports.getDescriptionsByControlPointId = async (id) => {
     return result.recordset
 }
 
+module.exports.getLatestControlPointNumber = async () => {
+    const result = await localDB()
+        .request()
+        .query(`
+            SELECT MAX(controlPointNumber) as controlPointNumber FROM [ControlPoint]
+        `)
+
+    if(result.recordset[0] == null){
+        return 1
+    }else{
+        return result.recordset[0].controlPointNumber + 1
+    }
+}
+
+module.exports.expireOldFrequency = async (controlPointNumber) => {
+    await localDB()
+        .request()
+        .input("controlPointNumber", mssql.Int, controlPointNumber)
+        .query(`
+            update [dbo].[ControlPoint] 
+            set validTo = GETDATE()
+            where controlPointNumber = @controlPointNumber and validTo IS NULL
+        `)
+}

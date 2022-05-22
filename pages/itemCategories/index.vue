@@ -49,7 +49,7 @@ export default {
 		},
 		loadMoreItemCategories() {
             this.offset = this.offset + this.limit;
-			this.$store.dispatch("releasedOrders/loadItemCategoryCodes", {
+			this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
 				offset: this.offset,
 				limit: this.limit,
 			});

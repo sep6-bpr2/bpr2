@@ -45,6 +45,8 @@ export default {
 				let value = this.$store.state.createControlPoint
 				this.$store.dispatch('createControlPoint/submitEditControlPoint', {
 					controlPointId: this.$route.params.id,
+                    controlPointNumber: value.controlPointNumber,
+                    frequencyId: value.frequencyId,
 					descriptions: value.descriptions,
 					type: value.type,
 					measurementType: value.measurementType,

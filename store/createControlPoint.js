@@ -135,6 +135,14 @@ removeCode(state, index) {
 }
 
 export const actions = {
+    loadItemCategoryCodes({commit, rootState}) {
+		const user = rootState.login.user;
+		if (user) {
+			fetch(`http://localhost:3000/api/itemCategory/getCodesMax/${user.username}/All`).then(res => res.json()).then(result => {
+				commit('setAllItemCodes', result)
+			})
+		}
+	},
 async getAllTypes({commit, rootState}) {
     const user = rootState.login.user;
     if (user) {

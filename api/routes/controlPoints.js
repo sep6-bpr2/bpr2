@@ -45,8 +45,7 @@ router.get("/allAttributesNames/:username",
  *
  * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */
-router.get(
-	"/controlPointData/:username/:cpid",
+router.get("/controlPointData/:username/:cpid",
 	param("username").isLength({ min: 1, max: 35 }),
 	param('cpid').isInt(),
 	validate,
@@ -93,7 +92,6 @@ router.post("/submitControlPoint/:username",
     }
 )
 
-
 /**
  * @description - Edits existing control point
  * @param username - username of the user
@@ -109,8 +107,7 @@ router.post("/submitControlPoint/:username",
  *
  * @example - PUT {BaseURL}/api/controlPoints/submitEditControlPoint/rafal
  */
-router.put(
-	"/submitEditControlPoint/:username",
+router.put("/submitEditControlPoint/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	body("controlPointId").isInt(),
 	body("frequencies").isArray(),

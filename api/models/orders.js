@@ -49,12 +49,13 @@ module.exports.getOrderInformation = async (id) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPoints = async (id, language) => {
+module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
     // The max statements are to help group by
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
         .input("language", mssql.NVarChar(40), language)
+        .input("date", mssql.DateTime, date)
         .query(`
             SELECT 
             DISTINCT
@@ -72,18 +73,25 @@ module.exports.getReleasedOrderControlPoints = async (id, language) => {
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
             INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
-            WHERE connection.[qaReportId] = @id AND description.language = @language
+            WHERE 
+                connection.[qaReportId] = @id AND 
+                description.language = @language AND 
+                point.validFrom < @date AND 
+                ( point.validTo > @date OR point.validTo IS NULL) AND 
+                description.validFrom < @date AND 
+                ( description.validTo > @date OR description.validTo IS NULL)
             Group by point.id
         `)
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPointsAuthors = async (id, language) => {
+module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date) => {
     // The max statements are to help group by
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
         .input("language", mssql.NVarChar(40), language)
+        .input("date", mssql.DateTime, date)
         .query(`
             SELECT 
             DISTINCT
@@ -101,7 +109,13 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language) => {
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
             INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
-            WHERE connection.[qaReportId] = @id AND description.language = @language
+            WHERE 
+                connection.[qaReportId] = @id AND 
+                description.language = @language AND 
+                ControlPoint.validFrom < @date AND 
+                ( ControlPoint.validTo > @date OR ControlPoint.validTo IS NULL) AND 
+                Description.validFrom < @date AND 
+                ( Description.validTo > @date OR Description.validTo IS NULL)
             Group by point.id
         `)
     return result.recordset
@@ -123,36 +137,44 @@ module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderControlPointsOptions = async (id) => {
+module.exports.getReleasedOrderControlPointsOptions = async (id, date) => {
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
+        .input("date", mssql.DateTime, date)
         .query(`
             SELECT * FROM [Option]
-            WHERE controlPointId = @id
+            WHERE controlPointId = @id AND 
+            validFrom < @date AND 
+            ( validTo > @date OR validTo IS NULL)
         `)
     return result.recordset
 }
 
-module.exports.getFrequenciesForCategory = async (code) => {
+module.exports.getFrequenciesForCategory = async (code, date) => {
     const result = await localDB()
         .request()
         .input("code", mssql.NVarChar(40), code)
+        .input("date", mssql.DateTime, date)
         .query(`
-            SELECT * FROM [ItemCategoryFrequency]
-            INNER JOIN [Frequency] ON [Frequency].id = [ItemCategoryFrequency].frequencyId
-            WHERE [ItemCategoryFrequency].code = @code
+            SELECT *
+            FROM [ItemCategoryFrequency]
+            INNER JOIN [Frequency] ON [Frequency].frequencyNumber = [ItemCategoryFrequency].frequencyId
+            WHERE [ItemCategoryFrequency].code = @code AND Frequency.validFrom < @date AND ( Frequency.validTo > @date OR Frequency.validTo IS NULL)
         `)
     return result.recordset
 }
 
-module.exports.getFrequencies = async (id) => {
+module.exports.getFrequencies = async (id, date) => {
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
+        .input("date", mssql.DateTime, date)
         .query(`
             SELECT * FROM [Frequency]
-            WHERE id = @id
+            WHERE frequencyNumber = @id AND 
+            validFrom < @date AND 
+            ( validTo > @date OR validTo IS NULL)
         `)
     return result.recordset
 }
@@ -175,6 +197,7 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
         .query(`
             SELECT DISTINCT 
             ControlPoint.id, 
+            ControlPoint.controlPointNumber, 
             ControlPoint.frequencyId, 
             ControlPoint.image, 
             ControlPoint.inputType, 
@@ -183,7 +206,7 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
             FROM [ControlPoint]
             INNER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.controlPointId
             INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.controlPointId
-            WHERE ACP.attributeId in (${attributeIds}) AND ICCP.itemCategoryCode = @categoryCode
+            WHERE ACP.attributeId in (${attributeIds}) AND ICCP.itemCategoryCode = @categoryCode AND ControlPoint.validFrom < GETDATE() AND ControlPoint.validTo IS NULL 
         `)
     return result.recordset
 }
@@ -202,12 +225,30 @@ module.exports.getReleasedOrderAttributes = async (id) => {
             FROM [KonfAir DRIFT$Item Attribute Value Mapping] mapping
             INNER JOIN [KonfAir DRIFT$Item Attribute] attribute ON mapping.[Item Attribute ID] = attribute.[ID]
             INNER JOIN [KonfAir DRIFT$Item Atrribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
-            WHERE mapping.[No_] = @id
+            WHERE mapping.[No_] = @id 
         `)
     return result.recordset
 }
 
-module.exports.getControlPointAttributes = async (id) => {
+module.exports.getControlPointAttributes = async (id, date) => {
+    const result = await localDB()
+        .request()
+        .input("id", mssql.Int, id)
+        .input("date", mssql.DateTime, date)
+        .query(`
+            SELECT 
+            attributeId as id, 
+            maxValue, 
+            minValue 
+            FROM [AttributeControlPoint]
+            WHERE controlPointId = @id AND 
+            validFrom < @date AND 
+            ( validTo > @date OR validTo IS NULL)
+        `)
+    return result.recordset
+}
+
+module.exports.getControlPointAttributesLatest = async (id) => {
     const result = await localDB()
         .request()
         .input("id", mssql.Int, id)
@@ -217,10 +258,11 @@ module.exports.getControlPointAttributes = async (id) => {
             maxValue, 
             minValue 
             FROM [AttributeControlPoint]
-            WHERE controlPointId = @id
+            WHERE controlPointId = @id AND AttributeControlPoint.validFrom < GETDATE() AND AttributeControlPoint.validTo IS NULL 
         `)
     return result.recordset
 }
+
 
 module.exports.getControlPointCategories = async (id) => {
     const result = await localDB()
@@ -240,7 +282,7 @@ module.exports.createQAReport = async (id) => {
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            INSERT INTO QAReport (itemId, status) VALUES (@id, 0)
+            INSERT INTO QAReport (itemId, status, createdDate) VALUES (@id, 0, GETDATE())
         `)
 
     const result = await localDB()
