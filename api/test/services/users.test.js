@@ -19,6 +19,18 @@ describe("User service testing", () => {
             assertEquals(data, "exists")
         })
     })
+
+    describe("delete User", () => {
+        it("delete User OK", async () => {
+            sinon.stub(usersModel, "removeUser").returns("removed")
+            sinon.stub(usersModel, "getAllUsers").returns("removed")
+
+            const data = await usersService.removeUser({username: "Orochimaru", role:"admin"})
+
+            assertEquals(data, "removed")
+        })
+    })
+
 })
 
 function assertEquals(value1, value2) {

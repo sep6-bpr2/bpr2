@@ -23,7 +23,7 @@ describe("ItemCategory service testing", () => {
 		})
 
 		it("set frequencyOfItem", async ()=>{
-			sinon.stub(itemCategoryModel, "setFrequenciesWithId").returns("result ok")
+			sinon.stub(itemCategoryModel, "setFrequenciesWithIdWhenIdNotZero").returns("result ok")
 
 			const data = await itemCategoryService.setFrequenciesWithId("random Item Value")
 

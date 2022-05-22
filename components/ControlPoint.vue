@@ -72,6 +72,7 @@
 									v-on:input="optionValueChange($event, index)"
 								/>
 								<v-btn
+									:color="col.KonfairPrimary"
 									id="deleteOption"
 									v-on:click="removeOptionValue(index)"
 								>
@@ -82,6 +83,7 @@
 							</v-card>
 						</div>
 						<v-btn
+							:color="col.KonfairPrimary"
 							v-on:click="newValue('optionValue')"
 							id="newOption"
 						>
@@ -154,6 +156,7 @@
 									v-on:input="attributeMaxValueChange($event, index)"
 								/>
 								<v-btn
+									:color="col.KonfairPrimary"
 									id="deleteAttribute"
 									v-on:click="removeAttribute(index)"
 								>
@@ -165,6 +168,7 @@
 						</div>
 
 						<v-btn
+							:color="col.KonfairPrimary"
 							id="newAttribute"
 							v-on:click="newValue('attribute')"
 						>
@@ -193,11 +197,12 @@
 									id="categoryItemCode"
 									:item-text="item=>item.Code"
 									:item-value="item=>item.Code"
+									:value="code.value"
 									v-on:input="codeChange($event, index)"
-									type="number"
 									class="manualValidation"
 								/>
 								<v-btn
+									:color="col.KonfairPrimary"
 									id="deleteItemCode"
 									v-on:click="removeCodes(index)"
 								>
@@ -208,6 +213,7 @@
 							</v-card>
 						</div>
 						<v-btn
+							:color="col.KonfairPrimary"
 							id="newItemCode"
 							v-on:click="newValue('code')"
 						>
@@ -249,9 +255,10 @@
 						<Translate :text="'Check frequency'"/>
 					</h3>
 					<v-btn
+						:color="col.KonfairPrimary"
 						id="addFreq"
-						v-if="!showFreq"
-						v-on:click="showFrequencies()"
+						v-if="!frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-pencil-plus-outline
@@ -260,35 +267,49 @@
 					</v-btn>
 
 					<v-btn
+						:color="col.KonfairPrimary"
 						id="deleteFreq"
-						v-if="showFreq"
-						v-on:click="showFreq=!showFreq"
+						v-if="frequencies"
+						v-on:click="changeShow"
 					>
 						<v-icon>
 							mdi-delete
 						</v-icon>
 						<Translate :text="'Delete Frequency'"/>
 					</v-btn>
-					<Frequency v-if="showFreq"
+					<Frequency v-if="frequencies"
 							   ref="frequencyChild"
 							   :frequencies="frequencies"
 					/>
 				</v-card>
 
 			</div>
-
-			<div class="bottomButtons">
-				<v-btn v-if="this.isEdit"
-					v-on:click="deleteControlPoint"
-				>
-					<Translate :text="'Delete Control Point'"/>
-				</v-btn>
-				<v-btn
-					id="submit"
-					v-on:click="submitForm"
-				>
-					<Translate :text="'Submit'"/>
-				</v-btn>
+			<div>
+				<AlertModal
+					style="float: left; width: 100%"
+					:id="1"
+					:message="this.translateText('Are you sure?')"
+					:show="showConfirmAlert && this.isEdit"
+					:status="'warning'"
+				/>
+				<div class="bottomButtons">
+					<v-btn
+						:color="col.red"
+						v-if="this.isEdit"
+						v-on:click="handleDelete"
+					>
+						<Translate :text="'Cancel'" v-if="showConfirmAlert"/>
+						<Translate :text="'Delete Control Point'" v-else/>
+					</v-btn>
+					<v-btn
+						id="submit"
+						v-on:click="handleSubmit"
+						:color="col.KonfairPrimary"
+					>
+						<Translate :text="'Confirm'" v-if="showConfirmAlert"/>
+						<Translate :text="'Submit'" v-else/>
+					</v-btn>
+				</div>
 			</div>
 
 		</v-form>
@@ -309,16 +330,21 @@
 import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
+import colors from "../styles/colors";
+
 export default {
 	name: "ControlPoint",
-	props: ["submit", "isEdit"],
+	props: ["submit", "isEdit", "deleteCp"],
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
 		successAlert: {show: false, text: ''},
 		warningAlert: {show: false, text: ''},
 		showFreq: false,
-		id: 0
+		col: colors,
+		id: 0,
+
+		showConfirmAlert: false
 	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
@@ -390,7 +416,6 @@ export default {
 				return this.$store.state.createControlPoint.image
 			},
 			set(value) {
-				console.log("AAAAAAAAAAAAWWWWWW"+value)
 				this.$store.commit('createControlPoint/setImage', value)
 			}
 		},
@@ -403,6 +428,15 @@ export default {
 		descriptionChange(desc, index) {
 			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
 		},
+		changeShow(){
+			if(this.frequencies){
+				this.$store.commit('createControlPoint/clearFrequency')
+			}
+			else {
+				this.$store.commit('createControlPoint/setDefaultFrequencies')
+			}
+		},
+
 		optionValueChange(option, index) {
 			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
 		},
@@ -410,17 +444,13 @@ export default {
 			this.$store.commit(`createControlPoint/setAttributeId`, {id: id, index: index})
 		},
 		attributeMinValueChange(minVal, index) {
-			this.$store.commit(`createControlPoint/setAttributeMinValue`,{minVal: minVal, index: index})
+			this.$store.commit(`createControlPoint/setAttributeMinValue`, {minVal: minVal, index: index})
 		},
 		attributeMaxValueChange(maxVal, index) {
 			this.$store.commit(`createControlPoint/setAttributeMaxValue`, {maxVal: maxVal, index: index})
 		},
 		codeChange(code, index) {
 			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
-		},
-		showFrequencies() {
-			this.showFreq = true
-			this.$store.dispatch('createControlPoint/getFrequencies', {controlPointId: this.id})
 		},
 		newValue(list) {
 			switch (list) {
@@ -452,8 +482,11 @@ export default {
 		removeAttribute(index) {
 			this.$store.commit('createControlPoint/removeAttribute', index)
 		},
-		deleteControlPoint() {
-			alert("this will work only on edit control point while reusing this component")
+		handleDelete() {
+			this.showConfirmAlert = !this.showConfirmAlert
+		},
+		handleSubmit(){
+			this.showConfirmAlert ? this.deleteCp() : this.submit()
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
@@ -465,16 +498,16 @@ export default {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
 				return false
 			}
-			if(this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
+
+			if (this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
+
 			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
 			if (this.type === 'options') {
-				console.log("!!!!!!!!!!!!"+JSON.stringify(this.optionValues))
 				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
 			} else if (this.type === 'number') {
 				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
 				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
 			}
-			//if (this.validate(this.attributes, this.translateText('attribute name can not be empty')) === false) return false
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},
@@ -517,15 +550,25 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
+
+			delete tempFrequencies.id;
+
+			let messageForNotification;
+			let existsNegVal
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+
 			if (!existsNegVal) {
-				alert("There is an invalid input")
+				messageForNotification = { response: 2, message: "There is an invalid input" }
 			} else {
-				return tempFrequencies
+				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
 			}
+			return messageForNotification
 		},
 		submitForm() {
+			this.submitFrequencies()
 			this.submit(this.validateAll, this.showAlert)
+
 		},
 	}
 }
@@ -577,7 +620,6 @@ p {
 	margin-bottom: 10pt;
 }
 button {
-	background-color: #555 !important;
 	color: white !important;
 }
 v-input {

@@ -21,6 +21,7 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
+						v-on:keyup.enter="hanldeLogin"
 						id="enterUsername"
 						:rules="usernameRules"
 						required
@@ -117,7 +118,7 @@ export default {
 							username: this.username,
 						})
 						.then((result) => {
-							if (result) {
+							if (result === true) {
 								if (
 									this.$store.state.login.user.role == "admin"
 								) {
@@ -125,6 +126,9 @@ export default {
 								} else {
 									this.$router.push("/releasedOrders");
 								}
+							}
+							else if(result !== false){
+								alert(result)
 							}
 						});
 				}
@@ -140,4 +144,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+ .v-btn__content{
+	 color: white;
+ }
+</style>

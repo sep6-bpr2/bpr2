@@ -1,6 +1,8 @@
 const controlPointModel = require("../models/controlPoints")
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
+const {updateControlPoint} = require("./controlPoints");
+const {updateControlPointFrequencyId} = require("../models/controlPoints");
 
 const typeSwitchToText = (value) => {
 	switch (value) {
@@ -23,6 +25,20 @@ const typeSwitchToNumber = (value) => {
 	}
 }
 
+const deletePicture = (pictureName) => {
+	let path = __dirname.split('\\')
+	let localPath = ""
+	for (let i = 0; i < path.length - 1; i++) {
+		localPath += path[i] + "\\"
+	}
+	localPath += `pictures\\${pictureName}`
+	try {
+		fs.unlinkSync(localPath)
+	} catch(err) {
+		console.error(err)
+	}
+}
+
 
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
@@ -34,6 +50,25 @@ module.exports.getTypes = async () => {
 module.exports.getAttributes = async () => {
 	return await controlPointModel.getAllAttributesNames()
 }
+
+module.exports.deleteControlPoint = async (cpId) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
+
+	if(mainInformation[0].frequencyid != null){
+		await controlPointModel.deleteFrequency(mainInformation[0].frequencyid)
+	}
+
+	await controlPointModel.deleteControlPoint(cpId)
+	await controlPointModel.deleteControlPointDescriptions(cpId)
+	await controlPointModel.deleteControlPointAttributes(cpId)
+	await controlPointModel.deleteControlPointOptionValues(cpId)
+	await controlPointModel.deleteControlPointItemCategoryCodes(cpId)
+	return {}
+}
+
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
@@ -49,14 +84,15 @@ module.exports.getControlPointData = async (cpId) => {
 	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
 	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
 
-	const frequency = await controlPointModel.getControlPointFrequency(mainInformation.frequencyId)
+
+
 	const result = {
 		mainInformation: mainInformation,
 		descriptions: descriptions,
 		optionValues: optionValues,
 		attributes: attributes,
 		categoryCodes: categoryCodes,
-		frequencies
+		frequencies: frequencies[0]
 	}
 	return result
 }
@@ -64,29 +100,30 @@ module.exports.getControlPointData = async (cpId) => {
 module.exports.updateControlPoint = async (data) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
 	if(mainInformation.length === 0){
-		return {message: `control point with id: ${cpId} does not exist in database`}
+		return {message: `control point with id: ${data.controlPointId} does not exist in database`}
 	}
 
 	data.type = typeSwitchToNumber(data.type)
 	if (data.image != null && !data.image.includes('File')) {
 		if(mainInformation[0].image!=null){
-			let path = __dirname.split('\\')
-			let localPath = ""
-			for (let i = 0; i < path.length - 1; i++) {
-				localPath += path[i] + "\\"
-			}
-			localPath += `pictures\\${mainInformation[0].image}`
-			try {
-				fs.unlinkSync(localPath)
-			} catch(err) {
-				console.error(err)
-			}
+			deletePicture(mainInformation[0].image)
 		}
 		data.image = saveImage(data.image)
 	}
 	await controlPointModel.updateControlMainInformation(data)
 
-	await controlPointModel.updateControlPointFrequency(data.controlPointId, data.frequencies)
+	let frequencyResult = await controlPointModel.getFrequencyId(data.controlPointId)
+	let frequencyId = frequencyResult[0][""]
+
+	if(data.frequencies == null) await controlPointModel.updateControlPointFrequencyWhenDataNull(data.controlPointId)
+	else if(frequencyId == null){
+		let freqResult = await controlPointModel.updateControlPointFrequencyWhenFreqIdNull(data.controlPointId, data.frequencies)
+		let freqId = freqResult[0][""]
+		await updateControlPointFrequencyId(data.controlPointId,freqId)
+	}
+	else await controlPointModel.updateControlPointFrequencyWhenFreqIdNotNull(data.controlPointId, data.frequencies)
+
+
 
 	data.descriptions.forEach(async desc => {
 		await controlPointModel.updateControlPointDescription(data.controlPointId, desc.lang.toLowerCase(), desc.value)
@@ -115,23 +152,29 @@ module.exports.submitControlPoint = async (cp) => {
 	if (cp.image != null) {
 		cp.image = saveImage(cp.image)
 	}
+	let insertFrequencyString = ''
 	const nVarchar = mssql.mssql.NVarChar(1000)
 	const con = await mssql.localDB().request()
+	if(cp.frequencies !== null){
+		Object.entries(cp.frequencies).forEach((frequency,index) => {
+			let value = frequency[1]
+			con.input(`val${index}`, mssql.mssql.Int, value)
+		})
+
+		insertFrequencyString=`INSERT INTO [dbo].[Frequency] VALUES
+								(@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
+								SELECT @FreqID = scope_identity();`
+	}
 	let sqlString = `
 	BEGIN TRANSACTION
 		DECLARE @FreqID int;
-		INSERT INTO [dbo].[Frequency] VALUES (@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
-    	SELECT @FreqID = scope_identity();
+		${insertFrequencyString}
     	DECLARE @CpID int;
     	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
     	SELECT @CpID = scope_identity();
     	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
     	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
     	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
-
-	cp.frequencies.forEach((entry, index) => {
-		con.input(`val${index}`, mssql.mssql.Int, entry.value)
-	})
 
 	cp.type = typeSwitchToNumber(cp.type)
 	con.input('type', mssql.mssql.Int, cp.type)

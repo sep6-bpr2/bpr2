@@ -5,6 +5,7 @@ const { validate } = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
 
 const service = require("../services/users")
+const {validateUserAdmin} = require("../middleware/validateUser");
 
 
 /**
@@ -38,16 +39,43 @@ router.get("/getAllUsers/:offset/:limit",
 )
 
 
+//{username: "", role:""}
 /**
  * @description - add user to the system
- * @body - user to add to the system
+ * @body - username to add to the system
+ * @body - role to add to the system
  *
- * @example - POST {BaseURL}/api/users/
+ * @example - POST {BaseURL}/api/users/addUser/rokas
  */
-router.post("/addUser", async (req, res) => {
-    const result = await service.addUser(req.body)
+router.post("/addUser/:username",param("username").isLength({ min: 1, max: 35 }),body("username").isLength({ min: 1, max: 35 }),body("role").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
+
+	const result = await service.addUser(req.body)
 
     res.send(result)
+})
+
+/**
+ * @description - delete user from the system
+ * @body - user to remove from the system
+ *
+ * @example - POST {BaseURL}/api/users/deleteUser/rokas
+ */
+router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
+	body("username").isString()
+	body("role").isString()
+	const result = await service.removeUser(req.body)
+
+    res.send(result)
+})
+
+/**
+ * @description - get all users in the system who are currently qa working
+ *
+ * @example - GET {BaseURL}/api/users/getQAUsers/simon
+ */
+router.get("/getQAUsers/:username",param("username").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
+	const result = await service.getAllQAUsers()
+	res.send(result)
 })
 
 module.exports = router

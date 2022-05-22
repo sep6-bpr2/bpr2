@@ -1,7 +1,7 @@
 /* eslint-disable */
-describe('testCreationOfUser', () => {
+describe('testDeletionOfUser', () => {
 
-	let val = Math.random().toString(36).substring(2,7)
+	let val2 = Math.random().toString(36).substring(2,7)
 
 	it('should login', () => {
 		cy.visit('http://localhost:3000/login');
@@ -11,8 +11,7 @@ describe('testCreationOfUser', () => {
 	})
 
 	it('should get user page',()=>{
-		cy.get('header > div > ul >li:nth-child(4) > a').click();
-		cy.get('header > div > ul >li:nth-child(4) > a').should('contain.text','Users');
+		cy.visit('http://localhost:3000/users')
 	})
 
 	it('should validate user that already exists',()=>{
@@ -31,13 +30,27 @@ describe('testCreationOfUser', () => {
 		cy.get('#createUser').click()
 		cy.get('#usernameInput').click();
 		cy.get('#usernameInput').clear();
-		cy.get('#usernameInput').type(val);
+		cy.get('#usernameInput').type(val2);
 		cy.get('#roles').parent().click()
 		cy.get('.v-menu__content').contains("admin").click();
 		cy.get('.v-btn:nth-child(4) > .v-btn__content').click();
 	})
 
 	it('should check created user',()=>{
-		cy.get('tr').should('contain.text',val)
+		cy.get('tr').should('contain.text',val2)
 	})
+
+	it('should delete user',()=>{
+		cy.get('tr').last().trigger('mouseover')
+		cy.get('.trashCan').last().click()
+		cy.on("window:alert", (str) => {
+			expect(str).to.equal("Are you sure you want to delete user with username: " + val2);
+		});
+	})
+
+	it('should check that user deleted',()=>{
+		cy.get('tr').should('not.include.text',val2)
+	})
+
+
 })
