@@ -322,9 +322,5 @@ function saveImage(baseImage) {
 }
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
-<<<<<<< HEAD
     return controlPointModel.getControlPointsMinimal(language, offset, limit)
-=======
-	return controlPointModel.getControlPointsMinimal(language, offset, limit)
->>>>>>> main
 }
