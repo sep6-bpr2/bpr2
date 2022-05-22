@@ -61,7 +61,6 @@ module.exports.releasedOrders = async (location, offset, limit) => {
  */
 module.exports.completedOrders = async (location, offset, limit) => {
     let qaReports = await model.getCompletedQAReports()
-    // THIS NEEDS TO BE FIXED
 
     if (qaReports.length == 0) {
         return []
@@ -94,7 +93,7 @@ module.exports.completedOrders = async (location, offset, limit) => {
 /**
  * convert a list of objects with specified key to a string with comma separated values of that key
  * @param {[]} list - list of objects
- * @param {string} key - key that is in all of the objects 
+ * @param {string} key - key that is in all of the objects
  * @returns string EX: "1,2,4,5,7"
  */
 function listToCommaString(list, key) {
@@ -163,14 +162,14 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // Get control points that connect to these attributes and are for this categoryCode
             controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
 
-            // Get all the attributes and item categories of these control points 
+            // Get all the attributes and item categories of these control points
             // Will later validate which one connects to which one
             for (let i = 0; i < controlPoints.length; i++) {
                 controlPoints[i].attributes = await model.getControlPointAttributesLatest(controlPoints[i].id)
             }
 
             let added = []
-            // Determine if the control point is applied to tje 
+            // Determine if the control point is applied to tje
             for (let i = 0; i < controlPoints.length; i++) {
 
                 // If no attributes then it is a general control point for this category
@@ -184,7 +183,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
                     for (let k = 0; k < attributes.length; k++) {
                         // The control point must be linked to at least one attribute
                         if (attributes[k].id == controlPoints[i].attributes[j].id) {
-                            // Control point without a range 
+                            // Control point without a range
 
                             if (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) {
                                 added.push(controlPoints[i])
@@ -205,7 +204,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
             // Add all of the control point connections to this order
             if (added.length != 0) {
-                // Add qa report 
+                // Add qa report
                 qaReport = await model.createQAReport(id)
                 qaReport = qaReport[0]
 
@@ -243,7 +242,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             controlPoints = await model.getReleasedOrderControlPoints(qaReport.id, language, qaReport.createdDate)
         }
 
-        // Get all the attributes and item categories of these control points 
+        // Get all the attributes and item categories of these control points
         for (let i = 0; i < controlPoints.length; i++) {
             controlPoints[i].attributes = await model.getControlPointAttributes(controlPoints[i].id, qaReport.createdDate)
         }
@@ -394,7 +393,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // If control point freq is not existent then assign the category frequency
             if (itemData.multipleTimeControlPoints[i].frequency == null && itemData.frequency != null)
                 assignedFrequency = itemData.frequency[frequencyCategoryKey]
-            // If the control point has a frequency 
+            // If the control point has a frequency
             else if (itemData.multipleTimeControlPoints[i].frequency != null)
                 assignedFrequency = itemData.multipleTimeControlPoints[i].frequency[frequencyCategoryKey]
 
@@ -405,7 +404,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
                 let author = ""
                 let connectionId = ""
 
-                // Get the first value from answers 
+                // Get the first value from answers
                 if (mResultsForControlPoint.length != 0) {
                     answer = mResultsForControlPoint[0].answer
                     author = mResultsForControlPoint[0].author
@@ -472,7 +471,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 /**
  * saves the answers of the passed order
  * @param {Object} editedQAReport - qa report that has changes
- * @param {string} username 
+ * @param {string} username
  * @returns {Promise} result of the operation {response, message}
  */
 module.exports.saveQAReport = async (editedQAReport, username) => {
@@ -616,11 +615,11 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
 /**
  * Checks if the string is a valid number
  * @param {string} str the string that you want to check if it is a number
- * @returns {boolean} 
+ * @returns {boolean}
  */
 function isNumeric(str) {
     if (typeof str != "string") {
-        return false // we only process strings!  
+        return false // we only process strings!
     } else {
         // @ts-ignore
         return !isNaN(str) && !isNaN(parseFloat(str))
@@ -628,9 +627,9 @@ function isNumeric(str) {
 }
 
 /**
- * Completes the order and 
- * @param {Object} editedQAReport 
- * @param {string} username 
+ * Completes the order and
+ * @param {Object} editedQAReport
+ * @param {string} username
  * @returns {Promise} result of the operation {response, message}
  */
 module.exports.completeQAReport = async (editedQAReport, username) => {

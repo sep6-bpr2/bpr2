@@ -27,6 +27,27 @@ module.exports.getAllUsers = async (offset, limit) => {
 	return result.recordset
 }
 
+
+module.exports.getAllUsersWithUser = async (user) => {
+	const result = await localDB()
+		.request()
+		.input("username", mssql.NVarChar(1000), user.username)
+		.query(`select * from SystemUser where SystemUser.username= @username`)
+
+	return result.recordset
+}
+
+
+module.exports.getAllQAUsers = async () => {
+	const result = await localDB()
+		.request()
+		.query('SELECT DISTINCT author FROM QAReportControlPointValue')
+
+	return result.recordset
+}
+
+
+
 module.exports.addUser = async (user) => {
     await localDB()
         .request()
@@ -40,4 +61,23 @@ module.exports.addUser = async (user) => {
             where SystemUser.username= '${user.username}' AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL`)
 
     return result.recordset
+}
+
+module.exports.removeUser = async (user) => {
+	await localDB()
+		.request()
+		.input("username", mssql.NVarChar(1000), user.username)
+		.query(`delete from SystemUser where username = @username`)
+}
+
+module.exports.expireUser = async (id, username) => {
+	await localDB()
+		.request()
+		.input("username", mssql.NVarChar(1000), username)
+        .input("id", mssql.Int, id)
+		.query(`
+            update [dbo].[SystemUser] 
+            set validTo = GETDATE()
+            where id = @id AND username = @username and validTo IS NULL
+        `)
 }

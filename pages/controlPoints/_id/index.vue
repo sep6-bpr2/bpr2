@@ -16,6 +16,7 @@
 			<ControlPoint
 				:submit="submit"
 				:is-edit="true"
+				:delete-cp="deleteControlPoint"
 			></ControlPoint>
 		</div>
 	</div>
@@ -66,6 +67,12 @@ export default {
 				})
 			}
 		},
+		deleteControlPoint(){
+				this.$store.dispatch('createControlPoint/deleteControlPoint', this.$route.params.id)
+					.then( resolved => {
+						if(resolved){ this.$router.push('/controlPoints');}
+					})
+		}
 	}
 };
 </script>

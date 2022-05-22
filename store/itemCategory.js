@@ -1,11 +1,15 @@
 export const state = () => ({
 	itemCodes: [],
-	frequencies:[]
+	frequencies: [],
+	updateSuccess: {}
 })
 
 export const mutations = {
-	setFrequencies(state,frequencies){
+	setFrequencies(state, frequencies) {
 		state.frequencies = frequencies
+	},
+	updateStatus(state, updateVal) {
+		state.updateSuccess = updateVal
 	},
     appendItemCodes(state, itemCodes) {
         for (let i = 0; i < itemCodes.length; i ++){
@@ -18,28 +22,28 @@ export const mutations = {
 }
 
 export const actions = {
-	loadItemCategoryCodes({ commit, rootState }, options) {
+	loadItemCategoryCodes({commit, rootState}, options) {
 		const user = rootState.login.user;
 		const location = rootState.login.chosenLocation
 		if (user) {
-			fetch(`api/itemCategory/getCodes/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+            fetch(`api/itemCategory/getCodes/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
                 if(options.offset == 0){
                     commit('setItemCodes', result)
                 }else{
                     commit('appendItemCodes', result)
                 }
-			})
+            })
 		}
 	},
-	getFrequencyOfItemCode({commit,rootState },{itemCode}){
+	getFrequencyOfItemCode({commit, rootState}, {itemCode}) {
 		const user = rootState.login.user;
 		if (user) {
-			fetch(`api/itemCategory/getFrequenciesOfCode/${user.username}/${itemCode}`).then(res => res.json()).then(result => {
+			fetch(`../api/itemCategory/getFrequenciesOfCode/${user.username}/${itemCode}`).then(res => res.json()).then(result => {
 				commit('setFrequencies', result)
 			})
 		}
 	},
-	setFrequencyWithId({commit,rootState },{frequencies}){
+	setFrequencyWithId({commit, rootState}, {frequencies}) {
 		const user = rootState.login.user;
 		if (user) {
 			let fetchData = {
@@ -49,7 +53,7 @@ export const actions = {
 					'Content-Type': 'application/json'
 				},
 			}
-			fetch(`../api/itemCategory/setFrequencies/${user.username}`,fetchData)
+			fetch(`../api/itemCategory/setFrequencies/${user.username}`, fetchData)
 		}
 	},
 }

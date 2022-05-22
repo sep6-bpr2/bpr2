@@ -42,6 +42,29 @@ router.get("/allAttributesNames/:username",
 /**
  * @description - Returns all available attributes to pick while creating control point
  * @param username - username of the user
+ * @param cpid - id of the control point
+ *
+ * @example - DELETE {BaseURL}/api/controlPoints/delete/rafal/1
+ */
+router.delete("/delete/:username/:cpid",
+	param("username").isLength({ min: 1, max: 35 }),
+	param('cpid').isInt(),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+		const result = await controlPointService.deleteControlPoint(req.params.cpid)
+		if (result.hasOwnProperty('message')) {
+			if(result.message.includes('does not exist')) res.status(404)
+		}
+		res.send(result)
+	}
+)
+
+
+/**
+ * @description - Returns all available attributes to pick while creating control point
+ * @param username - username of the user
+ * @param cpid - id of the control point
  *
  * @example - GET {BaseURL}/api/controlPoints/allAttributesNames/rafal
  */
@@ -62,7 +85,7 @@ router.get("/controlPointData/:username/:cpid",
 /**
  * @description - Inserts new control point
  * @param username - username of the user
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -75,7 +98,6 @@ router.get("/controlPointData/:username/:cpid",
  */
 router.post("/submitControlPoint/:username",
     param("username").isLength({ min: 1, max: 35 }),
-    body("frequencies").isArray(),
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
 	body("type").isString(),
@@ -87,6 +109,7 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
+		console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }
@@ -96,7 +119,7 @@ router.post("/submitControlPoint/:username",
  * @description - Edits existing control point
  * @param username - username of the user
  * @body controlPointId - id of control point to change
- * @body frequencies - list with frequencies
+ * @body frequencies - object with frequencies
  * @body descriptions - list of descriptions where at least one has some value
  * @body type - type of control point value
  * @body upperTolerance - upper tolerance for measure
@@ -110,7 +133,6 @@ router.post("/submitControlPoint/:username",
 router.put("/submitEditControlPoint/:username",
 	param("username").isLength({ min: 1, max: 35 }),
 	body("controlPointId").isInt(),
-	body("frequencies").isArray(),
 	body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
 	body("measurementType").isInt(),
 	body("type").isString(),

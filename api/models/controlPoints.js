@@ -53,28 +53,6 @@ module.exports.getControlMainInformation = async (controlPointNumber) => {
 	return result.recordset
 }
 
-module.exports.getControlPointFrequency = async (freqId) => {
-	const result = await localDB()
-		.request()
-		.input('freqId', mssql.Int, freqId)
-		.query(`SELECT to25,
-					   to50,
-					   to100,
-					   to200,
-					   to300,
-					   to500,
-					   to700,
-					   to1000,
-					   to1500,
-					   to2000,
-					   to3000,
-					   to4000,
-					   to5000
-				FROM Frequency
-				WHERE id = @freqId`)
-
-	return result.recordset
-}
 
 module.exports.getControlPointDescriptions = async (controlPointNumber) => {
 	const result = await localDB()
@@ -147,7 +125,6 @@ module.exports.updateControlMainInformation = async (data) => {
 
 	return result.recordset
 }
-
 
 module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, image, upperTolerance, lowerTolerance, inputType, measurementType) => {
 	const result = await localDB()
@@ -224,8 +201,6 @@ module.exports.expireCategoryCodesForControlPoint = async (controlPointNumber) =
         `)
 }
 
-
-
 module.exports.updateControlPointFrequency = async (cpId, data) => {
 	const result = await localDB()
 		.request()
@@ -257,6 +232,105 @@ module.exports.updateControlPointFrequency = async (cpId, data) => {
 					to3000 = @to3000,
 					to4000 = @to4000,
 					to5000 = @to5000 FROM Frequency f
+ 					JOIN ControlPoint c
+				ON c.frequencyId = f.id
+				WHERE c.id = @cpId`)
+
+	return result.recordset
+}
+
+module.exports.getFrequencyId = async (cpId) => {
+        const result = await localDB()
+            .request()
+            .input('cpId', mssql.Int, cpId)
+            .query(`select frequencyId from ControlPoint WHERE id = @cpId`)
+    
+        return result.recordset
+    }
+
+module.exports.updateControlPointFrequencyWhenFreqIdNotNull = async (cpId, data) => {
+
+	const result = await localDB()
+		.request()
+		.input('cpId', mssql.Int, cpId)
+		.input('to25', mssql.Int, data[Object.keys(data)[0]])
+		.input('to50', mssql.Int, data[Object.keys(data)[1]])
+		.input('to100', mssql.Int, data[Object.keys(data)[2]])
+		.input('to200', mssql.Int, data[Object.keys(data)[3]])
+		.input('to300', mssql.Int, data[Object.keys(data)[4]])
+		.input('to500', mssql.Int, data[Object.keys(data)[5]])
+		.input('to700', mssql.Int, data[Object.keys(data)[6]])
+		.input('to1000', mssql.Int, data[Object.keys(data)[7]])
+		.input('to1500', mssql.Int, data[Object.keys(data)[8]])
+		.input('to2000', mssql.Int, data[Object.keys(data)[9]])
+		.input('to3000', mssql.Int, data[Object.keys(data)[10]])
+		.input('to4000', mssql.Int, data[Object.keys(data)[11]])
+		.input('to5000', mssql.Int, data[Object.keys(data)[12]])
+		.query(`UPDATE Frequency
+				SET to25   = @to25,
+					to50   = @to50,
+					to100  = @to100,
+					to200  = @to200,
+					to300  = @to300,
+					to500  = @to500,
+					to700  = @to700,
+					to1000 = @to1000,
+					to1500 = @to1500,
+					to2000 = @to2000,
+					to3000 = @to3000,
+					to4000 = @to4000,
+					to5000 = @to5000 FROM Frequency f
+ 					JOIN ControlPoint c
+				ON c.frequencyId = f.id
+				WHERE c.id = @cpId`)
+
+	return result.recordset
+}
+
+module.exports.updateControlPointFrequencyWhenFreqIdNull = async (cpId, data) => {
+
+	const value = await localDB()
+		.request()
+		.input('cpId', mssql.Int, cpId)
+		.input('to25', mssql.Int, data[Object.keys(data)[0]])
+		.input('to50', mssql.Int, data[Object.keys(data)[1]])
+		.input('to100', mssql.Int, data[Object.keys(data)[2]])
+		.input('to200', mssql.Int, data[Object.keys(data)[3]])
+		.input('to300', mssql.Int, data[Object.keys(data)[4]])
+		.input('to500', mssql.Int, data[Object.keys(data)[5]])
+		.input('to700', mssql.Int, data[Object.keys(data)[6]])
+		.input('to1000', mssql.Int, data[Object.keys(data)[7]])
+		.input('to1500', mssql.Int, data[Object.keys(data)[8]])
+		.input('to2000', mssql.Int, data[Object.keys(data)[9]])
+		.input('to3000', mssql.Int, data[Object.keys(data)[10]])
+		.input('to4000', mssql.Int, data[Object.keys(data)[11]])
+		.input('to5000', mssql.Int, data[Object.keys(data)[12]])
+		.query(`INSERT INTO Frequency ([to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
+				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
+				[to5000])
+				VALUES (@to25,@to50,@to100,@to200,@to300,@to500,@to700,@to1000,@to1500,@to2000,@to3000,@to4000,@to5000);
+				SELECT SCOPE_IDENTITY()
+				`)
+
+	return value.recordset
+}
+
+module.exports.updateControlPointFrequencyId = async (cpId,freqId) => {
+	const result = await localDB()
+		.request()
+		.input('cpId', mssql.Int, cpId)
+		.input('freqId', mssql.Int, freqId)
+		.query(`UPDATE ControlPoint SET frequencyid = ${freqId} WHERE id = @cpId`)
+
+	return result.recordset
+}
+
+
+module.exports.updateControlPointFrequencyWhenDataNull = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('cpId', mssql.Int, cpId)
+		.query(`DELETE f FROM Frequency f
  					JOIN ControlPoint c
 				ON c.frequencyId = f.id
 				WHERE c.id = @cpId`)
@@ -356,6 +430,39 @@ module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
 		.query(`DELETE
 				FROM [dbo].[ItemCategoryControlPoint]
 				WHERE controlPointId = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.deleteControlPoint = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`DELETE
+				FROM [dbo].[ControlPoint]
+				WHERE id = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.deleteControlPointDescriptions = async (cpId) => {
+	const result = await localDB()
+		.request()
+		.input('CpId', mssql.Int, cpId)
+		.query(`DELETE
+				FROM [dbo].[Description]
+				WHERE controlPointId = @CpId`)
+
+	return result.recordset
+}
+
+module.exports.deleteFrequency = async (id) => {
+	const result = await localDB()
+		.request()
+		.input('id', mssql.Int, id)
+		.query(`DELETE
+				FROM [dbo].[Frequency]
+				WHERE id = @id`)
 
 	return result.recordset
 }

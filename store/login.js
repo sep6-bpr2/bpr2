@@ -29,13 +29,18 @@ export const mutations = {
 }
 
 export const actions = {
-	loginUser({commit, dispatch}, {username}) {
+	loginUser({commit, dispatch, rootState}, {username}) {
 		return new Promise((resolve, reject) => {
 			fetch(`api/users/getUser/${username}`).then(res => res.json()).then(result => {
 				if (result != null && result.length != 0) {
-					commit('setUser', result)
-					dispatch('nav/loadLinks', {}, {root: true})
-					resolve(true)
+					if(rootState.login.chosenLocation === "All" && result[0].role === "qa employee"){
+						resolve("This user is not allowed to login with specified department!")
+					}
+					else{
+						commit('setUser', result)
+						dispatch('nav/loadLinks', {}, {root: true})
+						resolve(true)
+					}
 				} else {
 					resolve(false)
 				}

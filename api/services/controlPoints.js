@@ -3,6 +3,8 @@ const itemCategoryModel = require("../models/itemCategory")
 
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
+const {updateControlPoint} = require("./controlPoints");
+const {updateControlPointFrequencyId} = require("../models/controlPoints");
 
 const typeSwitchToText = (value) => {
     switch (value) {
@@ -25,6 +27,20 @@ const typeSwitchToNumber = (value) => {
     }
 }
 
+const deletePicture = (pictureName) => {
+	let path = __dirname.split('\\')
+	let localPath = ""
+	for (let i = 0; i < path.length - 1; i++) {
+		localPath += path[i] + "\\"
+	}
+	localPath += `pictures\\${pictureName}`
+	try {
+		fs.unlinkSync(localPath)
+	} catch(err) {
+		console.error(err)
+	}
+}
+
 
 module.exports.getTypes = async () => {
     const allTypes = await controlPointModel.getAllTypes()
@@ -35,6 +51,25 @@ module.exports.getTypes = async () => {
 
 module.exports.getAttributes = async () => {
     return controlPointModel.getAllAttributesNames()
+}
+
+module.exports.deleteControlPoint = async (controlPointNumber) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(controlPointNumber)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${controlPointNumber} does not exist in database`}
+	}
+
+	if(mainInformation[0].frequencyid != null){
+        await itemCategoryModel.expireOldFrequency(mainInformation[0].frequencyId)
+	}
+
+    await controlPointModel.expireControlPoint(controlPointNumber)
+    await controlPointModel.expireDescriptionsForControlPoint(controlPointNumber)
+    await controlPointModel.expireAttributesForControlPoint(controlPointNumber)
+    await controlPointModel.expireOptionsForControlPoint(controlPointNumber)
+    await controlPointModel.expireCategoryCodesForControlPoint(controlPointNumber)
+
+	return {}
 }
 
 module.exports.getControlPointData = async (controlPointNumber) => {
@@ -85,6 +120,53 @@ module.exports.updateControlPoint = async (data) => {
         }
         data.image = saveImage(data.image)
     }
+
+    // Expire old frequency
+    // Insert new frequency
+    let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
+    oldControlPoint = oldControlPoint[0]
+
+    if(data.frequencies == null && oldControlPoint.frequencyId != null){
+        await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
+    }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
+        await itemCategoryModel.expireOldFrequency(data.frequencyId)
+        await itemCategoryModel.insertFrequency({
+            frequencyNumber: data.frequencyId,
+            to25: data.frequencies[0],
+            to50: data.frequencies[1],
+            to100: data.frequencies[2],
+            to200: data.frequencies[3],
+            to300: data.frequencies[4],
+            to500: data.frequencies[5],
+            to700: data.frequencies[6],
+            to1000: data.frequencies[7],
+            to1500: data.frequencies[8],
+            to2000: data.frequencies[9],
+            to3000: data.frequencies[10],
+            to4000: data.frequencies[11],
+            to5000: data.frequencies[12]
+        })
+    }else if(data.frequencyId != null && oldControlPoint.frequencyId == null && data.frequencies != null){
+        const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
+        data.frequencyId = latestFrequencyNumber
+        await itemCategoryModel.insertFrequency({
+            frequencyNumber: data.frequencyId,
+            to25: data.frequencies[0],
+            to50: data.frequencies[1],
+            to100: data.frequencies[2],
+            to200: data.frequencies[3],
+            to300: data.frequencies[4],
+            to500: data.frequencies[5],
+            to700: data.frequencies[6],
+            to1000: data.frequencies[7],
+            to1500: data.frequencies[8],
+            to2000: data.frequencies[9],
+            to3000: data.frequencies[10],
+            to4000: data.frequencies[11],
+            to5000: data.frequencies[12]
+        })
+    }
+    
     // Expire control point
     await controlPointModel.expireControlPoint(data.controlPointNumber)
     // Insert new control point
@@ -97,26 +179,6 @@ module.exports.updateControlPoint = async (data) => {
         data.inputType, 
         data.measurementType
     )
-
-    // Expire old frequency
-    await itemCategoryModel.expireOldFrequency(data.frequencyId)
-    //Insert new frequency
-    await itemCategoryModel.insertFrequency({
-        frequencyNumber: data.frequencyId,
-        to25: data.frequencies[0],
-        to50: data.frequencies[1],
-        to100: data.frequencies[2],
-        to200: data.frequencies[3],
-        to300: data.frequencies[4],
-        to500: data.frequencies[5],
-        to700: data.frequencies[6],
-        to1000: data.frequencies[7],
-        to1500: data.frequencies[8],
-        to2000: data.frequencies[9],
-        to3000: data.frequencies[10],
-        to4000: data.frequencies[11],
-        to5000: data.frequencies[12]
-    })
 
     // Expire all descriptions for this 
     await controlPointModel.expireDescriptionsForControlPoint(data.controlPointNumber)
@@ -158,25 +220,38 @@ module.exports.submitControlPoint = async (cp) => {
     if (cp.image != null) {
         cp.image = saveImage(cp.image)
     }
+    
+    let insertFrequencyString = ''
+	const con = await mssql.localDB().request()
+	if(cp.frequencies !== null){
+		Object.entries(cp.frequencies).forEach((frequency,index) => {
+			let value = frequency[1]
+			con.input(`val${index}`, mssql.mssql.Int, value)
+		})
+
+		insertFrequencyString=`
+            INSERT INTO [dbo].[Frequency] 
+            (frequencyNumber, to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000, validFrom) 
+            VALUES 
+            (@frequencyNumber, @val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12, GETDATE());
+        `
+	}
+
     const latestControlPointNumber = await controlPointModel.getLatestControlPointNumber()
     const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
 
-    const con = await mssql.localDB().request()
     let sqlString = `
     Transaction
-        INSERT INTO [dbo].[Frequency] (frequencyNumber, to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000, validFrom) VALUES (@frequencyNumber, @val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12, GETDATE());
+        ${insertFrequencyString}
 
         INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'english', @engDescription, GETDATE())
         INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'danish', @dkDescription, GETDATE())
         INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'lithuanian', @ltDescription, GETDATE())
-
+        
         INSERT INTO ControlPoint 
         (frequencyid, controlPointNumber, image, upperTolerance, lowerTolerance, inputType, measurementType, validFrom)
         VALUES (@frequencyNumber, @controlPointNumber, @image, @upperTolerance, @lowerTolerance, @type, @measurementType, GETDATE());
     `
-    cp.frequencies.forEach((entry, index) => {
-        con.input(`val${index}`, mssql.mssql.Int, entry.value)
-    })
 
     cp.type = typeSwitchToNumber(cp.type)
     con.input('type', mssql.mssql.Int, cp.type)
@@ -247,5 +322,9 @@ function saveImage(baseImage) {
 }
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
+<<<<<<< HEAD
     return controlPointModel.getControlPointsMinimal(language, offset, limit)
+=======
+	return controlPointModel.getControlPointsMinimal(language, offset, limit)
+>>>>>>> main
 }
