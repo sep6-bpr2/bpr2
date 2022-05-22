@@ -1,9 +1,8 @@
 <template>
-	<!-- <div 
-        v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
+	<div 
+        v-show="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
         class="completedOrders"
-    > -->
-	<div class="completedOrders">
+    >
 		<h1>This is the completed orders page</h1>
 		<CustomTable
 			id="completedOrderList"
@@ -11,6 +10,7 @@
 			:rows="completedOrders"
 			:tableHeaders="headers"
 			:callback="completedOrderClickCallback"
+            :scrolledToBottomCallback="loadMoreCompletedOrders"
 		/>
 	</div>
 </template>
@@ -33,25 +33,10 @@ export default {
 		};
 	},
 	created() {
-		if (!this.$store.state || !this.$store.state.login.user) {
-			this.$router.push("/login");
-		}
 		this.$store.dispatch("completedOrders/loadCompletedOrders", {
 			offset: this.offset,
 			limit: this.limit,
 		});
-	},
-	mounted() {
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-				this.offset = this.offset + this.limit;
-				this.loadMoreCompletedOrders();
-				console.log("Reached the end of the list");
-			}
-		};
 	},
 	computed: {
 		headers() {
@@ -69,6 +54,7 @@ export default {
 			this.$router.push("/completedOrders/" + row.id);
 		},
 		loadMoreCompletedOrders() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("completedOrders/loadCompletedOrders", {
 				offset: this.offset,
 				limit: this.limit,

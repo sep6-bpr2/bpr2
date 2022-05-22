@@ -12,7 +12,7 @@
 		<h1><Translate :text="'Item Category'" /></h1>
 
 		<p>
-			<Translate :text="'Click on item category to edit its frequency'"/>
+			<Translate :text="'Click on item category to edit its frequency'" />
 		</p>
 
 		<custom-table
@@ -20,23 +20,24 @@
 			:rows="codeList"
 			:tableHeaders="headers"
 			:callback="itemCatCodeClickCallback"
+            :scrolledToBottomCallback="loadMoreItemCategories"
 		/>
 	</div>
-
 </template>
 
 <script>
 import CustomTable from "../../components/CustomTable";
 import Translate from "../../components/Translate";
-import {authorizeUser} from "../../mixins/authorizeUser.js"
+import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {
-	data:()=>({
+	data: () => ({
 		allowedHeaders: ["Code"],
 		headers: [{ name: "Item Codes", id: 0 }],
 		notification: null,
 		modalAlertShowSubmit: false,
-
+		offset: 0,
+		limit: 25,
 	}),
     mixins: [authorizeUser],
 	components: {Translate, CustomTable},
@@ -62,14 +63,14 @@ export default {
 		},
 	},
 	mounted() {
-
 		if(this.updateStatus.status === "success"){
 			this.notification = { response: 1, message: "The item category with code " + this.updateStatus.value + " has updated successfully"}
 			this.modalAlertShowSubmit = true;
 		}
 
-		 this.$store
-			.dispatch("itemCategory/loadItemCategoryCodes")
+        this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
+			offset: this.offset, limit: this.limit
+		});
 
 	},
 	methods: {
@@ -79,12 +80,19 @@ export default {
 		closeAlertModal(id) {
 			if (id == 1) this.modalAlertShowSubmit = false;
 		},
+        loadMoreItemCategories() {
+            this.offset = this.offset + this.limit;
+			this.$store.dispatch("releasedOrders/loadItemCategoryCodes", {
+				offset: this.offset,
+				limit: this.limit,
+			});
+		},
 	}
 }
 </script>
 
 <style scoped>
-.itemCat{
+.itemCat {
 	margin: 10px;
 }
 </style>

@@ -17,11 +17,12 @@ const defaultFrequencyValue = [{
 }]
 
 
-module.exports.getItemCatCodes = async (location) => {
+module.exports.getItemCatCodes = async (location, offset, limit) => {
 	if (location !== 'All') {
-		return model.getItemCatCodesWhenLocationNotAll(location)
-	}
-	return model.getItemCatCodesWhenLocationAll()
+		return model.getItemCatCodesWhenLocationNotAll(location, offset, limit)
+	}else{
+        return model.getItemCatCodesWhenLocationAll(offset, limit)
+    }
 }
 
 module.exports.getFrequenciesOfItem = async (itemCode) => {
