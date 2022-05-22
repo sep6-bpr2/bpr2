@@ -1,9 +1,8 @@
 <template>
-	<!-- <div 
-        v-if="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
+	<div 
+        v-show="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
         class="completedOrders"
-    > -->
-	<div class="completedOrders">
+    >
 		<h1>This is the completed orders page</h1>
 		<CustomTable
 			id="completedOrderList"
