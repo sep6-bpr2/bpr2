@@ -78,12 +78,12 @@
 					:inputsDisabled="true"
 				/>
 			</div>
-		</div>
 
-		<div class="completedOrder">
-			<button id="printButton" v-on:click="handlePrint">
-				<Translate text="Print PDF" />
-			</button>
+			<div class="completedOrder">
+				<button id="printButton" v-on:click="handlePrint">
+					<Translate text="Print PDF" />
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -233,13 +233,18 @@ export default {
 
 					canvas.getContext("2d").drawImage(this, 0, 0);
 
-					resolve({ data: canvas.toDataURL("image/jpeg"), width: canvas.width, height: canvas.height})
+					resolve({
+						data: canvas.toDataURL("image/jpeg"),
+						width: canvas.width,
+						height: canvas.height,
+					});
 				};
 
 				image.src = URL;
 			});
 		},
-		async handlePrint() { // Print the information of the 
+		async handlePrint() {
+			// Print the information of the
 			let pdf = new jsPDF("landscape", "px");
 
 			let arrayOfElements = [
@@ -258,15 +263,14 @@ export default {
 
 				// Calculate the scale of the image
 				let scale = 0;
-				const scaleWidth = element.style.width / pdf.internal.pageSize.getWidth();
-				const scaleHeight = element.style.height / pdf.internal.pageSize.getHeight();
+				const scaleWidth =
+					element.style.width / pdf.internal.pageSize.getWidth();
+				const scaleHeight =
+					element.style.height / pdf.internal.pageSize.getHeight();
 
 				// Determine which scale would fit the page best
-				if (scaleWidth > scaleHeight) 
-					scale = scaleWidth;
-				else 
-					scale = scaleHeight;
-				
+				if (scaleWidth > scaleHeight) scale = scaleWidth;
+				else scale = scaleHeight;
 
 				// Add the image to pdf as png with adjusted size
 				pdf.addImage(
@@ -279,72 +283,96 @@ export default {
 					arrayOfElements[i],
 					"FAST"
 				);
-                pdf.addPage();
+				pdf.addPage();
 			}
 
-			for (let i = 0; i < this.currentOrder.oneTimeControlPoints.length; i++) {
-                if(this.currentOrder.oneTimeControlPoints[i].image != null){
-                    let image = await this.getUrlImageAsData(
-                        window.location.origin + "/api/controlPoints/picture/" +this.$store.state.login.user.username + "/" + this.currentOrder.oneTimeControlPoints[i].image
-                    ); 
+			for (
+				let i = 0;
+				i < this.currentOrder.oneTimeControlPoints.length;
+				i++
+			) {
+				if (this.currentOrder.oneTimeControlPoints[i].image != null) {
+					let image = await this.getUrlImageAsData(
+						window.location.origin +
+							"/api/controlPoints/picture/" +
+							this.$store.state.login.user.username +
+							"/" +
+							this.currentOrder.oneTimeControlPoints[i].image
+					);
 
-                    // Calculate the scale of the image
-                    const scaleWidth = image.width / pdf.internal.pageSize.getWidth();
-                    const scaleHeight = image.height / pdf.internal.pageSize.getHeight();
-                    let scale = 0;
+					// Calculate the scale of the image
+					const scaleWidth =
+						image.width / pdf.internal.pageSize.getWidth();
+					const scaleHeight =
+						image.height / pdf.internal.pageSize.getHeight();
+					let scale = 0;
 
-                    // Determine which scale would fit the page best
-                    if (scaleWidth > scaleHeight)
-                        scale = scaleWidth;
-                    else 
-                        scale = scaleHeight;
-                    
+					// Determine which scale would fit the page best
+					if (scaleWidth > scaleHeight) scale = scaleWidth;
+					else scale = scaleHeight;
 
-                    // Add the image to pdf as png with adjusted size
-                    pdf.addImage(
-                        image.data,
-                        "PNG",
-                        0,
-                        0,
-                        image.width / scale,
-                        image.height / scale,
-                        this.currentOrder.oneTimeControlPoints[i].image + "One time",
-                        "FAST"
-                    );
-                    pdf.addPage();
-                }
+					// Add the image to pdf as png with adjusted size
+					pdf.addImage(
+						image.data,
+						"PNG",
+						0,
+						0,
+						image.width / scale,
+						image.height / scale,
+						this.currentOrder.oneTimeControlPoints[i].image +
+							"One time",
+						"FAST"
+					);
+					pdf.addPage();
+				}
 			}
-            for (let i = 0; i < this.currentOrder.multipleTimeControlPoints.length; i++) {
-                if(this.currentOrder.multipleTimeControlPoints[i].image != null){
-                    let image = await this.getUrlImageAsData(
-                        window.location.origin + "/api/controlPoints/picture/" +this.$store.state.login.user.username + "/" + this.currentOrder.multipleTimeControlPoints[i].image
-                    ); 
-                    // Calculate the scale of the image
-                    const scaleWidth = image.width / pdf.internal.pageSize.getWidth();
-                    const scaleHeight = image.height / pdf.internal.pageSize.getHeight();
-                    let scale = 0;
+			for (
+				let i = 0;
+				i < this.currentOrder.multipleTimeControlPoints.length;
+				i++
+			) {
+				if (
+					this.currentOrder.multipleTimeControlPoints[i].image != null
+				) {
+					let image = await this.getUrlImageAsData(
+						window.location.origin +
+							"/api/controlPoints/picture/" +
+							this.$store.state.login.user.username +
+							"/" +
+							this.currentOrder.multipleTimeControlPoints[i].image
+					);
+					// Calculate the scale of the image
+					const scaleWidth =
+						image.width / pdf.internal.pageSize.getWidth();
+					const scaleHeight =
+						image.height / pdf.internal.pageSize.getHeight();
+					let scale = 0;
 
-                    // Determine which scale would fit the page best
-                    if (scaleWidth > scaleHeight)
-                        scale = scaleWidth;
-                    else 
-                        scale = scaleHeight;
+					// Determine which scale would fit the page best
+					if (scaleWidth > scaleHeight) scale = scaleWidth;
+					else scale = scaleHeight;
 
-                    // Add the image to pdf as png with adjusted size
-                    pdf.addImage(
-                        image.data,
-                        "PNG",
-                        0,
-                        0,
-                        image.width / scale,
-                        image.height / scale,
-                        this.currentOrder.multipleTimeControlPoints[i].image + "Multiple",
-                        "FAST"
-                    );
-                    if (i != 0 && i != this.currentOrder.multipleTimeControlPoints.length - 1) {
-                        pdf.addPage();
-                    }
-                }
+					// Add the image to pdf as png with adjusted size
+					pdf.addImage(
+						image.data,
+						"PNG",
+						0,
+						0,
+						image.width / scale,
+						image.height / scale,
+						this.currentOrder.multipleTimeControlPoints[i].image +
+							"Multiple",
+						"FAST"
+					);
+					if (
+						i != 0 &&
+						i !=
+							this.currentOrder.multipleTimeControlPoints.length -
+								1
+					) {
+						pdf.addPage();
+					}
+				}
 			}
 			pdf.save("QA report " + this.currentOrder.id + ".pdf");
 		},
