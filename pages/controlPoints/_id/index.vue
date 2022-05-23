@@ -18,10 +18,10 @@
 				:is-edit="true"
 				:delete-cp="deleteControlPoint"
 				:cp-data="cpData"
-				:attributes-names="this.$store.state.createControlPoint.attributesNames"
-				:codes-choice="this.$store.state.createControlPoint.allItemCodes"
-				:all-types="this.$store.state.createControlPoint.allTypes"
-				:all-measurement-types="this.$store.state.createControlPoint.allMeasurementTypes"
+				:attributes-names="this.$store.state.controlPoint.attributesNames"
+				:codes-choice="this.$store.state.controlPoint.allItemCodes"
+				:all-types="this.$store.state.controlPoint.allTypes"
+				:all-measurement-types="this.$store.state.controlPoint.allMeasurementTypes"
 			></ControlPoint>
 		</div>
 	</div>
@@ -40,11 +40,11 @@ export default {
 		cpData: null,
 	}),
 	created() {
-		this.$store.dispatch("createControlPoint/getAllTypes")
-		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
+		this.$store.dispatch("controlPoint/getAllTypes")
+		this.$store.dispatch("controlPoint/getAllAttributesNames")
+		this.$store.dispatch("controlPoint/loadItemCategoryCodes")
 		this.$store
-			.dispatch("createControlPoint/getControlPointData", this.$route.params.id).then(result =>{
+			.dispatch("controlPoint/getControlPointData", this.$route.params.id).then(result =>{
 			if(result){
 				this.cpData = result
 			}
@@ -52,14 +52,14 @@ export default {
 	},
 	computed: {
 		alert() {
-			return this.$store.state.createControlPoint.alert
+			return this.$store.state.controlPoint.alert
 		},
 	},
 	methods: {
 		submit(validateAll, showAlert, validateFrequency) {
 			if (validateAll() && validateFrequency() ) {
 				this.cpData.controlPointId = this.$route.params.id
-				this.$store.dispatch('createControlPoint/submitEditControlPoint', this.cpData).then(result => {
+				this.$store.dispatch('controlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {
 						showAlert('success', this.translateText('control point has been created'))
 					} else {
@@ -69,7 +69,7 @@ export default {
 			}
 		},
 		deleteControlPoint(){
-				this.$store.dispatch('createControlPoint/deleteControlPoint', this.$route.params.id)
+				this.$store.dispatch('controlPoint/deleteControlPoint', this.$route.params.id)
 					.then( resolved => {
 						if(resolved){ this.$router.push('/controlPoints');}
 					})

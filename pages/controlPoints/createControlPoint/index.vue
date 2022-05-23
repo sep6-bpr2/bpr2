@@ -7,10 +7,10 @@
 			:submit="submit"
 			:is-edit="false"
 			:cp-data="cpData"
-			:attributes-names="this.$store.state.createControlPoint.attributesNames"
-			:codes-choice="this.$store.state.createControlPoint.allItemCodes"
-			:all-types="this.$store.state.createControlPoint.allTypes"
-			:all-measurement-types="this.$store.state.createControlPoint.allMeasurementTypes"
+			:attributes-names="this.$store.state.controlPoint.attributesNames"
+			:codes-choice="this.$store.state.controlPoint.allItemCodes"
+			:all-types="this.$store.state.controlPoint.allTypes"
+			:all-measurement-types="this.$store.state.controlPoint.allMeasurementTypes"
 		></ControlPoint>
 	</div>
 </template>
@@ -58,9 +58,9 @@ export default {
 		}
 	}),
 	created() {
-		this.$store.dispatch("createControlPoint/getAllTypes")
-		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
+		this.$store.dispatch("controlPoint/getAllTypes")
+		this.$store.dispatch("controlPoint/getAllAttributesNames")
+		this.$store.dispatch("controlPoint/loadItemCategoryCodes")
 	},
 	methods: {
 
@@ -69,7 +69,7 @@ export default {
 
 
 				let value = this.cpData
-				this.$store.dispatch('createControlPoint/submitControlPoint', {
+				this.$store.dispatch('controlPoint/submitControlPoint', {
 					descriptions: value.descriptions,
 					type: value.type,
 					measurementType: value.measurementType,

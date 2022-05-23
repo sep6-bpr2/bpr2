@@ -348,11 +348,6 @@ export default {
 
 		showConfirmAlert: false
 	}),
-	created() {
-		this.$store.dispatch("controlPoint/getAllTypes")
-		this.$store.dispatch("controlPoint/getAllAttributesNames")
-		this.$store.dispatch("controlPoint/loadItemCategoryCodes")
-	},
 	computed: {
 		frequencies() {
             // FIX THIS SHIT

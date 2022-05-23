@@ -108,7 +108,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		type: null,
 		upperTolerance: null,
 		lowerTolerance: null,
-		optionValues: [],// {value: '',}
+		optionValues: mainInformation.inputtype === "options" ? [] : [{value: null}, {value: null}],// {value: '',}
 		attributes: [],//{id: '', minValue: 0, maxValue: 0}
 		codes: [],
 		image: null,
