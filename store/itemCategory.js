@@ -11,14 +11,14 @@ export const mutations = {
 	updateStatus(state, updateVal) {
 		state.updateSuccess = updateVal
 	},
-    appendItemCodes(state, itemCodes) {
-        for (let i = 0; i < itemCodes.length; i ++){
-            state.itemCodes.push(itemCodes[i])
-        }
-    },
-    setItemCodes(state, itemCodes) {
-        state.itemCodes = itemCodes
-    },
+	appendItemCodes(state, itemCodes) {
+		for (let i = 0; i < itemCodes.length; i++) {
+			state.itemCodes.push(itemCodes[i])
+		}
+	},
+	setItemCodes(state, itemCodes) {
+		state.itemCodes = itemCodes
+	},
 }
 
 export const actions = {
@@ -26,29 +26,28 @@ export const actions = {
 		const user = rootState.login.user;
 		const location = rootState.login.chosenLocation
 		if (user) {
-            fetch(`api/itemCategory/getCodes/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
-                if(options.offset == 0){
-                    commit('setItemCodes', result)
-                }else{
-                    commit('appendItemCodes', result)
-                }
-            })
+			fetch(`api/itemCategory/getCodes/${user.username}/${location}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+				if (options.offset == 0) {
+					commit('setItemCodes', result)
+				} else {
+					commit('appendItemCodes', result)
+				}
+			})
 		}
 	},
-	itemCodeExists({commit, rootState}, {code}){
+	itemCodeExists({commit, rootState}, {code}) {
 		const user = rootState.login.user;
-		return new Promise((resolve, reject) => {
-			if (user) {
+		if (user) {
+			return new Promise((resolve, reject) => {
 				fetch(`../api/itemCategory/checkItemExists/${user.username}/${code}`).then(res => res.json()).then(result => {
-					if(result){
+					if (result) {
 						resolve(result)
-					}
-					else{
+					} else {
 						resolve(false)
 					}
 				})
-			}
-		})
+			})
+		}
 	},
 	getFrequencyOfItemCode({commit, rootState}, {itemCode}) {
 		const user = rootState.login.user;

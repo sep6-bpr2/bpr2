@@ -42,11 +42,10 @@ export default {
 	}),
 	mounted() {
 		this.$store
-			.dispatch(`itemCategory/getFrequencyOfItemCode`, {itemCode: this.$route.params.code})
-
-		this.$store
 			.dispatch("itemCategory/itemCodeExists",{code: this.$route.params.code}).then(result => {
 			if (!result[0]) {
+				this.$store
+					.dispatch(`itemCategory/getFrequencyOfItemCode`, {itemCode: this.$route.params.code})
 				this.notification = {response: 0, message: "Item Code " + this.$route.params.code + " does not exist"}
 				this.modalAlertShowSubmit = true;
 				return
