@@ -1,32 +1,43 @@
 <template>
-	<table class="customTable">
-		<thead>
-			<tr>
-				<th
-					v-for="header in tableHeaders"
-					:key="header.id.toString() + header.name.toString()"
+	<div>
+		<table class="customTable">
+			<thead>
+				<tr>
+					<th
+						v-for="header in tableHeaders"
+						:key="header.id.toString() + header.name.toString()"
+					>
+						<Translate :text="header.name" />
+					</th>
+					<th v-if="deleteRowCallback"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					v-for="(row, index) in rows"
+					:id="'customTable' + index"
+					:key="Object.values(row)[0].toString() + index"
+					v-on:click="clickList(row)"
+					@mouseover="activeOver(index)"
+					@mouseleave="removeOver(index)"
 				>
-					<Translate :text="header.name" />
-				</th>
-				<th v-if="deleteRowCallback"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				v-for="(row, index) in rows"
-                :id="'customTable'+index"
-				:key="Object.values(row)[0].toString() + index"
-				v-on:click="clickList(row)"
-				@mouseover="activeOver(index)"
-				@mouseleave="removeOver(index)"
-			>
-				<td v-for="value in allowedHeaders" :key="value + index">
-					{{ rows[index][value] }}
-				</td>
-				<td v-if="deleteRowCallback" @click="deleteRow(row)"  class="trashCan"><v-icon color="red" v-if="showId === index">{{ svgPath }}</v-icon></td>
-			</tr>
-		</tbody>
-	</table>
+					<td v-for="value in allowedHeaders" :key="value + index">
+						{{ rows[index][value] }}
+					</td>
+					<td
+						v-if="deleteRowCallback"
+						@click="deleteRow(row)"
+						class="trashCan"
+					>
+						<v-icon color="red" v-if="showId === index">{{
+							svgPath
+						}}</v-icon>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div v-observe-visibility="visibilityChanged" />
+	</div>
 </template>
 
 <script>
@@ -48,7 +59,14 @@ export default {
 	 *  AllowedHeaders - What headers to use. You may not want to use all keys from the data as headers
 	 *  callback - what function to call if clicked on row. OPTIONAL
 	 */
-	props: ["allowedHeaders", "rows", "tableHeaders", "callback","deleteRowCallback"],
+	props: [
+		"allowedHeaders",
+		"rows",
+		"tableHeaders",
+		"callback",
+		"scrolledToBottomCallback",
+        "deleteRowCallback"
+	],
 	methods: {
 		clickList(row) {
 			if (this.callback)this.callback(row)
@@ -66,6 +84,10 @@ export default {
 		},
 		removeOver() {
 			this.showId = null;
+		},
+		visibilityChanged(isVisible) {
+            if(!isVisible) return
+			if (this.scrolledToBottomCallback) this.scrolledToBottomCallback();
 		},
 	},
 };
@@ -112,7 +134,7 @@ export default {
 	cursor: pointer;
 }
 
-.trashCan{
+.trashCan {
 	width: 80px;
 	height: 50px;
 }

@@ -37,7 +37,7 @@ export default {
 	mixins: [translate, authorizeUser],
 	data: () => ({
 		cpData: {
-			allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
+			controlPointNumber: null,
 			defaultFrequency: {
 				"id": 0,
 				"to25": 2,
@@ -64,8 +64,6 @@ export default {
 			attributes: [],//{id: '', minValue: 0, maxValue: 0}
 			codes: [],
 			image: null,
-			imagePreview: null,
-			alert: {show: false, message: "", status: 0}
 		}
 	}),
 	created() {
@@ -99,12 +97,14 @@ export default {
 				let value = this.cpData
 				this.$store.dispatch('createControlPoint/submitEditControlPoint', {
 					controlPointId: this.$route.params.id,
+					controlPointNumber: value.controlPointNumber,
+					frequencyId: value.frequencyId,
 					descriptions: value.descriptions,
 					type: value.type,
 					measurementType: value.measurementType,
 					upperTolerance: value.upperTolerance,
 					lowerTolerance: value.lowerTolerance,
-					optionValues: value.optionValues,
+					optionValues: value.type == 'options'? value.optionValues: [],
 					attributes: value.attributes,
 					codes: value.codes,
 					image: value.image,

@@ -16,8 +16,8 @@
 
 <script>
 import {translate} from "../../../mixins/translate.js"
-import ControlPoint from "../../../components/ControlPoint";
-import Translate from "../../../components/Translate";
+import ControlPoint from "../../../components/ControlPoint.vue";
+import Translate from "../../../components/Translate.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {

@@ -63,21 +63,18 @@ export const actions = {
                 commit('setModalMessage', "")
                 commit('setModalStatus', "success")
                 commit('setRedirectLogin', false)
-                console.log("Warning should not be shown")
             } else {
                 if (user == "unauthenticated") {
                     commit('setRedirectLogin', true)
                     commit('setModalState', false)
                     commit('setModalMessage', "")
                     commit('setModalStatus', "success")
-                    console.log("Warning should not be shown")
                 } else {
                     commit('setModalState', true)
                     commit('setModalMessage', "This page is restricted to roles: " + restrictedToRoles.join(", "))
                     commit('setModalStatus', "danger")
                     commit('setRedirectLogin', false)
                     dispatch('nav/resetLinks', {}, { root: true })
-                    console.log("Warning should be shown")
                 }
             }
         }

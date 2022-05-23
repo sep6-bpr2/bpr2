@@ -8,24 +8,32 @@ export const state = () => ({
 })
 
 export const mutations = {
-	setUsers(state, userList) {
-		state.userList = userList
-	},
 	setNewUser(state, userList) {
 		state.userList.push(...userList)
 	},
-	setQAUsers(state, QAUserList){
+    appendUsers(state, users) {
+        for (let i = 0; i < users.length; i ++){
+            state.userList.push(users[i])
+        }
+    },
+    setUsers(state, users) {
+        state.userList = users
+    },
+    setQAUsers(state, QAUserList){
 		state.QAUsers.push(...QAUserList)
 	}
 }
 
 export const actions = {
-	loadUsers({ commit, rootState }) {
+	loadUsers({ commit, rootState }, options) {
 		const user = rootState.login.user;
 		if (user) {
-			const language = rootState.login.chosenLanguage.name;
-			fetch(`api/users/getAllUsers`).then(res => res.json()).then(result => {
-				commit('setUsers', result)
+			fetch(`api/users/getAllUsers/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
+                if(options.offset == 0){
+                    commit('setUsers', result)
+                }else{
+                    commit('appendUsers', result)
+                }
 			})
 		}
 	},

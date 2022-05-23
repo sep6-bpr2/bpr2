@@ -112,7 +112,6 @@
 						<v-text-field
 							v-model="upperTolerance"
 							type="number"
-							min="0"
 						/>
 					</div>
 				</v-card>
@@ -136,7 +135,7 @@
 									<Translate :text="'Name'"/>
 								</p>
 								<v-autocomplete
-									:items="attributesNames"
+									:items="attributesChoice"
 									:item-text="item=>item.name"
 									:item-value="item=>item.id"
 									:value="attribute.id"
@@ -349,9 +348,28 @@ export default {
 
 		showConfirmAlert: false
 	}),
+	created() {
+		this.$store.dispatch("createControlPoint/getAllTypes")
+		this.$store.dispatch("createControlPoint/getAllAttributesNames")
+		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
+	},
 	computed: {
 		frequencies() {
-			return this.cpData.frequencies
+            // FIX THIS SHIT
+            if(this.cpData.frequencies != null){
+			    return this.cpData.frequencies[0]
+            }else{
+                return null
+            }
+		},
+		allTypes() {
+			return this.$store.state.createControlPoint.allTypes
+		},
+		codesChoice() {
+			return this.$store.state.createControlPoint.allItemCodes
+		},
+		attributesChoice() {
+			return this.$store.state.createControlPoint.attributesNames
 		},
 		descriptions() {
 			return this.cpData.descriptions
@@ -511,7 +529,6 @@ export default {
 					return false
 				}
 			}
-
 			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
 			return true
 		},

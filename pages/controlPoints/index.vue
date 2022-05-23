@@ -22,6 +22,7 @@
 			:rows="controlPoints"
 			:tableHeaders="headers"
 			:callback="controlPointClickCallback"
+            :scrolledToBottomCallback="loadMoreControlPoints"
 		/>
 	</div>
 </template>
@@ -49,18 +50,6 @@ export default {
 			limit: this.limit,
 		});
 	},
-	mounted() {
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-				this.offset = this.offset + this.limit;
-				this.loadMoreControlPoints();
-				console.log("Reached the end of the list");
-			}
-		};
-	},
 	computed: {
 		headers() {
 			return this.$store.state.controlPoints.tableHeaders;
@@ -83,6 +72,7 @@ export default {
 			this.$router.push("/controlPoints/createControlPoint");
 		},
 		loadMoreControlPoints() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("controlPoints/loadControlPoints", {
 				offset: this.offset,
 				limit: this.limit,

@@ -2,6 +2,7 @@ const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
 		allItemCodes: [],
+        controlPointNumber: null,
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		defaultFrequency: {
 			"id": 0,
@@ -19,16 +20,6 @@ const getDefaultState = () => ({
 			"to4000": 65,
 			"to5000": 70
 		},
-		frequencies: null,
-		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-		measurementType: null,
-		type: null,
-		upperTolerance: null,
-		lowerTolerance: null,
-		optionValues: [{value: null}, {value: null}],// {value: '',}
-		attributes: [],//{id: '', minValue: 0, maxValue: 0}
-		codes: [{value: null}],
-		image: null,
 		imagePreview: null,
 
 		alert: {show: false, message: "", status: 0}
@@ -68,6 +59,25 @@ export const actions = {
 		}
 	},
 
+    loadItemCategoryCodes({commit, rootState}) {
+        const user = rootState.login.user;
+        if (user) {
+            fetch(`http://localhost:3000/api/itemCategory/getCodesMax/${user.username}/All`).then(res => res.json()).then(result => {
+                commit('setAllItemCodes', result)
+            })
+        }
+    },
+	async getFrequencies({commit, rootState}, cpId) {
+		const user = rootState.login.user;
+		if (user) {
+			await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${cpId.controlPointId}/${user.username}`)
+				.then(res => res.json())
+				.then(res => {
+                    console.log(res)
+					commit('setFrequencies', res)
+				})
+		}
+	},
 	async getAllAttributesNames({commit, rootState}) {
 		const user = rootState.login.user;
 		if (user) {
@@ -76,14 +86,6 @@ export const actions = {
 				.then(res => {
 					commit('setAllAttributesNames', res)
 				})
-		}
-	},
-	loadItemCategoryCodes({commit, rootState}) {
-		const user = rootState.login.user;
-		if (user) {
-			fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
-				commit('setAllItemCodes', result)
-			})
 		}
 	},
 	deleteControlPoint({ commit, rootState }, cpId) {
@@ -169,6 +171,7 @@ export const actions = {
 
 						// main info
 						let mainInfo = res.mainInformation
+						cpData.controlPointNumber = mainInfo.controlPointNumber
 						cpData.measurementType =  mainInfo.measurementtype
 						if (mainInfo.image != null) {
 							cpData.imagePreview = `http://localhost:3000/api/controlPoints/picture/${user.username}/${mainInfo.image}`

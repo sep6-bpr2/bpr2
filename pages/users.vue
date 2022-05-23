@@ -20,30 +20,38 @@
 			 :rows="userList"
 			 :tableHeaders="headers"
 			 :deleteRowCallback="deleteRowCallback"
+             :scrolledToBottomCallback="loadMoreUsers"
 		 />
 		 <Transition >
 			 <div style="min-height: 248px; display: table" v-if="shouldCreateUser" class="create_User_form ml-5">
 				 <v-form ref="form">
 
-					 <h4>New User</h4>
+						<v-text-field
+							v-model="userName"
+							id="usernameInput"
+							:counter="10"
+							:rules="userNameRules"
+							label="Username"
+							required
+						></v-text-field>
 
-					 <v-text-field
-						 v-model="userName"
-						 id="usernameInput"
-						 :counter="10"
-						 :rules="userNameRules"
-						 label="Username"
-						 required
-					 ></v-text-field>
+						<v-select
+							v-model="roleValue"
+							id="roles"
+							:items="roles"
+							:rules="[(v) => !!v || 'Item is required']"
+							label="Role"
+							required
+						>
+						</v-select>
 
-					 <v-select
-						 v-model="roleValue"
-						 id="roles"
-						 :items="roles"
-						 :rules="[v => !!v || 'Item is required']"
-						 label="Role"
-						 required>
-					 </v-select>
+						<v-btn
+							color="#333"
+							id="submitCreateUser"
+							@click="submitCreateUser"
+						>
+							Submit
+						</v-btn>
 
 					 <v-btn
 						 v-if="!shouldConfirm"
@@ -78,9 +86,8 @@
 </template>
 
 <script>
-import CustomTable from "../components/CustomTable";
+import CustomTable from "../components/CustomTable.vue";
 import colors from "../styles/colors";
-import login from "./login";
 import {authorizeUser} from "../mixins/authorizeUser.js"
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
@@ -96,12 +103,12 @@ export default {
 		shouldConfirm: false,
 		isConfirmed: "",
 		users: [],
-		roleValue:"",
-		shouldCreateUser:false,
-		userName:"",
-		userNameRules: [
-			v => !!v || 'Name is required',
-		],
+		roleValue: "",
+		shouldCreateUser: false,
+		userName: "",
+		userNameRules: [(v) => !!v || "Name is required"],
+		offset: 0,
+		limit: 25,
 	}),
 	mixins: [authorizeUser,translate, alerts],
 	methods:{
@@ -181,6 +188,13 @@ export default {
 		closeAlertModal(id) {
 			if (id == 1) this.modalAlertShowSubmit = false;
 		},
+		loadMoreUsers() {
+            this.offset = this.offset + this.limit;
+			this.$store.dispatch("users/loadUsers", {
+				offset: this.offset,
+				limit: this.limit,
+			});
+		},
 	},
 	computed:{
 		notificationStatus() {
@@ -208,17 +222,18 @@ export default {
 		allowedHeaders() {
 			return this.$store.state.users.allowedHeaders;
 		},
-		roles(){
+		roles() {
 			return this.$store.state.users.roles;
-		}
+		},
 	},
 	mounted() {
-		 this.$store
-			.dispatch("users/loadUsers", {username: this.username})
-
-		 this.$store.dispatch("users/getAllWorkingQAUsers")
-	}
-}
+		this.$store.dispatch("users/loadUsers", {
+			offset: this.offset,
+			limit: this.limit,
+		});
+        this.$store.dispatch("users/getAllWorkingQAUsers")
+	},
+};
 </script>
 
 <style scoped>
@@ -234,7 +249,7 @@ export default {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-.create_User_form{
+.create_User_form {
 	transition: ease-in;
 	width: 400px;
 	height: 242px;
@@ -249,11 +264,11 @@ export default {
 }
 .v-enter {
 	opacity: 0;
-	transform: translate(0,-8%);
+	transform: translate(0, -8%);
 }
 .v-leave-to {
 	opacity: 0;
-	transform: translate(0,-8%);
+	transform: translate(0, -8%);
 }
 
 .alert{

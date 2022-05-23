@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="completedOrderPage">
 		<AlertModal
 			:id="1"
 			:message="currentOrder && currentOrder.message"
@@ -7,14 +7,22 @@
 			:status="errorStatus"
 			:closeCallback="closeAlertModal"
 		/>
-		<div v-if="currentOrder && currentOrder.response == null && this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" class="completedOrder">
+		<div
+			v-if="
+				currentOrder &&
+				currentOrder.response == null &&
+				this.$store.state.login.user &&
+				this.$store.state.login.user.role == 'admin'
+			"
+			class="completedOrder"
+		>
 			<ImageModal
 				:image="modalImage"
 				:show="modalImageShow"
 				:closeCallback="closeImageModal"
 			/>
 
-			<div class="information">
+			<div id="completedOrderInformation" class="information">
 				<h2>Information</h2>
 				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
 				<DataDisplay
@@ -28,43 +36,53 @@
 				<DataDisplay :name="'Deadline'" :data="currentOrder.deadline" />
 				<DataDisplay :name="'Location'" :data="currentOrder.location" />
 				<DataDisplay :name="'Status'" :data="currentOrder.status" />
-                <DataDisplay :name="'Completed date'" :data="currentOrder.completionDate" />
+				<DataDisplay
+					:name="'Completed date'"
+					:data="currentOrder.completionDate"
+				/>
 			</div>
 
-			<div class="oneTimeMeasurements">
+			<div
+				id="completedOrderOneTimeMeasurements"
+				class="oneTimeMeasurements"
+			>
 				<h2>One time measurements</h2>
 
 				<CustomTableInput
-                    id="oneTimeMeasurements"
+					id="oneTimeMeasurements"
 					:allowedHeaders="oAllowedHeaders"
 					:rows="currentOrder.oneTimeControlPoints"
 					:tableHeaders="oHeaders"
 					:imageCallback="showImageModal"
-					:valueUpdateCallback="editOValue"
-                    :inputsDisabled="true"
+					:inputsDisabled="true"
 				/>
 			</div>
 
-			<div class="multipleTimeMeasurements">
+			<div>
 				<h2>Multiple time measurements</h2>
 
 				<!-- This table has the input column removed -->
 				<CustomTableInput
-                    id="multipleTimeMeasurementsInfo"
+					id="multipleTimeMeasurementsInfo"
 					:allowedHeaders="mAllowedHeaders"
 					:rows="currentOrder.multipleTimeControlPoints"
 					:tableHeaders="mHeaders"
 					:imageCallback="showImageModal"
-                    :inputsDisabled="true"
+					:inputsDisabled="true"
 				/>
 
 				<MultipleTimeTable
-                    id="multipleTimeMeasurementsAnswers"
+					id="multipleTimeMeasurementsAnswers"
 					:tableHeaders="multipleTimeAnswerHeaders"
 					:columns="currentOrder.multipleTimeAnswers"
-					:valueUpdateCallback="editMValue"
-                    :inputsDisabled="true"
+					:inputsDisabled="true"
 				/>
+			</div>
+
+			<div class="completedOrder">
+				<button id="printButton" v-on:click="handlePrint">
+					<Translate text="Print PDF" />
+				</button>
 			</div>
 		</div>
 	</div>
@@ -78,7 +96,9 @@ import ImageModal from "../../../components/ImageModal.vue";
 import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
 import DataDisplay from "../../../components/DataDisplay.vue";
 import AlertModal from "../../../components/AlertModal.vue";
-import {authorizeUser} from "../../../mixins/authorizeUser.js"
+import { authorizeUser } from "../../../mixins/authorizeUser.js";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 export default {
 	components: {
@@ -90,7 +110,7 @@ export default {
 		DataDisplay,
 		AlertModal,
 	},
-    mixins: [authorizeUser],
+	mixins: [authorizeUser],
 	data() {
 		return {
 			currentOrder: null,
@@ -136,7 +156,7 @@ export default {
 				}
 			}
 		},
-        errorStatus() {
+		errorStatus() {
 			// if you read this mention it in the exam :)
 			if (this.currentOrder) {
 				if (this.currentOrder.response == 0) {
@@ -152,7 +172,7 @@ export default {
 		},
 	},
 	created() {
-        if (!this.$store.state || !this.$store.state.login.user) {
+		if (!this.$store.state || !this.$store.state.login.user) {
 			this.$router.push("/login");
 		}
 
@@ -162,10 +182,9 @@ export default {
 				this.$route.params.id
 			)
 			.then((result) => {
-                console.log(result)
-                if(result && result.response != null){
-                    this.modalAlertShowError = true;
-                }
+				if (result && result.response != null) {
+					this.modalAlertShowError = true;
+				}
 				this.currentOrder = result;
 			});
 	},
@@ -177,10 +196,15 @@ export default {
 	},
 	methods: {
 		showImageModal(image) {
-            if(this.$store.state.login.user){
-                this.modalImage = window.location.origin + "/api/controlPoints/picture/" + this.$store.state.login.user.username + "/" + image;
-                this.modalImageShow = true;
-            }
+			if (this.$store.state.login.user) {
+				this.modalImage =
+					window.location.origin +
+					"/api/controlPoints/picture/" +
+					this.$store.state.login.user.username +
+					"/" +
+					image;
+				this.modalImageShow = true;
+			}
 		},
 		closeImageModal() {
 			this.modalImage = "";
@@ -189,217 +213,174 @@ export default {
 		closeAlertModal(id) {
 			if (id == 2) this.modalAlertShowSubmit = false;
 			else if (id == 1) {
-			    this.modalAlertShowSubmit = false;
+				this.modalAlertShowSubmit = false;
 			}
 		},
-		editOValue(index, value) {
-			this.currentOrder.oneTimeControlPoints[index].answer = value;
-			this.currentOrder.oneTimeControlPoints[index].author =
-				this.$store.state.login.user.username;
+		async getUrlImageAsData(URL) {
+			return new Promise((resolve, reject) => {
+				var image = new Image();
+				image.setAttribute("crossOrigin", "anonymous"); //getting images from external domain
 
-			let inputValidated = 0;
+				image.onload = function () {
+					var canvas = document.createElement("canvas");
+					canvas.width = this.naturalWidth;
+					canvas.height = this.naturalHeight;
 
-			// Validate the input
-            if (this.currentOrder.oneTimeControlPoints[index].answer == "") {
-				inputValidated = 1; 
-			} else if( this.currentOrder.oneTimeControlPoints[index].answer.length > 50){
-                inputValidated = 0
-            }else if (this.currentOrder.oneTimeControlPoints[index].inputType == 0) {
-				//Option
+					//next three lines for white background in case png has a transparent background
+					var ctx = canvas.getContext("2d");
+					ctx.fillStyle = "#fff"; /// set white fill style
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-				for (
-					let i = 0;
-					i <
-					this.currentOrder.oneTimeControlPoints[index].options
-						.length;
-					i++
+					canvas.getContext("2d").drawImage(this, 0, 0);
+
+					resolve({
+						data: canvas.toDataURL("image/jpeg"),
+						width: canvas.width,
+						height: canvas.height,
+					});
+				};
+
+				image.src = URL;
+			});
+		},
+		async handlePrint() {
+			// Print the information of the
+			let pdf = new jsPDF("landscape", "px");
+
+			let arrayOfElements = [
+				"completedOrderInformation",
+				"completedOrderOneTimeMeasurements",
+				"multipleTimeMeasurementsInfo",
+				"multipleTimeMeasurementsAnswers",
+			];
+
+			for (let i = 0; i < arrayOfElements.length; i++) {
+				let element = document.getElementById(arrayOfElements[i]);
+
+				// Get the image of the html element
+				let canvas = await html2canvas(element);
+				let image = canvas.toDataURL("image/png");
+
+				// Calculate the scale of the image
+				let scale = 0;
+				const scaleWidth =
+					element.style.width / pdf.internal.pageSize.getWidth();
+				const scaleHeight =
+					element.style.height / pdf.internal.pageSize.getHeight();
+
+				// Determine which scale would fit the page best
+				if (scaleWidth > scaleHeight) scale = scaleWidth;
+				else scale = scaleHeight;
+
+				// Add the image to pdf as png with adjusted size
+				pdf.addImage(
+					image,
+					"PNG",
+					0,
+					0,
+					element.style.width / scale,
+					element.style.height / scale,
+					arrayOfElements[i],
+					"FAST"
+				);
+				pdf.addPage();
+			}
+
+			for (
+				let i = 0;
+				i < this.currentOrder.oneTimeControlPoints.length;
+				i++
+			) {
+				if (this.currentOrder.oneTimeControlPoints[i].image != null) {
+					let image = await this.getUrlImageAsData(
+						window.location.origin +
+							"/api/controlPoints/picture/" +
+							this.$store.state.login.user.username +
+							"/" +
+							this.currentOrder.oneTimeControlPoints[i].image
+					);
+
+					// Calculate the scale of the image
+					const scaleWidth =
+						image.width / pdf.internal.pageSize.getWidth();
+					const scaleHeight =
+						image.height / pdf.internal.pageSize.getHeight();
+					let scale = 0;
+
+					// Determine which scale would fit the page best
+					if (scaleWidth > scaleHeight) scale = scaleWidth;
+					else scale = scaleHeight;
+
+					// Add the image to pdf as png with adjusted size
+					pdf.addImage(
+						image.data,
+						"PNG",
+						0,
+						0,
+						image.width / scale,
+						image.height / scale,
+						this.currentOrder.oneTimeControlPoints[i].image +
+							"One time",
+						"FAST"
+					);
+					pdf.addPage();
+				}
+			}
+			for (
+				let i = 0;
+				i < this.currentOrder.multipleTimeControlPoints.length;
+				i++
+			) {
+				if (
+					this.currentOrder.multipleTimeControlPoints[i].image != null
 				) {
+					let image = await this.getUrlImageAsData(
+						window.location.origin +
+							"/api/controlPoints/picture/" +
+							this.$store.state.login.user.username +
+							"/" +
+							this.currentOrder.multipleTimeControlPoints[i].image
+					);
+					// Calculate the scale of the image
+					const scaleWidth =
+						image.width / pdf.internal.pageSize.getWidth();
+					const scaleHeight =
+						image.height / pdf.internal.pageSize.getHeight();
+					let scale = 0;
+
+					// Determine which scale would fit the page best
+					if (scaleWidth > scaleHeight) scale = scaleWidth;
+					else scale = scaleHeight;
+
+					// Add the image to pdf as png with adjusted size
+					pdf.addImage(
+						image.data,
+						"PNG",
+						0,
+						0,
+						image.width / scale,
+						image.height / scale,
+						this.currentOrder.multipleTimeControlPoints[i].image +
+							"Multiple",
+						"FAST"
+					);
 					if (
-						this.currentOrder.oneTimeControlPoints[index].options[i]
-							.value ==
-						this.currentOrder.oneTimeControlPoints[index].answer
+						i != 0 &&
+						i !=
+							this.currentOrder.multipleTimeControlPoints.length -
+								1
 					) {
-						inputValidated = 1;
-						break;
+						pdf.addPage();
 					}
 				}
-			} else if (
-				this.currentOrder.oneTimeControlPoints[index].inputType == 1 && // Text
-				typeof this.currentOrder.oneTimeControlPoints[index].answer ===
-					"string"
-			) {
-				inputValidated = 1;
-			} else if (
-				this.currentOrder.oneTimeControlPoints[index].inputType == 3 // Number
-			) {
-				let str = this.currentOrder.oneTimeControlPoints[index].answer;
-				if (typeof str != "string") {
-					inputValidated = 0;
-				} else {
-					inputValidated = 
-						(!isNaN(str) &&
-						!isNaN(parseFloat(str)) &&
-						Number(str) >= 0)? 1: 0;
-				}
 			}
-
-             // Check tolerances
-            if(
-                inputValidated == 1 && 
-                this.currentOrder.oneTimeControlPoints[index].inputType == 3 && 
-                this.currentOrder.oneTimeControlPoints[index].lowerTolerance &&
-                this.currentOrder.oneTimeControlPoints[index].upperTolerance &&
-                this.currentOrder.oneTimeControlPoints[index].answer != ""
-            ){
-                let max = parseFloat(this.currentOrder.oneTimeControlPoints[index].expectedValue) + parseFloat(this.currentOrder.oneTimeControlPoints[index].upperTolerance)
-                let min = parseFloat(this.currentOrder.oneTimeControlPoints[index].expectedValue) - parseFloat(this.currentOrder.oneTimeControlPoints[index].lowerTolerance)
-                let number = parseFloat(this.currentOrder.oneTimeControlPoints[index].answer)
-
-                if (    
-                    max < number ||
-                    min > number
-                ){
-                    inputValidated = 2
-                }
-            }else if (
-                inputValidated == 1 && 
-                this.currentOrder.oneTimeControlPoints[index].inputType == 3 && 
-                this.currentOrder.oneTimeControlPoints[index].lowerTolerance == null &&
-                this.currentOrder.oneTimeControlPoints[index].upperTolerance == null &&
-                this.currentOrder.oneTimeControlPoints[index].answer != ""
-            ){
-                let expected = parseFloat(this.currentOrder.oneTimeControlPoints[index].expectedValue)
-                let number = parseFloat(this.currentOrder.oneTimeControlPoints[index].answer)
-                if (expected != number) {
-                    inputValidated = 2
-                }
-            }
-
-			this.currentOrder.oneTimeControlPoints[index].validated = inputValidated;
-		},
-		editMValue(indexColumn, indexCell, value) {
-			this.currentOrder.multipleTimeAnswers[indexColumn][
-				indexCell
-			].answer = value;
-			this.currentOrder.multipleTimeAnswers[indexColumn][
-				indexCell
-			].author = this.$store.state.login.user.username;
-
-			let inputValidated = 0
-
-			// Validate the input
-            if ( this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer == ""){
-                inputValidated = 1
-            }else if( this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer.length > 50){
-                inputValidated = 0
-            }else if (
-				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.inputType == 0
-			) {
-				//Option
-
-				for (
-					let i = 0;
-					i <
-					this.currentOrder.multipleTimeControlPoints[indexColumn]
-						.options.length;
-					i++
-				) {
-					if (
-						this.currentOrder.multipleTimeControlPoints[indexColumn]
-							.options[i].value ==
-						this.currentOrder.multipleTimeAnswers[indexColumn][
-							indexCell
-						].answer
-					) {
-						inputValidated = 1;
-						break;
-					}
-				}
-			} else if (
-				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.inputType == 1 && // Text
-				typeof this.currentOrder.multipleTimeAnswers[indexColumn][
-					indexCell
-				].answer === "string"
-			) {
-				inputValidated = 1;
-			} else if (
-				this.currentOrder.multipleTimeAnswers[indexColumn][indexCell]
-					.inputType == 3 // Number
-			) {
-				let str =
-					this.currentOrder.multipleTimeAnswers[indexColumn][
-						indexCell
-					].answer;
-				if (typeof str != "string") {
-					inputValidated = 0;
-				} else {
-					inputValidated =
-						(!isNaN(str) &&
-						!isNaN(parseFloat(str)) &&
-						Number(str) >= 0)? 1: 0;
-				}
-			}
-
-            // Check tolerances
-            if(
-                inputValidated == 1 && 
-                this.currentOrder.multipleTimeControlPoints[indexColumn].inputType == 3 && 
-                this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance &&
-                this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance &&
-                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer != ""
-            ){
-                let max = parseFloat(this.currentOrder.multipleTimeControlPoints[indexColumn].expectedValue) + parseFloat(this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance)
-                let min = parseFloat(this.currentOrder.multipleTimeControlPoints[indexColumn].expectedValue) - parseFloat(this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance)
-                let number = parseFloat(this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer)
-
-                if (    
-                    max < number ||
-                    min > number
-                ){
-                    inputValidated = 2
-                }
-            }else if (                
-                inputValidated == 1 && 
-                this.currentOrder.multipleTimeControlPoints[indexColumn].inputType == 3 &&
-                this.currentOrder.multipleTimeControlPoints[indexColumn].lowerTolerance == null &&
-                this.currentOrder.multipleTimeControlPoints[indexColumn].upperTolerance == null && 
-                this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer != ""
-            ){
-                let expected = parseFloat(this.currentOrder.multipleTimeControlPoints[indexColumn].expectedValue)
-                let number = parseFloat(this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].answer)
-
-                if (expected != number) {
-                    inputValidated = 2
-                }
-            }
-
-			this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].validated = inputValidated;
-		},
-
-		handleSave() {
-			this.$store.dispatch(
-				"completedOrder/saveContent",
-				this.currentOrder
-			);
-		},
-		handleComplete() {
-			this.$store.dispatch(
-				"completedOrder/completeContent",
-				this.currentOrder
-			);
+			pdf.save("QA report " + this.currentOrder.id + ".pdf");
 		},
 	},
 };
 </script>
 
 <style scoped>
-.containerInfoOneTime {
-	display: flex;
-	justify-content: left;
-	align-items: center;
-}
 .completedOrder {
 	margin: 10px;
 }
@@ -407,6 +388,7 @@ export default {
 .information div {
 	margin-top: 5px;
 	margin-bottom: 5px;
+	width: auto;
 }
 
 .completedOrder button {
