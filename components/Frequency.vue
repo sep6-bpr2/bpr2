@@ -171,7 +171,6 @@ export default {
 			}
 		},
 		createLabel(keyVal) {
-            console.log(keyVal)
 			let labelValue = keyVal.split('to')[1];
 			return '>' + labelValue
 		},
