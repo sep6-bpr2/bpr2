@@ -1,5 +1,14 @@
 <template>
 	<v-main>
+		<AlertModal
+			class="alert"
+			v-if="notification"
+			:id="1"
+			:message="notification.message"
+			:show="modalAlertShowSubmit"
+			:status="notificationStatus"
+			:closeCallback="closeAlertModal"
+		/>
 		<v-form ref="form">
 			<v-card width="500" v-on:keyup.enter="hanldeLogin" class="mx-auto mt-9">
 				<v-select
@@ -11,11 +20,11 @@
 				>
 					<template slot="selection" slot-scope="data">
 						{{ data.item.name }}
-						<flag :iso="data.item.flag" class="ml-1" />
+						<flag :iso="data.item.flag" class="ml-1"/>
 					</template>
 					<template slot="item" slot-scope="data">
 						{{ data.item.name }}
-						<flag :iso="data.item.flag" class="ml-1" />
+						<flag :iso="data.item.flag" class="ml-1"/>
 					</template>
 				</v-select>
 				<v-divider></v-divider>
@@ -48,8 +57,10 @@
 						v-on:click="hanldeLogin"
 						:color="cols.KonfairPrimary"
 						style="float: right"
-						><Translate :text="'Login'"
-					/></v-btn>
+					>
+						<Translate :text="'Login'"
+						/>
+					</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-form>
@@ -70,10 +81,13 @@ export default {
 	components: {
 		Translate,
 	},
-    mixins: [authorizeUser],
+	mixins: [authorizeUser],
 	name: "LogIn",
 	data: function () {
 		return {
+			modalAlertShowSubmit: false,
+			modalAlertShowError: false,
+			notification: null,
 			cols: colors,
 			username: "",
 			canLogIn: false,
@@ -85,6 +99,19 @@ export default {
 		this.$store.dispatch("login/getLocations")
 	},
 	computed: {
+		notificationStatus() {
+			if (this.notification) {
+				if (this.notification.response == 0) {
+					return "danger";
+				} else if (this.notification.response == 1) {
+					return "success";
+				} else if (this.notification.response == 2) {
+					return "warning";
+				} else {
+					return "other";
+				}
+			}
+		},
 		allLocations() {
 			return this.$store.state.login.allLocations;
 		},
@@ -125,13 +152,16 @@ export default {
 								} else {
 									this.$router.push("/releasedOrders");
 								}
-							}
-							else if(result !== false){
-								alert(result)
+							} else if (result !== false) {
+								this.notification = {response: 0, message: result}
+								this.modalAlertShowSubmit = true
 							}
 						});
 				}
 			}
+		},
+		closeAlertModal(id) {
+			this.modalAlertShowSubmit = false;
 		},
 		translateText(text) {
 			return lanugages.translateFunction(
@@ -144,7 +174,7 @@ export default {
 </script>
 
 <style>
- .v-btn__content{
-	 color: white;
- }
+.v-btn__content {
+	color: white;
+}
 </style>

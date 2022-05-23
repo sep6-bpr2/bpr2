@@ -42,7 +42,7 @@ export const actions = {
 						resolve(true)
 					}
 				} else {
-					resolve(false)
+					resolve("This user does not exist in the system!")
 				}
 			})
 		})
