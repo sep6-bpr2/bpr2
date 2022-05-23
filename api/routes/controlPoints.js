@@ -74,7 +74,7 @@ router.get("/controlPointData/:username/:cpid",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const result = await controlPointService.getControlPointData(req.params.cpid)
+        const result = await controlPointService.getControlPointData(req.params.cpid, req.params.username)
         if (result.hasOwnProperty('message')) {
             if (result.message.includes('does not exist')) res.status(404)
         }
