@@ -252,7 +252,7 @@
 					></v-file-input>
 				</v-card>
 
-				<v-card class="card2" elevation="24">
+				<v-card class="card2" elevation="24" v-show="cpData.measurementType==0">
 					<h3>
 						<Translate :text="'Check frequency'"/>
 					</h3>
