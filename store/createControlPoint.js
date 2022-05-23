@@ -128,88 +128,14 @@ export const actions = {
 					})
 					.then(res => res.json())
 					.then(res => {
-						let cpData = {
-							allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-								defaultFrequency: {
-								"id": 0,
-									"to25": 2,
-									"to50": 3,
-									"to100": 4,
-									"to200": 7,
-									"to300": 10,
-									"to500": 16,
-									"to700": 22,
-									"to1000": 30,
-									"to1500": 40,
-									"to2000": 50,
-									"to3000": 60,
-									"to4000": 65,
-									"to5000": 70
-							},
-							frequencies: null,
-								descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-								measurementType: null,
-								type: null,
-								upperTolerance: null,
-								lowerTolerance: null,
-								optionValues: [],// {value: '',}
-								attributes: [],//{id: '', minValue: 0, maxValue: 0}
-								codes: [],
-								image: null,
-								imagePreview: null,
-								alert: {show: false, message: "", status: 0}
-						}
-
-						cpData.frequencies = res.frequencies
-						let eng = res.descriptions.find(o => o.language.toLowerCase() === "english")
-						cpData.descriptions[0].value = eng.description
-						let dk = res.descriptions.find(o => o.language.toLowerCase() === "danish")
-						cpData.descriptions[1].value = dk.description
-						let lt = res.descriptions.find(o => o.language.toLowerCase() === "lithuanian")
-						cpData.descriptions[2].value = lt.description
-
-
-						// main info
-						let mainInfo = res.mainInformation
-						cpData.controlPointNumber = mainInfo.controlPointNumber
-						cpData.measurementType =  mainInfo.measurementtype
-						if (mainInfo.image != null) {
-							cpData.imagePreview = `http://localhost:3000/api/controlPoints/picture/${user.username}/${mainInfo.image}`
-							cpData.image = mainInfo.image
-						}
-
-						//type and values based on options
-						cpData.type = mainInfo.inputtype
-						if (mainInfo.inputtype === "options") {
-							for (let i = 0; i < res.optionValues.length; i++) {
-								cpData.optionValues.push({value: null})
-								cpData.optionValues[i].value =  res.optionValues[i].value
-							}
-						} else if (mainInfo.inputtype === "number") {
-							cpData.upperTolerance = mainInfo.uppertolerance
-							cpData.lowerTolerance = mainInfo.lowertolerance
-						}
-
-						//attributes
-						let att = res.attributes
-						if (att.length > 0) {
-							for (let i = 0; i < att.length; i++) {
-								cpData.attributes.push({id: '', minValue: null, maxValue: null})
-								cpData.attributes[i].id = att[i].attributeId
-								cpData.attributes[i].minValue = att[i].minValue
-								cpData.attributes[i].maxValue = att[i].maxValue
-							}
-						}
-						//codes
-						res.categoryCodes.forEach(o => cpData.codes.push({value: JSON.stringify(o.itemCategoryCode)}))
-
-						resolve(cpData)
-
+						console.log(res)
+						resolve(res)
 					})
 			})
 		}
 	},
 	async submitControlPoint({commit, rootState}, cp) {
+		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA!!!")
 		const user = rootState.login.user;
 		const request = (commit, cp) => {
 			return new Promise((resolve, reject) => {

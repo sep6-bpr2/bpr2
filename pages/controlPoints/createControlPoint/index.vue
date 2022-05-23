@@ -10,6 +10,7 @@
 			:attributes-names="attributeNames"
 			:codes-choice="itemCategories"
 			:all-types="allTypes"
+			:all-measurement-types="allMeasurementTypes"
 		></ControlPoint>
 	</div>
 </template>
@@ -72,11 +73,17 @@ export default {
 		itemCategories() {
 			return this.$store.state.createControlPoint.allItemCodes
 		},
+		allMeasurementTypes() {
+			return this.cpData.allMeasurementTypes
+		},
 	},
 	methods: {
 
-		submit(validateAll, showAlert,submitFrequency) {
+		submit(validateAll, showAlert,validateFrequency) {
+			console.log(validateFrequency)
 			if (validateAll() && submitFrequency()) {
+
+
 				let value = this.cpData
 				this.$store.dispatch('createControlPoint/submitControlPoint', {
 					descriptions: value.descriptions,

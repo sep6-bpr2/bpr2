@@ -7,7 +7,7 @@
 			:status="alert.status"
 		/>
 		<div
-			v-if="!alert.show"
+			v-if="!alert.show  && cpData!= null"
 		>
 			<div class="pageHeader">
 				<Translate text="Edit control point"/>
@@ -21,6 +21,7 @@
 				:attributes-names="attributeNames"
 				:codes-choice="itemCategories"
 				:all-types="allTypes"
+				:all-measurement-types="allMeasurementTypes"
 			></ControlPoint>
 		</div>
 	</div>
@@ -36,35 +37,7 @@ export default {
 	components: {Translate, ControlPoint},
 	mixins: [translate, authorizeUser],
 	data: () => ({
-		cpData: {
-			controlPointNumber: null,
-			defaultFrequency: {
-				"id": 0,
-				"to25": 2,
-				"to50": 3,
-				"to100": 4,
-				"to200": 7,
-				"to300": 10,
-				"to500": 16,
-				"to700": 22,
-				"to1000": 30,
-				"to1500": 40,
-				"to2000": 50,
-				"to3000": 60,
-				"to4000": 65,
-				"to5000": 70
-			},
-			frequencies: null,
-			descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
-			measurementType: null,
-			type: null,
-			upperTolerance: null,
-			lowerTolerance: null,
-			optionValues: [],// {value: '',}
-			attributes: [],//{id: '', minValue: 0, maxValue: 0}
-			codes: [],
-			image: null,
-		}
+		cpData: null,
 	}),
 	created() {
 		this.$store.dispatch("createControlPoint/getAllTypes")
@@ -90,26 +63,15 @@ export default {
 		itemCategories() {
 			return this.$store.state.createControlPoint.allItemCodes
 		},
+		allMeasurementTypes() {
+			return this.cpData.allMeasurementTypes
+		},
 	},
 	methods: {
-		submit(validateAll, showAlert,submitFrequency) {
-			if (validateAll() && submitFrequency() ) {
-				let value = this.cpData
-				this.$store.dispatch('createControlPoint/submitEditControlPoint', {
-					controlPointId: this.$route.params.id,
-					controlPointNumber: value.controlPointNumber,
-					frequencyId: value.frequencyId,
-					descriptions: value.descriptions,
-					type: value.type,
-					measurementType: value.measurementType,
-					upperTolerance: value.upperTolerance,
-					lowerTolerance: value.lowerTolerance,
-					optionValues: value.type == 'options'? value.optionValues: [],
-					attributes: value.attributes,
-					codes: value.codes,
-					image: value.image,
-					frequencies: value.frequencies,
-				}).then(result => {
+		submit(validateAll, showAlert, validateFrequency) {
+			if (validateAll() && validateFrequency() ) {
+				this.cpData.controlPointId = this.$route.params.id
+				this.$store.dispatch('createControlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {
 						showAlert('success', this.translateText('control point has been created'))
 					} else {
