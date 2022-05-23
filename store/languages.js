@@ -210,8 +210,27 @@ const translations = {
 		"danish": "bla bla"
 	},
 	// alerts
-	"there must be at least two option for the options type": {
+
+	"invalid input in frequency": {
+		"english": "invalid input in frequency",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	}
+	,"there must be at least two option for the options type": {
 		"english": "there must be at least two option for the options type",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"lower tolerance needs to be grater than 0 and smaller than 2147483647": {
+		"english": "lower tolerance needs to be grater than 0 and smaller than 2147483647",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},"upper tolerance needs to be grater than 0 and smaller than 2147483647": {
+		"english": "upper tolerance needs to be grater than 0 and smaller than 2147483647",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},"lower tolerance can not be grater or equal to upper tolerance": {
+		"english": "lower tolerance can not be grater or equal to upper tolerance",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},"control point must have at least one item category code": {

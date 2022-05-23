@@ -111,12 +111,11 @@ export default {
 			}
 			tempFrequencies.Code = parseInt(this.$route.params.code)
 			let text = "Are you sure you want to update frequency for this item Category?"
-			let existsNegVal
-			 existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			 existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			let existsOverInt = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
 			let localNotification;
-			if(existsNegVal === false){
+			if (!existsNegVal || !existsOverInt) {
 				localNotification = { response: 0, message: "There is an invalid input"}
 			}
 			else{
