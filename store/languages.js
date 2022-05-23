@@ -268,11 +268,11 @@ const translations = {
 	// ---------------------
 }
 
-const translateFunction = (text, flag) => {
+const translateFunction = (text, language) => {
     if (text && translations[text]) {
         try {
             const translated =
-                translations[text][flag];
+                translations[text][language];
             if (translated) {
                 return translated;
             } else {

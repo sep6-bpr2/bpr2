@@ -57,10 +57,10 @@ export default {
 		},
 	},
 	computed: {
-		allLinks() {
-			this.links = this.$store.state.nav.availableLinks;
-			return this.$store.state.nav.availableLinks;
-		},
+		// allLinks() {
+		// 	this.links = this.$store.state.nav.availableLinks;
+		// 	return this.$store.state.nav.availableLinks;
+		// },
 		show() {
 			if (this.$store.state.login.user) {
 				return "inline";
