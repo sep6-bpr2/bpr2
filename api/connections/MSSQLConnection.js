@@ -24,7 +24,10 @@ const get = (name, config) => {
 module.exports.getConnections = async () => {
     if (process.env.environment != "testing") {
         
-        if(process.env.DATABASE == "local"){
+        if(process.env.DATABASE == "konfair"){
+            konfairDB = await get("Konfair", "Server=172.16.1.38,50259;Database=konfair;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
+            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")  
+        }else if(process.env.DATABASE == "local"){
             konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
             localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
         }else{
