@@ -162,13 +162,14 @@ export default {
 				this.modalAlertShowSubmit = true;
 			} else {
 				if (confirm("Are you sure you want to delete user with username: " + row.username) == true) {
+
 					this.$store.dispatch("users/deleteUser", user).then(result => {
-						console.log(result + "$$$$$$$$$$$$")
 						if (result) {
 							this.notification = {
 								response: 1,
 								message: "You have successfully deleted user: " + user.username
 							}
+							this.$store.dispatch("users/loadUsers", {offset: 0,limit: this.limit})
 						} else {
 							this.notification = {
 								response: 0,

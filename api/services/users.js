@@ -10,8 +10,7 @@ module.exports.addUser = async (body) => {
 }
 
 module.exports.removeUser = async (body) => {
-	await model.removeUser(body)
-	return model.getAllUsers()
+	return model.removeUser(body)
 }
 
 module.exports.getAllUsers = async (offset, limit) => {
