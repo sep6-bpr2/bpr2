@@ -64,6 +64,17 @@ module.exports.setFrequenciesWithIdWhenIdZero = async (item) => {
 	return result.recordset
 }
 
+module.exports.checkCodeExists = async (itemCode) => {
+	let result = await konfairDB()
+		.request()
+		.input("itemCode", mssql.Int, itemCode)
+		.query(`select DISTINCT Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O]
+ 				on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C]
+ 				on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code where Code = @itemCode`)
+
+	return result.recordset
+}
+
 
 
 

@@ -32,9 +32,15 @@ module.exports.getFrequenciesOfItem = async (itemCode) => {
 	return value
 }
 
+
 module.exports.setFrequenciesWithId = async (item) => {
 	if(item.id !== 0){
 		return model.setFrequenciesWithIdWhenIdNotZero(item)
 	}
 	return model.setFrequenciesWithIdWhenIdZero(item)
+}
+
+module.exports.checkCodeExists = async (itemCode) => {
+
+	return model.checkCodeExists(itemCode)
 }

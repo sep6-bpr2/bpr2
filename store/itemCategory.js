@@ -33,6 +33,21 @@ export const actions = {
 			})
 		}
 	},
+	itemCodeExists({commit, rootState}, {code}){
+		const user = rootState.login.user;
+		return new Promise((resolve, reject) => {
+			if (user) {
+				fetch(`../api/itemCategory/checkItemExists/${user.username}/${code}`).then(res => res.json()).then(result => {
+					if(result){
+						resolve(result)
+					}
+					else{
+						resolve(false)
+					}
+				})
+			}
+		})
+	},
 	getFrequencyOfItemCode({commit, rootState}, {itemCode}) {
 		const user = rootState.login.user;
 		if (user) {

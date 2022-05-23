@@ -1,10 +1,8 @@
-
 export const state = () => ({
 	tableHeaders: [{ name: "Username", id: 0 }, { name: "Role", id: 1 }],
 	allowedHeaders: ["username", "role"],
 	roles:["qa employee","admin"],
 	userList: [],
-	QAUsers: []
 })
 
 export const mutations = {
@@ -13,9 +11,6 @@ export const mutations = {
 	},
 	setNewUser(state, userList) {
 		state.userList.push(...userList)
-	},
-	setQAUsers(state, QAUserList){
-		state.QAUsers.push(...QAUserList)
 	}
 }
 
@@ -31,30 +26,29 @@ export const actions = {
 	},
 	deleteUser({commit, rootState }, deletingUser) {
 		const user = rootState.login.user;
-		if(user) {
-			let fetchData = {
-				method: 'DELETE',
-				body: JSON.stringify(deletingUser),
-				headers: {
-					'Content-Type': 'application/json'
-				},
-			}
+		return new Promise( (resolve, reject) => {
 			if (user) {
-				 fetch(`api/users/deleteUser/${user.username}`, fetchData).then(res=> res.json()).then(result => {
-					commit('setUsers', result)
-				})
+				if(user) {
+					let fetchData = {
+						method: 'DELETE',
+						body: JSON.stringify(deletingUser),
+						headers: {
+							'Content-Type': 'application/json'
+						},
+					}
+					if (user) {
+						fetch(`api/users/deleteUser/${user.username}`, fetchData).then(res=> res.json()).then(result => {
+							if(result){
+								commit('setUsers', result)
+								resolve(true)
+							}
+							else resolve(false)
+						})
+					}
+				}
 			}
-		}
+		})
 	},
-	getAllWorkingQAUsers({commit, rootState}){
-		let user = rootState.login.user;
-		if(user) {
-			fetch(`api/users/getQAUsers/${user.username}`).then(res=> res.json()).then(result => {
-				commit('setQAUsers', result)
-			})
-		}
-	},
-
 
 	async createUser({commit, rootState}, creatingUser) {
 		const user = rootState.login.user;
@@ -65,10 +59,18 @@ export const actions = {
 				'Content-Type': 'application/json'
 			},
 		}
-		if (user) {
-			await fetch(`api/users/addUser/${user.username}`, fetchData).then(res=> res.json()).then(result => {
-				commit('setNewUser', result)
-			})
-		}
+		return new Promise( (resolve, reject) => {
+			if (user) {
+				 fetch(`api/users/addUser/${user.username}`, fetchData).then(res => res.json()).then(result => {
+					 if(result){
+						 commit('setNewUser', result)
+						 resolve(true)
+					 }
+					 else{
+						resolve(false)
+					 }
+				})
+			}
+		})
 	},
 }
