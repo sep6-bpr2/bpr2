@@ -25,6 +25,20 @@ const typeSwitchToNumber = (value) => {
 	}
 }
 
+const deletePicture = (pictureName) => {
+	let path = __dirname.split('\\')
+	let localPath = ""
+	for (let i = 0; i < path.length - 1; i++) {
+		localPath += path[i] + "\\"
+	}
+	localPath += `pictures\\${pictureName}`
+	try {
+		fs.unlinkSync(localPath)
+	} catch(err) {
+		console.error(err)
+	}
+}
+
 
 module.exports.getTypes = async () => {
 	const allTypes = await controlPointModel.getAllTypes()
@@ -36,6 +50,25 @@ module.exports.getTypes = async () => {
 module.exports.getAttributes = async () => {
 	return await controlPointModel.getAllAttributesNames()
 }
+
+module.exports.deleteControlPoint = async (cpId) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+	if(mainInformation.length === 0){
+		return {message: `control point with id: ${cpId} does not exist in database`}
+	}
+
+	if(mainInformation[0].frequencyid != null){
+		await controlPointModel.deleteFrequency(mainInformation[0].frequencyid)
+	}
+
+	await controlPointModel.deleteControlPoint(cpId)
+	await controlPointModel.deleteControlPointDescriptions(cpId)
+	await controlPointModel.deleteControlPointAttributes(cpId)
+	await controlPointModel.deleteControlPointOptionValues(cpId)
+	await controlPointModel.deleteControlPointItemCategoryCodes(cpId)
+	return {}
+}
+
 
 module.exports.getControlPointData = async (cpId) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
@@ -67,23 +100,13 @@ module.exports.getControlPointData = async (cpId) => {
 module.exports.updateControlPoint = async (data) => {
 	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
 	if(mainInformation.length === 0){
-		return {message: `control point with id: ${cpId} does not exist in database`}
+		return {message: `control point with id: ${data.controlPointId} does not exist in database`}
 	}
 
 	data.type = typeSwitchToNumber(data.type)
 	if (data.image != null && !data.image.includes('File')) {
 		if(mainInformation[0].image!=null){
-			let path = __dirname.split('\\')
-			let localPath = ""
-			for (let i = 0; i < path.length - 1; i++) {
-				localPath += path[i] + "\\"
-			}
-			localPath += `pictures\\${mainInformation[0].image}`
-			try {
-				fs.unlinkSync(localPath)
-			} catch(err) {
-				console.error(err)
-			}
+			deletePicture(mainInformation[0].image)
 		}
 		data.image = saveImage(data.image)
 	}
@@ -223,27 +246,4 @@ function saveImage(baseImage) {
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
 	return controlPointModel.getControlPointsMinimal(language, offset, limit)
-
-	// for (let i = 0; i < controlPoints.length; i++) {
-	// 	const descriptions = await controlPointModel.getDescriptionsByControlPointId(controlPoints[i].id)
-	// 	let englishIndex = -1;
-	// 	for (let j = 0; j < descriptions.length; j++) {
-	// 		if (descriptions[j].language == language) {
-	// 			controlPoints[i].description = descriptions[j].description
-	// 		}
-
-	// 		// Backup of english
-	// 		if (descriptions[j].language == "english") {
-	// 			englishIndex = j
-	// 		}
-	// 	}
-
-	// 	// Backup of english
-	// 	if (controlPoints[i].description == null && englishIndex != -1) {
-	// 		controlPoints[i].description = descriptions[englishIndex].description
-	// 	}
-	// }
-
-
-	return controlPoints
 }

@@ -3,7 +3,7 @@ const router = Router()
 const { validate } = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
 const service = require("../services/itemCategory")
-const {param, body} = require("express-validator");
+const { param, body } = require("express-validator");
 
 /**
  * @description - get item codes at a location
@@ -12,17 +12,18 @@ const {param, body} = require("express-validator");
  *
  * @example - GET {BaseURL}/api/itemCategory/getCodes/rokas/dk
  */
-router.get("/getCodes/:username/:location",
-			param("username").isLength({ min: 1, max: 35 }),
-			param("location").isLength({ min: 2, max: 50 }),
-			validate,
-			validateUserAdmin,
-			async (req, res) => {
-
-	const result = await service.getItemCatCodes(req.params.location)
-
-	res.send(result)
-})
+router.get("/getCodes/:username/:location/:offset/:limit",
+    param("username").isLength({ min: 1, max: 35 }),
+    param("location").isLength({ min: 2, max: 50 }),
+    param("offset").isInt({ min: 0, max: 999999999 }),
+    param("limit").isInt({ min: 0, max: 100 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const result = await service.getItemCatCodes(req.params.location, parseInt(req.params.offset), parseInt(req.params.limit))
+        res.send(result)
+    }
+)
 
 /**
  * @description - check if item exists
@@ -51,16 +52,17 @@ router.get("/checkItemExists/:username/:itemCode",
  * @example - GET {BaseURL}/api/itemCategory/getFrequenciesOfCode/rokas/193345
  */
 router.get("/getFrequenciesOfCode/:username/:itemCode",
-			param("username").isLength({ min: 1, max: 35 }),
-			param("itemCode").isLength({ min: 1, max: 35 }),
-			validate,
-			validateUserAdmin,
-			async (req, res) => {
+    param("username").isLength({ min: 1, max: 35 }),
+    param("itemCode").isLength({ min: 1, max: 35 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
 
-	let result = await service.getFrequenciesOfItem(req.params.itemCode)
+        let result = await service.getFrequenciesOfItem(req.params.itemCode)
 
-	res.send(result)
-})
+        res.send(result)
+    }
+)
 
 /**
  * @description - post update of frequency for given id
@@ -70,15 +72,16 @@ router.get("/getFrequenciesOfCode/:username/:itemCode",
  * @example - POST {BaseURL}/api/itemCategory/setFrequencies/rokas
  */
 router.post("/setFrequencies/:username",
-			param("username").isLength({ min: 1, max: 35 }),
-			body("id").isInt(),
-			validate,
-			validateUserAdmin,
-			async (req, res) => {
+    param("username").isLength({ min: 1, max: 35 }),
+    body("id").isInt(),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
 
-	const result = await service.setFrequenciesWithId(req.body)
-	res.send(result)
-})
+        const result = await service.setFrequenciesWithId(req.body)
+        res.send(result)
+    }
+)
 
 
 

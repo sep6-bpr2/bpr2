@@ -13,6 +13,7 @@
 			:rows="releasedOrders"
 			:tableHeaders="headers"
 			:callback="releasedOrderClickCallback"
+            :scrolledToBottomCallback="loadMoreReleasedOrders"
 		/>
 	</div>
 </template>
@@ -39,18 +40,6 @@ export default {
 			offset: this.offset, limit: this.limit
 		});
 	},
-	mounted() {
-		window.onscroll = () => {
-			if (
-				window.innerHeight + window.scrollY >=
-				document.body.offsetHeight
-			) {
-                this.offset = this.offset + this.limit
-				this.loadMoreReleasedOrders();
-                console.log("Reached the end of the list")
-			}
-		};
-	},
 	computed: {
 		headers() {
 			return this.$store.state.releasedOrders.tableHeaders;
@@ -67,6 +56,7 @@ export default {
 			this.$router.push("/releasedOrders/" + row.id);
 		},
 		loadMoreReleasedOrders() {
+            this.offset = this.offset + this.limit;
 			this.$store.dispatch("releasedOrders/loadReleasedOrders", {
 				offset: this.offset, limit: this.limit
 			});

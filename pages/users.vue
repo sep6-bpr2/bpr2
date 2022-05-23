@@ -16,18 +16,17 @@
 			<Translate :text="'Create User'"/>
 		</button>
 
-		<div style="display: flex; align-items:flex-start">
-			<CustomTable
-				:allowedHeaders="allowedHeaders"
-				:rows="userList"
-				:tableHeaders="headers"
-				:deleteRowCallback="deleteRowCallback"
-			/>
-			<Transition>
-				<div style="min-height: 248px; display: table" v-if="shouldCreateUser" class="create_User_form ml-5">
-					<v-form ref="form">
-
-						<h4>New User</h4>
+	 <div style="display: flex; align-items:flex-start">
+		 <CustomTable
+			 :allowedHeaders="allowedHeaders"
+			 :rows="userList"
+			 :tableHeaders="headers"
+			 :deleteRowCallback="deleteRowCallback"
+             :scrolledToBottomCallback="loadMoreUsers"
+		 />
+		 <Transition >
+			 <div style="min-height: 248px; display: table" v-if="shouldCreateUser" class="create_User_form ml-5">
+				 <v-form ref="form">
 
 						<v-text-field
 							v-model="userName"
@@ -42,19 +41,20 @@
 							v-model="roleValue"
 							id="roles"
 							:items="roles"
-							:rules="[v => !!v || 'Item is required']"
+							:rules="[(v) => !!v || 'Item is required']"
 							label="Role"
-							required>
+							required
+						>
 						</v-select>
 
-						<v-btn
-							v-if="!shouldConfirm"
-							color="#333"
-							id="submitCreateUser"
-							@click="handleSubmitClick"
-						>
-							Submit
-						</v-btn>
+					 <v-btn
+						 v-if="!shouldConfirm"
+						 color="#333"
+						 id="submitCreateUser"
+						 @click="handleSubmitClick"
+					 >
+						 Submit
+					 </v-btn>
 
 						<v-btn
 							v-if="shouldConfirm"
@@ -101,9 +101,9 @@ export default {
 		roleValue: "",
 		shouldCreateUser: false,
 		userName: "",
-		userNameRules: [
-			v => !!v || 'Name is required',
-		],
+		userNameRules: [(v) => !!v || "Name is required"],
+		offset: 0,
+		limit: 25,
 	}),
 	mixins: [authorizeUser, translate, alerts],
 	methods: {
@@ -188,6 +188,13 @@ export default {
 		closeAlertModal(id) {
 			if (id == 1) this.modalAlertShowSubmit = false;
 		},
+		loadMoreUsers() {
+            this.offset = this.offset + this.limit;
+			this.$store.dispatch("users/loadUsers", {
+				offset: this.offset,
+				limit: this.limit,
+			});
+		},
 	},
 	computed: {
 		notificationStatus() {
@@ -214,13 +221,15 @@ export default {
 		},
 		roles() {
 			return this.$store.state.users.roles;
-		}
+		},
 	},
 	mounted() {
-		this.$store
-			.dispatch("users/loadUsers", {username: this.username})
-	}
-}
+		this.$store.dispatch("users/loadUsers", {
+			offset: this.offset,
+			limit: this.limit,
+		});
+	},
+};
 </script>
 
 <style scoped>
@@ -236,7 +245,6 @@ export default {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-
 .create_User_form {
 	transition: ease-in;
 	width: 400px;
@@ -250,18 +258,16 @@ export default {
 .v-enter-active {
 	transition: 0.5s ease;
 }
-
 .v-enter {
 	opacity: 0;
 	transform: translate(0, -8%);
 }
-
 .v-leave-to {
 	opacity: 0;
 	transform: translate(0, -8%);
 }
 
-.alert {
+.alert{
 	padding: 10px;
 	width: 600px;
 }
