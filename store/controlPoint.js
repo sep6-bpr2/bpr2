@@ -73,7 +73,6 @@ export const actions = {
 			await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${cpId.controlPointId}/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
-                    console.log(res)
 					commit('setFrequencies', res)
 				})
 		}
@@ -128,14 +127,12 @@ export const actions = {
 					})
 					.then(res => res.json())
 					.then(res => {
-						console.log(res)
 						resolve(res)
 					})
 			})
 		}
 	},
 	async submitControlPoint({commit, rootState}, cp) {
-		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA!!!")
 		const user = rootState.login.user;
 		const request = (commit, cp) => {
 			return new Promise((resolve, reject) => {

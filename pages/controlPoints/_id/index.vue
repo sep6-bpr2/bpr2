@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-show="this.$store.state.login.user">
 		<AlertModal
 			:id="1"
 			:message="alert.message"
@@ -18,10 +18,10 @@
 				:is-edit="true"
 				:delete-cp="deleteControlPoint"
 				:cp-data="cpData"
-				:attributes-names="attributeNames"
-				:codes-choice="itemCategories"
-				:all-types="allTypes"
-				:all-measurement-types="allMeasurementTypes"
+				:attributes-names="this.$store.state.createControlPoint.attributesNames"
+				:codes-choice="this.$store.state.createControlPoint.allItemCodes"
+				:all-types="this.$store.state.createControlPoint.allTypes"
+				:all-measurement-types="this.$store.state.createControlPoint.allMeasurementTypes"
 			></ControlPoint>
 		</div>
 	</div>
@@ -53,18 +53,6 @@ export default {
 	computed: {
 		alert() {
 			return this.$store.state.createControlPoint.alert
-		},
-		allTypes() {
-			return this.$store.state.createControlPoint.allTypes
-		},
-		attributeNames() {
-			return this.$store.state.createControlPoint.attributesNames
-		},
-		itemCategories() {
-			return this.$store.state.createControlPoint.allItemCodes
-		},
-		allMeasurementTypes() {
-			return this.cpData.allMeasurementTypes
 		},
 	},
 	methods: {

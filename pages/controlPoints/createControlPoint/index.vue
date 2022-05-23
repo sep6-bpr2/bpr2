@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-show="this.$store.state.login.user">
 		<div class="pageHeader">
 			<Translate text="Create control point"/>
 		</div>
@@ -7,10 +7,10 @@
 			:submit="submit"
 			:is-edit="false"
 			:cp-data="cpData"
-			:attributes-names="attributeNames"
-			:codes-choice="itemCategories"
-			:all-types="allTypes"
-			:all-measurement-types="allMeasurementTypes"
+			:attributes-names="this.$store.state.createControlPoint.attributesNames"
+			:codes-choice="this.$store.state.createControlPoint.allItemCodes"
+			:all-types="this.$store.state.createControlPoint.allTypes"
+			:all-measurement-types="this.$store.state.createControlPoint.allMeasurementTypes"
 		></ControlPoint>
 	</div>
 </template>
@@ -27,7 +27,6 @@ export default {
 	mixins: [translate, authorizeUser],
 	data: () => ({
 		cpData: {
-			allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 			defaultFrequency: {
 				"id": 0,
 				"to25": 2,
@@ -63,25 +62,10 @@ export default {
 		this.$store.dispatch("createControlPoint/getAllAttributesNames")
 		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
 	},
-	computed: {
-		allTypes() {
-			return this.$store.state.createControlPoint.allTypes
-		},
-		attributeNames() {
-			return this.$store.state.createControlPoint.attributesNames
-		},
-		itemCategories() {
-			return this.$store.state.createControlPoint.allItemCodes
-		},
-		allMeasurementTypes() {
-			return this.cpData.allMeasurementTypes
-		},
-	},
 	methods: {
 
 		submit(validateAll, showAlert,validateFrequency) {
-			console.log(validateFrequency)
-			if (validateAll() && submitFrequency()) {
+			if (validateAll() && validateFrequency()) {
 
 
 				let value = this.cpData

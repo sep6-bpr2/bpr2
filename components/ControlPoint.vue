@@ -349,9 +349,9 @@ export default {
 		showConfirmAlert: false
 	}),
 	created() {
-		this.$store.dispatch("createControlPoint/getAllTypes")
-		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
+		this.$store.dispatch("controlPoint/getAllTypes")
+		this.$store.dispatch("controlPoint/getAllAttributesNames")
+		this.$store.dispatch("controlPoint/loadItemCategoryCodes")
 	},
 	computed: {
 		frequencies() {
