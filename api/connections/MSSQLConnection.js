@@ -21,26 +21,50 @@ const get = (name, config) => {
     return pools.get(name);
 }
 
-module.exports.getConnections = async () => {
+module.exports.getConnectionsOwn = async () => {
     if (process.env.environment != "testing") {
-        
-        if(process.env.DATABASE == "konfair"){
-            konfairDB = await get("Konfair", "Server=172.16.1.38,50259;Database=konfair;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
-            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")  
-        }else if(process.env.DATABASE == "local"){
-            konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
+        if (process.env.DATABASE == "konfair") {
+            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
+        } else if (process.env.DATABASE == "local") {
             localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
-        }else{
-            konfairDB = await get("konfair", "Server=bpr2.database.windows.net,1433;Database=konfair;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;")
+        } else {
             localDB = await get("own", "Server=bpr2.database.windows.net,1433;Database=own;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;")
         }
-     }
+    }
 }
 
-module.exports.konfairDB = () => {
+module.exports.getConnectionsKonfair = async () => {
+    if (process.env.environment != "testing") {
+        if (process.env.DATABASE == "konfair") {
+            konfairDB = await get("Konfair", "Server=172.16.1.38,50259;Database=konfair;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
+        } else if (process.env.DATABASE == "local") {
+            konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
+        } else {
+            konfairDB = await get("konfair", "Server=bpr2.database.windows.net,1433;Database=konfair;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;")
+        }
+    }
+}
+
+
+module.exports.konfairDB = async () => {
+    if (konfairDB == null) {
+        try {
+            await module.exports.getConnectionsKonfair()
+        } catch (err) {
+            console.log("[" + new Date().toLocaleString() + "] - [ERROR] - Failed to connect to database - Own")
+        }
+    }
+
     return konfairDB
 }
-module.exports.localDB = () => {
+module.exports.localDB = async () => {
+    if (localDB == null) {
+        try {
+            await module.exports.getConnectionsOwn()
+        } catch (err) {
+            console.log("[" + new Date().toLocaleString() + "] - [ERROR] - Failed to connect to database - Konfair")
+        }
+    }
     return localDB
 }
 
