@@ -1,7 +1,7 @@
 <template>
 	<v-main>
 		<v-form ref="form">
-			<v-card width="500" class="mx-auto mt-9">
+			<v-card width="500" v-on:keyup.enter="hanldeLogin" class="mx-auto mt-9">
 				<v-select
 					id="selectLanguage"
 					:items="allLanguages"
@@ -21,7 +21,6 @@
 				<v-divider></v-divider>
 				<v-card-text>
 					<v-text-field
-						v-on:keyup.enter="hanldeLogin"
 						id="enterUsername"
 						:rules="usernameRules"
 						required

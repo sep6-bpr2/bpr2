@@ -1,6 +1,8 @@
 const model = require("../models/itemCategory")
+
 const defaultFrequencyValue = [{
 	"id": 0,
+	"frequencyNumber": 0,
 	"to25": 2,
 	"to50": 3,
 	"to100": 4,
@@ -16,17 +18,24 @@ const defaultFrequencyValue = [{
 	"to5000": 70
 }]
 
-
 module.exports.getItemCatCodes = async (location, offset, limit) => {
 	if (location !== 'All') {
-		return model.getItemCatCodesWhenLocationNotAll(location, offset, limit)
+        if(limit == 'max'){
+            return model.getItemCatCodesWhenLocationNotAllMax(location)
+        }else{
+            return model.getItemCatCodesWhenLocationNotAll(location, offset, limit)
+        }
 	}else{
-        return model.getItemCatCodesWhenLocationAll(offset, limit)
+        if(limit == 'max'){
+            return model.getItemCatCodesWhenLocationAllMax()
+        }else{
+            return model.getItemCatCodesWhenLocationAll(offset, limit)
+        }
     }
 }
 
-module.exports.getFrequenciesOfItem = async (itemCode) => {
-	let value = await model.getFrequenciesOfItem(itemCode)
+module.exports.getFrequenciesOfCategory = async (itemCode) => {
+	let value = await model.getFrequenciesOfCategory(itemCode)
 	if (value[0] == undefined) {
 		value = defaultFrequencyValue
 	}
@@ -36,9 +45,14 @@ module.exports.getFrequenciesOfItem = async (itemCode) => {
 
 module.exports.setFrequenciesWithId = async (item) => {
 	if(item.id !== 0){
-		return model.setFrequenciesWithIdWhenIdNotZero(item)
+        await model.expireOldFrequency(item.frequencyNumber)
+        return model.insertFrequency(item)
 	}
-	return model.setFrequenciesWithIdWhenIdZero(item)
+    
+    const latestFrequencyNumber = await model.getLatestFrequencyNumber()
+    item.frequencyNumber = latestFrequencyNumber
+
+	return model.insertFrequency(item)
 }
 
 module.exports.checkCodeExists = async (itemCode) => {

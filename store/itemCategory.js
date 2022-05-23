@@ -72,8 +72,6 @@ export const actions = {
 				if (res.status === 200) {
 					await commit("updateStatus", {status: "success", value: frequencies.Code})
 				} else await commit("updateStatus", {status: "error", value: frequencies.Code})
-
-
 			})
 		}
 	},

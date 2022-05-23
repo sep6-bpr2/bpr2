@@ -3,7 +3,6 @@ export const state = () => ({
 	allowedHeaders: ["username", "role"],
 	roles: ["qa employee", "admin"],
 	userList: [],
-	QAUsers: []
 })
 
 export const mutations = {
@@ -17,9 +16,6 @@ export const mutations = {
 	},
 	setUsers(state, users) {
 		state.userList = users
-	},
-	setQAUsers(state, QAUserList) {
-		state.QAUsers.push(...QAUserList)
 	}
 }
 

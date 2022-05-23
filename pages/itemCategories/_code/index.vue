@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Frequency from "../../../components/Frequency";
+import Frequency from "../../../components/Frequency.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 
@@ -56,7 +56,10 @@ export default {
 	},
 	computed: {
 		frequencies() {
-			return this.$store.state.itemCategory.frequencies[0]
+            let frequencies = JSON.parse(JSON.stringify(this.$store.state.itemCategory.frequencies[0]))
+            delete frequencies.frequencyNumber // Remove the frequencyNumber before passing
+			return frequencies
+			// return this.$store.state.itemCategory.frequencies[0]
 		},
 		isDoneFetching() {
 			if (this.$store.state.itemCategory.frequencies[0]) {
@@ -110,26 +113,27 @@ export default {
 			existsNegVal = Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
 			let localNotification;
-			if (existsNegVal === false) {
-				localNotification = {response: 0, message: "There is an invalid input"}
-			} else {
-				this.$store.dispatch("itemCategory/setFrequencyWithId", {frequencies: tempFrequencies})
-				this.$router.push("/itemCategories");
+			if(existsNegVal === false){
+				localNotification = { response: 0, message: "There is an invalid input"}
+			}
+			else{
+                    tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber
+					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
+					this.$router.push("/itemCategories");
 			}
 			return localNotification
 		},
-		pushBack() {
-			this.$router.push("/itemCategories");
+		pushBack(){
+				this.$router.push("/itemCategories");
 		}
 	}
 }
 </script>
 
 <style scoped>
-.alert {
+.alert{
 	padding: 10px;
 }
-
 .freq {
 	display: flex;
 	margin: 10px;

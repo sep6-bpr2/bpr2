@@ -4,7 +4,10 @@ module.exports.getUserByUsername = async (username) => {
     const result = await localDB()
         .request()
         .input("username", mssql.NVarChar(1000), username)
-        .query(`select * from SystemUser WHERE SystemUser.username=@username`)
+        .query(`
+            select *
+            from SystemUser
+            WHERE SystemUser.username = @username AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL `)
     return result.recordset
 }
 
@@ -14,9 +17,10 @@ module.exports.getAllUsers = async (offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
 		.query(`
-            SELECT * 
+            SELECT *
             FROM SystemUser
-            ORDER BY id ASC 
+            WHERE validFrom < GETDATE() AND validTo IS NULL
+            ORDER BY id ASC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
 
@@ -34,28 +38,29 @@ module.exports.getAllUsersWithUser = async (user) => {
 }
 
 
-module.exports.getAllQAUsers = async () => {
-	const result = await localDB()
-		.request()
-		.query('SELECT DISTINCT author FROM QAReportControlPointValue')
-
-	return result.recordset
-}
-
-
-
 module.exports.addUser = async (user) => {
     await localDB()
         .request()
-		.input("username", mssql.NVarChar(1000), user.username)
-		.input("role", mssql.NVarChar(1000), user.role)
-        .query(`insert into SystemUser(username,role) values (@username,@role)`)
+        .query(`insert into SystemUser (username, role, validFrom) values ('${user.username}','${user.role}', GETDATE())`)
 
+    const result = await localDB()
+        .request()
+        .query(`
+            select *
+            from SystemUser
+            where SystemUser.username= '${user.username}' AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL`)
+
+    return result.recordset
 }
 
-module.exports.removeUser = async (user) => {
+module.exports.expireUser = async (username) => {
 	await localDB()
 		.request()
-		.input("username", mssql.NVarChar(1000), user.username)
-		.query(`delete from SystemUser where username = @username`)
+		.input("username", mssql.NVarChar(1000), username)
+        // .input("id", mssql.Int, id)
+		.query(`
+            update [dbo].[SystemUser]
+            set validTo = GETDATE()
+            where username = @username AND validTo IS NULL
+        `)
 }
