@@ -2,6 +2,7 @@ const getDefaultState = () => ({
 		allTypes: [],
 		attributesNames: [],
 		allItemCodes: [],
+        controlPointNumber: null,
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		defaultFrequency: {
 			"id": 0,
@@ -59,7 +60,8 @@ export const mutations = {
 	,
 
 	setFrequencies(state, frequencies) {
-		state.frequencies = frequencies
+        console.log(JSON.stringify(frequencies))
+        state.frequencies = frequencies
 	},
 
 
@@ -79,6 +81,9 @@ export const mutations = {
 		state.measurementType = measurementType
 	},
 
+    setControlPointNumber(state, controlPointNumber) {
+		state.controlPointNumber = controlPointNumber
+	},
 
 	setAllDescriptions(state, obj) {
 		let eng = obj.find(o => o.language.toLowerCase() === "english")
@@ -163,13 +168,21 @@ export const actions = {
 				})
 		}
 	},
-
+    loadItemCategoryCodes({commit, rootState}) {
+        const user = rootState.login.user;
+        if (user) {
+            fetch(`http://localhost:3000/api/itemCategory/getCodesMax/${user.username}/All`).then(res => res.json()).then(result => {
+                commit('setAllItemCodes', result)
+            })
+        }
+    },
 	async getFrequencies({commit, rootState}, cpId) {
 		const user = rootState.login.user;
 		if (user) {
 			await fetch(`http://localhost:3000/api/controlPoints/getFrequenciesOfControlPoint/${cpId.controlPointId}/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
+                    console.log(res)
 					commit('setFrequencies', res)
 				})
 		}
@@ -184,14 +197,14 @@ export const actions = {
 				})
 		}
 	},
-	loadItemCategoryCodes({commit, rootState}) {
-		const user = rootState.login.user;
-		if (user) {
-			fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
-				commit('setAllItemCodes', result)
-			})
-		}
-	},
+	// loadItemCategoryCodes({commit, rootState}) {
+	// 	const user = rootState.login.user;
+	// 	if (user) {
+	// 		fetch(`http://localhost:3000/api/itemCategory/getCodes/${user.username}/All`).then(res => res.json()).then(result => {
+	// 			commit('setAllItemCodes', result)
+	// 		})
+	// 	}
+	// },
 	deleteControlPoint({ commit, rootState }, cpId) {
 		const user = rootState.login.user;
 		if (user) {
@@ -237,6 +250,8 @@ export const actions = {
 
 					// main info
 					let mainInfo = res.mainInformation
+                    commit('setControlPointNumber', mainInfo.controlPointNumber)
+
 					commit('setMeasurementType', mainInfo.measurementtype)
 					if (mainInfo.image != null) {
 						commit('setFetchedImage', {image: mainInfo.image, username: user.username})

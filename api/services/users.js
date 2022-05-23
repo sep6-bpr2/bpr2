@@ -10,8 +10,8 @@ module.exports.addUser = async (body) => {
 }
 
 module.exports.removeUser = async (body) => {
-	await model.removeUser(body)
-	return model.getAllUsers()
+    await model.expireUser(body.username)
+	return model.getAllUsers(0, 25)// The default
 }
 
 module.exports.getAllUsers = async (offset, limit) => {

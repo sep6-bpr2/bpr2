@@ -12,8 +12,8 @@
 
 <script>
 import {translate} from "../../../mixins/translate.js"
-import ControlPoint from "../../../components/ControlPoint";
-import Translate from "../../../components/Translate";
+import ControlPoint from "../../../components/ControlPoint.vue";
+import Translate from "../../../components/Translate.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
 
 export default {
@@ -27,32 +27,28 @@ export default {
 	},
 	methods: {
 
-		submit(validateAll, showAlert) {
-			if (validateAll()) {
-				let value = this.$store.state.createControlPoint
-				this.$store.dispatch('createControlPoint/submitControlPoint', {
-					descriptions: value.descriptions,
-					type: value.type,
-					measurementType: value.measurementType,
-					upperTolerance: value.upperTolerance,
-					lowerTolerance: value.lowerTolerance,
-					optionValues: value.optionValues,
-					attributes: value.attributes,
-					codes: value.codes,
-					image: value.image,
-					frequencies: value.frequencies,
-				}).then(result => {
-					if (result) {
-						this.$store.commit('createControlPoint/resetState')
-						showAlert('success', this.translateText('control point has been created'))
-					}else{
-						showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
-					}
-				})
-			}
+		submit(showAlert) {
+            let value = this.$store.state.createControlPoint
+            this.$store.dispatch('createControlPoint/submitControlPoint', {
+                descriptions: value.descriptions,
+                type: value.type,
+                measurementType: value.measurementType,
+                upperTolerance: value.upperTolerance,
+                lowerTolerance: value.lowerTolerance,
+                optionValues: value.optionValues,
+                attributes: value.attributes,
+                codes: value.codes,
+                image: value.image,
+                frequencies: value.frequencies,
+            }).then(result => {
+                if (result) {
+                    this.$store.commit('createControlPoint/resetState')
+                    showAlert('success', this.translateText('control point has been created'))
+                }else{
+                    showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
+                }
+            })
 		},
-
-
 	}
 }
 </script>

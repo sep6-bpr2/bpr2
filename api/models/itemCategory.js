@@ -11,10 +11,24 @@ module.exports.getItemCatCodesWhenLocationNotAll = async (location, offset, limi
             from [KonfAir DRIFT$Item] 
             join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
             JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
-            where [Location Code] =@location
             ORDER BY Code DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
 `)
+    return result.recordset
+}
+
+module.exports.getItemCatCodesWhenLocationNotAllMax = async (location) => {
+    const result = await konfairDB()
+        .request()
+        .input("location", mssql.NVarChar(1000), location)
+        .query(`
+            select DISTINCT Code 
+            from [KonfAir DRIFT$Item] 
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            ORDER BY Code DESC
+        `)
+
     return result.recordset
 }
 
@@ -30,52 +44,148 @@ module.exports.getItemCatCodesWhenLocationAll = async (offset, limit) => {
             JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
             ORDER BY Code DESC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
-`)
+    `)
+    return result.recordset
+}
+
+module.exports.getItemCatCodesWhenLocationAllMax = async () => {
+    const result = await konfairDB()
+        .request()
+        .query(`
+            select DISTINCT Code 
+            from [KonfAir DRIFT$Item] 
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
+            ORDER BY Code DESC 
+        `)
 
     return result.recordset
 }
-module.exports.getFrequenciesOfItem = async (itemCode) => {
+module.exports.getFrequenciesOfCategory = async (categoryCode) => {
 
     const result = await localDB()
         .request()
-        .input("itemCode", mssql.Int, itemCode)
-        .query(`select F.id,[to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
-				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
-				[to5000] from [dbo].[ItemCategoryFrequency] I JOIN [dbo].[Frequency] F
-				on I.frequencyid = F.id where I.code = @itemCode
+        .input("categoryCode", mssql.Int, categoryCode)
+        .query(`
+            select 
+            F.id,
+            F.frequencyNumber as frequencyNumber,
+            [to25],
+            [to50], 
+            [to100],
+            [to200],
+            [to300],
+            [to500],
+            [to700],
+            [to1000],
+            [to1500],
+            [to2000],
+            [to3000],
+            [to4000],
+            [to5000] 
+            from [dbo].[ItemCategoryFrequency] I 
+            JOIN [dbo].[Frequency] F on I.frequencyid = F.frequencyNumber 
+            where I.code = @categoryCode AND F.validFrom < GETDATE() AND F.validTo IS NULL 
         `)
     return result.recordset
 }
+
 module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
     const result = await localDB()
         .request()
-        .query(`update [dbo].[Frequency] set to25 = ${item.to25} ,to50 = ${item.to50} ,to100 = ${item.to100}
-					,to200 = ${item.to200} ,to300 = ${item.to300} ,to500 = ${item.to500} ,
-					to700 = ${item.to700} ,to1000 = ${item.to1000} ,to1500 = ${item.to1500} ,
-					to2000 = ${item.to2000},to3000 = ${item.to3000} ,to4000 = ${item.to4000} ,
-					to5000 = ${item.to5000} where id = ${item.id}
-`)
+        .query(`
+            update [dbo].[Frequency] 
+            set 
+            to25 = ${item.to25} ,
+            to50 = ${item.to50} ,
+            to100 = ${item.to100} ,
+            to200 = ${item.to200} ,
+            to300 = ${item.to300} ,
+            to500 = ${item.to500} ,
+			to700 = ${item.to700} ,
+            to1000 = ${item.to1000} ,
+            to1500 = ${item.to1500} ,
+			to2000 = ${item.to2000},
+            to3000 = ${item.to3000} ,
+            to4000 = ${item.to4000} ,
+			to5000 = ${item.to5000} 
+            where id = ${item.id}
+        `)
     return result.recordset
 }
 
-module.exports.setFrequenciesWithIdWhenIdZero = async (item) => {
-    let idResult = await localDB()
-        .request()
-        .query(`insert into [dbo].[Frequency]([to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
-				[to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
-				[to5000]) values (${item.to25},${item.to50},${item.to100},${item.to200},${item.to300},
-				${item.to500},${item.to700},${item.to1000},${item.to1500},${item.to2000},${item.to3000},
-				${item.to4000},${item.to5000}); SELECT SCOPE_IDENTITY()`)
 
-    const newId = idResult.recordset[0][""]
+module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
+    const result = await localDB()
+        .request()
+        .query(`
+            update [dbo].[Frequency] 
+            set 
+            to25 = ${item.to25} ,
+            to50 = ${item.to50} ,
+            to100 = ${item.to100} ,
+            to200 = ${item.to200} ,
+            to300 = ${item.to300} ,
+            to500 = ${item.to500} ,
+			to700 = ${item.to700} ,
+            to1000 = ${item.to1000} ,
+            to1500 = ${item.to1500} ,
+			to2000 = ${item.to2000},
+            to3000 = ${item.to3000} ,
+            to4000 = ${item.to4000} ,
+			to5000 = ${item.to5000} 
+            where id = ${item.id}
+        `)
+    return result.recordset
+}
+
+module.exports.insertFrequency = async (frequency) => {
+    await localDB()
+        .request()
+        .query(`
+            insert into [dbo].[Frequency]
+            (
+                frequencyNumber, [to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
+			    [to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
+				[to5000], validFrom
+            ) 
+            values (
+                ${frequency.frequencyNumber},${frequency.to25},${frequency.to50},${frequency.to100},${frequency.to200},${frequency.to300},
+				${frequency.to500},${frequency.to700},${frequency.to1000},${frequency.to1500},${frequency.to2000},${frequency.to3000},
+				${frequency.to4000},${frequency.to5000}, GETDATE()
+            ); 
+        `)
 
     const result = await localDB()
         .request()
-        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${item.Code},${newId})`)
+        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${frequency.Code},${frequency.frequencyNumber})`)
 
     return result.recordset
 }
 
+module.exports.getLatestFrequencyNumber = async () => {
+    const result = await localDB()
+        .request()
+        .query(`
+            SELECT MAX(frequencyNumber) as frequencyNumber FROM [Frequency]
+        `)
 
+    if(result.recordset[0] == null){
+        return 1
+    }else{
+        return result.recordset[0].frequencyNumber + 1
+    }
+}
+
+module.exports.expireOldFrequency = async (frequencyNumber) => {
+    await localDB()
+        .request()
+        .input("frequencyNumber", mssql.Int, frequencyNumber)
+        .query(`
+            update [dbo].[Frequency] 
+            set validTo = GETDATE()
+            where frequencyNumber = @frequencyNumber and validTo IS NULL
+        `)
+}
 
 

@@ -3,9 +3,7 @@ const router = Router()
 const { param, body } = require('express-validator')
 const { validate } = require("../middleware/validateMiddleware")
 const { validateUserAdmin, validateUserQA } = require("../middleware/validateUser")
-
 const service = require("../services/users")
-const {validateUserAdmin} = require("../middleware/validateUser");
 
 
 /**

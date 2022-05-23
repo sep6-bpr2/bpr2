@@ -25,6 +25,18 @@ router.get("/getCodes/:username/:location/:offset/:limit",
     }
 )
 
+router.get("/getCodesMax/:username/:location",
+    param("username").isLength({ min: 1, max: 35 }),
+    param("location").isLength({ min: 2, max: 50 }),
+    validate,
+    validateUserAdmin,
+    async (req, res) => {
+        const result = await service.getItemCatCodes(req.params.location, 0, "max")
+        res.send(result)
+    }
+)
+
+
 /**
  * @description - get frequency of an item Codes
  * @param username - name of the user for validation
@@ -32,15 +44,13 @@ router.get("/getCodes/:username/:location/:offset/:limit",
  *
  * @example - GET {BaseURL}/api/itemCategory/getFrequenciesOfCode/rokas/193345
  */
-router.get("/getFrequenciesOfCode/:username/:itemCode",
+router.get("/getFrequenciesOfCode/:username/:categoryCode",
     param("username").isLength({ min: 1, max: 35 }),
-    param("itemCode").isLength({ min: 1, max: 35 }),
+    param("categoryCode").isLength({ min: 1, max: 35 }),
     validate,
     validateUserAdmin,
     async (req, res) => {
-
-        let result = await service.getFrequenciesOfItem(req.params.itemCode)
-
+        let result = await service.getFrequenciesOfCategory(req.params.categoryCode)
         res.send(result)
     }
 )
@@ -54,11 +64,11 @@ router.get("/getFrequenciesOfCode/:username/:itemCode",
  */
 router.post("/setFrequencies/:username",
     param("username").isLength({ min: 1, max: 35 }),
+    body("frequencyNumber").isInt(),
     body("id").isInt(),
     validate,
     validateUserAdmin,
     async (req, res) => {
-
         const result = await service.setFrequenciesWithId(req.body)
         res.send(result)
     }

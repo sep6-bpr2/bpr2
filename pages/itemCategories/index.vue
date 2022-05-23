@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import CustomTable from "../../components/CustomTable";
-import Translate from "../../components/Translate";
+import CustomTable from "../../components/CustomTable.vue";
+import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
 
 export default {
@@ -82,7 +82,7 @@ export default {
 		},
         loadMoreItemCategories() {
             this.offset = this.offset + this.limit;
-			this.$store.dispatch("releasedOrders/loadItemCategoryCodes", {
+			this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
 				offset: this.offset,
 				limit: this.limit,
 			});

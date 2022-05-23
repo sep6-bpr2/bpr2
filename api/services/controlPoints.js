@@ -1,28 +1,28 @@
 const controlPointModel = require("../models/controlPoints")
+const itemCategoryModel = require("../models/itemCategory")
+
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
-const {updateControlPoint} = require("./controlPoints");
-const {updateControlPointFrequencyId} = require("../models/controlPoints");
 
 const typeSwitchToText = (value) => {
-	switch (value) {
-		case 3:
-			return "number"
-		case 1:
-			return "text"
-		case 0:
-			return "options"
-	}
+    switch (value) {
+        case 3:
+            return "number"
+        case 1:
+            return "text"
+        case 0:
+            return "options"
+    }
 }
 const typeSwitchToNumber = (value) => {
-	switch (value) {
-		case "number":
-			return 3
-		case "text":
-			return 1
-		case "options":
-			return 0
-	}
+    switch (value) {
+        case "number":
+            return 3
+        case "text":
+            return 1
+        case "options":
+            return 0
+    }
 }
 
 const deletePicture = (pictureName) => {
@@ -41,119 +41,185 @@ const deletePicture = (pictureName) => {
 
 
 module.exports.getTypes = async () => {
-	const allTypes = await controlPointModel.getAllTypes()
-	return allTypes.map(obj => {
-		return typeSwitchToText(obj.type)
-	})
+    const allTypes = await controlPointModel.getAllTypes()
+    return allTypes.map(obj => {
+        return typeSwitchToText(obj.type)
+    })
 }
 
 module.exports.getAttributes = async () => {
-	return await controlPointModel.getAllAttributesNames()
+    return controlPointModel.getAllAttributesNames()
 }
 
-module.exports.deleteControlPoint = async (cpId) => {
-	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
+module.exports.deleteControlPoint = async (controlPointNumber) => {
+	let mainInformation = await controlPointModel.getControlMainInformation(controlPointNumber)
 	if(mainInformation.length === 0){
-		return {message: `control point with id: ${cpId} does not exist in database`}
+		return {message: `control point with id: ${controlPointNumber} does not exist in database`}
 	}
 
 	if(mainInformation[0].frequencyid != null){
-		await controlPointModel.deleteFrequency(mainInformation[0].frequencyid)
+        await itemCategoryModel.expireOldFrequency(mainInformation[0].frequencyId)
 	}
 
-	await controlPointModel.deleteControlPoint(cpId)
-	await controlPointModel.deleteControlPointDescriptions(cpId)
-	await controlPointModel.deleteControlPointAttributes(cpId)
-	await controlPointModel.deleteControlPointOptionValues(cpId)
-	await controlPointModel.deleteControlPointItemCategoryCodes(cpId)
+    await controlPointModel.expireControlPoint(controlPointNumber)
+    await controlPointModel.expireDescriptionsForControlPoint(controlPointNumber)
+    await controlPointModel.expireAttributesForControlPoint(controlPointNumber)
+    await controlPointModel.expireOptionsForControlPoint(controlPointNumber)
+    await controlPointModel.expireCategoryCodesForControlPoint(controlPointNumber)
+
 	return {}
 }
 
+module.exports.getControlPointData = async (controlPointNumber) => {
+    let mainInformation = await controlPointModel.getControlMainInformation(controlPointNumber)
+    if (mainInformation.length === 0) {
+        return { message: `control point with id: ${controlPointNumber} does not exist in database` }
+    }
+    mainInformation = mainInformation[0]
+    mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
-module.exports.getControlPointData = async (cpId) => {
-	let mainInformation = await controlPointModel.getControlMainInformation(cpId)
-	if(mainInformation.length === 0){
-		return {message: `control point with id: ${cpId} does not exist in database`}
-	}
-	mainInformation = mainInformation[0]
-	mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
+    const descriptions = await controlPointModel.getControlPointDescriptions(controlPointNumber)
+    const attributes = await controlPointModel.getControlPointAttributes(controlPointNumber)
+    const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(controlPointNumber)
+    const optionValues = await controlPointModel.getControlPointOptionValues(controlPointNumber)
+    const frequencies = await controlPointModel.getFrequenciesOfControlPoint(controlPointNumber)
 
-	const descriptions = await controlPointModel.getControlPointDescriptions(cpId)
-	const attributes = await controlPointModel.getControlPointAttributes(cpId)
-	const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(cpId)
-	const optionValues = await controlPointModel.getControlPointOptionValues(cpId)
-	const frequencies = await controlPointModel.getFrequenciesOfControlPoint(cpId)
-
-
-
-	const result = {
-		mainInformation: mainInformation,
-		descriptions: descriptions,
-		optionValues: optionValues,
-		attributes: attributes,
-		categoryCodes: categoryCodes,
-		frequencies: frequencies[0]
-	}
-	return result
+    return {
+        mainInformation: mainInformation,
+        descriptions: descriptions,
+        optionValues: optionValues,
+        attributes: attributes,
+        categoryCodes: categoryCodes,
+        frequencies
+    }
 }
 
 module.exports.updateControlPoint = async (data) => {
-	let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointId)
-	if(mainInformation.length === 0){
-		return {message: `control point with id: ${data.controlPointId} does not exist in database`}
-	}
+    
+    let mainInformation = await controlPointModel.getControlMainInformation(data.controlPointNumber)
+    if (mainInformation.length === 0) {
+        return { message: `control point with id: ${data.controlPointNumber} does not exist in database` }
+    }
 
-	data.type = typeSwitchToNumber(data.type)
-	if (data.image != null && !data.image.includes('File')) {
-		if(mainInformation[0].image!=null){
-			deletePicture(mainInformation[0].image)
-		}
-		data.image = saveImage(data.image)
-	}
-	await controlPointModel.updateControlMainInformation(data)
+    data.type = typeSwitchToNumber(data.type)
+    if (data.image != null && !data.image.includes('File')) {
+        if (mainInformation[0].image != null) {
+            let path = __dirname.split('\\')
+            let localPath = ""
+            for (let i = 0; i < path.length - 1; i++) {
+                localPath += path[i] + "\\"
+            }
+            localPath += `pictures\\${mainInformation[0].image}`
+            try {
+                fs.unlinkSync(localPath)
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        data.image = saveImage(data.image)
+    }
 
-	let frequencyResult = await controlPointModel.getFrequencyId(data.controlPointId)
-	let frequencyId = frequencyResult[0][""]
+    // Expire old frequency
+    // Insert new frequency
+    let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
+    oldControlPoint = oldControlPoint[0]
 
-	if(data.frequencies == null) await controlPointModel.updateControlPointFrequencyWhenDataNull(data.controlPointId)
-	else if(frequencyId == null){
-		let freqResult = await controlPointModel.updateControlPointFrequencyWhenFreqIdNull(data.controlPointId, data.frequencies)
-		let freqId = freqResult[0][""]
-		await updateControlPointFrequencyId(data.controlPointId,freqId)
-	}
-	else await controlPointModel.updateControlPointFrequencyWhenFreqIdNotNull(data.controlPointId, data.frequencies)
+    if(data.frequencies == null && oldControlPoint.frequencyId != null){
+        await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
+    }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
+        await itemCategoryModel.expireOldFrequency(data.frequencyId)
+        await itemCategoryModel.insertFrequency({
+            frequencyNumber: data.frequencyId,
+            to25: data.frequencies[0],
+            to50: data.frequencies[1],
+            to100: data.frequencies[2],
+            to200: data.frequencies[3],
+            to300: data.frequencies[4],
+            to500: data.frequencies[5],
+            to700: data.frequencies[6],
+            to1000: data.frequencies[7],
+            to1500: data.frequencies[8],
+            to2000: data.frequencies[9],
+            to3000: data.frequencies[10],
+            to4000: data.frequencies[11],
+            to5000: data.frequencies[12]
+        })
+    }else if(data.frequencyId != null && oldControlPoint.frequencyId == null && data.frequencies != null){
+        const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
+        data.frequencyId = latestFrequencyNumber
+        await itemCategoryModel.insertFrequency({
+            frequencyNumber: data.frequencyId,
+            to25: data.frequencies[0],
+            to50: data.frequencies[1],
+            to100: data.frequencies[2],
+            to200: data.frequencies[3],
+            to300: data.frequencies[4],
+            to500: data.frequencies[5],
+            to700: data.frequencies[6],
+            to1000: data.frequencies[7],
+            to1500: data.frequencies[8],
+            to2000: data.frequencies[9],
+            to3000: data.frequencies[10],
+            to4000: data.frequencies[11],
+            to5000: data.frequencies[12]
+        })
+    }
+    
+    // Expire control point
+    await controlPointModel.expireControlPoint(data.controlPointNumber)
+    // Insert new control point
+    await controlPointModel.insertControlPointNEW(
+        data.controlPointNumber, 
+        data.frequencyId, 
+        data.image, 
+        data.upperTolerance, 
+        data.lowerTolerance, 
+        data.type, 
+        data.measurementType
+    )
 
+    // Expire all descriptions for this 
+    await controlPointModel.expireDescriptionsForControlPoint(data.controlPointNumber)
+    // Insert new descriptions
+    data.descriptions.forEach(async desc => {
+        await controlPointModel.insertDescription(data.controlPointNumber, desc.lang.toLowerCase(), desc.value)
+    })
 
+    //options
+    // expire all options
+    await controlPointModel.expireOptionsForControlPoint(data.controlPointNumber)
+    // insert new options
+    data.optionValues.forEach(async obj => {
+        await controlPointModel.insertOption(data.controlPointId, obj.value)
+    })
 
-	data.descriptions.forEach(async desc => {
-		await controlPointModel.updateControlPointDescription(data.controlPointId, desc.lang.toLowerCase(), desc.value)
-	})
+    //attributes
+    //Epxire all attributes
+    await controlPointModel.expireAttributesForControlPoint(data.controlPointNumber)
+    // Insert new attributes
+    // await controlPointModel.deleteControlPointAttributes(data.controlPointId)
+    data.attributes.forEach(async obj => {
+        await controlPointModel.insertControlPointAttribute(data.controlPointId, obj.id, obj.minValue, obj.maxValue)
+    })
+    
+    //codes
+    // Expire all codes
+    await controlPointModel.expireCategoryCodesForControlPoint(data.controlPointNumber)
+    // Insert new codes
+    // await controlPointModel.deleteControlPointItemCategoryCodes(data.controlPointId)
+    data.codes.forEach(async obj => {
+        await controlPointModel.insertControlPointItemCategoryCode(data.controlPointId, obj.value)
+    })
 
-	//options
-	await controlPointModel.deleteControlPointOptionValues(data.controlPointId)
-	data.optionValues.forEach(async obj => {
-		await controlPointModel.insertControlPointOptionValue(data.controlPointId, obj.value)
-	})
-	//attributes
-	await controlPointModel.deleteControlPointAttributes(data.controlPointId)
-	data.attributes.forEach(async obj => {
-		await controlPointModel.insertControlPointAttributes(data.controlPointId, obj.id, obj.minValue, obj.maxValue)
-	})
-	//codes
-	await controlPointModel.deleteControlPointItemCategoryCodes(data.controlPointId)
-	data.codes.forEach(async obj => {
-		await controlPointModel.insertControlPointItemCategoryCodes(data.controlPointId, obj.value)
-	})
-
-	return {}
+    return {}
 }
 
 module.exports.submitControlPoint = async (cp) => {
-	if (cp.image != null) {
-		cp.image = saveImage(cp.image)
-	}
-	let insertFrequencyString = ''
-	const nVarchar = mssql.mssql.NVarChar(1000)
+    if (cp.image != null) {
+        cp.image = saveImage(cp.image)
+    }
+    
+    let insertFrequencyString = ''
 	const con = await mssql.localDB().request()
 	if(cp.frequencies !== null){
 		Object.entries(cp.frequencies).forEach((frequency,index) => {
@@ -161,89 +227,103 @@ module.exports.submitControlPoint = async (cp) => {
 			con.input(`val${index}`, mssql.mssql.Int, value)
 		})
 
-		insertFrequencyString=`INSERT INTO [dbo].[Frequency] VALUES
-								(@val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12);
-								SELECT @FreqID = scope_identity();`
-	}
-	let sqlString = `
-	BEGIN TRANSACTION
-		DECLARE @FreqID int;
-		${insertFrequencyString}
-    	DECLARE @CpID int;
-    	INSERT INTO ControlPoint VALUES (@FreqID, @image, @upperTolerance, @lowerTolerance, @type, @measurementType );
-    	SELECT @CpID = scope_identity();
-    	INSERT INTO Description VALUES (@CpID,'english', @engDescription)
-    	INSERT INTO Description VALUES (@CpID,'danish', @dkDescription)
-    	INSERT INTO Description VALUES (@CpID,'lithuanian', @ltDescription) `
-
-	cp.type = typeSwitchToNumber(cp.type)
-	con.input('type', mssql.mssql.Int, cp.type)
-	con.input('measurementType', mssql.mssql.Int, cp.measurementType)
-
-	con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
-	con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
-	con.input('image', mssql.mssql.NVarChar, cp.image)
-
-	con.input('engDescription', nVarchar, cp.descriptions[0].value)
-	con.input('dkDescription', nVarchar, cp.descriptions[1].value)
-	con.input('ltDescription', nVarchar, cp.descriptions[2].value)
-	if (cp.type == 0) {
-		cp.optionValues.forEach((item, index) => {
-			sqlString += `INSERT INTO [Option] (controlPointId, value )
-						  VALUES (@CpID, @option${index}); `
-			con.input('option' + index, nVarchar, item.value)
-		})
+		insertFrequencyString=`
+            INSERT INTO [dbo].[Frequency] 
+            (frequencyNumber, to25, to50, to100, to200, to300, to500, to700, to1000, to1500, to2000, to3000, to4000, to5000, validFrom) 
+            VALUES 
+            (@frequencyNumber, @val0,@val1,@val2,@val3,@val4,@val5,@val6,@val7,@val8,@val9,@val10,@val11,@val12, GETDATE());
+        `
 	}
 
-	cp.attributes.forEach((item, index) => {
-		sqlString += `INSERT INTO AttributeControlPoint
-					  VALUES (@id${index}, @CpID, @min${index}, @max${index}) `
-		con.input(`id${index}`, nVarchar, item.id)
-		con.input(`min${index}`, nVarchar, item.minValue)
-		con.input(`max${index}`, nVarchar, item.maxValue)
-	})
+    const latestControlPointNumber = await controlPointModel.getLatestControlPointNumber()
+    const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
 
-	cp.codes.forEach((item, index) => {
-		sqlString += `INSERT INTO ItemCategoryControlPoint
-					  VALUES (@code${index}, @CpID) `
-		con.input('code' + index, nVarchar, item.value)
-	})
+    let sqlString = `
+    BEGIN TRANSACTION 
+        ${insertFrequencyString}
 
-	sqlString += ` COMMIT`
-	return await controlPointModel.insertControlPoint(sqlString, con)
+        INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'english', @engDescription, GETDATE())
+        INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'danish', @dkDescription, GETDATE())
+        INSERT INTO [Description] (controlPointId, language, description, validFrom) values (@controlPointNumber,'lithuanian', @ltDescription, GETDATE())
+        
+        INSERT INTO ControlPoint 
+        (frequencyid, controlPointNumber, image, upperTolerance, lowerTolerance, inputType, measurementType, validFrom)
+        VALUES (@frequencyNumber, @controlPointNumber, @image, @upperTolerance, @lowerTolerance, @type, @measurementType, GETDATE());
+    `
+
+    cp.type = typeSwitchToNumber(cp.type)
+    con.input('type', mssql.mssql.Int, cp.type)
+    con.input('measurementType', mssql.mssql.Int, cp.measurementType)
+    con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
+    con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
+    con.input('image', mssql.mssql.NVarChar, cp.image)
+    con.input('controlPointNumber', mssql.mssql.Int, latestControlPointNumber)
+    if(cp.frequencies !== null){
+        con.input('frequencyNumber', mssql.mssql.Int, latestFrequencyNumber)
+    }else{
+        con.input('frequencyNumber', mssql.mssql.Int, null)
+    }
+
+    con.input('engDescription', mssql.mssql.NVarChar, cp.descriptions[0].value)
+    con.input('dkDescription', mssql.mssql.NVarChar, cp.descriptions[1].value)
+    con.input('ltDescription', mssql.mssql.NVarChar, cp.descriptions[2].value)
+    if (cp.type == 0) {
+        cp.optionValues.forEach((item, index) => {
+            sqlString += `INSERT INTO [Option] (controlPointId, value, validFrom )
+						  VALUES (@controlPointNumber, @option${index}, GETDATE()); `
+            con.input('option' + index, mssql.mssql.NVarChar, item.value)
+        })
+    }
+
+    cp.attributes.forEach((item, index) => {
+        sqlString += `INSERT INTO AttributeControlPoint (attributeId, controlPointId, minValue, maxValue, validFrom)
+					  VALUES (@id${index}, @controlPointNumber, @min${index}, @max${index}, GETDATE()); `
+        con.input(`id${index}`, mssql.mssql.NVarChar, item.id)
+        con.input(`min${index}`, mssql.mssql.NVarChar, item.minValue)
+        con.input(`max${index}`, mssql.mssql.NVarChar, item.maxValue)
+    })
+
+    cp.codes.forEach((item, index) => {
+        sqlString += `INSERT INTO ItemCategoryControlPoint (itemCategoryCode, controlPointId, validFrom)
+					  VALUES (@code${index}, @controlPointNumber, GETDATE()); `
+        con.input('code' + index, mssql.mssql.NVarChar, item.value)
+    })
+    sqlString += ' COMMIT'
+    console.log(sqlString)
+    return controlPointModel.insertControlPoint(sqlString, con)
 }
 
 module.exports.getFrequenciesOfControlPoint = async (cpId) => {
-	return await controlPointModel.getFrequenciesOfControlPoint(cpId)
+    return controlPointModel.getFrequenciesOfControlPoint(cpId)
 }
 
 function saveImage(baseImage) {
-	/*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
-	let path = __dirname.split('\\')
-	let localPath = ""
-	for (let i = 0; i < path.length - 1; i++) {
-		localPath += path[i] + "\\"
-	}
-	localPath += "pictures\\"
+    /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
+    let path = __dirname.split('\\')
+    let localPath = ""
+    for (let i = 0; i < path.length - 1; i++) {
+        localPath += path[i] + "\\"
+    }
+    localPath += "pictures\\"
 
-	//Find extension of file
-	const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
-	const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
+    //Find extension of file
+    const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
+    const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
 
-	//Forming regex to extract base64 data of file.
-	const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
+    //Forming regex to extract base64 data of file.
+    const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
 
-	//Extract base64 data.
-	const base64Data = baseImage.replace(regex, "");
-	const rand = Math.ceil(Math.random() * 1000);
+    //Extract base64 data.
+    const base64Data = baseImage.replace(regex, "");
+    const rand = Math.ceil(Math.random() * 1000);
 
-	//Random photo name with timeStamp so it will not overide previous images.
-	const filename = `File${Date.now()}${rand}.${ext}`;
+    //Random photo name with timeStamp so it will not overide previous images.
+    const filename = `File${Date.now()}${rand}.${ext}`;
 
-	fs.writeFileSync(localPath + filename, base64Data, 'base64');
-	return filename
+    fs.writeFileSync(localPath + filename, base64Data, 'base64');
+    return filename
 }
 
 module.exports.controlPointsMinimal = async (language, offset, limit) => {
-	return controlPointModel.getControlPointsMinimal(language, offset, limit)
+    return controlPointModel.getControlPointsMinimal(language, offset, limit)
 }
