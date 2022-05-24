@@ -1,15 +1,22 @@
 const mssql = require('mssql')
+const mssqlV8 = require("mssql/msnodesqlv8")
+
 const pools = new Map();
 
 let konfairDB;
 let localDB;
 
-const get = (name, config) => {
+const get = (name, config, useNormalMssql) => {
     if (!pools.has(name)) {
         if (!config) {
             throw new Error('Pool does not exist');
         }
-        const pool = new mssql.ConnectionPool(config);
+        let pool
+        if(useNormalMssql){
+            pool = new mssql.ConnectionPool(config);
+        }else{
+            pool = new mssqlV8.ConnectionPool(config);
+        }
         // automatically remove the pool from the cache if `pool.close()` is called
         const close = pool.close.bind(pool);
         pool.close = (...args) => {
@@ -24,11 +31,11 @@ const get = (name, config) => {
 module.exports.getConnectionsOwn = async () => {
     if (process.env.environment != "testing") {
         if (process.env.DATABASE == "konfair") {
-            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
+            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;", true)
         } else if (process.env.DATABASE == "local") {
-            localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
+            localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
         } else {
-            localDB = await get("own", "Server=bpr2.database.windows.net,1433;Database=own;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;")
+            localDB = await get("own", "Server=bpr2.database.windows.net,1433;Database=own;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;", true)
         }
     }
 }
@@ -36,11 +43,17 @@ module.exports.getConnectionsOwn = async () => {
 module.exports.getConnectionsKonfair = async () => {
     if (process.env.environment != "testing") {
         if (process.env.DATABASE == "konfair") {
-            konfairDB = await get("Konfair", "Server=172.16.1.38,50259;Database=konfair;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;")
+            konfairDB = await get("Konfair", {
+                database: "master",
+                server: "srvsql",
+                driver: "msnodesqlv8",
+                options: {
+                  trustedConnection: true
+                }, false)
         } else if (process.env.DATABASE == "local") {
-            konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;")
+            konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
         } else {
-            konfairDB = await get("konfair", "Server=bpr2.database.windows.net,1433;Database=konfair;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;")
+            konfairDB = await get("konfair", "Server=bpr2.database.windows.net,1433;Database=konfair;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;", true)
         }
     }
 }
@@ -75,3 +88,5 @@ module.exports.localDB = async () => {
 }
 
 module.exports.mssql = mssql
+module.exports.mssqlV8 = mssqlV8
+

@@ -60,7 +60,7 @@ router.get("/released/full/:username/:id/:language",
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.getQAReport(req.params.id, req.params.language, false, false)
+        const data = await service.getQAReport(req.params.id, req.params.language.toLowerCase(), false, false)
         res.send(data)
     }
 )
@@ -79,7 +79,7 @@ router.get("/completed/full/:username/:id/:language",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await service.getQAReport(req.params.id, req.params.language, true, true)
+        const data = await service.getQAReport(req.params.id, req.params.language.toLowerCase(), true, true)
         res.send(data)
     }
 )

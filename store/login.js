@@ -1,6 +1,6 @@
-const languages = [{name: "English", flag: "english"}, {name: "Dansk", flag: "danish"}, {name: "Lietuviu", flag: "lithuanian"}]
+const languages = [{name: "English", flag: "gb"}, {name: "Danish", flag: "dk"}, {name: "Lithuanian", flag: "lt"}]
 const locations = ["All"]
-const defaultLanguage = {name: "English", flag: "english"}
+const defaultLanguage = {name: "English", flag: "gb"}
 
 export const state = () => ({
 	allLanguages: languages,
