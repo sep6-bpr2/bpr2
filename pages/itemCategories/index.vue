@@ -7,6 +7,7 @@
 			:message="notification.message"
 			:show="modalAlertShowSubmit"
 			:status="notificationStatus"
+			 :timer="3000"
 			:closeCallback="closeAlertModal"
 		/>
 		<h1><Translate :text="'Item Category'" /></h1>

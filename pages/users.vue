@@ -32,7 +32,8 @@
 							v-model="userName"
 							id="usernameInput"
 							:counter="10"
-							:rules="userNameRules"
+							:rules="userNameRules.concat(maxValRules)"
+
 							label="Username"
 							required
 						></v-text-field>
@@ -100,7 +101,8 @@ export default {
 		roleValue: "",
 		shouldCreateUser: false,
 		userName: "",
-		userNameRules: [(v) => !!v || "Name is required"],
+		userNameRules: [(v) => !!v || "Name is required" ],
+		maxValRules: [v => v.length <= 50 || 'Max 50 characters'],
 		offset: 0,
 		limit: 25,
 	}),
