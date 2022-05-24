@@ -65,9 +65,11 @@ export const actions = {
 		}
 		return new Promise((resolve, reject) => {
 			if (user) {
-				fetch(`api/users/addUser/${user.username}`, fetchData).then(res => res.json()).then(result => {
-					if (result) {
-						commit('setNewUser', result)
+				fetch(`api/users/addUser/${user.username}`, fetchData).then(async res => {
+					if (res.status === 200) {
+						await res.json().then(async result => {
+							await commit('setNewUser', result)
+						})
 						resolve(true)
 					} else {
 						resolve(false)

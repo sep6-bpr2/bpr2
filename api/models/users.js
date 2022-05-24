@@ -32,7 +32,7 @@ module.exports.getAllUsersWithUser = async (user) => {
 	const result = await localDB()
 		.request()
 		.input("username", mssql.NVarChar(1000), user.username)
-		.query(`select * from SystemUser where SystemUser.username= @username`)
+		.query(`select * from SystemUser where SystemUser.username= @username and validFrom < GETDATE() AND validTo IS NULL`)
 
 	return result.recordset
 }
