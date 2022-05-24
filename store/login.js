@@ -20,8 +20,12 @@ export const mutations = {
 	logoutUser(state) {
 		state.user = null
 	},
-	addToLocations(state, locations) {
-		state.allLocations.push(...locations)
+	addToLocations(state, newLocations) {
+        let updatedLocations = ["All"]
+        for(let i = 0; i< newLocations.length; i++){
+            updatedLocations.push(newLocations[i])
+        }
+        state.allLocations = updatedLocations
 	},
 	setLocation(state, location) {
 		state.chosenLocation = location

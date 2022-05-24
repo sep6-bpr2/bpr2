@@ -1,7 +1,6 @@
 const express = require('express')
 require('dotenv').config()
 const helmet = require("helmet");
-const mssql = require('./connections/MSSQLConnection')
 
 // Routes that contain the endpoints
 function initializeRoutes(app) {
@@ -28,8 +27,6 @@ const startServer = () => {
 
     initializeMiddleware(app)
     initializeRoutes(app)
-
-    mssql.getConnections()
 
     return app
 }

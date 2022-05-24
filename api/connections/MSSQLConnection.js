@@ -50,22 +50,28 @@ module.exports.konfairDB = async () => {
     if (konfairDB == null) {
         try {
             await module.exports.getConnectionsKonfair()
+            return konfairDB
         } catch (err) {
             console.log("[" + new Date().toLocaleString() + "] - [ERROR] - Failed to connect to database - Own")
+            return null
         }
+    }else{
+        return konfairDB
     }
-
-    return konfairDB
 }
 module.exports.localDB = async () => {
     if (localDB == null) {
         try {
             await module.exports.getConnectionsOwn()
+            return localDB
+
         } catch (err) {
             console.log("[" + new Date().toLocaleString() + "] - [ERROR] - Failed to connect to database - Konfair")
+            return null
         }
+    }else{
+        return localDB
     }
-    return localDB
 }
 
 module.exports.mssql = mssql
