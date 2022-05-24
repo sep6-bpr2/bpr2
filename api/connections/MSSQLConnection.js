@@ -30,26 +30,42 @@ const get = (name, config, useNormalMssql) => {
 
 module.exports.getConnectionsOwn = async () => {
     if (process.env.environment != "testing") {
-        if (process.env.DATABASE == "konfair") {
-            localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;", true)
+        // localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;", true)
+
+        if (process.env.DATABASE == "konfairProduction" || process.env.DATABASE == "konfairTesting") {
+            localDB = await get("Own", {
+                database: "Own",
+                server: "SRVAPP3\\SQLEXPRESS",
+                driver: "msnodesqlv8",
+                options: {
+                  trustedConnection: true
+                }}, false)
         } else if (process.env.DATABASE == "local") {
-            localDB = await get("Own", "Server=localhost,1433;Database=Own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
+            localDB = await get("Own", "Server=localhost,1433;Database=own;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
         } else {
-            localDB = await get("own", "Server=bpr2.database.windows.net,1433;Database=own;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;", true)
+            localDB = await get("Own", "Server=bpr2.database.windows.net,1433;Database=own;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;", true)
         }
     }
 }
 
 module.exports.getConnectionsKonfair = async () => {
     if (process.env.environment != "testing") {
-        if (process.env.DATABASE == "konfair") {
+        if (process.env.DATABASE == "konfairProduction") {
             konfairDB = await get("Konfair", {
                 database: "master",
                 server: "srvsql",
                 driver: "msnodesqlv8",
                 options: {
                   trustedConnection: true
-                }, false)
+                }}, false)
+        } else if (process.env.DATABASE == "konfairTesting") {
+            konfairDB = await get("Konfair", {
+                database: "konfair",
+                server: "SRVAPP3\\SQLEXPRESS",
+                driver: "msnodesqlv8",
+                options: {
+                  trustedConnection: true
+                }}, false)
         } else if (process.env.DATABASE == "local") {
             konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
         } else {
