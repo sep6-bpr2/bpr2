@@ -1,5 +1,8 @@
 const mssql = require('mssql')
-const mssqlV8 = require("mssql/msnodesqlv8")
+let mssqlV8 = null
+if(process.env.DATABASE == "konfairProduction" || process.env.DATABASE == "konfairTesting"){
+    mssqlV8 = require("mssql/msnodesqlv8")
+}
 
 const pools = new Map();
 
@@ -104,5 +107,5 @@ module.exports.localDB = async () => {
 }
 
 module.exports.mssql = mssql
-module.exports.mssqlV8 = mssqlV8
+// module.exports.mssqlV8 = mssqlV8
 

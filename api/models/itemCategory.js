@@ -164,7 +164,7 @@ module.exports.insertFrequency = async (frequency) => {
 }
 
 module.exports.checkCodeExists = async (itemCode) => {
-	let result = await konfairDB()
+	let result = await ( await konfairDB())
 		.request()
 		.input("itemCode", mssql.Int, itemCode)
 		.query(`select DISTINCT Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O]
