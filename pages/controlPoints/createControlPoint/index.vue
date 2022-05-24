@@ -66,8 +66,6 @@ export default {
 
 		submit(validateAll, showAlert,validateFrequency) {
 			if (validateAll() && validateFrequency()) {
-
-
 				let value = this.cpData
 				this.$store.dispatch('controlPoint/submitControlPoint', {
 					descriptions: value.descriptions,

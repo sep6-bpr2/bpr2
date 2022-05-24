@@ -19,6 +19,7 @@
 							&nbsp:&nbsp
 							<v-text-field
 								style="max-width: 100%"
+								:error="description.value.length > 200"
 								id="description"
 								:value="description.value"
 								v-on:input="descriptionChange($event, index)"
@@ -96,17 +97,15 @@
 						v-if="cpData.type==='number'"
 						class="innerElement row"
 					>
-						<p>
-							<Translate :text="'LowerTolerance'"/>
-						</p>
+						<Translate :text="'Lower Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
+							:error="cpData.lowerTolerance <= 0 && cpData.lowerTolerance"
 							v-model="cpData.lowerTolerance"
 							type="number"
 						/>
-						<p>
-							<Translate :text="'UpperTolerance'"/>
-						</p>
+						<Translate :text="'Upper Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
+							:error="cpData.upperTolerance <= 0 && cpData.upperTolerance"
 							v-model="cpData.upperTolerance"
 							type="number"
 						/>
@@ -138,8 +137,9 @@
 									class="manualValidation"
 								/>
 								<div v-show="attribute.type==1" class="valueEntry">
-										<Translate :text="'Min value'"/>
-									<v-text-field required
+									<Translate :text="'Min value'"/>
+									<v-text-field
+												  :error="(attribute.minValue <= 0 && attribute.minValue)"
 												  :value="attribute.minValue"
 												  v-on:input="attributeMinValueChange($event, index,)"
 									/>
@@ -147,7 +147,7 @@
 										<Translate :text="'Max value'"/>
 									</p>
 									<v-text-field
-										class="shrink"
+										:error="(attribute.maxValue <= 0 && attribute.maxValue)"
 										:value="attribute.maxValue"
 										v-on:input="attributeMaxValueChange($event, index)"
 									/>
@@ -433,62 +433,62 @@ export default {
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
+			let valid = true;
 			let notEmptyDesc = 0
 			for (const des of this.cpData.descriptions) {
 				if (this.validate([{value: des.value}], '') === true) notEmptyDesc += 1
+				if (des.value.length>0 && des.value.length>200) {
+					this.showAlert('warning', this.translateText("description can not exceed 200 characters"))
+					valid = false
+				}
 			}
 			if (notEmptyDesc === 0) {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
-				return false
+				valid = false
 			}
 
-			if (this.validate([{value: this.cpData.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
+			if (this.validate([{value: this.cpData.measurementType}], this.translateText('measurement type con not be empty')) === false) valid = false
 
-			if (this.validate([{value: this.cpData.type}], this.translateText('value type can not be empty')) === false) return false
+			if (this.validate([{value: this.cpData.type}], this.translateText('value type can not be empty')) === false) valid = false
 			if (this.cpData.type === 'options') {
-				if (this.validate(this.cpData.optionValues, this.translateText('option can not be empty')) === false) return false
+				if (this.validate(this.cpData.optionValues, this.translateText('option can not be empty')) === false) valid = false
 			} else if (this.cpData.type === 'number') {
-				if (this.validate([{value: this.cpData.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
-				if (this.validate([{value: this.cpData.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
+				if (this.validate([{value: this.cpData.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) valid = false
+				if (this.validate([{value: this.cpData.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) valid = false
 				if (!validatePositiveAndInt(this.cpData.lowerTolerance)) {
 					this.showAlert('warning', this.translateText("lower tolerance needs to be grater than 0 and smaller than 2147483647"))
-					return false
+					valid = false
 				}
 				if (!validatePositiveAndInt(this.cpData.upperTolerance)) {
 					this.showAlert('warning', this.translateText("upper tolerance needs to be grater than 0 and smaller than 2147483647"))
-					return false
-				}
-				if (this.cpData.lowerTolerance >= this.cpData.upperTolerance) {
-					this.showAlert('warning', this.translateText("lower tolerance can not be grater or equal to upper tolerance"))
-					return false
+					valid = false
 				}
 			}
-
 			if(this.cpData.attributes.length!=0){
-				return this.cpData.attributes.forEach(att => {
+				this.cpData.attributes.forEach(att => {
 					if(validateEmpty(att.id)){
 						this.showAlert('warning', this.translateText("attributes must have a name"))
-						return false
+						valid = false
 					}
 					if(att.type == 1){
 						if(validateEmpty(att.minValue) || validateEmpty(att.maxValue)){
 							this.showAlert('warning', this.translateText("numeric attributes must have minimum and maximum value"))
-							return false
+							valid = false
 						}
 						if(!validatePositiveAndInt(att.minValue) || !validatePositiveAndInt(att.maxValue)){
 							this.showAlert('warning', this.translateText("attribute minimum and maximum value needs to be positive value"))
-							return false
+							valid = false
 						}
 						if(att.minValue >= att.maxValue){
 							this.showAlert('warning', this.translateText("attribute minimum value can not be greater or equal to the maximum value"))
-							return false
+							valid = false
 						}
 					}
 				})
 			}
 
-			if (this.validate(this.cpData.codes, this.translateText('code can not be empty')) === false) return false
-			return true
+			if (this.validate(this.cpData.codes, this.translateText('code can not be empty')) === false) valid = false
+			return valid
 		},
 		validate(list, warningMessage) {
 			for (let el of list) {

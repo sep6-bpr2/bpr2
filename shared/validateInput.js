@@ -35,6 +35,11 @@ module.exports.validateInput = (value, inputType, options, lowerTolerance, upper
 
     return inputValidated
 }
+
+module.exports.validateStringLength = (value, maxLength) =>{
+	return value.length <= maxLength
+}
+
 module.exports.validatePositiveAndInt = (value) => {
 	return value > 0 || value <= 2147483647
 }

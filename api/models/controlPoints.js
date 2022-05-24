@@ -132,8 +132,8 @@ module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, i
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.input('frequencyId', mssql.Int, frequencyId)
 		.input('image', mssql.NVarChar, image)
-		.input('upperTolerance', mssql.Int, upperTolerance)
-		.input('lowerTolerance', mssql.Int, lowerTolerance)
+		.input('upperTolerance', mssql.Float, upperTolerance)
+		.input('lowerTolerance', mssql.Float, lowerTolerance)
 		.input('inputType', mssql.Int, inputType)
 		.input('measurementType', mssql.Int, measurementType)
 		.query(`

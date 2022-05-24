@@ -108,7 +108,7 @@ const translations = {
 		"danish": "bla bla"
 	},
 	"Lower Tolerance":{
-		"english": "LowerTolerance",
+		"english": "Lower Tolerance",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
@@ -210,8 +210,11 @@ const translations = {
 		"danish": "bla bla"
 	},
 	// alerts
-
-
+	"description can not exceed 200 characters": {
+		"english": "description can not exceed 200 characters",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
 	"attributes must have a name": {
 		"english": "invalid input in frequency",
 		"lithuanian": "bla bla",
