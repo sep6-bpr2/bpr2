@@ -50,7 +50,7 @@ export default {
 			upperTolerance: null,
 			lowerTolerance: null,
 			optionValues: [{value: null}, {value: null}],// {value: '',}
-			attributes: [],//{id: '', minValue: 0, maxValue: 0}
+			attributes: [],//{id: '', minValue: 0, maxValue: 0, type: 0}
 			codes: [{value: null}],
 			image: null,
 			imagePreview: null,
@@ -96,75 +96,6 @@ export default {
 </script>
 
 <style scoped>
-.column {
-	width: 50%;
-	float: left;
-}
 
-.v-card {
-	width: -webkit-fill-available;
-	margin: 15pt;
-	padding: 5pt;
-	float: left;
-}
-
-p {
-	margin-inline: 10pt;
-}
-
-.row {
-	display: flex;
-	flex-direction: row;
-	align-items: baseline;
-}
-
-.innerElement {
-	margin: 5pt;
-}
-
-.multiValueCard {
-	display: flex;
-	flex-direction: column;
-}
-
-.valueEntry {
-	display: flex;
-	flex-direction: row;
-	align-items: baseline;
-	margin: 5pt;
-	justify-content: space-between;
-}
-
-.image {
-	max-width: 300pt;
-	max-height: 300pt;
-}
-
-.bottomButtons {
-	width: 100%;
-	float: left;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	margin-bottom: 10pt;
-
-}
-
-button {
-	background-color: #555 !important;
-	color: white !important;
-}
-
-v-input {
-	width: inherit !important;
-}
-
-.alert {
-	position: fixed;
-	top: 90%;
-	width: 60%;
-	right: 20%;
-	left: 20%;
-}
 </style>
 
