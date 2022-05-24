@@ -1,5 +1,6 @@
 <template>
-	<div class="itemCat">
+	<div class="itemCat" v-show="$store.state.login.user &&
+		$store.state.login.user === 'admin'">
 		<AlertModal
 			class="alert"
 			v-if="notification"
@@ -7,7 +8,7 @@
 			:message="notification.message"
 			:show="modalAlertShowSubmit"
 			:status="notificationStatus"
-			 :timer="3000"
+			:timing="3000"
 			:closeCallback="closeAlertModal"
 		/>
 		<h1><Translate :text="'Item Category'" /></h1>
@@ -66,14 +67,15 @@ export default {
 	mounted() {
 		if(this.updateStatus.status === "success"){
 			this.notification = { response: 1, message: "The item category with code " + this.updateStatus.value + " has updated successfully"}
-			this.modalAlertShowSubmit = true;
 		}
 		else if(this.updateStatus.status === "error"){
 			this.notification = { response: 0, message: "The item category with code " + this.updateStatus.value + " could not be updated"}
-			this.modalAlertShowSubmit = true;
 		}
+		this.modalAlertShowSubmit = true;
+		this.$store.commit('itemCategory/updateStatus',{})
 
-        this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
+
+		this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
 			offset: this.offset, limit: this.limit
 		});
 
