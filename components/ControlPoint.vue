@@ -1,9 +1,9 @@
 <template>
 	<div
-		style="margin-inline: 100pt"
+
 	>
-		<v-form
-			ref="controlPointForm"
+		<div
+			style="margin-inline: 100pt"
 		>
 			<div class="column">
 				<v-card class="card1" elevation="5">
@@ -99,13 +99,13 @@
 					>
 						<Translate :text="'Lower Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
-							:error="cpData.lowerTolerance <= 0 && cpData.lowerTolerance"
+							:error="cpData.lowerTolerance < 0 && cpData.lowerTolerance"
 							v-model="cpData.lowerTolerance"
 							type="number"
 						/>
 						<Translate :text="'Upper Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
-							:error="cpData.upperTolerance <= 0 && cpData.upperTolerance"
+							:error="cpData.upperTolerance < 0 && cpData.upperTolerance"
 							v-model="cpData.upperTolerance"
 							type="number"
 						/>
@@ -180,9 +180,7 @@
 					<div class="innerElement multiValueCard"
 						 id="codes"
 					>
-						<h3 class="cardTitle">
-							<Translate :text="'Item category code'"/>
-						</h3>
+						<Translate :text="'Item category code'"/>
 						<div
 							v-for="(code, index) in cpData.codes"
 						>
@@ -284,7 +282,7 @@
 			</div>
 			<div>
 				<AlertModal
-					style="float: left; width: 100%"
+					style="float: left; width: 100%; margin-bottom: 10pt"
 					:id="1"
 					:message="this.translateText('Are you sure?')"
 					:show="showConfirmAlert && this.isEdit"
@@ -292,7 +290,7 @@
 				/>
 				<div class="bottomButtons">
 					<v-btn
-						:color="col.red"
+						:color="showConfirmAlert ? col.KonfairPrimary : col.red"
 						v-if="this.isEdit"
 						v-on:click="handleDelete"
 					>
@@ -302,7 +300,7 @@
 					<v-btn
 						id="submit"
 						v-on:click="handleSubmit"
-						:color="col.KonfairPrimary"
+						:color="showConfirmAlert ? col.red : col.KonfairPrimary"
 					>
 						<Translate :text="'Confirm'" v-if="showConfirmAlert"/>
 						<Translate :text="'Submit'" v-else/>
@@ -310,7 +308,7 @@
 				</div>
 			</div>
 
-		</v-form>
+		</div>
 		<div class="alert">
 			<v-alert type="success" v-if="successAlert.show">
 				{{ successAlert.text }}
@@ -329,7 +327,7 @@ import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
 import colors from "../styles/colors";
-import {validateEmpty, validatePositiveAndInt} from "../shared/validateInput";
+import {validateEmpty, validateNegativeAndInt, validateNonPositiveAndInt} from "../shared/validateInput";
 
 export default {
 	name: "ControlPoint",
@@ -455,11 +453,11 @@ export default {
 			} else if (this.cpData.type === 'number') {
 				if (this.validate([{value: this.cpData.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) valid = false
 				if (this.validate([{value: this.cpData.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) valid = false
-				if (!validatePositiveAndInt(this.cpData.lowerTolerance)) {
+				if (!validateNonPositiveAndInt(this.cpData.lowerTolerance)) {
 					this.showAlert('warning', this.translateText("lower tolerance needs to be grater than 0 and smaller than 2147483647"))
 					valid = false
 				}
-				if (!validatePositiveAndInt(this.cpData.upperTolerance)) {
+				if (!validateNonPositiveAndInt(this.cpData.upperTolerance)) {
 					this.showAlert('warning', this.translateText("upper tolerance needs to be grater than 0 and smaller than 2147483647"))
 					valid = false
 				}
@@ -475,7 +473,7 @@ export default {
 							this.showAlert('warning', this.translateText("numeric attributes must have minimum and maximum value"))
 							valid = false
 						}
-						if(!validatePositiveAndInt(att.minValue) || !validatePositiveAndInt(att.maxValue)){
+						if(!validateNegativeAndInt(att.minValue) || !validateNegativeAndInt(att.maxValue)){
 							this.showAlert('warning', this.translateText("attribute minimum and maximum value needs to be positive value"))
 							valid = false
 						}

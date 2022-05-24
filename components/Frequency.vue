@@ -205,6 +205,10 @@ export default {
 v-list {
 }
 
+
+</style>
+
+<style scoped>
 .alert{
 	max-width: 350px;
 	min-width: 100%;
