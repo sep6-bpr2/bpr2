@@ -42,6 +42,7 @@ module.exports.getFrequenciesOfCategory = async (itemCode) => {
 	return value
 }
 
+
 module.exports.setFrequenciesWithId = async (item) => {
 	if(item.id !== 0){
         await model.expireOldFrequency(item.frequencyNumber)
@@ -52,4 +53,9 @@ module.exports.setFrequenciesWithId = async (item) => {
     item.frequencyNumber = latestFrequencyNumber
 
 	return model.insertFrequency(item)
+}
+
+module.exports.checkCodeExists = async (itemCode) => {
+
+	return model.checkCodeExists(itemCode)
 }

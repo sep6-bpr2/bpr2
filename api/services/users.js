@@ -10,15 +10,9 @@ module.exports.addUser = async (body) => {
 }
 
 module.exports.removeUser = async (body) => {
-    await model.expireUser(body.username)
-	return model.getAllUsers(0, 25)// The default
+    return model.expireUser(body.username)
 }
 
 module.exports.getAllUsers = async (offset, limit) => {
 	return model.getAllUsers(offset, limit)
 }
-
-module.exports.getAllQAUsers = async () => {
-	return model.getAllQAUsers()
-}
-

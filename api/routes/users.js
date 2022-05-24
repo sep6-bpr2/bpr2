@@ -66,14 +66,4 @@ router.delete("/deleteUser/:username",param("username").isLength({ min: 1, max: 
     res.send(result)
 })
 
-/**
- * @description - get all users in the system who are currently qa working
- *
- * @example - GET {BaseURL}/api/users/getQAUsers/simon
- */
-router.get("/getQAUsers/:username",param("username").isLength({ min: 1, max: 35 }),validate,validateUserAdmin, async (req, res) => {
-	const result = await service.getAllQAUsers()
-	res.send(result)
-})
-
 module.exports = router

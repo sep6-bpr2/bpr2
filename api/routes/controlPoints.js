@@ -74,7 +74,7 @@ router.get("/controlPointData/:username/:cpid",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const result = await controlPointService.getControlPointData(req.params.cpid)
+        const result = await controlPointService.getControlPointData(req.params.cpid, req.params.username)
         if (result.hasOwnProperty('message')) {
             if (result.message.includes('does not exist')) res.status(404)
         }
@@ -101,8 +101,8 @@ router.post("/submitControlPoint/:username",
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
     body("type").isString(),
-    body("upperTolerance").custom(value => validateNullOrInt(value)),
-    body("lowerTolerance").custom(value => validateNullOrInt(value)),
+    body("upperTolerance").exists(),
+    body("lowerTolerance").exists(),
     body("optionValues").isArray(),
     body("attributes").isArray(),
     body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),
@@ -136,8 +136,8 @@ router.put("/submitEditControlPoint/:username",
     body("descriptions").custom((value) => validateListEntriesNotEmpty(value, 1)),
     body("measurementType").isInt(),
     body("type").isString(),
-    body("upperTolerance").custom(value => validateNullOrInt(value)),
-    body("lowerTolerance").custom(value => validateNullOrInt(value)),
+    body("upperTolerance").exists(),
+    body("lowerTolerance").exists(),
     body("optionValues").isArray(),
     body("attributes").isArray(),
     body("codes").custom(value => validateListEntriesNotEmpty(value, value.length)),

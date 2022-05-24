@@ -6,19 +6,20 @@
 			ref="controlPointForm"
 		>
 			<div class="column">
-				<v-card class="card1" elevation="24">
-					<h3>
+				<v-card class="card1" elevation="5">
+					<h3 class="cardTitle">
 						<Translate :text="'Main information'"/>
 					</h3>
 					<div
-						v-for="(description, index) in descriptions"
+						v-for="(description, index) in this.cpData.descriptions"
 					>
 						<div class="innerElement row">
-							<p>
-								{{ description.lang }}
-								<Translate :text="'Description'"/>
-							</p>
+							{{ description.lang }}&nbsp
+							<Translate :text="'Description'"/>
+							&nbsp:&nbsp
 							<v-text-field
+								style="max-width: 100%"
+								:error="description.value.length > 200"
 								id="description"
 								:value="description.value"
 								v-on:input="descriptionChange($event, index)"
@@ -26,51 +27,48 @@
 						</div>
 					</div>
 					<div class="innerElement row">
-						<p>
-							<Translate :text="'Control point measurement type'"/>
-						</p>
+						<Translate :text="'Control point measurement type'"/>
+						&nbsp:&nbsp
 						<v-select
 							id="measurementType"
 							:items="allMeasurementTypes"
 							:item-text="item=>item.name"
 							:item-value="item=>item.value"
-							v-model="measurementType"
+							v-model="cpData.measurementType"
 						/>
 					</div>
 				</v-card>
 
-				<v-card elevation="24">
-					<h3>
-						<Translate :text="'Value'"/>
+				<v-card elevation="5">
+					<h3 class="cardTitle">
+						<Translate :text="'Input Type'"/>
 					</h3>
 					<div class="innerElement row">
-						<p>
-							<Translate :text="'Type'"/>
-						</p>
+						<Translate :text="'Type'"/>
+						&nbsp:&nbsp
 						<v-select
 							id="type"
 							:items="allTypes"
-							v-model="type"
+							v-model="cpData.type"
 						/>
 					</div>
 
 					<div
-						v-if="type==='options'"
+						v-if="cpData.type==='options'"
 						id="options"
 					>
 						<div
-							v-for="(option, index) in optionValues"
+							v-for="(option, index) in cpData.optionValues"
 						>
-							<v-card class="valueEntry" elevation="24"
+							<v-card class="valueEntry" elevation="5"
 							>
-								<p>
 									<Translate :text="'Option'"/>
-									{{ index + 1 }}
-								</p>
-								<v-text-field
-									:value="option.value"
-									v-on:input="optionValueChange($event, index)"
-								/>
+									&nbsp
+									{{ index + 1 }}&nbsp:&nbsp
+									<v-text-field
+										:value="option.value"
+										v-on:input="optionValueChange($event, index)"
+									/>
 								<v-btn
 									:color="col.KonfairPrimary"
 									id="deleteOption"
@@ -96,65 +94,65 @@
 					</div>
 
 					<div
-						v-if="type==='number'"
+						v-if="cpData.type==='number'"
 						class="innerElement row"
 					>
-						<p>
-							<Translate :text="'LowerTolerance'"/>
-						</p>
+						<Translate :text="'Lower Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
-							v-model="lowerTolerance"
+							:error="cpData.lowerTolerance <= 0 && cpData.lowerTolerance"
+							v-model="cpData.lowerTolerance"
+							type="number"
 						/>
-						<p>
-							<Translate :text="'UpperTolerance'"/>
-						</p>
+						<Translate :text="'Upper Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
-							v-model="upperTolerance"
+							:error="cpData.upperTolerance <= 0 && cpData.upperTolerance"
+							v-model="cpData.upperTolerance"
+							type="number"
 						/>
 					</div>
 				</v-card>
 
-				<v-card class="card3" elevation="24">
-					<h3>
-						<Translate :text="'Relationship with category items and attributes'"/>
+				<v-card class="card3" elevation="5">
+					<h3 class="cardTitle">
+						<Translate :text="'Relationship with item category codes and attributes'"/>
 					</h3>
 					<div class="innerElement multiValueCard"
 						 id="attributes"
 					>
-						<p>
-							<Translate :text="'Attributes'"/>
-						</p>
+						<Translate :text="'Attributes'"/>
 						<div class="attributes"
-							 v-for="(attribute, index) in attributes"
+							 v-for="(attribute, index) in cpData.attributes"
 						>
-							<v-card class="valueEntry" elevation="24"
+							<v-card class="valueEntry" elevation="5"
 							>
-								<p>
-									<Translate :text="'Name'"/>
-								</p>
+								<div class="valueEntry">
+								<Translate :text="'Name'"/>
+								&nbsp:&nbsp
 								<v-autocomplete
-									:items="attributesChoice"
+									:items="attributesNames"
 									:item-text="item=>item.name"
-									:item-value="item=>item.id"
-									:value="attribute.id"
+									:item-value="item=>item"
+									:value="attribute"
 									v-on:input="attributeIdChange($event, index)"
 									class="manualValidation"
 								/>
-								<p>
+								<div v-show="attribute.type==1" class="valueEntry">
 									<Translate :text="'Min value'"/>
-								</p>
-								<v-text-field required
-											  :value="attribute.minValue"
-											  v-on:input="attributeMinValueChange($event, index,)"
-								/>
-								<p>
-									<Translate :text="'Max value'"/>
-								</p>
-								<v-text-field
-									class="shrink"
-									:value="attribute.maxValue"
-									v-on:input="attributeMaxValueChange($event, index)"
-								/>
+									<v-text-field
+												  :error="(attribute.minValue <= 0 && attribute.minValue)"
+												  :value="attribute.minValue"
+												  v-on:input="attributeMinValueChange($event, index,)"
+									/>
+									<p>
+										<Translate :text="'Max value'"/>
+									</p>
+									<v-text-field
+										:error="(attribute.maxValue <= 0 && attribute.maxValue)"
+										:value="attribute.maxValue"
+										v-on:input="attributeMaxValueChange($event, index)"
+									/>
+								</div>
+								</div>
 								<v-btn
 									:color="col.KonfairPrimary"
 									id="deleteAttribute"
@@ -182,16 +180,16 @@
 					<div class="innerElement multiValueCard"
 						 id="codes"
 					>
-						<p>
-							<Translate :text="'Category Item Codes'"/>
-						</p>
+						<h3 class="cardTitle">
+							<Translate :text="'Item category code'"/>
+						</h3>
 						<div
-							v-for="(code, index) in codes"
+							v-for="(code, index) in cpData.codes"
 						>
-							<v-card class="valueEntry" elevation="24">
-								<p>
-									<Translate :text="'Code'"/>
-								</p>
+							<v-card class="valueEntry" elevation="5">
+
+								<Translate :text="'Code'"/>
+								&nbsp:&nbsp
 								<v-autocomplete
 									:items="codesChoice"
 									id="categoryItemCode"
@@ -227,19 +225,19 @@
 			</div>
 
 			<div class="column">
-				<v-card elevation="24">
+				<v-card elevation="5">
 					<h3>
 						<Translate :text="'Image'"/>
 					</h3>
 					<img
-						v-if="previewImage===null"
+						v-if="cpData.imagePreview===null"
 						class="image innerElement"
 						src="~/assets/no_image.png"
 					/>
 					<v-img
 						v-else
 						class="image innerElement"
-						v-bind:src="this.previewImage"
+						v-bind:src="cpData.imagePreview"
 					/>
 					<v-file-input
 						id="file-input"
@@ -250,7 +248,7 @@
 					></v-file-input>
 				</v-card>
 
-				<v-card class="card2" elevation="24">
+				<v-card class="card2" elevation="5" v-show="cpData.measurementType==0">
 					<h3>
 						<Translate :text="'Check frequency'"/>
 					</h3>
@@ -327,14 +325,15 @@
 </template>
 
 <script>
-import Translate from "./Translate.vue";
+import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
 import colors from "../styles/colors";
+import {validateEmpty, validatePositiveAndInt} from "../shared/validateInput";
 
 export default {
 	name: "ControlPoint",
-	props: ["submit", "isEdit", "deleteCp"],
+	props: ["submit", "isEdit", "deleteCp", "cpData", "codesChoice", "attributesNames", "allTypes", "allMeasurementTypes", "alert"],
 	components: {Translate},
 	mixins: [translate, alerts],
 	data: () => ({
@@ -346,175 +345,150 @@ export default {
 
 		showConfirmAlert: false
 	}),
-	created() {
-		this.$store.dispatch("createControlPoint/getAllTypes")
-		this.$store.dispatch("createControlPoint/getAllAttributesNames")
-		this.$store.dispatch("createControlPoint/loadItemCategoryCodes")
-	},
 	computed: {
 		frequencies() {
-            // FIX THIS SHIT
-            if(this.$store.state.createControlPoint.frequencies != null){
-			    return this.$store.state.createControlPoint.frequencies[0]
-            }else{
-                return null
-            }
-		},
-		allTypes() {
-			return this.$store.state.createControlPoint.allTypes
-		},
-		codesChoice() {
-			return this.$store.state.createControlPoint.allItemCodes
-		},
-		attributesChoice() {
-			return this.$store.state.createControlPoint.attributesNames
-		},
-		descriptions() {
-			return this.$store.state.createControlPoint.descriptions
-		},
-		allMeasurementTypes() {
-			return this.$store.state.createControlPoint.allMeasurementTypes
-		},
-		measurementType: {
-			get() {
-				return this.$store.state.createControlPoint.measurementType
-			},
-			set(value) {
-				this.$store.commit('createControlPoint/setMeasurementType', value)
+			if (this.cpData.frequencies != null) {
+				return this.cpData.frequencies[0]
+			} else {
+				return null
 			}
-		},
-		type: {
-			get() {
-				return this.$store.state.createControlPoint.type
-			},
-			set(type) {
-				this.$store.commit('createControlPoint/setType', type)
-			}
-		},
-		lowerTolerance: {
-			get() {
-				return this.$store.state.createControlPoint.lowerTolerance
-			},
-			set(value) {
-				this.$store.commit('createControlPoint/setLowerTolerance', value)
-			}
-		},
-		upperTolerance: {
-			get() {
-				return this.$store.state.createControlPoint.upperTolerance
-			},
-			set(value) {
-				this.$store.commit('createControlPoint/setUpperTolerance', value)
-			}
-		},
-		optionValues() {
-			return this.$store.state.createControlPoint.optionValues
-		},
-		attributes() {
-			return this.$store.state.createControlPoint.attributes
-		},
-		codes() {
-			return this.$store.state.createControlPoint.codes
 		},
 		currentImage: {
 			get() {
-				return this.$store.state.createControlPoint.image
+				return this.cpData.image
 			},
 			set(value) {
-				this.$store.commit('createControlPoint/setImage', value)
+				this.cpData.image = value
+
+				this.cpData.imagePreview = value ? URL.createObjectURL(value) : null
 			}
 		},
-		previewImage() {
-			return this.$store.state.createControlPoint.imagePreview
-		}
 	},
 	methods: {
 		// set computed property with v-model causes error on complex objects, see: https://vuex.vuejs.org/guide/forms.html
 		descriptionChange(desc, index) {
-			this.$store.commit('createControlPoint/setDescription', {desc: desc, index: index})
+			this.cpData.descriptions[index].value = desc
 		},
-		changeShow(){
-			if(this.frequencies){
-				this.$store.commit('createControlPoint/clearFrequency')
-			}
-			else {
-				this.$store.commit('createControlPoint/setDefaultFrequencies')
+		changeShow() {
+			if (this.frequencies) {
+				this.cpData.frequencies = null
+			} else {
+				this.cpData.frequencies = this.cpData.defaultFrequency
 			}
 		},
 
 		optionValueChange(option, index) {
-			this.$store.commit('createControlPoint/setOptionValues', {value: option, index: index})
+			this.cpData.optionValues[index].value = option
 		},
-		attributeIdChange(id, index) {
-			this.$store.commit(`createControlPoint/setAttributeId`, {id: id, index: index})
+		attributeIdChange(att, index) {
+			this.cpData.attributes[index].id = att.id
+			this.cpData.attributes[index].type = att.type
 		},
 		attributeMinValueChange(minVal, index) {
-			this.$store.commit(`createControlPoint/setAttributeMinValue`, {minVal: minVal, index: index})
+			this.cpData.attributes[index].minValue = minVal
+
 		},
 		attributeMaxValueChange(maxVal, index) {
-			this.$store.commit(`createControlPoint/setAttributeMaxValue`, {maxVal: maxVal, index: index})
+			this.cpData.attributes[index].maxValue = maxVal
 		},
 		codeChange(code, index) {
-			this.$store.commit('createControlPoint/setCodes', {code: code, index: index})
+			this.cpData.codes[index].value = code
 		},
 		newValue(list) {
 			switch (list) {
 				case 'optionValue':
-					this.$store.commit('createControlPoint/addOptionValue')
+					this.cpData.optionValues.push({value: null})
 					break;
 				case 'attribute':
-					this.$store.commit('createControlPoint/addAttribute')
+					this.cpData.attributes.push({id: '', minValue: null, maxValue: null, type: null})
 					break;
 				case 'code':
-					this.$store.commit('createControlPoint/addCode')
+					this.cpData.codes.push({value: null})
 					break;
 			}
 		},
 		removeOptionValue(index) {
-			if (this.optionValues.length === 2) {
+			if (this.cpData.optionValues.length === 2) {
 				this.showAlert('warning', this.translateText('there must be at least two option for the options type'))
 			} else {
-				this.$store.commit('createControlPoint/removeOptionValue', index)
+				this.cpData.optionValues.splice(index, 1)
+
 			}
 		},
 		removeCodes(index) {
-			if (this.codes.length === 1) {
+			if (this.cpData.codes.length === 1) {
 				this.showAlert('warning', this.translateText('control point must have at least one item category code'))
 			} else {
-				this.$store.commit('createControlPoint/removeCode', index)
+				this.cpData.codes.splice(index, 1)
 			}
 		},
 		removeAttribute(index) {
-			this.$store.commit('createControlPoint/removeAttribute', index)
+			this.cpData.attributes.splice(index, 1)
 		},
 		handleDelete() {
 			this.showConfirmAlert = !this.showConfirmAlert
 		},
-		handleSubmit(){
-			this.showConfirmAlert ? this.deleteCp() : this.submit()
+		handleSubmit() {
+			this.showConfirmAlert ? this.deleteCp() : this.submitForm(this.validateAll, this.showAlert, this.handleFrequencies)
 		},
 		// rules works only with v-model. However, v-model can not be used on complex state properties
 		validateAll() {
+			let valid = true;
 			let notEmptyDesc = 0
-			for (const des of this.descriptions) {
+			for (const des of this.cpData.descriptions) {
 				if (this.validate([{value: des.value}], '') === true) notEmptyDesc += 1
+				if (des.value.length>0 && des.value.length>200) {
+					this.showAlert('warning', this.translateText("description can not exceed 200 characters"))
+					valid = false
+				}
 			}
 			if (notEmptyDesc === 0) {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
-				return false
+				valid = false
 			}
 
-			if (this.validate([{value: this.measurementType}], this.translateText('measurement type con not be empty')) === false) return false
+			if (this.validate([{value: this.cpData.measurementType}], this.translateText('measurement type con not be empty')) === false) valid = false
 
-			if (this.validate([{value: this.type}], this.translateText('value type can not be empty')) === false) return false
-			if (this.type === 'options') {
-				if (this.validate(this.optionValues, this.translateText('option can not be empty')) === false) return false
-			} else if (this.type === 'number') {
-				if (this.validate([{value: this.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) return false
-				if (this.validate([{value: this.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) return false
+			if (this.validate([{value: this.cpData.type}], this.translateText('value type can not be empty')) === false) valid = false
+			if (this.cpData.type === 'options') {
+				if (this.validate(this.cpData.optionValues, this.translateText('option can not be empty')) === false) valid = false
+			} else if (this.cpData.type === 'number') {
+				if (this.validate([{value: this.cpData.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) valid = false
+				if (this.validate([{value: this.cpData.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) valid = false
+				if (!validatePositiveAndInt(this.cpData.lowerTolerance)) {
+					this.showAlert('warning', this.translateText("lower tolerance needs to be grater than 0 and smaller than 2147483647"))
+					valid = false
+				}
+				if (!validatePositiveAndInt(this.cpData.upperTolerance)) {
+					this.showAlert('warning', this.translateText("upper tolerance needs to be grater than 0 and smaller than 2147483647"))
+					valid = false
+				}
 			}
-			if (this.validate(this.codes, this.translateText('code can not be empty')) === false) return false
-			return true
+			if(this.cpData.attributes.length!=0){
+				this.cpData.attributes.forEach(att => {
+					if(validateEmpty(att.id)){
+						this.showAlert('warning', this.translateText("attributes must have a name"))
+						valid = false
+					}
+					if(att.type == 1){
+						if(validateEmpty(att.minValue) || validateEmpty(att.maxValue)){
+							this.showAlert('warning', this.translateText("numeric attributes must have minimum and maximum value"))
+							valid = false
+						}
+						if(!validatePositiveAndInt(att.minValue) || !validatePositiveAndInt(att.maxValue)){
+							this.showAlert('warning', this.translateText("attribute minimum and maximum value needs to be positive value"))
+							valid = false
+						}
+						if(att.minValue >= att.maxValue){
+							this.showAlert('warning', this.translateText("attribute minimum value can not be greater or equal to the maximum value"))
+							valid = false
+						}
+					}
+				})
+			}
+
+			if (this.validate(this.cpData.codes, this.translateText('code can not be empty')) === false) valid = false
+			return valid
 		},
 		validate(list, warningMessage) {
 			for (let el of list) {
@@ -526,9 +500,9 @@ export default {
 			}
 			return true
 		},
-		submitFrequencies() {
+		handleFrequencies() {
 			if (typeof this.$refs.frequencyChild === 'undefined') {
-				return null
+				return true
 			}
 			let localFrequencies = this.$refs.frequencyChild.localFrequencies
 			let stateFrequencies = this.frequencies
@@ -555,26 +529,23 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-
+			let valid = false
 			delete tempFrequencies.id;
 
-			let messageForNotification;
-			let existsNegVal
-			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
+			let existsOverInt = Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
 
-			if (!existsNegVal) {
-				messageForNotification = { response: 2, message: "There is an invalid input" }
+			if (!existsNegVal || !existsOverInt) {
+				this.showAlert('warning', this.translateText("invalid input in frequency"))
+				valid = false
 			} else {
-				this.$store.commit("createControlPoint/setFrequencies",tempFrequencies)
+				this.cpData.frequencies = tempFrequencies
+				valid = true
 			}
-			return messageForNotification
+			return valid
 		},
-		submitForm() {
-			this.submitFrequencies()
-            if(this.validateAll()){
-                this.submit( this.showAlert )
-            }
+		submitForm(validateAll, showAlert, submitFrequencies) {
+			this.submit(validateAll, showAlert, submitFrequencies)
 		},
 	}
 }
@@ -585,38 +556,46 @@ export default {
 	width: 50%;
 	float: left;
 }
+
 .v-card {
 	width: -webkit-fill-available;
 	margin: 15pt;
 	padding: 5pt;
 	float: left;
 }
-p {
-	margin-inline: 10pt;
-}
+
 .row {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
 }
+
+.cardTitle {
+	margin-left: 5pt;
+}
+
 .innerElement {
 	margin: 5pt;
 }
+
 .multiValueCard {
 	display: flex;
 	flex-direction: column;
 }
+
 .valueEntry {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
-	margin: 5pt;
-	justify-content: space-between;
+	margin-inline: 0;
+	margin-top: 1pt;
 }
+
 .image {
 	max-width: 300pt;
 	max-height: 300pt;
 }
+
 .bottomButtons {
 	width: 100%;
 	float: left;
@@ -625,12 +604,15 @@ p {
 	justify-content: space-evenly;
 	margin-bottom: 10pt;
 }
+
 button {
 	color: white !important;
 }
-v-input {
-	width: inherit !important;
+.v-input{
+	min-width: 50pt;
+	max-width: 250pt;
 }
+
 .alert {
 	position: fixed;
 	top: 90%;

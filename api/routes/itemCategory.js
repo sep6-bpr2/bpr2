@@ -38,6 +38,25 @@ router.get("/getCodesMax/:username/:location",
 
 
 /**
+ * @description - check if item exists
+ * @param username - name of the user for valiation
+ * @param itemCode - item code to find
+ *
+ * @example - GET {BaseURL}/api/itemCategory/checkItemExists/rokas/193345
+ */
+router.get("/checkItemExists/:username/:itemCode",
+	param("username").isLength({ min: 1, max: 35 }),
+	param("itemCode").isLength({ min: 1, max: 50 }),
+	validate,
+	validateUserAdmin,
+	async (req, res) => {
+
+		const result = await service.checkCodeExists(req.params.itemCode)
+
+		res.send(result)
+	})
+
+/**
  * @description - get frequency of an item Codes
  * @param username - name of the user for validation
  * @param itemCode - item Code used to get the frequency for the specified value

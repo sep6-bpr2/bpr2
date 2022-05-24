@@ -7,10 +7,10 @@ module.exports.getItemCatCodesWhenLocationNotAll = async (location, offset, limi
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            select DISTINCT Code 
-            from [KonfAir DRIFT$Item] 
-            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
-            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            select DISTINCT Code
+            from [KonfAir DRIFT$Item]
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_]
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
             ORDER BY Code DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
 `)
@@ -22,10 +22,10 @@ module.exports.getItemCatCodesWhenLocationNotAllMax = async (location) => {
         .request()
         .input("location", mssql.NVarChar(1000), location)
         .query(`
-            select DISTINCT Code 
-            from [KonfAir DRIFT$Item] 
-            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
-            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            select DISTINCT Code
+            from [KonfAir DRIFT$Item]
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_]
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
             ORDER BY Code DESC
         `)
 
@@ -38,11 +38,11 @@ module.exports.getItemCatCodesWhenLocationAll = async (offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            select DISTINCT Code 
-            from [KonfAir DRIFT$Item] 
-            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            select DISTINCT Code
+            from [KonfAir DRIFT$Item]
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_]
             JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
-            ORDER BY Code DESC 
+            ORDER BY Code DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
     `)
     return result.recordset
@@ -52,11 +52,11 @@ module.exports.getItemCatCodesWhenLocationAllMax = async () => {
     const result = await ( await konfairDB())
         .request()
         .query(`
-            select DISTINCT Code 
-            from [KonfAir DRIFT$Item] 
-            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            select DISTINCT Code
+            from [KonfAir DRIFT$Item]
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_]
             JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
-            ORDER BY Code DESC 
+            ORDER BY Code DESC
         `)
 
     return result.recordset
@@ -67,11 +67,11 @@ module.exports.getFrequenciesOfCategory = async (categoryCode) => {
         .request()
         .input("categoryCode", mssql.Int, categoryCode)
         .query(`
-            select 
+            select
             F.id,
             F.frequencyNumber as frequencyNumber,
             [to25],
-            [to50], 
+            [to50],
             [to100],
             [to200],
             [to300],
@@ -82,10 +82,10 @@ module.exports.getFrequenciesOfCategory = async (categoryCode) => {
             [to2000],
             [to3000],
             [to4000],
-            [to5000] 
-            from [dbo].[ItemCategoryFrequency] I 
-            JOIN [dbo].[Frequency] F on I.frequencyid = F.frequencyNumber 
-            where I.code = @categoryCode AND F.validFrom < GETDATE() AND F.validTo IS NULL 
+            [to5000]
+            from [dbo].[ItemCategoryFrequency] I
+            JOIN [dbo].[Frequency] F on I.frequencyid = F.frequencyNumber
+            where I.code = @categoryCode AND F.validFrom < GETDATE() AND F.validTo IS NULL
         `)
     return result.recordset
 }
@@ -94,8 +94,8 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
     const result = await ( await localDB())
         .request()
         .query(`
-            update [dbo].[Frequency] 
-            set 
+            update [dbo].[Frequency]
+            set
             to25 = ${item.to25} ,
             to50 = ${item.to50} ,
             to100 = ${item.to100} ,
@@ -108,7 +108,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 			to2000 = ${item.to2000},
             to3000 = ${item.to3000} ,
             to4000 = ${item.to4000} ,
-			to5000 = ${item.to5000} 
+			to5000 = ${item.to5000}
             where id = ${item.id}
         `)
     return result.recordset
@@ -119,8 +119,8 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
     const result = await ( await localDB())
         .request()
         .query(`
-            update [dbo].[Frequency] 
-            set 
+            update [dbo].[Frequency]
+            set
             to25 = ${item.to25} ,
             to50 = ${item.to50} ,
             to100 = ${item.to100} ,
@@ -133,7 +133,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 			to2000 = ${item.to2000},
             to3000 = ${item.to3000} ,
             to4000 = ${item.to4000} ,
-			to5000 = ${item.to5000} 
+			to5000 = ${item.to5000}
             where id = ${item.id}
         `)
     return result.recordset
@@ -148,12 +148,12 @@ module.exports.insertFrequency = async (frequency) => {
                 frequencyNumber, [to25] ,[to50] ,[to100] ,[to200] ,[to300] ,[to500] ,
 			    [to700] ,[to1000] ,[to1500] ,[to2000] ,[to3000] ,[to4000] ,
 				[to5000], validFrom
-            ) 
+            )
             values (
                 ${frequency.frequencyNumber},${frequency.to25},${frequency.to50},${frequency.to100},${frequency.to200},${frequency.to300},
 				${frequency.to500},${frequency.to700},${frequency.to1000},${frequency.to1500},${frequency.to2000},${frequency.to3000},
 				${frequency.to4000},${frequency.to5000}, GETDATE()
-            ); 
+            );
         `)
 
     const result = await ( await localDB())
@@ -161,6 +161,17 @@ module.exports.insertFrequency = async (frequency) => {
         .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${frequency.Code},${frequency.frequencyNumber})`)
 
     return result.recordset
+}
+
+module.exports.checkCodeExists = async (itemCode) => {
+	let result = await konfairDB()
+		.request()
+		.input("itemCode", mssql.Int, itemCode)
+		.query(`select DISTINCT Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O]
+ 				on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C]
+ 				on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code where Code = @itemCode`)
+
+	return result.recordset
 }
 
 module.exports.getLatestFrequencyNumber = async () => {
@@ -182,7 +193,7 @@ module.exports.expireOldFrequency = async (frequencyNumber) => {
         .request()
         .input("frequencyNumber", mssql.Int, frequencyNumber)
         .query(`
-            update [dbo].[Frequency] 
+            update [dbo].[Frequency]
             set validTo = GETDATE()
             where frequencyNumber = @frequencyNumber and validTo IS NULL
         `)

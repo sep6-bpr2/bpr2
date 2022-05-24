@@ -5,8 +5,8 @@ module.exports.getUserByUsername = async (username) => {
         .request()
         .input("username", mssql.NVarChar(1000), username)
         .query(`
-            select * 
-            from SystemUser 
+            select *
+            from SystemUser
             WHERE SystemUser.username = @username AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL `)
     return result.recordset
 }
@@ -17,10 +17,10 @@ module.exports.getAllUsers = async (offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
 		.query(`
-            SELECT * 
+            SELECT *
             FROM SystemUser
-            WHERE validFrom < GETDATE() AND validTo IS NULL 
-            ORDER BY id ASC 
+            WHERE validFrom < GETDATE() AND validTo IS NULL
+            ORDER BY id ASC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
 
@@ -32,7 +32,7 @@ module.exports.getAllUsersWithUser = async (user) => {
 	const result = await ( await localDB())
 		.request()
 		.input("username", mssql.NVarChar(1000), user.username)
-		.query(`select * from SystemUser where SystemUser.username= @username`)
+		.query(`select * from SystemUser where SystemUser.username= @username and validFrom < GETDATE() AND validTo IS NULL`)
 
 	return result.recordset
 }
@@ -56,8 +56,8 @@ module.exports.addUser = async (user) => {
     const result = await ( await localDB())
         .request()
         .query(`
-            select * 
-            from SystemUser 
+            select *
+            from SystemUser
             where SystemUser.username= '${user.username}' AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL`)
 
     return result.recordset
@@ -76,7 +76,7 @@ module.exports.expireUser = async (username) => {
 		.input("username", mssql.NVarChar(1000), username)
         // .input("id", mssql.Int, id)
 		.query(`
-            update [dbo].[SystemUser] 
+            update [dbo].[SystemUser]
             set validTo = GETDATE()
             where username = @username AND validTo IS NULL
         `)
