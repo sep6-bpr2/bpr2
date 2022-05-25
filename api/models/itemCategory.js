@@ -168,7 +168,6 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 }
 
 module.exports.insertFrequency = async (frequency) => {
-	console.log(JSON.stringify(frequency))
     const result = await localDB()
         .request()
 		.input('frequencyNumber',mssql.Int,frequency.frequencyNumber)
@@ -193,7 +192,7 @@ module.exports.insertFrequency = async (frequency) => {
 				[to5000], validFrom
             )
             values (
-                @frequencyNumber,@to25,@to50,@to100,@to200,@to300,@to500,@to700,@to1000,to1500,to2000,to3000,@to4000,@to5000, GETDATE()
+                @frequencyNumber,@to25,@to50,@to100,@to200,@to300,@to500,@to700,@to1000,@to1500,@to2000,@to3000,@to4000,@to5000, GETDATE()
             );
         `)
 

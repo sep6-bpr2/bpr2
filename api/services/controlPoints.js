@@ -3,6 +3,7 @@ const itemCategoryModel = require("../models/itemCategory")
 
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
+const frequency = require("../../shared/frequency");
 
 const typeSwitchToText = (value) => {
     switch (value) {
@@ -88,22 +89,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 
 	let cpData = {
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-		defaultFrequency: {
-			"id": 0,
-			"to25": 2,
-			"to50": 3,
-			"to100": 4,
-			"to200": 7,
-			"to300": 10,
-			"to500": 16,
-			"to700": 22,
-			"to1000": 30,
-			"to1500": 40,
-			"to2000": 50,
-			"to3000": 60,
-			"to4000": 65,
-			"to5000": 70
-		},
+		defaultFrequency: frequency.defaultFrequency(),
 		frequencies: null,
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
@@ -195,12 +181,12 @@ module.exports.updateControlPoint = async (data) => {
     let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
     oldControlPoint = oldControlPoint[0]
 
+	console.log(data)
     if(data.frequencies == null && oldControlPoint.frequencyId != null){
         await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
     }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
-        await itemCategoryModel.expireOldFrequency(data.frequencyId)
+		await itemCategoryModel.expireOldFrequency(data.frequencyId)
         await itemCategoryModel.insertFrequency({
-            frequencyNumber: data.frequencyId,
 			frequencyNumber: data.frequencyId,
 			to25: data.frequencies.to25,
 			to50: data.frequencies.to50,

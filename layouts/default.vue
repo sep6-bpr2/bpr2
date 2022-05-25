@@ -74,8 +74,7 @@ ul {
 }
 
 .pageHeader{
-	background-color: #555555;
-	color: white;
+	color: black;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
