@@ -18,7 +18,7 @@ module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
 					[to700], [to1000], [to1500], [to2000], [to3000], [to4000],
 					[to5000]
             from [dbo].[ControlPoint] C
-            JOIN [dbo].[Frequency] F on C.frequencyId = F.id
+            JOIN [dbo].[Frequency] F on C.frequencyId = F.frequencyNumber
             where C.controlPointNumber = @controlPointNumber AND C.validFrom < GETDATE() AND C.validTo IS NULL
 		`)
 	return result.recordset

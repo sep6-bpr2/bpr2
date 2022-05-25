@@ -37,25 +37,7 @@ export default {
 	components: {Translate, ControlPoint},
 	mixins: [translate, authorizeUser],
 	data: () => ({
-		cpData: {
-			defaultFrequency: {
-				"id": 0,
-				"to25": 2,
-				"to50": 3,
-				"to100": 4,
-				"to200": 7,
-				"to300": 10,
-				"to500": 16,
-				"to700": 22,
-				"to1000": 30,
-				"to1500": 40,
-				"to2000": 50,
-				"to3000": 60,
-				"to4000": 65,
-				"to5000": 70
-			},
-			frequencies: null,
-		},
+		cpData: null
 	}),
 	created() {
 		this.$store.dispatch("controlPoint/getAllTypes")
@@ -65,6 +47,9 @@ export default {
 			.dispatch("controlPoint/getControlPointData", this.$route.params.id).then(result =>{
 			if(result){
 				this.cpData = result
+				if(!this.cpData.frequencies){
+					this.$set(this.cpData,'frequencies',null)
+				}
 			}
 		})
 	},
@@ -76,6 +61,7 @@ export default {
 	methods: {
 		submit(validateAll, showAlert, validateFrequency) {
 			if (validateAll() && validateFrequency() ) {
+				console.log(JSON.stringify(this.cpData))
 				this.cpData.controlPointId = this.$route.params.id
 				this.$store.dispatch('controlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {

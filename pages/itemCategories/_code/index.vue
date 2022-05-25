@@ -1,5 +1,8 @@
 <template>
-	<div v-show="$store.state.login.user && $store.state.login.user === 'admin'">
+	<div v-show="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'admin'
+		">
 		<AlertModal
 			class="alert"
 			v-if="notification"

@@ -83,7 +83,6 @@ export const actions = {
 			await fetch(`http://localhost:3000/api/controlPoints/allAttributesNames/${user.username}`)
 				.then(res => res.json())
 				.then(res => {
-					console.log(res)
 					commit('setAllAttributesNames', res)
 				})
 		}

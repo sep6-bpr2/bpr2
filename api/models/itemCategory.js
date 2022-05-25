@@ -140,7 +140,8 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 }
 
 module.exports.insertFrequency = async (frequency) => {
-    await localDB()
+	console.log(JSON.stringify(frequency))
+    const result = await localDB()
         .request()
         .query(`
             insert into [dbo].[Frequency]
@@ -155,10 +156,6 @@ module.exports.insertFrequency = async (frequency) => {
 				${frequency.to4000},${frequency.to5000}, GETDATE()
             );
         `)
-
-    const result = await localDB()
-        .request()
-        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${frequency.Code},${frequency.frequencyNumber})`)
 
     return result.recordset
 }

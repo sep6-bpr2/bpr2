@@ -75,8 +75,9 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     if (mainInformation.length === 0) {
         return { message: `control point with id: ${controlPointNumber} does not exist in database` }
     }
+
     mainInformation = mainInformation[0]
-    mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
+		mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
     const descriptions = await controlPointModel.getControlPointDescriptions(controlPointNumber)
     const attributes = await controlPointModel.getControlPointAttributes(controlPointNumber)
@@ -106,6 +107,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		frequencies: null,
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
+		frequencyNumber:0,
 		type: null,
 		upperTolerance: null,
 		lowerTolerance: null,
@@ -128,6 +130,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 	// main info
 	cpData.controlPointNumber = mainInformation.controlPointNumber
 	cpData.measurementType =  mainInformation.measurementtype
+	cpData.frequencyNumber = mainInformation.frequencyNumber
 
 	if (mainInformation.image != null) {
 		cpData.imagePreview = `http://localhost:3000/api/controlPoints/picture/${username}/${mainInformation.image}`
@@ -198,38 +201,39 @@ module.exports.updateControlPoint = async (data) => {
         await itemCategoryModel.expireOldFrequency(data.frequencyId)
         await itemCategoryModel.insertFrequency({
             frequencyNumber: data.frequencyId,
-            to25: data.frequencies[0],
-            to50: data.frequencies[1],
-            to100: data.frequencies[2],
-            to200: data.frequencies[3],
-            to300: data.frequencies[4],
-            to500: data.frequencies[5],
-            to700: data.frequencies[6],
-            to1000: data.frequencies[7],
-            to1500: data.frequencies[8],
-            to2000: data.frequencies[9],
-            to3000: data.frequencies[10],
-            to4000: data.frequencies[11],
-            to5000: data.frequencies[12]
+			frequencyNumber: data.frequencyId,
+			to25: data.frequencies.to25,
+			to50: data.frequencies.to50,
+			to100: data.frequencies.to100,
+			to200: data.frequencies.to200,
+			to300: data.frequencies.to300,
+			to500: data.frequencies.to500,
+			to700: data.frequencies.to700,
+			to1000: data.frequencies.to1000,
+			to1500: data.frequencies.to1500,
+			to2000: data.frequencies.to2000,
+			to3000: data.frequencies.to3000,
+			to4000: data.frequencies.to4000,
+			to5000: data.frequencies.to5000
         })
-    }else if(data.frequencyId != null && oldControlPoint.frequencyId == null && data.frequencies != null){
+    }else if(data.frequencyId == null && oldControlPoint.frequencyId == null && data.frequencies != null){
         const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
         data.frequencyId = latestFrequencyNumber
         await itemCategoryModel.insertFrequency({
             frequencyNumber: data.frequencyId,
-            to25: data.frequencies[0],
-            to50: data.frequencies[1],
-            to100: data.frequencies[2],
-            to200: data.frequencies[3],
-            to300: data.frequencies[4],
-            to500: data.frequencies[5],
-            to700: data.frequencies[6],
-            to1000: data.frequencies[7],
-            to1500: data.frequencies[8],
-            to2000: data.frequencies[9],
-            to3000: data.frequencies[10],
-            to4000: data.frequencies[11],
-            to5000: data.frequencies[12]
+            to25: data.frequencies.to25,
+            to50: data.frequencies.to50,
+            to100: data.frequencies.to100,
+            to200: data.frequencies.to200,
+            to300: data.frequencies.to300,
+            to500: data.frequencies.to500,
+            to700: data.frequencies.to700,
+            to1000: data.frequencies.to1000,
+            to1500: data.frequencies.to1500,
+            to2000: data.frequencies.to2000,
+            to3000: data.frequencies.to3000,
+            to4000: data.frequencies.to4000,
+            to5000: data.frequencies.to5000
         })
     }
 
