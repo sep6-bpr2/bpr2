@@ -347,8 +347,13 @@ export default {
 	}),
 	computed: {
 		frequencies() {
+            console.log(this.cpData.frequencies)
 			if (this.cpData.frequencies != null) {
-				return this.cpData.frequencies[0]
+                return this.cpData.frequencies[0]
+
+                console.log("Getting the frequencies")
+                console.log(this.cpData.frequencies[0])
+				return this.cpData.frequencies
 			} else {
 				return null
 			}
@@ -373,6 +378,8 @@ export default {
 			if (this.frequencies) {
 				this.cpData.frequencies = null
 			} else {
+                console.log("FREQUNECIES")
+                console.log(this.cpData.defaultFrequency)
 				this.cpData.frequencies = this.cpData.defaultFrequency
 			}
 		},

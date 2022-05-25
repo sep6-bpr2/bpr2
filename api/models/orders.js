@@ -211,6 +211,26 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
     return result.recordset
 }
 
+module.exports.getControlPointsCategoryNoAtrributes = async (categoryCode) => {
+    const result = await ( await localDB())
+        .request()
+        .input("categoryCode", mssql.Int, categoryCode)
+        .query(`
+            SELECT DISTINCT 
+            ControlPoint.id, 
+            ControlPoint.controlPointNumber, 
+            ControlPoint.frequencyId, 
+            ControlPoint.image, 
+            ControlPoint.inputType, 
+            ControlPoint.lowerTolerance, 
+            ControlPoint.upperTolerance  
+            FROM [ControlPoint]
+            LEFT OUTER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.controlPointId
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.controlPointId
+            WHERE ACP.attributeId IS NULL AND ICCP.itemCategoryCode = @categoryCode AND ControlPoint.validFrom < GETDATE() AND ControlPoint.validTo IS NULL 
+        `)
+    return result.recordset
+}
 
 module.exports.getReleasedOrderAttributes = async (id) => {
     const result = await ( await konfairDB())

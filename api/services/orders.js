@@ -162,6 +162,9 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // Get control points that connect to these attributes and are for this categoryCode
             controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
 
+            let controlPointsWithCategory = await model.getControlPointsCategoryNoAtrributes(parseInt(itemData.categoryCode))
+
+            controlPoints.push(...controlPointsWithCategory)
             // Get all the attributes and item categories of these control points
             // Will later validate which one connects to which one
             for (let i = 0; i < controlPoints.length; i++) {
@@ -304,9 +307,21 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
             // Compute the text shown for the tolerance
             controlPoints[i].toleranceText = ""
-            if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance == controlPoints[i].lowerTolerance)
+            if (
+                controlPoints[i].upperTolerance != null && 
+                controlPoints[i].lowerTolerance != null && 
+                controlPoints[i].upperTolerance != 0 && 
+                controlPoints[i].lowerTolerance != 0 && 
+                controlPoints[i].upperTolerance == controlPoints[i].lowerTolerance
+            )
                 controlPoints[i].toleranceText = "+/-" + controlPoints[i].upperTolerance + controlPoints[i].units
-            else if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance != controlPoints[i].lowerTolerance)
+            else if (
+                controlPoints[i].upperTolerance != null && 
+                controlPoints[i].lowerTolerance != null && 
+                controlPoints[i].upperTolerance != 0 && 
+                controlPoints[i].lowerTolerance != 0 &&
+                controlPoints[i].upperTolerance != controlPoints[i].lowerTolerance
+            )
                 controlPoints[i].toleranceText = "+" + controlPoints[i].upperTolerance + "/-" + controlPoints[i].lowerTolerance + controlPoints[i].units
 
             // Compute the options if the control point input type is option

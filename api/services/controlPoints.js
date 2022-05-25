@@ -287,7 +287,7 @@ module.exports.submitControlPoint = async (cp) => {
     }
 
     let insertFrequencyString = ''
-	const con = await mssql.localDB().request()
+	const con = await (await mssql.localDB()).request()
 	if(cp.frequencies !== null){
 		Object.entries(cp.frequencies).forEach((frequency,index) => {
 			let value = frequency[1]
