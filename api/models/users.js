@@ -1,4 +1,4 @@
-const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
+const { mssql, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getUserByUsername = async (username) => {
     const result = await localDB()
@@ -41,14 +41,17 @@ module.exports.getAllUsersWithUser = async (user) => {
 module.exports.addUser = async (user) => {
     await localDB()
         .request()
-        .query(`insert into SystemUser (username, role, validFrom) values ('${user.username}','${user.role}', GETDATE())`)
+		.input("username", mssql.NVarChar(1000), user.username)
+		.input("role",mssql.NVarChar(1000), user.role)
+		.query(`insert into SystemUser (username, role, validFrom) values (@username,@role, GETDATE())`)
 
     const result = await localDB()
         .request()
-        .query(`
+		.input("username", mssql.NVarChar(1000), user.username)
+		.query(`
             select *
             from SystemUser
-            where SystemUser.username= '${user.username}' AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL`)
+            where SystemUser.username= @username AND SystemUser.validFrom < GETDATE() AND SystemUser.validTo IS NULL`)
 
     return result.recordset
 }
@@ -57,7 +60,6 @@ module.exports.expireUser = async (username) => {
 	await localDB()
 		.request()
 		.input("username", mssql.NVarChar(1000), username)
-        // .input("id", mssql.Int, id)
 		.query(`
             update [dbo].[SystemUser]
             set validTo = GETDATE()

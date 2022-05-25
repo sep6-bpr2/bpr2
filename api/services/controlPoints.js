@@ -3,6 +3,7 @@ const itemCategoryModel = require("../models/itemCategory")
 
 const mssql = require("../connections/MSSQLConnection");
 const fs = require('fs')
+const frequency = require("../../shared/frequency");
 
 const typeSwitchToText = (value) => {
     switch (value) {
@@ -75,8 +76,9 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     if (mainInformation.length === 0) {
         return { message: `control point with id: ${controlPointNumber} does not exist in database` }
     }
+
     mainInformation = mainInformation[0]
-    mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
+		mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
     const descriptions = await controlPointModel.getControlPointDescriptions(controlPointNumber)
     const attributes = await controlPointModel.getControlPointAttributes(controlPointNumber)
@@ -84,27 +86,14 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     const optionValues = await controlPointModel.getControlPointOptionValues(controlPointNumber)
     const frequencies = await controlPointModel.getFrequenciesOfControlPoint(controlPointNumber)
 
+
 	let cpData = {
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
-		defaultFrequency: {
-			"id": 0,
-			"to25": 2,
-			"to50": 3,
-			"to100": 4,
-			"to200": 7,
-			"to300": 10,
-			"to500": 16,
-			"to700": 22,
-			"to1000": 30,
-			"to1500": 40,
-			"to2000": 50,
-			"to3000": 60,
-			"to4000": 65,
-			"to5000": 70
-		},
+		defaultFrequency: frequency.defaultFrequency(),
 		frequencies: null,
 		descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 		measurementType: null,
+		frequencyNumber:0,
 		type: null,
 		upperTolerance: null,
 		lowerTolerance: null,
@@ -115,7 +104,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		imagePreview: null,
 	}
 
-	cpData.frequencies = frequencies
+	cpData.frequencies = frequencies[0]
 	let eng = descriptions.find(o => o.language.toLowerCase() === "english")
 	cpData.descriptions[0].value = eng.description
 	let dk = descriptions.find(o => o.language.toLowerCase() === "danish")
@@ -127,6 +116,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 	// main info
 	cpData.controlPointNumber = mainInformation.controlPointNumber
 	cpData.measurementType =  mainInformation.measurementtype
+	cpData.frequencyNumber = mainInformation.frequencyNumber
 
 	if (mainInformation.image != null) {
 		cpData.imagePreview = `http://localhost:3000/api/controlPoints/picture/${username}/${mainInformation.image}`
@@ -191,44 +181,45 @@ module.exports.updateControlPoint = async (data) => {
     let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
     oldControlPoint = oldControlPoint[0]
 
+	console.log(data)
     if(data.frequencies == null && oldControlPoint.frequencyId != null){
         await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
     }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
-        await itemCategoryModel.expireOldFrequency(data.frequencyId)
+		await itemCategoryModel.expireOldFrequency(data.frequencyId)
         await itemCategoryModel.insertFrequency({
-            frequencyNumber: data.frequencyId,
-            to25: data.frequencies[0],
-            to50: data.frequencies[1],
-            to100: data.frequencies[2],
-            to200: data.frequencies[3],
-            to300: data.frequencies[4],
-            to500: data.frequencies[5],
-            to700: data.frequencies[6],
-            to1000: data.frequencies[7],
-            to1500: data.frequencies[8],
-            to2000: data.frequencies[9],
-            to3000: data.frequencies[10],
-            to4000: data.frequencies[11],
-            to5000: data.frequencies[12]
+			frequencyNumber: data.frequencyId,
+			to25: data.frequencies.to25,
+			to50: data.frequencies.to50,
+			to100: data.frequencies.to100,
+			to200: data.frequencies.to200,
+			to300: data.frequencies.to300,
+			to500: data.frequencies.to500,
+			to700: data.frequencies.to700,
+			to1000: data.frequencies.to1000,
+			to1500: data.frequencies.to1500,
+			to2000: data.frequencies.to2000,
+			to3000: data.frequencies.to3000,
+			to4000: data.frequencies.to4000,
+			to5000: data.frequencies.to5000
         })
-    }else if(data.frequencyId != null && oldControlPoint.frequencyId == null && data.frequencies != null){
+    }else if(data.frequencyId == null && oldControlPoint.frequencyId == null && data.frequencies != null){
         const latestFrequencyNumber = await itemCategoryModel.getLatestFrequencyNumber()
         data.frequencyId = latestFrequencyNumber
         await itemCategoryModel.insertFrequency({
             frequencyNumber: data.frequencyId,
-            to25: data.frequencies[0],
-            to50: data.frequencies[1],
-            to100: data.frequencies[2],
-            to200: data.frequencies[3],
-            to300: data.frequencies[4],
-            to500: data.frequencies[5],
-            to700: data.frequencies[6],
-            to1000: data.frequencies[7],
-            to1500: data.frequencies[8],
-            to2000: data.frequencies[9],
-            to3000: data.frequencies[10],
-            to4000: data.frequencies[11],
-            to5000: data.frequencies[12]
+            to25: data.frequencies.to25,
+            to50: data.frequencies.to50,
+            to100: data.frequencies.to100,
+            to200: data.frequencies.to200,
+            to300: data.frequencies.to300,
+            to500: data.frequencies.to500,
+            to700: data.frequencies.to700,
+            to1000: data.frequencies.to1000,
+            to1500: data.frequencies.to1500,
+            to2000: data.frequencies.to2000,
+            to3000: data.frequencies.to3000,
+            to4000: data.frequencies.to4000,
+            to5000: data.frequencies.to5000
         })
     }
 
