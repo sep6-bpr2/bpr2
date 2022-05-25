@@ -102,13 +102,13 @@ const translations = {
 		"danish": "bla bla"
 	},
 
-	"Value Type":{
+	"Input Type":{
 		"english": "Value Type",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
 	"Lower Tolerance":{
-		"english": "LowerTolerance",
+		"english": "Lower Tolerance",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
@@ -167,8 +167,8 @@ const translations = {
 	},
 
 	// Relationship with category items and attributes card
-	"Relationship with category items and attributes": {
-		"english": "Relationship with category items and attributes",
+	"Relationship with item category codes and attributes": {
+		"english": "Relationship with item category codes and attributes",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
@@ -210,6 +210,31 @@ const translations = {
 		"danish": "bla bla"
 	},
 	// alerts
+	"description can not exceed 200 characters": {
+		"english": "description can not exceed 200 characters",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attributes must have a name": {
+		"english": "invalid input in frequency",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	}
+	,"numeric attributes must have minimum and maximum value": {
+		"english": "numeric attributes must have minimum and maximum value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attribute minimum and maximum value needs to be positive value": {
+		"english": "attribute minimum and maximum value needs to be positive value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attribute minimum value can not be greater or equal to the maximum value": {
+		"english": "attribute minimum value can not be greater or equal to the maximum value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
 
 	"invalid input in frequency": {
 		"english": "invalid input in frequency",

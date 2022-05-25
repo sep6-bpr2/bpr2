@@ -322,8 +322,8 @@ module.exports.submitControlPoint = async (cp) => {
     cp.type = typeSwitchToNumber(cp.type)
     con.input('type', mssql.mssql.Int, cp.type)
     con.input('measurementType', mssql.mssql.Int, cp.measurementType)
-    con.input('upperTolerance', mssql.mssql.Int, cp.upperTolerance)
-    con.input('lowerTolerance', mssql.mssql.Int, cp.lowerTolerance)
+    con.input('upperTolerance', mssql.mssql.Float, cp.upperTolerance)
+    con.input('lowerTolerance', mssql.mssql.Float, cp.lowerTolerance)
     con.input('image', mssql.mssql.NVarChar, cp.image)
     con.input('controlPointNumber', mssql.mssql.Int, latestControlPointNumber)
     if(cp.frequencies !== null){

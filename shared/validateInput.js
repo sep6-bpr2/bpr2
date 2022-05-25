@@ -36,6 +36,18 @@ module.exports.validateInput = (value, inputType, options, lowerTolerance, upper
     return inputValidated
 }
 
+module.exports.validateStringLength = (value, maxLength) =>{
+	return value.length <= maxLength
+}
+
+module.exports.validateNonPositiveAndInt = (value) => {
+	return value > 0 || value <= 2147483647
+}
+
+module.exports.validateNegativeAndInt = (value) => {
+	return value >= 0 || value <= 2147483647
+}
+
 // Backend uses different syntax and no tolerance
 module.exports.validateInputBackend = (value, inputType, options) => {
     let inputValidated = false;

@@ -368,12 +368,10 @@ export default {
 		descriptionChange(desc, index) {
 			this.cpData.descriptions[index].value = desc
 		},
-		changeShow(){
-			console.log(this.frequencies)
-			if(this.frequencies){
+		changeShow() {
+			if (this.frequencies) {
 				this.cpData.frequencies = null
-			}
-			else {
+			} else {
 				this.cpData.frequencies = this.cpData.defaultFrequency
 			}
 		},
@@ -381,8 +379,9 @@ export default {
 		optionValueChange(option, index) {
 			this.cpData.optionValues[index].value = option
 		},
-		attributeIdChange(id, index) {
-			this.cpData.attributes[index].id = id
+		attributeIdChange(att, index) {
+			this.cpData.attributes[index].id = att.id
+			this.cpData.attributes[index].type = att.type
 		},
 		attributeMinValueChange(minVal, index) {
 			this.cpData.attributes[index].minValue = minVal
