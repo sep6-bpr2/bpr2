@@ -320,7 +320,7 @@ module.exports.updateControlPointFrequencyId = async (cpId,freqId) => {
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('freqId', mssql.Int, freqId)
-		.query(`UPDATE ControlPoint SET frequencyid = ${freqId} WHERE id = @cpId`)
+		.query(`UPDATE ControlPoint SET frequencyid = @freqId WHERE id = @cpId`)
 
 	return result.recordset
 }
