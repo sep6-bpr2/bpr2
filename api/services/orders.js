@@ -160,9 +160,9 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
 
             // Get control points that connect to these attributes and are for this categoryCode
-            controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
+            controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), itemData.categoryCode)
 
-            let controlPointsWithCategory = await model.getControlPointsCategoryNoAtrributes(parseInt(itemData.categoryCode))
+            let controlPointsWithCategory = await model.getControlPointsCategoryNoAtrributes(itemData.categoryCode)
 
             controlPoints.push(...controlPointsWithCategory)
             // Get all the attributes and item categories of these control points

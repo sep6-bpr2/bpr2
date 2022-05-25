@@ -24,7 +24,8 @@
 
 			<div class="information">
 				<h2>Information</h2>
-				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
+                <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
+				<DataDisplay :name="'Item number'" :data="currentOrder.id" />
 				<DataDisplay
 					:name="'Description'"
 					:data="currentOrder.description"
@@ -36,6 +37,8 @@
 				<DataDisplay :name="'Deadline'" :data="currentOrder.deadline" />
 				<DataDisplay :name="'Location'" :data="currentOrder.location" />
 				<DataDisplay :name="'Status'" :data="currentOrder.status" />
+                <DataDisplay :name="'Quantity'" :data="currentOrder.quantity" />
+
 			</div>
 
 			<div class="oneTimeMeasurements">

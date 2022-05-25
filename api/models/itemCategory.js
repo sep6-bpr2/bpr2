@@ -20,7 +20,6 @@ module.exports.getItemCatCodesWhenLocationNotAll = async (location, offset, limi
 module.exports.getItemCatCodesWhenLocationNotAllMax = async (location) => {
     const result = await ( await konfairDB())
         .request()
-        .input("location", mssql.NVarChar(1000), location)
         .query(`
             select DISTINCT Code
             from [KonfAir DRIFT$Item]
@@ -158,7 +157,7 @@ module.exports.insertFrequency = async (frequency) => {
 
     const result = await ( await localDB())
         .request()
-        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values (${frequency.Code},${frequency.frequencyNumber})`)
+        .query(`insert into [dbo].[ItemCategoryFrequency](Code,frequencyid) values ('${frequency.Code}',${frequency.frequencyNumber})`)
 
     return result.recordset
 }

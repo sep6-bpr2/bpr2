@@ -7,7 +7,12 @@ module.exports.getReleasedOrders = async (location, offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline 
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3  
@@ -22,7 +27,13 @@ module.exports.getOrders = async (location) => {
         .request()
         .input("location", mssql.NVarChar(40), location)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline, 
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location
         `)
@@ -41,7 +52,8 @@ module.exports.getOrderInformation = async (id) => {
             pOrder.status, 
             pOrder.[Due Date] as deadline, 
             pOrder.[Location Code] as location, 
-            pOrder.Quantity as quantity
+            pOrder.Quantity as quantity,
+            pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE item.[No_] = @id
@@ -444,7 +456,13 @@ module.exports.getOrdersByIdList = async (location, stringList, offset, limit) =
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringList})
             ORDER BY item.[No_] ASC 
@@ -461,7 +479,13 @@ module.exports.getOrdersByIdListAllLocations = async (stringList, offset, limit)
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE item.[No_] in (${stringList})
             ORDER BY item.[No_] ASC 

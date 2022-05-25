@@ -24,6 +24,7 @@
 
 			<div id="completedOrderInformation" class="information">
 				<h2>Information</h2>
+                <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
 				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
 				<DataDisplay
 					:name="'Description'"
@@ -40,6 +41,8 @@
 					:name="'Completed date'"
 					:data="currentOrder.completionDate"
 				/>
+                <DataDisplay :name="'Quantity'" :data="currentOrder.quantity" />
+
 			</div>
 
 			<div

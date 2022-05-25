@@ -105,7 +105,7 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-			tempFrequencies.Code = parseInt(this.$route.params.code)
+			tempFrequencies.Code = this.$route.params.code
 			let text = "Are you sure you want to update frequency for this item Category?"
 			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
 			let existsOverInt = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
