@@ -17,9 +17,9 @@ module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
             select [to25], [to50], [to100], [to200], [to300], [to500],
 					[to700], [to1000], [to1500], [to2000], [to3000], [to4000],
 					[to5000]
-            from [dbo].[ControlPoint] C 
+            from [dbo].[ControlPoint] C
             JOIN [dbo].[Frequency] F on C.frequencyId = F.id
-            where C.controlPointNumber = @controlPointNumber AND F.validFrom < GETDATE() AND F.validTo IS NULL
+            where C.controlPointNumber = @controlPointNumber AND C.validFrom < GETDATE() AND C.validTo IS NULL
 		`)
 	return result.recordset
 }
@@ -38,16 +38,16 @@ module.exports.getControlMainInformation = async (controlPointNumber) => {
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
-            SELECT 
-            frequencyid, 
+            SELECT
+            frequencyid,
             controlPointNumber,
-            image, 
-            uppertolerance, 
-            lowertolerance, 
-            inputtype, 
+            image,
+            uppertolerance,
+            lowertolerance,
+            inputtype,
             measurementtype
 			FROM ControlPoint
-			WHERE controlPointNumber = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+			WHERE controlPointNumber = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
         `)
 
 	return result.recordset
@@ -61,7 +61,7 @@ module.exports.getControlPointDescriptions = async (controlPointNumber) => {
 		.query(`
             SELECT language, description
             FROM Description
-            WHERE Description.controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+            WHERE Description.controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
         `)
 
 	return result.recordset
@@ -74,7 +74,7 @@ module.exports.getControlPointOptionValues = async (controlPointNumber) => {
 		.query(`
             SELECT value
             FROM [Option]
-            WHERE [Option].controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+            WHERE [Option].controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
         `)
 
 	return result.recordset
@@ -87,7 +87,7 @@ module.exports.getControlPointAttributes = async (controlPointNumber) => {
 		.query(`
             SELECT attributeId, minValue, maxValue
             FROM [dbo].[AttributeControlPoint]
-            WHERE controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL 
+            WHERE controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
             `)
 
 	return result.recordset
@@ -137,9 +137,9 @@ module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, i
 		.input('inputType', mssql.Int, inputType)
 		.input('measurementType', mssql.Int, measurementType)
 		.query(`
-            insert into ControlPoint 
-            (controlPointNumber, validFrom, frequencyId, image, inputType, upperTolerance, lowerTolerance, measurementType) 
-            values 
+            insert into ControlPoint
+            (controlPointNumber, validFrom, frequencyId, image, inputType, upperTolerance, lowerTolerance, measurementType)
+            values
             (@controlPointNumber ,GETDATE(), @frequencyId, @image, @inputType, @upperTolerance, @lowerTolerance, @measurementType)
         `)
 
@@ -151,7 +151,7 @@ module.exports.expireControlPoint = async (controlPointNumber) => {
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
-            update [dbo].[ControlPoint] 
+            update [dbo].[ControlPoint]
             set validTo = GETDATE()
             where controlPointNumber = @controlPointNumber and validTo IS NULL
         `)
@@ -162,7 +162,7 @@ module.exports.expireDescriptionsForControlPoint = async (controlPointNumber) =>
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
-            update [dbo].[Description] 
+            update [dbo].[Description]
             set validTo = GETDATE()
             where controlPointId = @controlPointNumber and validTo IS NULL
         `)
@@ -173,7 +173,7 @@ module.exports.expireOptionsForControlPoint = async (controlPointNumber) => {
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
-            update [dbo].[Option] 
+            update [dbo].[Option]
             set validTo = GETDATE()
             where controlPointId = @controlPointNumber and validTo IS NULL
         `)
@@ -244,7 +244,7 @@ module.exports.getFrequencyId = async (cpId) => {
             .request()
             .input('cpId', mssql.Int, cpId)
             .query(`select frequencyId from ControlPoint WHERE id = @cpId`)
-    
+
         return result.recordset
     }
 
@@ -360,9 +360,9 @@ module.exports.insertDescription = async (controlPointId, language, description)
 		.input('description', mssql.NVarChar, description)
 		.input('language', mssql.NVarChar, language)
 		.query(`
-            INSERT INTO Description 
-            (controlPointId, language, description, validFrom) 
-            VALUES 
+            INSERT INTO Description
+            (controlPointId, language, description, validFrom)
+            VALUES
             (@controlPointId, @language, @description, GETDATE())
         `)
 
@@ -386,9 +386,9 @@ module.exports.insertOption = async (controlPointId, value) => {
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('value', mssql.NVarChar, value)
 		.query(`
-            INSERT INTO [Option] 
+            INSERT INTO [Option]
             (controlPointId, value, validFrom)
-            VALUES 
+            VALUES
             (@controlPointId, @value, GETDATE())
         `)
 
@@ -414,9 +414,9 @@ module.exports.insertControlPointAttribute = async (controlPointId, attributeId,
 		.input('minValue', mssql.Float, minValue)
 		.input('maxValue', mssql.Float, maxValue)
 		.query(`
-            INSERT INTO [dbo].[AttributeControlPoint] 
+            INSERT INTO [dbo].[AttributeControlPoint]
             (attributeId, controlPointId, minValue, maxValue, validFrom)
-            VALUES 
+            VALUES
             (@attributeId, @controlPointId, @minValue, @maxValue, GETDATE())
         `)
 
@@ -473,9 +473,9 @@ module.exports.insertControlPointItemCategoryCode = async (controlPointId, itemC
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('itemCategoryCode', mssql.Int, itemCategoryCode)
 		.query(`
-            INSERT INTO [dbo].[ItemCategoryControlPoint] 
+            INSERT INTO [dbo].[ItemCategoryControlPoint]
             (controlPointId, itemCategoryCode, validFrom)
-            VALUES 
+            VALUES
             (@controlPointId, @itemCategoryCode, GETDATE())
         `)
 
@@ -508,7 +508,7 @@ module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 		.query(`
             SELECT controlPointId as id, description
             FROM Description
-            WHERE Description.language = @language AND validFrom < GETDATE() AND validTo IS NULL 
+            WHERE Description.language = @language AND validFrom < GETDATE() AND validTo IS NULL
             Order By controlPointId DESC
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
@@ -542,7 +542,7 @@ module.exports.expireOldFrequency = async (controlPointNumber) => {
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
-            update [dbo].[ControlPoint] 
+            update [dbo].[ControlPoint]
             set validTo = GETDATE()
             where controlPointNumber = @controlPointNumber and validTo IS NULL
         `)

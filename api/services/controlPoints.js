@@ -84,6 +84,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     const optionValues = await controlPointModel.getControlPointOptionValues(controlPointNumber)
     const frequencies = await controlPointModel.getFrequenciesOfControlPoint(controlPointNumber)
 
+
 	let cpData = {
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
 		defaultFrequency: {
@@ -115,7 +116,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		imagePreview: null,
 	}
 
-	cpData.frequencies = frequencies
+	cpData.frequencies = frequencies[0]
 	let eng = descriptions.find(o => o.language.toLowerCase() === "english")
 	cpData.descriptions[0].value = eng.description
 	let dk = descriptions.find(o => o.language.toLowerCase() === "danish")

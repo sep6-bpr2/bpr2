@@ -350,12 +350,7 @@ export default {
 	}),
 	computed: {
 		frequencies() {
-            // FIX THIS SHIT
-            if(this.cpData.frequencies != null){
-			    return this.cpData.frequencies[0]
-            }else{
-                return null
-            }
+			    return this.cpData.frequencies
 		},
 		currentImage: {
 			get() {
@@ -374,6 +369,7 @@ export default {
 			this.cpData.descriptions[index].value = desc
 		},
 		changeShow(){
+			console.log(this.frequencies)
 			if(this.frequencies){
 				this.cpData.frequencies = null
 			}
