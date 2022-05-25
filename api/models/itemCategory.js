@@ -64,7 +64,7 @@ module.exports.getFrequenciesOfCategory = async (categoryCode) => {
 
     const result = await ( await localDB())
         .request()
-        .input("categoryCode", mssql.Int, categoryCode)
+        .input("categoryCode", mssql.NVarChar, categoryCode)
         .query(`
             select
             F.id,
@@ -165,10 +165,14 @@ module.exports.insertFrequency = async (frequency) => {
 module.exports.checkCodeExists = async (itemCode) => {
 	let result = await ( await konfairDB())
 		.request()
-		.input("itemCode", mssql.Int, itemCode)
-		.query(`select DISTINCT Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O]
- 				on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C]
- 				on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code where Code = @itemCode`)
+		.input("itemCode", mssql.NVarChar, itemCode)
+		.query(`
+            select DISTINCT 
+            Code 
+            from [KonfAir DRIFT$Item] 
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            where Code = @itemCode`)
 
 	return result.recordset
 }
