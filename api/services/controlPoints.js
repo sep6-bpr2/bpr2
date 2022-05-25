@@ -352,7 +352,7 @@ module.exports.submitControlPoint = async (cp) => {
 
     cp.codes.forEach((item, index) => {
         sqlString += `INSERT INTO ItemCategoryControlPoint (itemCategoryCode, controlPointId, validFrom)
-					  VALUES (@code${index}, @controlPointNumber, GETDATE()); `
+					  VALUES ('@code${index}', @controlPointNumber, GETDATE()); `
         con.input('code' + index, mssql.mssql.NVarChar, item.value)
     })
     sqlString += ' COMMIT'

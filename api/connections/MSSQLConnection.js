@@ -55,7 +55,7 @@ module.exports.getConnectionsKonfair = async () => {
     if (process.env.environment != "testing") {
         if (process.env.DATABASE == "konfairProduction") {
             konfairDB = await get("Konfair", {
-                database: "master",
+                database: "KonfAir-2018-daily",
                 server: "srvsql",
                 driver: "msnodesqlv8",
                 options: {

@@ -34,7 +34,7 @@ CREATE TABLE [dbo].[Description](
 
 DROP TABLE IF EXISTS [dbo].[ItemCategoryControlPoint];
 CREATE TABLE [dbo].[ItemCategoryControlPoint](
-    [itemCategoryCode] int,
+    [itemCategoryCode] nvarchar(1000),
     [controlPointId] int,
     [validFrom] DATETIME,
     [validTo] DATETIME,
