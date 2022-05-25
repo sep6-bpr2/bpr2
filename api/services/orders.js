@@ -22,7 +22,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
     }
 
     // Get our database qa reports that are related to these released orders
-    let qaReports = await model.getMultipleQAReports(listToCommaString(orders, 'id'))
+    let qaReports = await model.getMultipleQAReports(listToCommaStringOfStrings(orders, 'id'))
 
     let uncompletedOrders = []
 
@@ -103,6 +103,18 @@ function listToCommaString(list, key) {
             stringList = stringList + list[i][key].toString()
         } else {
             stringList = stringList + list[i][key].toString() + ","
+        }
+    }
+    return stringList
+}
+
+function listToCommaStringOfStrings(list, key) {
+    let stringList = ""
+    for (let i = 0; i < list.length; i++) {
+        if ((list.length - 1) == i) {
+            stringList = stringList + "'" + list[i][key].toString() + "'"
+        } else {
+            stringList = stringList + "'" + list[i][key].toString()+ "'" + ","
         }
     }
     return stringList
@@ -624,20 +636,6 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
         }
     } else {
         return { response: 0, message: "Your data does not match what is in the database" }
-    }
-}
-
-/**
- * Checks if the string is a valid number
- * @param {string} str the string that you want to check if it is a number
- * @returns {boolean}
- */
-function isNumeric(str) {
-    if (typeof str != "string") {
-        return false // we only process strings!
-    } else {
-        // @ts-ignore
-        return !isNaN(str) && !isNaN(parseFloat(str))
     }
 }
 
