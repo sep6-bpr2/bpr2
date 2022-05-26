@@ -220,8 +220,8 @@ const translations = {
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	}
-	,"numeric attributes must have minimum and maximum value": {
-		"english": "numeric attributes must have minimum and maximum value",
+	,"attribute minimum and maximum value can not be empty": {
+		"english": "attribute minimum and maximum value can not be empty",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
@@ -246,12 +246,12 @@ const translations = {
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
-	"lower tolerance needs to be grater than 0 and smaller than 2147483647": {
-		"english": "lower tolerance needs to be grater than 0 and smaller than 2147483647",
+	"lower tolerance needs to be grater or equal to 0 and smaller than 2147483647": {
+		"english": "lower tolerance needs to be grater or equal to 0 and smaller than 2147483647",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
-	},"upper tolerance needs to be grater than 0 and smaller than 2147483647": {
-		"english": "upper tolerance needs to be grater than 0 and smaller than 2147483647",
+	},"upper tolerance needs to be grater or equal to 0 and smaller than 2147483647": {
+		"english": "upper tolerance needs to be grater or equal to 0 and smaller than 2147483647",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},"lower tolerance can not be grater or equal to upper tolerance": {
@@ -277,8 +277,8 @@ const translations = {
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	}
-	,"measurement type con not be empty": {
-		"english": "MEASUREMENT TYPE con not be empty",
+	,"measurement type can not be empty": {
+		"english": "MEASUREMENT TYPE can not be empty",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	},
@@ -305,6 +305,12 @@ const translations = {
 
 	"control point has been created": {
 		"english": "control point has been created",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+
+	"control point has been changed": {
+		"english": "control point has been changed",
 		"lithuanian": "bla bla",
 		"danish": "bla bla"
 	}
