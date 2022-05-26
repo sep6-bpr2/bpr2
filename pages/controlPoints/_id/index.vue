@@ -38,7 +38,7 @@ export default {
 	components: {Translate, ControlPoint},
 	mixins: [translate, authorizeUser,header],
 	data: () => ({
-		cpData: null,
+		cpData: null
 	}),
 	created() {
 		this.$store.dispatch("controlPoint/getAllTypes")
@@ -48,6 +48,9 @@ export default {
 			.dispatch("controlPoint/getControlPointData", this.$route.params.id).then(result =>{
 			if(result){
 				this.cpData = result
+				if(!this.cpData.frequencies){
+					this.$set(this.cpData,'frequencies',null)
+				}
 			}
 		})
 	},
@@ -59,6 +62,7 @@ export default {
 	methods: {
 		submit(validateAll, showAlert, validateFrequency) {
 			if (validateAll() && validateFrequency() ) {
+				console.log(JSON.stringify(this.cpData))
 				this.cpData.controlPointId = this.$route.params.id
 				this.$store.dispatch('controlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {

@@ -12,14 +12,14 @@ module.exports.getAllTypes = async () => {
 module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
 	const result = await (await localDB())
 		.request()
-        .input("controlPointNumber", mssql.Int, controlPointNumber)
+		.input("controlPointNumber", mssql.Int, controlPointNumber)
 		.query(`
             select [to25], [to50], [to100], [to200], [to300], [to500],
 					[to700], [to1000], [to1500], [to2000], [to3000], [to4000],
 					[to5000]
             from [dbo].[ControlPoint] C
-            JOIN [dbo].[Frequency] F on C.frequencyId = F.id
-            where C.controlPointNumber = @controlPointNumber AND F.validFrom < GETDATE() AND F.validTo IS NULL
+            JOIN [dbo].[Frequency] F on C.frequencyId = F.frequencyNumber
+            where C.controlPointNumber = @controlPointNumber AND C.validFrom < GETDATE() AND C.validTo IS NULL
 		`)
 	return result.recordset
 }
@@ -253,36 +253,7 @@ module.exports.updateControlPointFrequencyWhenFreqIdNotNull = async (cpId, data)
 	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
-		.input('to25', mssql.Int, data[Object.keys(data)[0]])
-		.input('to50', mssql.Int, data[Object.keys(data)[1]])
-		.input('to100', mssql.Int, data[Object.keys(data)[2]])
-		.input('to200', mssql.Int, data[Object.keys(data)[3]])
-		.input('to300', mssql.Int, data[Object.keys(data)[4]])
-		.input('to500', mssql.Int, data[Object.keys(data)[5]])
-		.input('to700', mssql.Int, data[Object.keys(data)[6]])
-		.input('to1000', mssql.Int, data[Object.keys(data)[7]])
-		.input('to1500', mssql.Int, data[Object.keys(data)[8]])
-		.input('to2000', mssql.Int, data[Object.keys(data)[9]])
-		.input('to3000', mssql.Int, data[Object.keys(data)[10]])
-		.input('to4000', mssql.Int, data[Object.keys(data)[11]])
-		.input('to5000', mssql.Int, data[Object.keys(data)[12]])
-		.query(`UPDATE Frequency
-				SET to25   = @to25,
-					to50   = @to50,
-					to100  = @to100,
-					to200  = @to200,
-					to300  = @to300,
-					to500  = @to500,
-					to700  = @to700,
-					to1000 = @to1000,
-					to1500 = @to1500,
-					to2000 = @to2000,
-					to3000 = @to3000,
-					to4000 = @to4000,
-					to5000 = @to5000 FROM Frequency f
- 					JOIN ControlPoint c
-				ON c.frequencyId = f.id
-				WHERE c.id = @cpId`)
+		.query(`select frequencyId from ControlPoint WHERE id = @cpId`)
 
 	return result.recordset
 }
@@ -320,7 +291,7 @@ module.exports.updateControlPointFrequencyId = async (cpId,freqId) => {
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('freqId', mssql.Int, freqId)
-		.query(`UPDATE ControlPoint SET frequencyid = ${freqId} WHERE id = @cpId`)
+		.query(`UPDATE ControlPoint SET frequencyid = @freqId WHERE id = @cpId`)
 
 	return result.recordset
 }
@@ -351,7 +322,6 @@ module.exports.updateControlPointDescription = async (cpId, language, descriptio
 
 	return result.recordset
 }
-
 
 module.exports.insertDescription = async (controlPointId, language, description) => {
 	const result = await (await localDB())
@@ -502,9 +472,9 @@ module.exports.insertControlPoint = async (sqlString, con) => {
 module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 	const result = await (await localDB())
 		.request()
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
-        .input("language", mssql.NVarChar(40), language)
+		.input("offset", mssql.Int, offset)
+		.input("limit", mssql.Int, limit)
+		.input("language", mssql.NVarChar(40), language)
 		.query(`
             SELECT controlPointId as id, description
             FROM Description
@@ -530,11 +500,11 @@ module.exports.getLatestControlPointNumber = async () => {
             SELECT MAX(controlPointNumber) as controlPointNumber FROM [ControlPoint]
         `)
 
-    if(result.recordset[0] == null){
-        return 1
-    }else{
-        return result.recordset[0].controlPointNumber + 1
-    }
+	if (result.recordset[0] == null) {
+		return 1
+	} else {
+		return result.recordset[0].controlPointNumber + 1
+	}
 }
 
 module.exports.expireOldFrequency = async (controlPointNumber) => {

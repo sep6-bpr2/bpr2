@@ -40,8 +40,12 @@ module.exports.validateStringLength = (value, maxLength) =>{
 	return value.length <= maxLength
 }
 
-module.exports.validatePositiveAndInt = (value) => {
+module.exports.validateNonPositiveAndInt = (value) => {
 	return value > 0 || value <= 2147483647
+}
+
+module.exports.validateNegativeAndInt = (value) => {
+	return value >= 0 || value <= 2147483647
 }
 
 // Backend uses different syntax and no tolerance

@@ -1,5 +1,8 @@
 <template>
-	<div>
+	<div v-show="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'admin'
+		">
 		<AlertModal
 			class="alert"
 			v-if="notification"
@@ -117,8 +120,9 @@ export default {
 			}
 			else{
                     tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber
-					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
-					this.$router.push("/itemCategories");
+					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies}).then(res =>{
+						this.$router.push("/itemCategories");
+					})
 			}
 			return localNotification
 		},

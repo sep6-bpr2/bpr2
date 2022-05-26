@@ -28,7 +28,7 @@
 						</v-list>
 					</div>
 				</v-row>
-				<v-row >
+				<v-row style="min-width: 350px" >
 					<v-col
 						v-if="submitFrequenciesCallback && !shouldConfirm"
 						cols="12"
@@ -56,14 +56,6 @@
 						>
 							Reset
 						</v-btn>
-					</v-col>
-
-					<v-col
-						v-if="pushBackCallback"
-						cols="12"
-						sm="4"
-					>
-						<v-btn color="#333" v-on:click="handleCancelClick" class="white--text">Cancel</v-btn>
 					</v-col>
 				</v-row>
 				<v-row
@@ -112,7 +104,7 @@ export default {
 		formKey: 0,
 
 	}),
-	props: ["submitFrequenciesCallback", "resetFrequenciesCallback", "pushBackCallback", "frequencies"],
+	props: ["submitFrequenciesCallback", "resetFrequenciesCallback", "frequencies"],
 	computed: {
 		notificationStatus() {
 			if (this.notification) {
@@ -131,9 +123,6 @@ export default {
 	methods: {
 		handleSubmitClick(){
 				this.handleOperation("Are you sure you want to update frequency?","update")
-		},
-		handleCancelClick(){
-			this.handleOperation("Are you sure you want to cancel?","cancel")
 		},
 		closeAlertModal(id) {
 			this.modalAlertShowSubmit = false;
@@ -159,10 +148,8 @@ export default {
 			}
 		},
 		handleConfirmClick(){
-			if(this.isConfirmed === "update"){
+			if(this.isConfirmed === "update")
 				this.submitFrequencies()
-			}
-			else this.pushBack()
 		},
 		resetFrequencies() {
 			this.formKey += 1;
@@ -182,11 +169,6 @@ export default {
             // }
 			
 		},
-		pushBack() {
-			if (this.pushBackCallback) this.pushBackCallback();
-			this.shouldConfirm = false
-		}
-
 	}
 }
 </script>
@@ -213,6 +195,10 @@ export default {
 v-list {
 }
 
+
+</style>
+
+<style scoped>
 .alert{
 	max-width: 350px;
 	min-width: 100%;
