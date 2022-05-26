@@ -181,7 +181,6 @@ module.exports.updateControlPoint = async (data) => {
     let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
     oldControlPoint = oldControlPoint[0]
 
-	console.log(data)
     if(data.frequencies == null && oldControlPoint.frequencyId != null){
         await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
     }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
