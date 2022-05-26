@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[AttributeControlPoint](
     [controlPointId] int NOT NULL,
     [minValue] float,
     [maxValue] float,
-    [validFrom] DATETIME,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
@@ -12,58 +12,58 @@ DROP TABLE IF EXISTS [dbo].[ControlPoint];
 CREATE TABLE [dbo].[ControlPoint](
     [id] int IDENTITY(1, 1),
     [frequencyid] int,
-    [controlPointNumber] int,
+    [controlPointNumber] int NOT NULL,
     [image] nvarchar(MAX),
     [upperTolerance] float,
     [lowerTolerance] float,
-    [inputType] int,
-    [measurementType] int,
-    [validFrom] DATETIME,
+    [inputType] int NOT NULL,
+    [measurementType] int NOT NULL,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
 DROP TABLE IF EXISTS [dbo].[Description];
 CREATE TABLE [dbo].[Description](
     [id] int IDENTITY(1, 1),
-    [controlPointId] int,
-    [language] nvarchar(1000),
-    [description] nvarchar(1000),
-    [validFrom] DATETIME,
+    [controlPointId] int NOT NULL,
+    [language] nvarchar(1000) NOT NULL,
+    [description] nvarchar(1000) NOT NULL,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
 DROP TABLE IF EXISTS [dbo].[ItemCategoryControlPoint];
 CREATE TABLE [dbo].[ItemCategoryControlPoint](
-    [itemCategoryCode] nvarchar(1000),
-    [controlPointId] int,
-    [validFrom] DATETIME,
+    [itemCategoryCode] nvarchar(1000) NOT NULL,
+    [controlPointId] int NOT NULL,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
 DROP TABLE IF EXISTS [dbo].[Option];
 CREATE TABLE [dbo].[Option](
     [id] int IDENTITY(1, 1),
-    [controlPointId] int,
-    [value] nvarchar(1000),
-    [validFrom] DATETIME,
+    [controlPointId] int NOT NULL,
+    [value] nvarchar(1000) NOT NULL,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
 DROP TABLE IF EXISTS [dbo].[QAReport];
 CREATE TABLE [dbo].[QAReport](
     [id] int IDENTITY(1, 1),
-    [itemId] nvarchar(80),
-    [productionOrder] nvarchar(80),
-    [status] bit,
+    [itemId] nvarchar(80) NOT NULL,
+    [productionOrder] nvarchar(80) NOT NULL,
+    [status] bit NOT NULL,
     [completionDate] DATETIME,
-    [createdDate] DATETIME,
+    [createdDate] DATETIME NOT NULL,
 );
 
 DROP TABLE IF EXISTS [dbo].[QAReportControlPointValue];
 CREATE TABLE [dbo].[QAReportControlPointValue](
     [id] int IDENTITY(1, 1),
-    [qaReportId] int,
-    [controlPointId] int,
+    [qaReportId] int NOT NULL,
+    [controlPointId] int NOT NULL,
     [author] nvarchar(50),
     [value] nvarchar(50),
     [timestamp] DATETIME
@@ -72,9 +72,9 @@ CREATE TABLE [dbo].[QAReportControlPointValue](
 DROP TABLE IF EXISTS [dbo].[SystemUser];
 CREATE TABLE [dbo].[SystemUser](
     [id] int IDENTITY(1, 1),
-    [username] nvarchar(50),
-    [role] nvarchar(20),
-    [validFrom] DATETIME,
+    [username] nvarchar(50) NOT NULL,
+    [role] nvarchar(20) NOT NULL,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 );
 
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS [dbo].[Frequency];
 create table [dbo].[Frequency]
 (
     [id]     int IDENTITY(1, 1),
-    [frequencyNumber] int,
+    [frequencyNumber] int NOT NULL,
     [to25]   int,
     [to50]   int,
     [to100]  int,
@@ -96,7 +96,7 @@ create table [dbo].[Frequency]
     [to3000] int,
     [to4000] int,
     [to5000] int,
-    [validFrom] DATETIME,
+    [validFrom] DATETIME NOT NULL,
     [validTo] DATETIME,
 )
 
@@ -104,8 +104,8 @@ DROP TABLE IF EXISTS [dbo].[ItemCategoryFrequency];
 create table [dbo].[ItemCategoryFrequency]
 (
     id          int identity(1,1),
-    code        nvarchar(1000),
-    frequencyId int,
+    code        nvarchar(1000) NOT NULL,
+    frequencyId int NOT NULL,
 )
 
 
@@ -224,14 +224,14 @@ insert into [Option] (controlPointId, value, validFrom) values (10, 'No', GETDAT
 
 
 --- Completed order 
-INSERT INTO QAReport (itemId, status, completionDate, createdDate) VALUES ('1111', 1, GETDATE(), GETDATE())
+INSERT INTO QAReport (itemId, productionOrder, status, completionDate, createdDate) VALUES ('1111', '464646', 1, GETDATE(), GETDATE())
 
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 1, '32323', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'Yes', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'No', 'worker');
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(1, 10, 'No', 'worker');
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 1, '32323', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
+INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
 

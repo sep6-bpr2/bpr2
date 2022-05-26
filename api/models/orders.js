@@ -82,6 +82,7 @@ module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
             MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = '' THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer,
+            MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
@@ -118,6 +119,7 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date)
             MAX(connection.author) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer,
+            MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
@@ -417,7 +419,8 @@ module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPoi
             connection.id as connectionId, 
             connection.controlPointId,
             connection.qaReportId,
-            (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author 
+            (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
+            connection.timestamp
             FROM [QAReportControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
@@ -434,7 +437,8 @@ module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfCon
             connection.id as connectionId, 
             connection.controlPointId,
             connection.qaReportId,
-            connection.author
+            connection.author,
+            connection.timestamp
             FROM [QAReportControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
@@ -451,13 +455,11 @@ module.exports.getMultipleQAReports = async (stringList) => {
     return result.recordset
 }
 
-module.exports.getOrdersByIdList = async (location, stringListId, stringListProductionOrders, offset, limit) => {
+module.exports.getOrdersByIdList = async (location, stringListId, stringListProductionOrders) => {
 
     const result = await ( await konfairDB())
         .request()
         .input("location", mssql.NVarChar(40), location)
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
         .query(`
             SELECT 
             item.[No_] as id, 
@@ -469,18 +471,15 @@ module.exports.getOrdersByIdList = async (location, stringListId, stringListProd
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
             ORDER BY pOrder.[Due Date] ASC 
-            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset
 }
 
-module.exports.getOrdersByIdListAllLocations = async (stringListId, stringListProductionOrders, offset, limit) => {
+module.exports.getOrdersByIdListAllLocations = async (stringListId, stringListProductionOrders) => {
 
     const result = await ( await konfairDB())
         .request()
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
         .query(`
             SELECT 
             item.[No_] as id, 
@@ -492,7 +491,6 @@ module.exports.getOrdersByIdListAllLocations = async (stringListId, stringListPr
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
             ORDER BY pOrder.[Due Date] ASC 
-            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset
@@ -504,7 +502,8 @@ module.exports.getCompletedQAReports = async (offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            Select * from QAReport WHERE status = 1;
+            Select * from QAReport WHERE status = 1
+            ORDER BY productionOrder ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset

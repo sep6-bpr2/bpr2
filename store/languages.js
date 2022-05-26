@@ -1,4 +1,99 @@
 const translations = {
+    "default": {
+        "English": "default",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "No.": {
+        "English": "No.",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Print PDF": {
+        "English": "Print PDF",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Picture": {
+        "English": "Picture",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Units": {
+        "English": "Units",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Tolerance": {
+        "English": "Tolerance",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Expected value": {
+        "English": "Expected value",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Answer": {
+        "English": "Answer",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Letter": {
+        "English": "Letter",
+        "Lithuanian": "Raide",
+        "Danish": "",
+    },
+    "Completion date": {
+        "English": "Completion date",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Production order": {
+        "English": "Production order",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Item Number": {
+        "English": "Item Number",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Item Category Code": {
+        "English": "Item Category Code",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Quantity": {
+        "English": "default",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "User management": {
+        "English": "User management",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Create User": {
+        "English": "Create User",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Username": {
+        "English": "Username",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Role": {
+        "English": "Role",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "ID": {
+        "English": "ID",
+        "Lithuanian": "",
+        "Danish": "",
+    },
     "This is a description for a control point": {
         "English": "This is a description for a control point",
         "Lithuanian": "Cia yra kontroles tasko aprasymas",
@@ -279,9 +374,11 @@ const translateFunction = (text, language) => {
                 return text;
             }
         } catch (err) {
+            console.log("Add translate: - " + text)
             return text;
         }
     } else {
+        console.log("Add translate: - " + text)
         return text;
     }
 }

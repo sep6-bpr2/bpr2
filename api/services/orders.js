@@ -72,17 +72,13 @@ module.exports.completedOrders = async (location, offset, limit) => {
     if (location.toLocaleLowerCase() == "all") {
         orders = await model.getOrdersByIdListAllLocations(
             listToCommaStringOfStrings(qaReports, 'itemId'), 
-            listToCommaStringOfStrings(qaReports, 'productionOrder'), 
-            offset, 
-            limit
+            listToCommaStringOfStrings(qaReports, 'productionOrder')
         )
     } else {
         orders = await model.getOrdersByIdList(
             location, 
             listToCommaStringOfStrings(qaReports, 'itemId'), 
-            listToCommaStringOfStrings(qaReports, 'productionOrder'), 
-            offset, 
-            limit
+            listToCommaStringOfStrings(qaReports, 'productionOrder')
         )
     }
 
@@ -282,6 +278,11 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
 
         // Get all the data for the control point: descriptions, frequency, options
         for (let i = 0; i < controlPoints.length; i++) {
+            if(controlPoints[i].timestamp != null){
+                const date = new Date(controlPoints[i].timestamp)
+                controlPoints[i].timestamp = moment(date).format('YYYY-MM-DD HH:mm')
+            } 
+            
             // Get frequency of the control point
             controlPoints[i].frequency = await model.getFrequencies(controlPoints[i].frequencyId, qaReport.createdDate)
             if (controlPoints[i].frequency && controlPoints[i].frequency.length != 0)
@@ -448,12 +449,18 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
                 let answer = ""
                 let author = ""
                 let connectionId = ""
+                let timestamp = null
 
                 // Get the first value from answers
                 if (mResultsForControlPoint.length != 0) {
                     answer = mResultsForControlPoint[0].answer
                     author = mResultsForControlPoint[0].author
                     connectionId = mResultsForControlPoint[0].connectionId
+                    timestamp = mResultsForControlPoint[0].timestamp
+                    if(timestamp != null){
+                        const date = new Date(timestamp)
+                        timestamp = moment(date).format('YYYY-MM-DD HH:mm')
+                    } 
                     mResultsForControlPoint.shift() // Remove the first element
                     // If there are no more values then generate some empty ones to fill it up
                 } else {
@@ -474,7 +481,8 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
                         id: itemData.multipleTimeControlPoints[i].id,
                         answer: answer,
                         inputType: itemData.multipleTimeControlPoints[i].inputType,
-                        author: author
+                        author: author,
+                        timestamp: timestamp,
                     })
             }
 

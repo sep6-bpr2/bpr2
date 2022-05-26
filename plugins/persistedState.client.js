@@ -7,13 +7,7 @@ export default ({ store }) => {
             'mainState',
             'login', 
             'nav', 
-            'createControlPoint', 
-            'controlPoints', 
-            'users', 
-            'releasedOrders', 
-            'releasedOrder', 
-            'completedOrder', 
-            'completedOrders'
+            'users'
         ]
     })(store)
 }
