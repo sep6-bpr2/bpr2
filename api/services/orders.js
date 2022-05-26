@@ -1,6 +1,7 @@
 const moment = require("moment")
 const model = require("../models/orders")
 const inputValidation = require("../../shared/validateInput")
+const itemCategoryService = require("./itemCategory")
 
 /**
  * get a list of orders that are released in the system. All of them
@@ -32,7 +33,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
 
         // Use the our database qa report to know if that order has been completed
         for (let j = 0; j < qaReports.length; j++) {
-            if (qaReports[j].itemId == orders[i].id && qaReports[j].status != 0) {
+            if (qaReports[j].itemId == orders[i].id && qaReports[j].productionOrder == orders[i].productionOrder && qaReports[j].status != 0) {
                 addToList = false
                 break
             }
@@ -60,7 +61,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
  * }]
  */
 module.exports.completedOrders = async (location, offset, limit) => {
-    let qaReports = await model.getCompletedQAReports()
+    let qaReports = await model.getCompletedQAReports(offset, limit)
 
     if (qaReports.length == 0) {
         return []
@@ -69,20 +70,33 @@ module.exports.completedOrders = async (location, offset, limit) => {
     let orders = []
 
     if (location.toLocaleLowerCase() == "all") {
-        orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'), offset, limit)
+        orders = await model.getOrdersByIdListAllLocations(
+            listToCommaStringOfStrings(qaReports, 'itemId'), 
+            listToCommaStringOfStrings(qaReports, 'productionOrder'), 
+            offset, 
+            limit
+        )
     } else {
-        orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'), offset, limit)
+        orders = await model.getOrdersByIdList(
+            location, 
+            listToCommaStringOfStrings(qaReports, 'itemId'), 
+            listToCommaStringOfStrings(qaReports, 'productionOrder'), 
+            offset, 
+            limit
+        )
     }
 
+    let completedOrders = []
     for (let i = 0; i < qaReports.length; i++) {
-
         for (let j = 0; j < orders.length; j++) {
-            if (qaReports[i].itemId == orders[j].id) {
+            if (qaReports[i].itemId == orders[j].id && qaReports[i].productionOrder == orders[j].productionOrder) {
                 const deadline = new Date(orders[j].deadline)
                 orders[j].deadline = moment(deadline).format('YYYY-MM-DD')
 
                 const completionDate = new Date(qaReports[i].completionDate)
                 orders[j].completionDate = moment(completionDate).format('YYYY-MM-DD')
+                completedOrders.push(orders[j])
+                break;
             }
         }
     }
@@ -111,10 +125,14 @@ function listToCommaString(list, key) {
 function listToCommaStringOfStrings(list, key) {
     let stringList = ""
     for (let i = 0; i < list.length; i++) {
-        if ((list.length - 1) == i) {
-            stringList = stringList + "'" + list[i][key].toString() + "'"
-        } else {
-            stringList = stringList + "'" + list[i][key].toString()+ "'" + ","
+        try{
+            if ((list.length - 1) == i) {
+                stringList = stringList + "'" + list[i][key].toString() + "'"
+            } else {
+                stringList = stringList + "'" + list[i][key].toString()+ "'" + ","
+            }
+        }catch(err){
+            console.log("ERROR")
         }
     }
     return stringList
@@ -128,9 +146,9 @@ function listToCommaStringOfStrings(list, key) {
  * @param {boolean} getCompleted should the order be completed or released
  * @returns {Promise} Order, its one time measurement and multiple time measurement control points, and answers. Or a response with a message
  */
-module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => {
+module.exports.getQAReport = async (id, productionOrder, language, showAuthors, getCompleted) => {
     // Get a detailed item object from konfair database. Returns array of orders that match this id
-    let itemData = await model.getOrderInformation(id)
+    let itemData = await model.getOrderInformation(id, productionOrder)
 
     // If it exists continue process
     if (itemData && itemData.length != 0) {
@@ -139,7 +157,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         itemData = itemData[0]
 
         // Check if there exists a QA report for this order
-        let qaReport = await model.getReleasedOrderReport(id)
+        let qaReport = await model.getReleasedOrderReport(id, productionOrder)
 
         // Check if the exists a qa report for this or not and its status
         if (!getCompleted && qaReport.length != 0 && qaReport[0].status == 1)
@@ -220,7 +238,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // Add all of the control point connections to this order
             if (added.length != 0) {
                 // Add qa report
-                qaReport = await model.createQAReport(id)
+                qaReport = await model.createQAReport(id, productionOrder)
                 qaReport = qaReport[0]
 
                 // Add the connections between control point and qa report
@@ -247,7 +265,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         if (itemData.frequency && itemData.frequency.length != 0)
             itemData.frequency = itemData.frequency[0]
         else
-            itemData.frequency = null
+            itemData.frequency = itemCategoryService.defaultFrequency
 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not
@@ -503,7 +521,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
  */
 module.exports.saveQAReport = async (editedQAReport, username) => {
 
-    const originalOrder = await module.exports.getQAReport(editedQAReport.id, 'english', true, false)
+    const originalOrder = await module.exports.getQAReport(editedQAReport.id, editedQAReport.productionOrder, 'english', true, false)
 
     if (originalOrder != null) {
         //Check surface level requirements

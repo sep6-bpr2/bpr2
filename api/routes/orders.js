@@ -53,14 +53,15 @@ router.get("/completedList/minimal/:username/:location/:offset/:limit",
  *
  * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
  */
-router.get("/released/full/:username/:id/:language",
+router.get("/released/full/:username/:id/:productionOrder/:language",
     param("username").isLength({ min: 4, max: 50 }),
     param("id").isLength({ min: 1, max: 35 }),
+    param("productionOrder").isLength({ min: 1, max: 35 }),
     param("language").isLength({ min: 2, max: 20 }),
     validate,
     validateUserQA,
     async (req, res) => {
-        const data = await service.getQAReport(req.params.id, req.params.language.toLowerCase(), false, false)
+        const data = await service.getQAReport(req.params.id, req.params.productionOrder, req.params.language.toLowerCase(), true, false)
         res.send(data)
     }
 )
@@ -72,17 +73,19 @@ router.get("/released/full/:username/:id/:language",
  *
  * @example - GET {BaseURL}/api/orders/released/full/worker/47827/gb
  */
-router.get("/completed/full/:username/:id/:language",
+router.get("/completed/full/:username/:id/:productionOrder/:language",
     param("username").isLength({ min: 4, max: 50 }),
     param("id").isLength({ min: 1, max: 35 }),
+    param("productionOrder").isLength({ min: 1, max: 35 }),
     param("language").isLength({ min: 2, max: 20 }),
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await service.getQAReport(req.params.id, req.params.language.toLowerCase(), true, true)
+        const data = await service.getQAReport(req.params.id, req.params.productionOrder, req.params.language.toLowerCase(), true, true)
         res.send(data)
     }
 )
+
 /**
  * @description - Save changes to the qa report
  * @param username - name of the user for validation

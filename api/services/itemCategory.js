@@ -18,6 +18,8 @@ const defaultFrequencyValue = [{
 	"to5000": 70
 }]
 
+module.exports.defaultFrequency = defaultFrequencyValue[0]
+
 module.exports.getItemCatCodes = async (location, offset, limit) => {
 	if (location !== 'All') {
         if(limit == 'max'){

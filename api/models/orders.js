@@ -16,7 +16,7 @@ module.exports.getReleasedOrders = async (location, offset, limit) => {
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3  
-            ORDER BY item.[No_] ASC 
+            ORDER BY pOrder.[Due Date] ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset
@@ -40,10 +40,11 @@ module.exports.getOrders = async (location) => {
     return result.recordset
 }
 
-module.exports.getOrderInformation = async (id) => {
+module.exports.getOrderInformation = async (id, productionOrder) => {
     const result = await ( await konfairDB())
         .request()
         .input("id", mssql.NVarChar(40), id)
+        .input("productionOrder", mssql.NVarChar(40), productionOrder)
         .query(`
             SELECT 
             item.No_ as id, 
@@ -56,7 +57,7 @@ module.exports.getOrderInformation = async (id) => {
             pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE item.[No_] = @id
+            WHERE item.[No_] = @id AND pOrder.[No_] = @productionOrder
         `)
     return result.recordset
 }
@@ -191,13 +192,14 @@ module.exports.getFrequencies = async (id, date) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderReport = async (id) => {
+module.exports.getReleasedOrderReport = async (id, productionOrder) => {
     const result = await ( await localDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
+        .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
             SELECT * FROM [QAReport]
-            WHERE itemId = @id
+            WHERE itemId = @id AND productionOrder = @productionOrder
         `)
     return result.recordset
 }
@@ -247,7 +249,7 @@ module.exports.getControlPointsCategoryNoAtrributes = async (categoryCode) => {
 module.exports.getReleasedOrderAttributes = async (id) => {
     const result = await ( await konfairDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
         .query(`
             SELECT 
             attribute.[Name] as name, 
@@ -256,7 +258,7 @@ module.exports.getReleasedOrderAttributes = async (id) => {
             value.[Value] as value, attribute.[ID] as id 
             FROM [KonfAir DRIFT$Item Attribute Value Mapping] mapping
             INNER JOIN [KonfAir DRIFT$Item Attribute] attribute ON mapping.[Item Attribute ID] = attribute.[ID]
-            INNER JOIN [KonfAir DRIFT$Item Atrribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
+            INNER JOIN [KonfAir DRIFT$Item Attribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
             WHERE mapping.[No_] = @id 
         `)
     return result.recordset
@@ -309,12 +311,13 @@ module.exports.getControlPointCategories = async (id) => {
     return result.recordset
 }
 
-module.exports.createQAReport = async (id) => {
+module.exports.createQAReport = async (id, productionOrder) => {
     await ( await localDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
+        .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
-            INSERT INTO QAReport (itemId, status, createdDate) VALUES (@id, 0, GETDATE())
+            INSERT INTO QAReport (itemId, productionOrder, status, createdDate) VALUES (@id, @productionOrder, 0, GETDATE())
         `)
 
     const result = await ( await localDB())
@@ -388,7 +391,7 @@ module.exports.alterMeasurement = async (connectionId, controlPointId, value, qa
         .input("author", mssql.NVarChar, author)
         .query(`
             UPDATE [QAReportControlPointValue]
-            SET [value] = @value, [author] = @author
+            SET [value] = @value, [author] = @author, timestamp = GETDATE()
             WHERE qaReportId = @qaReportId AND controlPointId = @controlPointId AND id = @id; 
         `)
     return result.recordset
@@ -448,7 +451,7 @@ module.exports.getMultipleQAReports = async (stringList) => {
     return result.recordset
 }
 
-module.exports.getOrdersByIdList = async (location, stringList, offset, limit) => {
+module.exports.getOrdersByIdList = async (location, stringListId, stringListProductionOrders, offset, limit) => {
 
     const result = await ( await konfairDB())
         .request()
@@ -464,15 +467,15 @@ module.exports.getOrdersByIdList = async (location, stringList, offset, limit) =
             pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringList})
-            ORDER BY item.[No_] ASC 
+            WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
+            ORDER BY pOrder.[Due Date] ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset
 }
 
-module.exports.getOrdersByIdListAllLocations = async (stringList, offset, limit) => {
+module.exports.getOrdersByIdListAllLocations = async (stringListId, stringListProductionOrders, offset, limit) => {
 
     const result = await ( await konfairDB())
         .request()
@@ -487,19 +490,22 @@ module.exports.getOrdersByIdListAllLocations = async (stringList, offset, limit)
             pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE item.[No_] in (${stringList})
-            ORDER BY item.[No_] ASC 
+            WHERE item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
+            ORDER BY pOrder.[Due Date] ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
         
     return result.recordset
 }
 
-module.exports.getCompletedQAReports = async () => {
+module.exports.getCompletedQAReports = async (offset, limit) => {
     const result = await ( await localDB())
         .request()
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
         .query(`
             Select * from QAReport WHERE status = 1;
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset
 }

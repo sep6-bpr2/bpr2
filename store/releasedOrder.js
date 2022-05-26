@@ -32,13 +32,13 @@ export const mutations = {
 }
 
 export const actions = {
-    loadReleasedOrderFull({ commit, rootState }, itemId) {
+    loadReleasedOrderFull({ commit, rootState }, parameters) {
         const user = rootState.login.user
         if (user && user.role == "qa employee") {
             const language = rootState.login.chosenLanguage.name
 
             return new Promise((resolve, reject) => {
-                fetch(`/api/orders/released/full/${user.username}/${itemId}/${language}`)
+                fetch(`/api/orders/released/full/${user.username}/${parameters.itemId}/${parameters.productionOrder}/${language}`)
                     .then(res => res.json())
                     .then(result => {
                         if (result && result.errors == null) {

@@ -53,6 +53,7 @@ DROP TABLE IF EXISTS [dbo].[QAReport];
 CREATE TABLE [dbo].[QAReport](
     [id] int IDENTITY(1, 1),
     [itemId] nvarchar(80),
+    [productionOrder] nvarchar(80),
     [status] bit,
     [completionDate] DATETIME,
     [createdDate] DATETIME,
@@ -64,7 +65,8 @@ CREATE TABLE [dbo].[QAReportControlPointValue](
     [qaReportId] int,
     [controlPointId] int,
     [author] nvarchar(50),
-    [value] nvarchar(50)
+    [value] nvarchar(50),
+    [timestamp] DATETIME
 );
 
 DROP TABLE IF EXISTS [dbo].[SystemUser];

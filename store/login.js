@@ -23,6 +23,7 @@ export const mutations = {
 	addToLocations(state, newLocations) {
         let updatedLocations = ["All"]
         for(let i = 0; i< newLocations.length; i++){
+			if(newLocations[i] != '' && newLocations[i] != 'MØ')
             updatedLocations.push(newLocations[i])
         }
         state.allLocations = updatedLocations

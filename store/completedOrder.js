@@ -32,12 +32,12 @@ export const mutations = {
 }
 
 export const actions = {
-    loadCompletedOrderFull({ rootState }, itemId) {
+    loadCompletedOrderFull({ rootState }, parameters) {
         const user = rootState.login.user
         if (user && user.role == "admin") {
             const language = rootState.login.chosenLanguage.name
             return new Promise((resolve, reject) => {
-                fetch(`/api/orders/completed/full/${user.username}/${itemId}/${language}`).then(res => res.json()).then(result => {
+                fetch(`/api/orders/completed/full/${user.username}/${parameters.itemId}/${parameters.productionOrder}/${language}`).then(res => res.json()).then(result => {
                     if (result && !result.message) {
                         for (let i = 0; i < result.oneTimeControlPoints.length; i++) {
                             result.oneTimeControlPoints[i].validated = inputValidation.validateInput(

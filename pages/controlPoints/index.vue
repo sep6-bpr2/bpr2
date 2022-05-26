@@ -31,13 +31,14 @@
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
+import {header} from "../../mixins/header";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	data() {
 		return {
 			offset: 0,

@@ -109,7 +109,6 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }

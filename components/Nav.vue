@@ -4,27 +4,24 @@
 		<div>
 			<ul>
 				<li v-for="link in links" :key="link.id">
-					<nuxt-link
-						:id="'nav' + link.id"
-						:to="{ path: link.link }"
-						v-bind:style="[
-							currentLinkName == link.link
-								? { 'background-color': cols.KonfairPrimary }
-								: {},
-						]"
-					>
+					<nuxt-link :id="'nav' + link.id" :to="{ path: link.link }" v-bind:style="[
+						currentLinkName == link.link
+							? { 'background-color': cols.KonfairPrimary }
+							: {},
+					]">
 						<Translate :text="link.name" />
 					</nuxt-link>
 				</li>
 			</ul>
 		</div>
-		<button
-			v-on:click="logout"
-			style="margin-left: auto"
-			:style="{ display: show }"
-		>
-			<Translate :text="'Logout'" />
-		</button>
+
+		<div style="margin-left: auto;" :style="{ display: show }">
+			<h3 v-if="this.$store.state.login.user" class="username"> {{ this.$store.state.login.user.username }}</h3>
+			<button v-on:click="logout">
+				<Translate :text="'Logout'" />
+			</button>
+		</div>
+
 	</header>
 </template>
 
@@ -43,6 +40,7 @@ export default {
 			links: [],
 		};
 	},
+
 	created() {
 		this.loadLinks();
 	},
@@ -63,7 +61,7 @@ export default {
 		// },
 		show() {
 			if (this.$store.state.login.user) {
-				return "inline";
+				return "flex";
 			} else {
 				return "none";
 			}
@@ -73,6 +71,7 @@ export default {
 			const paths = this.$nuxt.$route.path.split("/");
 			return "/" + paths[1];
 		},
+		
 	},
 	watch: {
 		"$store.state.nav.availableLinks": function () {
@@ -126,6 +125,16 @@ export default {
 	align-items: center;
 	text-align: center;
 }
+
+.username {
+	color: #fff;
+	padding: 0.3rem 0.3rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
 
 .header a:hover {
 	background: #555;

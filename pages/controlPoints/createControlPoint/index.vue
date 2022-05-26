@@ -20,11 +20,12 @@ import {translate} from "../../../mixins/translate.js"
 import ControlPoint from "../../../components/ControlPoint.vue";
 import Translate from "../../../components/Translate.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
+import {header} from "../../../mixins/header";
 
 export default {
 	name: "index",
 	components: {Translate, ControlPoint},
-	mixins: [translate, authorizeUser],
+	mixins: [translate, authorizeUser,header],
 	data: () => ({
 		cpData: {
 			defaultFrequency: {

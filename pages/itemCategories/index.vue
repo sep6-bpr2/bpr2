@@ -30,6 +30,7 @@
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
+import {header} from "../../mixins/header";
 
 export default {
 	data: () => ({
@@ -40,7 +41,7 @@ export default {
 		offset: 0,
 		limit: 25,
 	}),
-    mixins: [authorizeUser],
+    mixins: [authorizeUser,header],
 	components: {Translate, CustomTable},
 	computed:{
 		updateStatus(){
