@@ -16,12 +16,12 @@
 				<tr
 					v-for="(row, index) in rows"
 					:id="'customTable' + index"
-					:key="Object.values(row)[0].toString() + index"
+					:key="'rows' + index"
 					v-on:click="clickList(row)"
 					@mouseover="activeOver(index)"
 					@mouseleave="removeOver(index)"
 				>
-					<td v-for="value in allowedHeaders" :key="value + index">
+					<td v-for="(value, indexValue) in allowedHeaders" :key="'values' + index + ' ' + indexValue">
 						{{ rows[index][value] }}
 					</td>
 					<td

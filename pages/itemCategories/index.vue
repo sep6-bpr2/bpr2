@@ -12,10 +12,6 @@
 		/>
 		<h1><Translate :text="'Item Category'" /></h1>
 
-		<p>
-			<Translate :text="'Click on item category to edit its frequency'" />
-		</p>
-
 		<custom-table
 			:allowedHeaders="allowedHeaders"
 			:rows="codeList"

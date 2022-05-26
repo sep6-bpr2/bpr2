@@ -9,10 +9,6 @@
 	>
 		<h1><Translate :text="'Control point management'" /></h1>
 
-		<p>
-			Control points map the characteristics of items to what things the
-			employee has to check on the item
-		</p>
 		<button v-on:click="handleCreate">
 			<Translate :text="'Create control point'" />
 		</button>

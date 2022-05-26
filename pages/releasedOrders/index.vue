@@ -6,7 +6,7 @@
 		"
 		class="releasedOrders"
 	>
-		<h1>This is the released orders page</h1>
+		<h1><Translate :text="'Released orders'"/></h1>
 		<CustomTable
 			id="releasedOrderList"
 			:allowedHeaders="allowedHeaders"

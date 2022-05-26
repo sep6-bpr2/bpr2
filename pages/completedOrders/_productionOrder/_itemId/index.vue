@@ -23,7 +23,8 @@
 			/>
 
 			<div id="completedOrderInformation" class="information">
-				<h2>Information</h2>
+                <h2><Translate :text="'Order information'"/></h2>
+
                 <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
 				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
 				<DataDisplay
@@ -49,7 +50,7 @@
 				id="completedOrderOneTimeMeasurements"
 				class="oneTimeMeasurements"
 			>
-				<h2>One time measurements</h2>
+                <h2><Translate :text="'One time measurements'"/></h2>
 
 				<CustomTableInput
 					id="oneTimeMeasurements"
@@ -62,7 +63,7 @@
 			</div>
 
 			<div>
-				<h2>Multiple time measurements</h2>
+                <h2><Translate :text="'Multiple time measurements'"/></h2>
 
 				<!-- This table has the input column removed -->
 				<CustomTableInput

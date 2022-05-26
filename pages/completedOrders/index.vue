@@ -3,7 +3,8 @@
         v-show="this.$store.state.login.user && this.$store.state.login.user.role == 'admin'" 
         class="completedOrders"
     >
-		<h1>This is the completed orders page</h1>
+        <h1><Translate :text="'Completed orders'"/></h1>
+
 		<CustomTable
 			id="completedOrderList"
 			:allowedHeaders="allowedHeaders"

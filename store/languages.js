@@ -4,6 +4,31 @@ const translations = {
         "Lithuanian": "",
         "Danish": "",
     },
+    "Input Type": {
+        "English": "Input Type",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Type": {
+        "English": "Type",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Delete Frequency": {
+        "English": "Delete Frequency",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Relationship with item category codes and attributes": {
+        "English": "Relationship with item category codes and attributes",
+        "Lithuanian": "",
+        "Danish": "",
+    },
+    "Item category code": {
+        "English": "Item category code",
+        "Lithuanian": "",
+        "Danish": "",
+    },
     "No.": {
         "English": "No.",
         "Lithuanian": "",
