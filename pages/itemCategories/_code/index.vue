@@ -1,5 +1,8 @@
 <template>
-	<div>
+	<div v-show="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'admin'
+		">
 		<AlertModal
 			class="alert"
 			v-if="notification"
@@ -28,12 +31,12 @@
 <script>
 import Frequency from "../../../components/Frequency.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
-
+import {header} from "../../../mixins/header";
 
 export default {
 	name: "index",
 	components: {Frequency},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	data: () => ({
 		modalAlertShowSubmit: false,
 		modalAlertShowError: false,
@@ -105,10 +108,11 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-			tempFrequencies.Code = parseInt(this.$route.params.code)
+			tempFrequencies.Code = 1
 			let text = "Are you sure you want to update frequency for this item Category?"
 			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
 			let existsOverInt = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+			tempFrequencies.Code = this.$route.params.code
 
 			let localNotification;
 			if (!existsNegVal || !existsOverInt) {
@@ -116,8 +120,9 @@ export default {
 			}
 			else{
                     tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber
-					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies})
-					this.$router.push("/itemCategories");
+					this.$store.dispatch("itemCategory/setFrequencyWithId",{frequencies: tempFrequencies}).then(res =>{
+						this.$router.push("/itemCategories");
+					})
 			}
 			return localNotification
 		},

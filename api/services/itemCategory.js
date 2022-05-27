@@ -1,22 +1,7 @@
 const model = require("../models/itemCategory")
+const frequency = require("../../shared/frequency");
 
-const defaultFrequencyValue = [{
-	"id": 0,
-	"frequencyNumber": 0,
-	"to25": 2,
-	"to50": 3,
-	"to100": 4,
-	"to200": 7,
-	"to300": 10,
-	"to500": 16,
-	"to700": 22,
-	"to1000": 30,
-	"to1500": 40,
-	"to2000": 50,
-	"to3000": 60,
-	"to4000": 65,
-	"to5000": 70
-}]
+module.exports.defaultFrequency = defaultFrequencyValue[0]
 
 module.exports.getItemCatCodes = async (location, offset, limit) => {
 	if (location !== 'All') {
@@ -37,7 +22,7 @@ module.exports.getItemCatCodes = async (location, offset, limit) => {
 module.exports.getFrequenciesOfCategory = async (itemCode) => {
 	let value = await model.getFrequenciesOfCategory(itemCode)
 	if (value[0] == undefined) {
-		value = defaultFrequencyValue
+		value[0] = frequency.defaultFrequency()
 	}
 	return value
 }
@@ -48,7 +33,7 @@ module.exports.setFrequenciesWithId = async (item) => {
         await model.expireOldFrequency(item.frequencyNumber)
         return model.insertFrequency(item)
 	}
-    
+
     const latestFrequencyNumber = await model.getLatestFrequencyNumber()
     item.frequencyNumber = latestFrequencyNumber
 

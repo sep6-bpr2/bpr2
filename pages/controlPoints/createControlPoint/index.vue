@@ -20,29 +20,16 @@ import {translate} from "../../../mixins/translate.js"
 import ControlPoint from "../../../components/ControlPoint.vue";
 import Translate from "../../../components/Translate.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
+import {header} from "../../../mixins/header";
+import defaultFrequency from "../../../shared/frequency";
 
 export default {
 	name: "index",
 	components: {Translate, ControlPoint},
-	mixins: [translate, authorizeUser],
+	mixins: [translate, authorizeUser,header],
 	data: () => ({
 		cpData: {
-			defaultFrequency: {
-				"id": 0,
-				"to25": 2,
-				"to50": 3,
-				"to100": 4,
-				"to200": 7,
-				"to300": 10,
-				"to500": 16,
-				"to700": 22,
-				"to1000": 30,
-				"to1500": 40,
-				"to2000": 50,
-				"to3000": 60,
-				"to4000": 65,
-				"to5000": 70
-			},
+			defaultFrequency: defaultFrequency.defaultFrequency(),
 			frequencies: null,
 			descriptions: [{lang: "English", value: ""}, {lang: "Danish", value: ""}, {lang: "Lithuanian", value: ""}],
 			measurementType: null,

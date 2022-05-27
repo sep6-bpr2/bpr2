@@ -74,6 +74,7 @@ import Vue from "vue";
 import Translate from "../components/Translate.vue";
 import lanugages from "../store/languages";
 import {authorizeUser} from "../mixins/authorizeUser.js"
+import {header} from "../mixins/header";
 
 Vue.use(FlagIcon);
 
@@ -81,7 +82,7 @@ export default {
 	components: {
 		Translate,
 	},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	name: "LogIn",
 	data: function () {
 		return {

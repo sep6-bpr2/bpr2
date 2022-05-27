@@ -1,7 +1,7 @@
 const {konfairDB} = require("../connections/MSSQLConnection");
 
 module.exports.getAllLocations = async () => {
-	const result = await konfairDB()
+	const result = await ( await konfairDB())
 		.request()
 		.query('select distinct [Location Code] from [KonfAir DRIFT$Production Order]')
 

@@ -1,5 +1,8 @@
 <template>
-	<div class="users">
+	<div class="users" v-show="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'admin'
+		">
 		<AlertModal
 			class="alert"
 			v-if="notification"
@@ -86,6 +89,8 @@ import colors from "../styles/colors";
 import {authorizeUser} from "../mixins/authorizeUser.js"
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
+import {header} from "../mixins/header";
+
 
 export default {
 	name: "users",
@@ -106,7 +111,7 @@ export default {
 		offset: 0,
 		limit: 25,
 	}),
-	mixins: [authorizeUser, translate, alerts],
+	mixins: [authorizeUser, translate, alerts, header],
 	methods: {
 		handleCreateUser() {
 			this.shouldCreateUser = true
@@ -159,7 +164,7 @@ export default {
 			let user = {username: row.username, role: row.role}
 			let currentUser = this.$store.state.login.user
 			if (user.username === currentUser.username) {
-				this.notification = {response: 0, message: "You cannot delete user with username: " + user.username}
+				this.notification = {response: 0, message: "You cannot delete yourself from the system"}
 				this.modalAlertShowSubmit = true;
 			} else {
 				if (confirm("Are you sure you want to delete user with username: " + row.username) == true) {

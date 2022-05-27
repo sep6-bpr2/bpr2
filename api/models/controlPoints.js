@@ -2,7 +2,7 @@ const {mssql, konfairDB, localDB} = require('../connections/MSSQLConnection')
 // need to take this to some static file
 
 module.exports.getAllTypes = async () => {
-	const result = await konfairDB()
+	const result = await (await konfairDB())
 		.request()
 		.query(`SELECT type
 				from [KonfAir DRIFT$Item Attribute]
@@ -10,23 +10,23 @@ module.exports.getAllTypes = async () => {
 	return result.recordset
 }
 module.exports.getFrequenciesOfControlPoint = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
-        .input("controlPointNumber", mssql.Int, controlPointNumber)
+		.input("controlPointNumber", mssql.Int, controlPointNumber)
 		.query(`
             select [to25], [to50], [to100], [to200], [to300], [to500],
 					[to700], [to1000], [to1500], [to2000], [to3000], [to4000],
 					[to5000]
             from [dbo].[ControlPoint] C
-            JOIN [dbo].[Frequency] F on C.frequencyId = F.id
-            where C.controlPointNumber = @controlPointNumber AND F.validFrom < GETDATE() AND F.validTo IS NULL
+            JOIN [dbo].[Frequency] F on C.frequencyId = F.frequencyNumber
+            where C.controlPointNumber = @controlPointNumber AND C.validFrom < GETDATE() AND C.validTo IS NULL
 		`)
 	return result.recordset
 }
 
 
 module.exports.getAllAttributesNames = async () => {
-	const result = await konfairDB()
+	const result = await (await konfairDB())
 		.request()
 		.query(`SELECT id, name, type
 				from [KonfAir DRIFT$Item Attribute]`)
@@ -34,7 +34,7 @@ module.exports.getAllAttributesNames = async () => {
 }
 
 module.exports.getControlMainInformation = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
@@ -55,7 +55,7 @@ module.exports.getControlMainInformation = async (controlPointNumber) => {
 
 
 module.exports.getControlPointDescriptions = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
@@ -68,7 +68,7 @@ module.exports.getControlPointDescriptions = async (controlPointNumber) => {
 }
 
 module.exports.getControlPointOptionValues = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
@@ -81,7 +81,7 @@ module.exports.getControlPointOptionValues = async (controlPointNumber) => {
 }
 
 module.exports.getControlPointAttributes = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
@@ -94,7 +94,7 @@ module.exports.getControlPointAttributes = async (controlPointNumber) => {
 }
 
 module.exports.getControlPointItemCategoryCodes = async (controlPointNumber) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.query(`
@@ -107,7 +107,7 @@ module.exports.getControlPointItemCategoryCodes = async (controlPointNumber) => 
 }
 
 module.exports.updateControlMainInformation = async (data) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, data.controlPointId)
 		.input('image', mssql.NVarChar, data.image)
@@ -127,7 +127,7 @@ module.exports.updateControlMainInformation = async (data) => {
 }
 
 module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, image, upperTolerance, lowerTolerance, inputType, measurementType) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointNumber', mssql.Int, controlPointNumber)
 		.input('frequencyId', mssql.Int, frequencyId)
@@ -147,7 +147,7 @@ module.exports.insertControlPointNEW = async (controlPointNumber, frequencyId, i
 }
 
 module.exports.expireControlPoint = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
@@ -158,7 +158,7 @@ module.exports.expireControlPoint = async (controlPointNumber) => {
 }
 
 module.exports.expireDescriptionsForControlPoint = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
@@ -169,7 +169,7 @@ module.exports.expireDescriptionsForControlPoint = async (controlPointNumber) =>
 }
 
 module.exports.expireOptionsForControlPoint = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
@@ -180,7 +180,7 @@ module.exports.expireOptionsForControlPoint = async (controlPointNumber) => {
 }
 
 module.exports.expireAttributesForControlPoint = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
@@ -191,7 +191,7 @@ module.exports.expireAttributesForControlPoint = async (controlPointNumber) => {
 }
 
 module.exports.expireCategoryCodesForControlPoint = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`
@@ -202,7 +202,7 @@ module.exports.expireCategoryCodesForControlPoint = async (controlPointNumber) =
 }
 
 module.exports.updateControlPointFrequency = async (cpId, data) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('to25', mssql.Int, data[0].value)
@@ -240,7 +240,7 @@ module.exports.updateControlPointFrequency = async (cpId, data) => {
 }
 
 module.exports.getFrequencyId = async (cpId) => {
-        const result = await localDB()
+        const result = await (await localDB())
             .request()
             .input('cpId', mssql.Int, cpId)
             .query(`select frequencyId from ControlPoint WHERE id = @cpId`)
@@ -250,46 +250,17 @@ module.exports.getFrequencyId = async (cpId) => {
 
 module.exports.updateControlPointFrequencyWhenFreqIdNotNull = async (cpId, data) => {
 
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
-		.input('to25', mssql.Int, data[Object.keys(data)[0]])
-		.input('to50', mssql.Int, data[Object.keys(data)[1]])
-		.input('to100', mssql.Int, data[Object.keys(data)[2]])
-		.input('to200', mssql.Int, data[Object.keys(data)[3]])
-		.input('to300', mssql.Int, data[Object.keys(data)[4]])
-		.input('to500', mssql.Int, data[Object.keys(data)[5]])
-		.input('to700', mssql.Int, data[Object.keys(data)[6]])
-		.input('to1000', mssql.Int, data[Object.keys(data)[7]])
-		.input('to1500', mssql.Int, data[Object.keys(data)[8]])
-		.input('to2000', mssql.Int, data[Object.keys(data)[9]])
-		.input('to3000', mssql.Int, data[Object.keys(data)[10]])
-		.input('to4000', mssql.Int, data[Object.keys(data)[11]])
-		.input('to5000', mssql.Int, data[Object.keys(data)[12]])
-		.query(`UPDATE Frequency
-				SET to25   = @to25,
-					to50   = @to50,
-					to100  = @to100,
-					to200  = @to200,
-					to300  = @to300,
-					to500  = @to500,
-					to700  = @to700,
-					to1000 = @to1000,
-					to1500 = @to1500,
-					to2000 = @to2000,
-					to3000 = @to3000,
-					to4000 = @to4000,
-					to5000 = @to5000 FROM Frequency f
- 					JOIN ControlPoint c
-				ON c.frequencyId = f.id
-				WHERE c.id = @cpId`)
+		.query(`select frequencyId from ControlPoint WHERE id = @cpId`)
 
 	return result.recordset
 }
 
 module.exports.updateControlPointFrequencyWhenFreqIdNull = async (cpId, data) => {
 
-	const value = await localDB()
+	const value = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('to25', mssql.Int, data[Object.keys(data)[0]])
@@ -316,18 +287,18 @@ module.exports.updateControlPointFrequencyWhenFreqIdNull = async (cpId, data) =>
 }
 
 module.exports.updateControlPointFrequencyId = async (cpId,freqId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.input('freqId', mssql.Int, freqId)
-		.query(`UPDATE ControlPoint SET frequencyid = ${freqId} WHERE id = @cpId`)
+		.query(`UPDATE ControlPoint SET frequencyid = @freqId WHERE id = @cpId`)
 
 	return result.recordset
 }
 
 
 module.exports.updateControlPointFrequencyWhenDataNull = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.query(`DELETE f FROM Frequency f
@@ -339,7 +310,7 @@ module.exports.updateControlPointFrequencyWhenDataNull = async (cpId) => {
 }
 
 module.exports.updateControlPointDescription = async (cpId, language, description) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.input('description', mssql.NVarChar, description)
@@ -352,9 +323,8 @@ module.exports.updateControlPointDescription = async (cpId, language, descriptio
 	return result.recordset
 }
 
-
 module.exports.insertDescription = async (controlPointId, language, description) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('description', mssql.NVarChar, description)
@@ -370,7 +340,7 @@ module.exports.insertDescription = async (controlPointId, language, description)
 }
 
 module.exports.deleteControlPointOptionValues = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('cpId', mssql.Int, cpId)
 		.query(`DELETE
@@ -381,7 +351,7 @@ module.exports.deleteControlPointOptionValues = async (cpId) => {
 }
 
 module.exports.insertOption = async (controlPointId, value) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('value', mssql.NVarChar, value)
@@ -396,7 +366,7 @@ module.exports.insertOption = async (controlPointId, value) => {
 }
 
 module.exports.deleteControlPointAttributes = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`DELETE
@@ -407,7 +377,7 @@ module.exports.deleteControlPointAttributes = async (cpId) => {
 }
 
 module.exports.insertControlPointAttribute = async (controlPointId, attributeId, minValue, maxValue) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('attributeId', mssql.Int, attributeId)
@@ -424,7 +394,7 @@ module.exports.insertControlPointAttribute = async (controlPointId, attributeId,
 }
 
 module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`DELETE
@@ -435,7 +405,7 @@ module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
 }
 
 module.exports.deleteControlPoint = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`DELETE
@@ -446,7 +416,7 @@ module.exports.deleteControlPoint = async (cpId) => {
 }
 
 module.exports.deleteControlPointDescriptions = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`DELETE
@@ -457,7 +427,7 @@ module.exports.deleteControlPointDescriptions = async (cpId) => {
 }
 
 module.exports.deleteFrequency = async (id) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('id', mssql.Int, id)
 		.query(`DELETE
@@ -468,7 +438,7 @@ module.exports.deleteFrequency = async (id) => {
 }
 
 module.exports.insertControlPointItemCategoryCode = async (controlPointId, itemCategoryCode) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('controlPointId', mssql.Int, controlPointId)
 		.input('itemCategoryCode', mssql.Int, itemCategoryCode)
@@ -483,7 +453,7 @@ module.exports.insertControlPointItemCategoryCode = async (controlPointId, itemC
 }
 
 module.exports.updateControlPointItemCategoryCodes = async (cpId) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
 		.input('CpId', mssql.Int, cpId)
 		.query(`SELECT itemCategoryCode
@@ -500,11 +470,11 @@ module.exports.insertControlPoint = async (sqlString, con) => {
 }
 
 module.exports.getControlPointsMinimal = async (language, offset, limit) => {
-	const result = await localDB()
+	const result = await (await localDB())
 		.request()
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
-        .input("language", mssql.NVarChar(40), language)
+		.input("offset", mssql.Int, offset)
+		.input("limit", mssql.Int, limit)
+		.input("language", mssql.NVarChar(40), language)
 		.query(`
             SELECT controlPointId as id, description
             FROM Description
@@ -516,7 +486,7 @@ module.exports.getControlPointsMinimal = async (language, offset, limit) => {
 }
 
 module.exports.getDescriptionsByControlPointId = async (id) => {
-    const result = await localDB()
+    const result = await (await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`SELECT id, language, description FROM Description WHERE Description.controlPointId=@id`)
@@ -524,21 +494,21 @@ module.exports.getDescriptionsByControlPointId = async (id) => {
 }
 
 module.exports.getLatestControlPointNumber = async () => {
-    const result = await localDB()
+    const result = await (await localDB())
         .request()
         .query(`
             SELECT MAX(controlPointNumber) as controlPointNumber FROM [ControlPoint]
         `)
 
-    if(result.recordset[0] == null){
-        return 1
-    }else{
-        return result.recordset[0].controlPointNumber + 1
-    }
+	if (result.recordset[0] == null) {
+		return 1
+	} else {
+		return result.recordset[0].controlPointNumber + 1
+	}
 }
 
 module.exports.expireOldFrequency = async (controlPointNumber) => {
-    await localDB()
+    await (await localDB())
         .request()
         .input("controlPointNumber", mssql.Int, controlPointNumber)
         .query(`

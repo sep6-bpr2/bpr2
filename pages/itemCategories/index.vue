@@ -1,5 +1,8 @@
 <template>
-	<div class="itemCat">
+	<div class="itemCat" v-show="
+			this.$store.state.login.user &&
+			this.$store.state.login.user.role == 'admin'
+		">
 		<AlertModal
 			class="alert"
 			v-if="notification"
@@ -7,14 +10,10 @@
 			:message="notification.message"
 			:show="modalAlertShowSubmit"
 			:status="notificationStatus"
-			 :timer="3000"
+			:timing="3000"
 			:closeCallback="closeAlertModal"
 		/>
 		<h1><Translate :text="'Item Category'" /></h1>
-
-		<p>
-			<Translate :text="'Click on item category to edit its frequency'" />
-		</p>
 
 		<custom-table
 			:allowedHeaders="allowedHeaders"
@@ -30,6 +29,7 @@
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
+import {header} from "../../mixins/header";
 
 export default {
 	data: () => ({
@@ -40,7 +40,7 @@ export default {
 		offset: 0,
 		limit: 25,
 	}),
-    mixins: [authorizeUser],
+    mixins: [authorizeUser,header],
 	components: {Translate, CustomTable},
 	computed:{
 		updateStatus(){
@@ -66,14 +66,15 @@ export default {
 	mounted() {
 		if(this.updateStatus.status === "success"){
 			this.notification = { response: 1, message: "The item category with code " + this.updateStatus.value + " has updated successfully"}
-			this.modalAlertShowSubmit = true;
 		}
 		else if(this.updateStatus.status === "error"){
 			this.notification = { response: 0, message: "The item category with code " + this.updateStatus.value + " could not be updated"}
-			this.modalAlertShowSubmit = true;
 		}
+		this.modalAlertShowSubmit = true;
+		this.$store.commit('itemCategory/updateStatus',{})
 
-        this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
+
+		this.$store.dispatch("itemCategory/loadItemCategoryCodes", {
 			offset: this.offset, limit: this.limit
 		});
 

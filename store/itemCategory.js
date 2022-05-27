@@ -67,10 +67,16 @@ export const actions = {
 					'Content-Type': 'application/json'
 				},
 			}
-			fetch(`../api/itemCategory/setFrequencies/${user.username}`, fetchData).then(async res => {
-				if (res.status === 200) {
-					await commit("updateStatus", {status: "success", value: frequencies.Code})
-				} else await commit("updateStatus", {status: "error", value: frequencies.Code})
+			return new Promise((resolve, reject) => {
+				fetch(`../api/itemCategory/setFrequencies/${user.username}`, fetchData).then(async res => {
+					if (res.status === 200) {
+						await commit("updateStatus", {status: "success", value: frequencies.Code})
+						resolve(true)
+					} else{
+						await commit("updateStatus", {status: "error", value: frequencies.Code})
+						resolve(false)
+					}
+				})
 			})
 		}
 	},

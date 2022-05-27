@@ -350,11 +350,12 @@ export default {
 		showConfirmAlert: false
 	}),
 	computed: {
-		frequencies() {
-			if (this.cpData.frequencies != null) {
-				return this.cpData.frequencies[0]
-			} else {
-				return null
+		frequencies:  {
+			get(){
+				return this.cpData.frequencies
+			},
+			set(freqs){
+				this.cpData.frequencies = freqs
 			}
 		},
 		currentImage: {
@@ -374,10 +375,10 @@ export default {
 			this.cpData.descriptions[index].value = desc
 		},
 		changeShow() {
-			if (this.frequencies) {
-				this.cpData.frequencies = null
+			if (this.cpData.frequencies) {
+				this.frequencies = null
 			} else {
-				this.cpData.frequencies = this.cpData.defaultFrequency
+				this.$set(this.cpData,'frequencies',this.cpData.defaultFrequency)
 			}
 		},
 
@@ -506,7 +507,8 @@ export default {
 			return true
 		},
 		handleFrequencies() {
-			if (typeof this.$refs.frequencyChild === 'undefined') {
+			if (typeof this.$refs.frequencyChild === 'undefined' || this.cpData.measurementType != 0) {
+				this.cpData.frequencies = null
 				return true
 			}
 			let localFrequencies = this.$refs.frequencyChild.localFrequencies
