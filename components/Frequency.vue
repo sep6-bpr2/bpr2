@@ -158,8 +158,16 @@ export default {
 			}
 		},
 		createLabel(keyVal) {
-			let labelValue = keyVal.split('to')[1];
-			return '>' + labelValue
+            let labelValue = keyVal.split('to')[1];
+            return '>' + labelValue
+            // if(keyVal != null && keyVal.to25 != null){
+            //     console.log()
+            //     let labelValue = keyVal.split('to')[1];
+			//     return '>' + labelValue
+            // }else{
+            //     return ""
+            // }
+			
 		},
 	}
 }

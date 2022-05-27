@@ -500,7 +500,7 @@ export default {
 			return true
 		},
 		handleFrequencies() {
-			if (typeof this.$refs.frequencyChild === 'undefined' || !this.cpData.measurementType==0) {
+			if (typeof this.$refs.frequencyChild === 'undefined' || this.cpData.measurementType != 0) {
 				this.cpData.frequencies = null
 				return true
 			}

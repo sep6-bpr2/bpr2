@@ -9,16 +9,6 @@ describe('login', () => {
 	})
 
 	it('Check released order list with 2 items', () => {
-        // Logging in to the correct user
-        cy.get('#selectLanguage').click({force: true})
-		cy.contains("Dansk").click()
-
-        cy.get('#selectLanguage').click({force: true})
-		cy.contains("Lietuvi").click()
-
-        cy.get('#selectLanguage').click({force: true})
-		cy.contains("English").click()
-
 		cy.get('#enterUsername').type('worker')
 		cy.get('#selectLocation').click({force: true})
 		cy.contains("DK").click()

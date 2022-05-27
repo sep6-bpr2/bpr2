@@ -32,10 +32,11 @@ import ControlPoint from "../../../components/ControlPoint";
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
+import {header} from "../../../mixins/header";
 
 export default {
 	components: {Translate, ControlPoint},
-	mixins: [translate, authorizeUser],
+	mixins: [translate, authorizeUser,header],
 	data: () => ({
 		cpData: null
 	}),

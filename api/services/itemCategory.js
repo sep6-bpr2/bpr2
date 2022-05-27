@@ -1,6 +1,8 @@
 const model = require("../models/itemCategory")
 const frequency = require("../../shared/frequency");
 
+module.exports.defaultFrequency = defaultFrequencyValue[0]
+
 module.exports.getItemCatCodes = async (location, offset, limit) => {
 	if (location !== 'All') {
         if(limit == 'max'){

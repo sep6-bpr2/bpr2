@@ -1,7 +1,7 @@
 const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getItemCatCodesWhenLocationNotAll = async (location, offset, limit) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .input("location", mssql.NVarChar(1000), location)
         .input("offset", mssql.Int, offset)
@@ -18,9 +18,8 @@ module.exports.getItemCatCodesWhenLocationNotAll = async (location, offset, limi
 }
 
 module.exports.getItemCatCodesWhenLocationNotAllMax = async (location) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
-        .input("location", mssql.NVarChar(1000), location)
         .query(`
             select DISTINCT Code
             from [KonfAir DRIFT$Item]
@@ -33,7 +32,7 @@ module.exports.getItemCatCodesWhenLocationNotAllMax = async (location) => {
 }
 
 module.exports.getItemCatCodesWhenLocationAll = async (offset, limit) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
@@ -49,7 +48,7 @@ module.exports.getItemCatCodesWhenLocationAll = async (offset, limit) => {
 }
 
 module.exports.getItemCatCodesWhenLocationAllMax = async () => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .query(`
             select DISTINCT Code
@@ -63,9 +62,9 @@ module.exports.getItemCatCodesWhenLocationAllMax = async () => {
 }
 module.exports.getFrequenciesOfCategory = async (categoryCode) => {
 
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
-        .input("categoryCode", mssql.Int, categoryCode)
+        .input("categoryCode", mssql.NVarChar, categoryCode)
         .query(`
             select
             F.id,
@@ -91,7 +90,7 @@ module.exports.getFrequenciesOfCategory = async (categoryCode) => {
 }
 
 module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
 		.input('id',mssql.Int,item.id)
 		.input('to25', mssql.Int, item.to25)
@@ -130,7 +129,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 
 
 module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
 		.input('id',mssql.Int,item.id)
 		.input('to25', mssql.Int, item.to25)
@@ -168,7 +167,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 }
 
 module.exports.insertFrequency = async (frequency) => {
-    const result = await localDB()
+    await ( await localDB())
         .request()
 		.input('frequencyNumber',mssql.Int,frequency.frequencyNumber)
 		.input('to25', mssql.Int, frequency.to25)
@@ -200,18 +199,22 @@ module.exports.insertFrequency = async (frequency) => {
 }
 
 module.exports.checkCodeExists = async (itemCode) => {
-	let result = await konfairDB()
+	let result = await ( await konfairDB())
 		.request()
-		.input("itemCode", mssql.Int, itemCode)
-		.query(`select DISTINCT Code from [KonfAir DRIFT$Item] join [KonfAir DRIFT$Production Order] [KA D$P O]
- 				on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] JOIN [KonfAir DRIFT$Item Category] [KA D$I C]
- 				on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code where Code = @itemCode`)
+		.input("itemCode", mssql.NVarChar, itemCode)
+		.query(`
+            select DISTINCT 
+            Code 
+            from [KonfAir DRIFT$Item] 
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            where Code = @itemCode`)
 
 	return result.recordset
 }
 
 module.exports.getLatestFrequencyNumber = async () => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .query(`
             SELECT MAX(frequencyNumber) as frequencyNumber FROM [Frequency]
@@ -225,7 +228,7 @@ module.exports.getLatestFrequencyNumber = async () => {
 }
 
 module.exports.expireOldFrequency = async (frequencyNumber) => {
-    await localDB()
+    await ( await localDB())
         .request()
         .input("frequencyNumber", mssql.Int, frequencyNumber)
         .query(`

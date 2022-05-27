@@ -24,7 +24,8 @@
 
 			<div class="information">
 				<h2>Information</h2>
-				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
+                <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
+				<DataDisplay :name="'Item number'" :data="currentOrder.id" />
 				<DataDisplay
 					:name="'Description'"
 					:data="currentOrder.description"
@@ -36,6 +37,8 @@
 				<DataDisplay :name="'Deadline'" :data="currentOrder.deadline" />
 				<DataDisplay :name="'Location'" :data="currentOrder.location" />
 				<DataDisplay :name="'Status'" :data="currentOrder.status" />
+                <DataDisplay :name="'Quantity'" :data="currentOrder.quantity" />
+
 			</div>
 
 			<div class="oneTimeMeasurements">
@@ -93,15 +96,16 @@
 </template>
 
 <script>
-import CustomTable from "../../../components/CustomTable.vue";
-import Translate from "../../../components/Translate.vue";
-import CustomTableInput from "../../../components/CustomTableInput.vue";
-import ImageModal from "../../../components/ImageModal.vue";
-import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
-import DataDisplay from "../../../components/DataDisplay.vue";
-import AlertModal from "../../../components/AlertModal.vue";
-import {authorizeUser} from "../../../mixins/authorizeUser.js"
-import inputValidation from "../../../shared/validateInput"
+import CustomTable from "../../../../components/CustomTable.vue";
+import Translate from "../../../../components/Translate.vue";
+import CustomTableInput from "../../../../components/CustomTableInput.vue";
+import ImageModal from "../../../../components/ImageModal.vue";
+import MultipleTimeTable from "../../../../components/MultipleTimeTable.vue";
+import DataDisplay from "../../../../components/DataDisplay.vue";
+import AlertModal from "../../../../components/AlertModal.vue";
+import {authorizeUser} from "../../../../mixins/authorizeUser.js"
+import inputValidation from "../../../../shared/validateInput"
+import {header} from "../../../../mixins/header";
 
 export default {
 	components: {
@@ -113,7 +117,7 @@ export default {
 		DataDisplay,
 		AlertModal,
 	},
-    mixins: [authorizeUser],
+    mixins: [authorizeUser,header],
 	data() {
 		return {
 			currentOrder: null,
@@ -178,7 +182,7 @@ export default {
 		this.$store
 			.dispatch(
 				"releasedOrder/loadReleasedOrderFull",
-				this.$route.params.id
+				{itemId: this.$route.params.itemId, productionOrder: this.$route.params.productionOrder}
 			)
 			.then((result) => {
                 if(result && result.response != null){

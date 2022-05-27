@@ -1,12 +1,13 @@
 export const state = () => ({
     tableHeaders: [
-        { name: "Item Number", id: 0 },
-        { name: "Item Category Code", id: 1 },
-        { name: "Quantity", id: 2 },
-        { name: "Deadline", id: 3 },
-        { name: "Completion date", id: 4 },
+        { name: "Production order", id: 0 },
+        { name: "Item Number", id: 1 },
+        { name: "Item Category Code", id: 2 },
+        { name: "Quantity", id: 3 },
+        { name: "Deadline", id: 4 },
+        { name: "Completion date", id: 5 },
     ],
-    allowedHeaders: ["id", "categoryCode", "quantity", "deadline", "completionDate"],
+    allowedHeaders: ["productionOrder", "id", "categoryCode", "quantity", "deadline", "completionDate"],
     orders: [],
 })
 

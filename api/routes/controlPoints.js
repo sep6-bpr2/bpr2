@@ -109,7 +109,6 @@ router.post("/submitControlPoint/:username",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        console.log(req.body)
         const result = await controlPointService.submitControlPoint(req.body)
         res.send(result)
     }
@@ -185,7 +184,7 @@ router.get("/listMinimal/:username/:language/:offset/:limit",
     validate,
     validateUserAdmin,
     async (req, res) => {
-        const data = await controlPointService.controlPointsMinimal(req.params.language, parseInt(req.params.offset), parseInt(req.params.limit))
+        const data = await controlPointService.controlPointsMinimal(req.params.language.toLowerCase(), parseInt(req.params.offset), parseInt(req.params.limit))
         res.send(data)
     }
 )

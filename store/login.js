@@ -1,6 +1,6 @@
-const languages = [{name: "English", flag: "english"}, {name: "Dansk", flag: "danish"}, {name: "Lietuviu", flag: "lithuanian"}]
+const languages = [{name: "English", flag: "gb"}, {name: "Danish", flag: "dk"}, {name: "Lithuanian", flag: "lt"}]
 const locations = ["All"]
-const defaultLanguage = {name: "English", flag: "english"}
+const defaultLanguage = {name: "English", flag: "gb"}
 
 export const state = () => ({
 	allLanguages: languages,
@@ -20,8 +20,13 @@ export const mutations = {
 	logoutUser(state) {
 		state.user = null
 	},
-	addToLocations(state, locations) {
-		state.allLocations.push(...locations)
+	addToLocations(state, newLocations) {
+        let updatedLocations = ["All"]
+        for(let i = 0; i< newLocations.length; i++){
+			if(newLocations[i] != '' && newLocations[i] != 'MØ')
+            updatedLocations.push(newLocations[i])
+        }
+        state.allLocations = updatedLocations
 	},
 	setLocation(state, location) {
 		state.chosenLocation = location

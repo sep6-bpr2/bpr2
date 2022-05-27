@@ -23,7 +23,7 @@
                         v-on:input="updateParent(index)"
                         :style="{color: validated(index), 'border-color': validated(index)}"
                         :disabled="inputsDisabled != null && inputsDisabled"
-                        :title="'Author: ' + originalRows[index].author"
+                        :title="'Author: ' + (originalRows[index].author?originalRows[index].author: '') + ' ' + (originalRows[index].timestamp?originalRows[index].timestamp: ' ')"
 					/>
 					<select
 						v-else-if="value == 'answer' && originalRows[index].inputType == 0"
@@ -31,7 +31,7 @@
                         v-on:change="updateParent(index)"
                         :style="{color: validated(index), cursor: (inputsDisabled != null && inputsDisabled ? 'default': 'pointer')}"
                         :disabled="inputsDisabled != null && inputsDisabled"
-                        :title="'Author: ' + originalRows[index].author"
+                        :title="'Author: ' + (originalRows[index].author?originalRows[index].author: '') + ' ' + (originalRows[index].timestamp?originalRows[index].timestamp: ' ')"
 					>
 						<option disabled selected value="">
 							-- select an option --

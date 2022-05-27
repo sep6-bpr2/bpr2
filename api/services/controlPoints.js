@@ -278,7 +278,7 @@ module.exports.submitControlPoint = async (cp) => {
     }
 
     let insertFrequencyString = ''
-	const con = await mssql.localDB().request()
+	const con = await (await mssql.localDB()).request()
 	if(cp.frequencies !== null){
 		Object.entries(cp.frequencies).forEach((frequency,index) => {
 			let value = frequency[1]
@@ -347,7 +347,6 @@ module.exports.submitControlPoint = async (cp) => {
         con.input('code' + index, mssql.mssql.NVarChar, item.value)
     })
     sqlString += ' COMMIT'
-    console.log(sqlString)
     return controlPointModel.insertControlPoint(sqlString, con)
 }
 
@@ -359,10 +358,15 @@ function saveImage(baseImage) {
     /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
     let path = __dirname.split('\\')
     let localPath = ""
-    for (let i = 0; i < path.length - 1; i++) {
-        localPath += path[i] + "\\"
+    
+    if(process.env.PICTURE_STORAGE_LOCATION == null) {
+        for (let i = 0; i < path.length - 1; i++) {
+            localPath += path[i] + "\\"
+        }
+        localPath += "pictures\\"
+    }else{
+        localPath = process.env.PICTURE_STORAGE_LOCATION + "\\"
     }
-    localPath += "pictures\\"
 
     //Find extension of file
     const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
@@ -377,6 +381,7 @@ function saveImage(baseImage) {
 
     //Random photo name with timeStamp so it will not overide previous images.
     const filename = `File${Date.now()}${rand}.${ext}`;
+
 
     fs.writeFileSync(localPath + filename, base64Data, 'base64');
     return filename

@@ -89,6 +89,8 @@ import colors from "../styles/colors";
 import {authorizeUser} from "../mixins/authorizeUser.js"
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
+import {header} from "../mixins/header";
+
 
 export default {
 	name: "users",
@@ -109,7 +111,7 @@ export default {
 		offset: 0,
 		limit: 25,
 	}),
-	mixins: [authorizeUser, translate, alerts],
+	mixins: [authorizeUser, translate, alerts, header],
 	methods: {
 		handleCreateUser() {
 			this.shouldCreateUser = true
