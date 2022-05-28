@@ -134,7 +134,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		cpData.upperTolerance = mainInformation.uppertolerance
 		cpData.lowerTolerance = mainInformation.lowertolerance
 	}
-
+	console.log(attributes)
 	//attributes
 	let att = attributes
 	if (att.length > 0) {
@@ -145,6 +145,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 			cpData.attributes[i].maxValue = att[i].maxValue
 		}
 	}
+	console.log(cpData.attributes)
 	//codes
 	categoryCodes.forEach(o => cpData.codes.push({value: JSON.stringify(o.itemCategoryCode)}))
 

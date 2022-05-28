@@ -330,11 +330,57 @@ const translations = {
 		"Danish": "bla bla"
 	},
 	// alerts
-	"there must be at least two option for the options type": {
-		"English": "there must be at least two option for the options type",
-		"Lithuanian": "bla bla",
-		"Danish": "bla bla"
-	},"control point must have at least one item category code": {
+	"description can not exceed 200 characters": {
+		"english": "description can not exceed 200 characters",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attributes must have a name": {
+		"english": "invalid input in frequency",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	}
+	,"attribute minimum and maximum value can not be empty": {
+		"english": "attribute minimum and maximum value can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attribute minimum and maximum value needs to be positive value": {
+		"english": "attribute minimum and maximum value needs to be positive value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"attribute minimum value can not be greater or equal to the maximum value": {
+		"english": "attribute minimum value can not be greater or equal to the maximum value",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"invalid input in frequency": {
+		"english": "invalid input in frequency",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	}
+	,"there must be at least two option for the options type": {
+		"english": "there must be at least two option for the options type",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+	"lower tolerance needs to be grater or equal to 0 and smaller than 2147483647": {
+		"english": "lower tolerance needs to be grater or equal to 0 and smaller than 2147483647",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+  "upper tolerance needs to be grater or equal to 0 and smaller than 2147483647": {
+		"english": "upper tolerance needs to be grater or equal to 0 and smaller than 2147483647",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+  "lower tolerance can not be grater or equal to upper tolerance": {
+		"english": "lower tolerance can not be grater or equal to upper tolerance",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+  "control point must have at least one item category code": {
 		"English": "control point must have at least one item category code",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
@@ -352,11 +398,11 @@ const translations = {
 		"English": "LOWER TOLERANCE can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
-	}
-	,"measurement type con not be empty": {
-		"English": "MEASUREMENT TYPE con not be empty",
-		"Lithuanian": "bla bla",
-		"Danish": "bla bla"
+	},
+  "measurement type can not be empty": {
+		"english": "MEASUREMENT TYPE can not be empty",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	},
 	"value type can not be empty": {
 		"English": "VALUE TYPE can not be empty",
@@ -380,9 +426,15 @@ const translations = {
 	},
 
 	"control point has been created": {
-		"English": "control point has been   created",
-		"Lithuanian": "bla bla",
-		"Danish": "bla bla"
+		"english": "control point has been created",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
+	},
+
+	"control point has been changed": {
+		"english": "control point has been changed",
+		"lithuanian": "bla bla",
+		"danish": "bla bla"
 	}
 
 	// ---------------------
