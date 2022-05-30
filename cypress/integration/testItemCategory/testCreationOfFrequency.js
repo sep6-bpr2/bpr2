@@ -59,21 +59,6 @@ describe('testCreationOfFrequency', () => {
 		it('should check inputted value and cancel', () => {
 			cy.get('td').first().click();
 			cy.get('#to25').should('have.value','233457')
-			cy.get('.col-sm-4:nth-child(3) .v-btn__content').click();
-			cy.get('.alert').should('be.visible')
-			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
-			cy.url().should('eq', 'http://localhost:3000/itemCategories')
-		})
-
-		it('should check other itemCode and cancel',()=>{
-			cy.get('tr:nth-child(2) > td').invoke('val').then(someVal => chosenItemCode = someVal)
-			cy.get('tr:nth-child(2) > td').click();
-			cy.get('.heading > h4').should('contain',chosenItemCode)
-			cy.get('.col-sm-4:nth-child(3) .v-btn__content').click();
-			cy.get('.alert').should('be.visible')
-			cy.get('.col-sm-4:nth-child(1) .v-btn__content').should('contain.text','Confirm');
-			cy.get('.col-sm-4:nth-child(1) .v-btn__content').click();
-			cy.url().should('eq', 'http://localhost:3000/itemCategories')
-			cy.get('.alert').should('be.visible')
+			cy.visit('http://localhost:3000/itemCategories');
 		})
 })

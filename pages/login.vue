@@ -31,7 +31,7 @@
 				<v-card-text>
 					<v-text-field
 						id="enterUsername"
-						:rules="usernameRules"
+						:rules="userNameRules.concat(maxValRules)"
 						required
 						v-model="username"
 						v-bind:label="translateText('username')"
@@ -92,7 +92,8 @@ export default {
 			cols: colors,
 			username: "",
 			canLogIn: false,
-			usernameRules: [(v) => !!v || "Name is required"],
+			userNameRules: [(v) => !!v || "Name is required" ],
+			maxValRules: [v => v.length <= 50 || 'Max 50 characters'],
 			locationRules: [(v) => !!v || "location is required"],
 		};
 	},

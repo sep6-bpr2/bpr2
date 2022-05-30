@@ -20,7 +20,7 @@ describe('testDeletionOfUser', () => {
 		cy.get('#usernameInput').type('admin');
 		cy.get('#roles').parent().click()
 		cy.get('.v-menu__content').contains("admin").click();
-		cy.get('.v-btn:nth-child(4) > .v-btn__content').click();
+		cy.get('.v-btn:nth-child(3) > .v-btn__content').click();
 		cy.on("window:alert", (str) => {
 			expect(str).to.equal("User already exists!");
 		});
@@ -33,7 +33,7 @@ describe('testDeletionOfUser', () => {
 		cy.get('#usernameInput').type(val2);
 		cy.get('#roles').parent().click()
 		cy.get('.v-menu__content').contains("admin").click();
-		cy.get('.v-btn:nth-child(4) > .v-btn__content').click();
+		cy.get('.v-btn:nth-child(3) > .v-btn__content').click();
 	})
 
 	it('should check created user',()=>{

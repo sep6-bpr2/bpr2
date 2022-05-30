@@ -539,11 +539,32 @@ export default {
 			let valid = false
 			delete tempFrequencies.id;
 
-			let existsNegVal = Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			let existsOverInt = Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
+			let failedId;
+			let existsNegVal = 	Object.entries(tempFrequencies).every(isGreaterThan0)
+			let existsOverInt = 	Object.entries(tempFrequencies).every(isLessThanMaxInteger)
+
+			function isGreaterThan0(el){
+				if(el[1] >= 0){
+					return true
+				}
+				else{
+					failedId = el[0]
+					return false
+				}
+			}
+
+			function isLessThanMaxInteger(el){
+				if(el[1] <= 2147483647){
+					return true
+				}
+				else{
+					failedId = el[0]
+					return false
+				}
+			}
 
 			if (!existsNegVal || !existsOverInt) {
-				this.showAlert('warning', this.translateText("invalid input in frequency"))
+				this.showAlert('warning', this.translateText("invalid input in frequency at code: " + failedId))
 				valid = false
 			} else {
 				this.cpData.frequencies = tempFrequencies
