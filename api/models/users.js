@@ -1,7 +1,7 @@
 const { mssql, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getUserByUsername = async (username) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("username", mssql.NVarChar(1000), username)
         .query(`
@@ -12,7 +12,7 @@ module.exports.getUserByUsername = async (username) => {
 }
 
 module.exports.getAllUsers = async (offset, limit) => {
-	const result = await localDB()
+	const result = await ( await localDB())
 		.request()
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
@@ -29,7 +29,7 @@ module.exports.getAllUsers = async (offset, limit) => {
 
 
 module.exports.getAllUsersWithUser = async (user) => {
-	const result = await localDB()
+	const result = await ( await localDB())
 		.request()
 		.input("username", mssql.NVarChar(1000), user.username)
 		.query(`select * from SystemUser where SystemUser.username= @username and validFrom < GETDATE() AND validTo IS NULL`)
@@ -38,14 +38,24 @@ module.exports.getAllUsersWithUser = async (user) => {
 }
 
 
+module.exports.getAllQAUsers = async () => {
+	const result = await ( await localDB())
+		.request()
+		.query('SELECT DISTINCT author FROM QAReportControlPointValue')
+
+	return result.recordset
+}
+
+
+
 module.exports.addUser = async (user) => {
-    await localDB()
+    await ( await localDB())
         .request()
 		.input("username", mssql.NVarChar(1000), user.username)
 		.input("role",mssql.NVarChar(1000), user.role)
 		.query(`insert into SystemUser (username, role, validFrom) values (@username,@role, GETDATE())`)
 
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
 		.input("username", mssql.NVarChar(1000), user.username)
 		.query(`
@@ -56,8 +66,15 @@ module.exports.addUser = async (user) => {
     return result.recordset
 }
 
+module.exports.removeUser = async (user) => {
+	await ( await localDB())
+		.request()
+		.input("username", mssql.NVarChar(1000), user.username)
+		.query(`delete from SystemUser where username = @username`)
+}
+
 module.exports.expireUser = async (username) => {
-	await localDB()
+	await ( await localDB())
 		.request()
 		.input("username", mssql.NVarChar(1000), username)
 		.query(`

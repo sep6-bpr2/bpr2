@@ -6,9 +6,10 @@
 
 <script>
 import {authorizeUser} from "../mixins/authorizeUser.js"
+import {header} from "../mixins/header";
 
 export default {
-    mixins: [authorizeUser],
+    mixins: [authorizeUser,header],
 	head() {
 		return {
 			title: "About my app",

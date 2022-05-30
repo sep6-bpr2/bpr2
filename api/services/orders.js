@@ -1,6 +1,7 @@
 const moment = require("moment")
 const model = require("../models/orders")
 const inputValidation = require("../../shared/validateInput")
+const itemCategoryService = require("./itemCategory")
 
 /**
  * get a list of orders that are released in the system. All of them
@@ -22,7 +23,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
     }
 
     // Get our database qa reports that are related to these released orders
-    let qaReports = await model.getMultipleQAReports(listToCommaString(orders, 'id'))
+    let qaReports = await model.getMultipleQAReports(listToCommaStringOfStrings(orders, 'id'))
 
     let uncompletedOrders = []
 
@@ -32,7 +33,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
 
         // Use the our database qa report to know if that order has been completed
         for (let j = 0; j < qaReports.length; j++) {
-            if (qaReports[j].itemId == orders[i].id && qaReports[j].status != 0) {
+            if (qaReports[j].itemId == orders[i].id && qaReports[j].productionOrder == orders[i].productionOrder && qaReports[j].status != 0) {
                 addToList = false
                 break
             }
@@ -60,7 +61,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
  * }]
  */
 module.exports.completedOrders = async (location, offset, limit) => {
-    let qaReports = await model.getCompletedQAReports()
+    let qaReports = await model.getCompletedQAReports(offset, limit)
 
     if (qaReports.length == 0) {
         return []
@@ -69,20 +70,29 @@ module.exports.completedOrders = async (location, offset, limit) => {
     let orders = []
 
     if (location.toLocaleLowerCase() == "all") {
-        orders = await model.getOrdersByIdListAllLocations(listToCommaString(qaReports, 'itemId'), offset, limit)
+        orders = await model.getOrdersByIdListAllLocations(
+            listToCommaStringOfStrings(qaReports, 'itemId'), 
+            listToCommaStringOfStrings(qaReports, 'productionOrder')
+        )
     } else {
-        orders = await model.getOrdersByIdList(location, listToCommaString(qaReports, 'itemId'), offset, limit)
+        orders = await model.getOrdersByIdList(
+            location, 
+            listToCommaStringOfStrings(qaReports, 'itemId'), 
+            listToCommaStringOfStrings(qaReports, 'productionOrder')
+        )
     }
 
+    let completedOrders = []
     for (let i = 0; i < qaReports.length; i++) {
-
         for (let j = 0; j < orders.length; j++) {
-            if (qaReports[i].itemId == orders[j].id) {
+            if (qaReports[i].itemId == orders[j].id && qaReports[i].productionOrder == orders[j].productionOrder) {
                 const deadline = new Date(orders[j].deadline)
                 orders[j].deadline = moment(deadline).format('YYYY-MM-DD')
 
                 const completionDate = new Date(qaReports[i].completionDate)
                 orders[j].completionDate = moment(completionDate).format('YYYY-MM-DD')
+                completedOrders.push(orders[j])
+                break;
             }
         }
     }
@@ -108,6 +118,22 @@ function listToCommaString(list, key) {
     return stringList
 }
 
+function listToCommaStringOfStrings(list, key) {
+    let stringList = ""
+    for (let i = 0; i < list.length; i++) {
+        try{
+            if ((list.length - 1) == i) {
+                stringList = stringList + "'" + list[i][key].toString() + "'"
+            } else {
+                stringList = stringList + "'" + list[i][key].toString()+ "'" + ","
+            }
+        }catch(err){
+            console.log("ERROR")
+        }
+    }
+    return stringList
+}
+
 /**
  * get a qa report object of specified order with all of the measurements and information included in it
  * @param {string} id id of the order
@@ -116,9 +142,9 @@ function listToCommaString(list, key) {
  * @param {boolean} getCompleted should the order be completed or released
  * @returns {Promise} Order, its one time measurement and multiple time measurement control points, and answers. Or a response with a message
  */
-module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => {
+module.exports.getQAReport = async (id, productionOrder, language, showAuthors, getCompleted) => {
     // Get a detailed item object from konfair database. Returns array of orders that match this id
-    let itemData = await model.getOrderInformation(id)
+    let itemData = await model.getOrderInformation(id, productionOrder)
 
     // If it exists continue process
     if (itemData && itemData.length != 0) {
@@ -127,7 +153,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         itemData = itemData[0]
 
         // Check if there exists a QA report for this order
-        let qaReport = await model.getReleasedOrderReport(id)
+        let qaReport = await model.getReleasedOrderReport(id, productionOrder)
 
         // Check if the exists a qa report for this or not and its status
         if (!getCompleted && qaReport.length != 0 && qaReport[0].status == 1)
@@ -160,8 +186,11 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
 
             // Get control points that connect to these attributes and are for this categoryCode
-            controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), parseInt(itemData.categoryCode))
+            controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), itemData.categoryCode)
 
+            let controlPointsWithCategory = await model.getControlPointsCategoryNoAtrributes(itemData.categoryCode)
+
+            controlPoints.push(...controlPointsWithCategory)
             // Get all the attributes and item categories of these control points
             // Will later validate which one connects to which one
             for (let i = 0; i < controlPoints.length; i++) {
@@ -205,7 +234,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
             // Add all of the control point connections to this order
             if (added.length != 0) {
                 // Add qa report
-                qaReport = await model.createQAReport(id)
+                qaReport = await model.createQAReport(id, productionOrder)
                 qaReport = qaReport[0]
 
                 // Add the connections between control point and qa report
@@ -232,7 +261,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
         if (itemData.frequency && itemData.frequency.length != 0)
             itemData.frequency = itemData.frequency[0]
         else
-            itemData.frequency = null
+            itemData.frequency = itemCategoryService.defaultFrequency
 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not
@@ -249,6 +278,11 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
         // Get all the data for the control point: descriptions, frequency, options
         for (let i = 0; i < controlPoints.length; i++) {
+            if(controlPoints[i].timestamp != null){
+                const date = new Date(controlPoints[i].timestamp)
+                controlPoints[i].timestamp = moment(date).format('YYYY-MM-DD HH:mm')
+            } 
+            
             // Get frequency of the control point
             controlPoints[i].frequency = await model.getFrequencies(controlPoints[i].frequencyId, qaReport.createdDate)
             if (controlPoints[i].frequency && controlPoints[i].frequency.length != 0)
@@ -304,9 +338,21 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
 
             // Compute the text shown for the tolerance
             controlPoints[i].toleranceText = ""
-            if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance == controlPoints[i].lowerTolerance)
+            if (
+                controlPoints[i].upperTolerance != null && 
+                controlPoints[i].lowerTolerance != null && 
+                controlPoints[i].upperTolerance != 0 && 
+                controlPoints[i].lowerTolerance != 0 && 
+                controlPoints[i].upperTolerance == controlPoints[i].lowerTolerance
+            )
                 controlPoints[i].toleranceText = "+/-" + controlPoints[i].upperTolerance + controlPoints[i].units
-            else if (controlPoints[i].upperTolerance != null && controlPoints[i].upperTolerance != controlPoints[i].lowerTolerance)
+            else if (
+                controlPoints[i].upperTolerance != null && 
+                controlPoints[i].lowerTolerance != null && 
+                controlPoints[i].upperTolerance != 0 && 
+                controlPoints[i].lowerTolerance != 0 &&
+                controlPoints[i].upperTolerance != controlPoints[i].lowerTolerance
+            )
                 controlPoints[i].toleranceText = "+" + controlPoints[i].upperTolerance + "/-" + controlPoints[i].lowerTolerance + controlPoints[i].units
 
             // Compute the options if the control point input type is option
@@ -403,12 +449,18 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
                 let answer = ""
                 let author = ""
                 let connectionId = ""
+                let timestamp = null
 
                 // Get the first value from answers
                 if (mResultsForControlPoint.length != 0) {
                     answer = mResultsForControlPoint[0].answer
                     author = mResultsForControlPoint[0].author
                     connectionId = mResultsForControlPoint[0].connectionId
+                    timestamp = mResultsForControlPoint[0].timestamp
+                    if(timestamp != null){
+                        const date = new Date(timestamp)
+                        timestamp = moment(date).format('YYYY-MM-DD HH:mm')
+                    } 
                     mResultsForControlPoint.shift() // Remove the first element
                     // If there are no more values then generate some empty ones to fill it up
                 } else {
@@ -429,7 +481,8 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
                         id: itemData.multipleTimeControlPoints[i].id,
                         answer: answer,
                         inputType: itemData.multipleTimeControlPoints[i].inputType,
-                        author: author
+                        author: author,
+                        timestamp: timestamp,
                     })
             }
 
@@ -476,7 +529,7 @@ module.exports.getQAReport = async (id, language, showAuthors, getCompleted) => 
  */
 module.exports.saveQAReport = async (editedQAReport, username) => {
 
-    const originalOrder = await module.exports.getQAReport(editedQAReport.id, 'english', true, false)
+    const originalOrder = await module.exports.getQAReport(editedQAReport.id, editedQAReport.productionOrder, 'english', true, false)
 
     if (originalOrder != null) {
         //Check surface level requirements
@@ -609,20 +662,6 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
         }
     } else {
         return { response: 0, message: "Your data does not match what is in the database" }
-    }
-}
-
-/**
- * Checks if the string is a valid number
- * @param {string} str the string that you want to check if it is a number
- * @returns {boolean}
- */
-function isNumeric(str) {
-    if (typeof str != "string") {
-        return false // we only process strings!
-    } else {
-        // @ts-ignore
-        return !isNaN(str) && !isNaN(parseFloat(str))
     }
 }
 

@@ -27,12 +27,15 @@ describe('Completed orders', () => {
         cy.contains('Item Category Code').should('be.visible')
         cy.contains('Quantity').should('be.visible')
         cy.contains('Deadline').should('be.visible')
+        cy.contains('Completion date').should('be.visible')
+
 
         // Check rows to contain predefined informatpopoion
         cy.contains('1111').should('be.visible')
         cy.contains('32110').should('be.visible')
         cy.contains('240').should('be.visible')
         cy.contains('2022-06-12').should('be.visible')
+        cy.contains('2022-05-24').should('be.visible')
 
         // Released orders not visible
         cy.contains('123456789').should('not.exist');
@@ -44,4 +47,24 @@ describe('Completed orders', () => {
         cy.contains('1111').should('be.visible')
         cy.get('#nav1').click({force: true})
 	})
+
+    it('ERROR user with wrong role', () => {
+        cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({force: true})
+		cy.contains("DK").click()
+		cy.get('#submitLogin').click()
+		
+		cy.visit('http://localhost:3000/completedOrders')
+
+        // Should see notification and failed
+        cy.contains('Failed').should('be.visible')
+	})
+
+    it('ERROR non authorized user', () => {
+		cy.visit('http://localhost:3000/completedOrders')
+
+        // Should see login screen
+        cy.contains('English').should('be.visible')
+        cy.contains('All').should('be.visible')
+    })
 })

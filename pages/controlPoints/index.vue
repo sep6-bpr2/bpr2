@@ -9,10 +9,6 @@
 	>
 		<h1><Translate :text="'Control point management'" /></h1>
 
-		<p>
-			Control points map the characteristics of items to what things the
-			employee has to check on the item
-		</p>
 		<button v-on:click="handleCreate">
 			<Translate :text="'Create control point'" />
 		</button>
@@ -31,13 +27,14 @@
 import CustomTable from "../../components/CustomTable.vue";
 import Translate from "../../components/Translate.vue";
 import { authorizeUser } from "../../mixins/authorizeUser.js";
+import {header} from "../../mixins/header";
 
 export default {
 	components: {
 		CustomTable,
 		Translate,
 	},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	data() {
 		return {
 			offset: 0,

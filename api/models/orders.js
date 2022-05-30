@@ -1,38 +1,50 @@
 const { mssql, konfairDB, localDB } = require('../connections/MSSQLConnection')
 
 module.exports.getReleasedOrders = async (location, offset, limit) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .input("location", mssql.NVarChar(40), location)
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline 
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location AND pOrder.status = 3  
-            ORDER BY item.[No_] ASC 
+            ORDER BY pOrder.[Due Date] ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset
 }
 
 module.exports.getOrders = async (location) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .input("location", mssql.NVarChar(40), location)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline, 
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
             WHERE pOrder.[Location Code] = @location
         `)
     return result.recordset
 }
 
-module.exports.getOrderInformation = async (id) => {
-    const result = await konfairDB()
+module.exports.getOrderInformation = async (id, productionOrder) => {
+    const result = await ( await konfairDB())
         .request()
         .input("id", mssql.NVarChar(40), id)
+        .input("productionOrder", mssql.NVarChar(40), productionOrder)
         .query(`
             SELECT 
             item.No_ as id, 
@@ -41,17 +53,18 @@ module.exports.getOrderInformation = async (id) => {
             pOrder.status, 
             pOrder.[Due Date] as deadline, 
             pOrder.[Location Code] as location, 
-            pOrder.Quantity as quantity
+            pOrder.Quantity as quantity,
+            pOrder.[No_] as productionOrder 
             FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE item.[No_] = @id
+            WHERE item.[No_] = @id AND pOrder.[No_] = @productionOrder
         `)
     return result.recordset
 }
 
 module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
     // The max statements are to help group by
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .input("language", mssql.NVarChar(40), language)
@@ -69,6 +82,7 @@ module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
             MAX(CASE WHEN connection.author IS NULL THEN '' WHEN connection.author = '' THEN '' ELSE 'taken' END) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer,
+            MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
@@ -87,7 +101,7 @@ module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
 
 module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date) => {
     // The max statements are to help group by
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .input("language", mssql.NVarChar(40), language)
@@ -105,6 +119,7 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date)
             MAX(connection.author) as author,
             MAX(connection.id) as connectionId, 
             MAX(connection.value) as answer,
+            MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
             FROM [QAReportControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
@@ -123,7 +138,7 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date)
 
 
 module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`
@@ -138,7 +153,7 @@ module.exports.getReleasedOrderControlPointsDescriptions = async (id) => {
 }
 
 module.exports.getReleasedOrderControlPointsOptions = async (id, date) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .input("date", mssql.DateTime, date)
@@ -152,7 +167,7 @@ module.exports.getReleasedOrderControlPointsOptions = async (id, date) => {
 }
 
 module.exports.getFrequenciesForCategory = async (code, date) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("code", mssql.NVarChar(40), code)
         .input("date", mssql.DateTime, date)
@@ -166,7 +181,7 @@ module.exports.getFrequenciesForCategory = async (code, date) => {
 }
 
 module.exports.getFrequencies = async (id, date) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .input("date", mssql.DateTime, date)
@@ -179,19 +194,20 @@ module.exports.getFrequencies = async (id, date) => {
     return result.recordset
 }
 
-module.exports.getReleasedOrderReport = async (id) => {
-    const result = await localDB()
+module.exports.getReleasedOrderReport = async (id, productionOrder) => {
+    const result = await ( await localDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
+        .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
             SELECT * FROM [QAReport]
-            WHERE itemId = @id
+            WHERE itemId = @id AND productionOrder = @productionOrder
         `)
     return result.recordset
 }
 
 module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("categoryCode", mssql.Int, categoryCode)
         .query(`
@@ -211,11 +227,31 @@ module.exports.getSpecificControlPoints = async (attributeIds, categoryCode) => 
     return result.recordset
 }
 
+module.exports.getControlPointsCategoryNoAtrributes = async (categoryCode) => {
+    const result = await ( await localDB())
+        .request()
+        .input("categoryCode", mssql.Int, categoryCode)
+        .query(`
+            SELECT DISTINCT 
+            ControlPoint.id, 
+            ControlPoint.controlPointNumber, 
+            ControlPoint.frequencyId, 
+            ControlPoint.image, 
+            ControlPoint.inputType, 
+            ControlPoint.lowerTolerance, 
+            ControlPoint.upperTolerance  
+            FROM [ControlPoint]
+            LEFT OUTER JOIN AttributeControlPoint ACP on ControlPoint.id = ACP.controlPointId
+            INNER JOIN ItemCategoryControlPoint ICCP on ControlPoint.id = ICCP.controlPointId
+            WHERE ACP.attributeId IS NULL AND ICCP.itemCategoryCode = @categoryCode AND ControlPoint.validFrom < GETDATE() AND ControlPoint.validTo IS NULL 
+        `)
+    return result.recordset
+}
 
 module.exports.getReleasedOrderAttributes = async (id) => {
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
         .query(`
             SELECT 
             attribute.[Name] as name, 
@@ -224,14 +260,14 @@ module.exports.getReleasedOrderAttributes = async (id) => {
             value.[Value] as value, attribute.[ID] as id 
             FROM [KonfAir DRIFT$Item Attribute Value Mapping] mapping
             INNER JOIN [KonfAir DRIFT$Item Attribute] attribute ON mapping.[Item Attribute ID] = attribute.[ID]
-            INNER JOIN [KonfAir DRIFT$Item Atrribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
+            INNER JOIN [KonfAir DRIFT$Item Attribute Value] value ON mapping.[Item Attribute Value ID] = value.[ID]
             WHERE mapping.[No_] = @id 
         `)
     return result.recordset
 }
 
 module.exports.getControlPointAttributes = async (id, date) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .input("date", mssql.DateTime, date)
@@ -249,7 +285,7 @@ module.exports.getControlPointAttributes = async (id, date) => {
 }
 
 module.exports.getControlPointAttributesLatest = async (id) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`
@@ -265,7 +301,7 @@ module.exports.getControlPointAttributesLatest = async (id) => {
 
 
 module.exports.getControlPointCategories = async (id) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`
@@ -277,15 +313,16 @@ module.exports.getControlPointCategories = async (id) => {
     return result.recordset
 }
 
-module.exports.createQAReport = async (id) => {
-    await localDB()
+module.exports.createQAReport = async (id, productionOrder) => {
+    await ( await localDB())
         .request()
-        .input("id", mssql.Int, id)
+        .input("id", mssql.NVarChar, id)
+        .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
-            INSERT INTO QAReport (itemId, status, createdDate) VALUES (@id, 0, GETDATE())
+            INSERT INTO QAReport (itemId, productionOrder, status, createdDate) VALUES (@id, @productionOrder, 0, GETDATE())
         `)
 
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`
@@ -295,7 +332,7 @@ module.exports.createQAReport = async (id) => {
 }
 
 module.exports.insertControlPointConnection = async (controlPointId, qaReportId) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("controlPointId", mssql.Int, controlPointId)
         .input("qaReportId", mssql.Int, qaReportId)
@@ -306,7 +343,7 @@ module.exports.insertControlPointConnection = async (controlPointId, qaReportId)
 }
 
 module.exports.getByCategory = async (categoryCode) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("categoryCode", mssql.Int, categoryCode)
         .query(`
@@ -320,7 +357,7 @@ module.exports.getByCategory = async (categoryCode) => {
 }
 
 module.exports.getByAttribute = async (attributeIds) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .query(`
             SELECT DISTINCT 
@@ -333,7 +370,7 @@ module.exports.getByAttribute = async (attributeIds) => {
 }
 
 module.exports.insertMultipleTimeMeasurement = async (controlPointId, value, qaReportId, author) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("controlPointId", mssql.Int, controlPointId)
         .input("qaReportId", mssql.Int, qaReportId)
@@ -347,7 +384,7 @@ module.exports.insertMultipleTimeMeasurement = async (controlPointId, value, qaR
 }
 
 module.exports.alterMeasurement = async (connectionId, controlPointId, value, qaReportId, author) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, connectionId)
         .input("controlPointId", mssql.Int, controlPointId)
@@ -356,14 +393,14 @@ module.exports.alterMeasurement = async (connectionId, controlPointId, value, qa
         .input("author", mssql.NVarChar, author)
         .query(`
             UPDATE [QAReportControlPointValue]
-            SET [value] = @value, [author] = @author
+            SET [value] = @value, [author] = @author, timestamp = GETDATE()
             WHERE qaReportId = @qaReportId AND controlPointId = @controlPointId AND id = @id; 
         `)
     return result.recordset
 }
 
 module.exports.deleteQAReportConnection = async (connectionId) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("connectionId", mssql.Int, connectionId)
         .query(`
@@ -373,7 +410,7 @@ module.exports.deleteQAReportConnection = async (connectionId) => {
 }
 
 module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPointIds) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("qaReportId", mssql.Int, qaReportId)
         .query(`
@@ -382,7 +419,8 @@ module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPoi
             connection.id as connectionId, 
             connection.controlPointId,
             connection.qaReportId,
-            (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author 
+            (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
+            connection.timestamp
             FROM [QAReportControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
@@ -390,7 +428,7 @@ module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPoi
 }
 
 module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfControlPointIds) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("qaReportId", mssql.Int, qaReportId)
         .query(`
@@ -399,7 +437,8 @@ module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfCon
             connection.id as connectionId, 
             connection.controlPointId,
             connection.qaReportId,
-            connection.author
+            connection.author,
+            connection.timestamp
             FROM [QAReportControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
@@ -408,7 +447,7 @@ module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfCon
 
 module.exports.getMultipleQAReports = async (stringList) => {
 
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .query(`
             Select * from QAReport WHERE itemId in (${stringList});
@@ -416,52 +455,62 @@ module.exports.getMultipleQAReports = async (stringList) => {
     return result.recordset
 }
 
-module.exports.getOrdersByIdList = async (location, stringList, offset, limit) => {
+module.exports.getOrdersByIdList = async (location, stringListId, stringListProductionOrders) => {
 
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
         .input("location", mssql.NVarChar(40), location)
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringList})
-            ORDER BY item.[No_] ASC 
-            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+            WHERE pOrder.[Location Code] = @location AND item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
+            ORDER BY pOrder.[Due Date] ASC 
         `)
         
     return result.recordset
 }
 
-module.exports.getOrdersByIdListAllLocations = async (stringList, offset, limit) => {
+module.exports.getOrdersByIdListAllLocations = async (stringListId, stringListProductionOrders) => {
 
-    const result = await konfairDB()
+    const result = await ( await konfairDB())
         .request()
-        .input("offset", mssql.Int, offset)
-        .input("limit", mssql.Int, limit)
         .query(`
-            SELECT item.[No_] as id, item.[Item Category Code] as categoryCode, pOrder.[Quantity] as quantity, pOrder.[Due Date] as deadline FROM [KonfAir DRIFT$Item] item
+            SELECT 
+            item.[No_] as id, 
+            item.[Item Category Code] as categoryCode, 
+            pOrder.[Quantity] as quantity, 
+            pOrder.[Due Date] as deadline,
+            pOrder.[No_] as productionOrder 
+            FROM [KonfAir DRIFT$Item] item
             INNER JOIN [KonfAir DRIFT$Production Order] pOrder ON item.No_ = pOrder.[Source No_]
-            WHERE item.[No_] in (${stringList})
-            ORDER BY item.[No_] ASC 
-            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+            WHERE item.[No_] in (${stringListId}) AND pOrder.[No_] in (${stringListProductionOrders})
+            ORDER BY pOrder.[Due Date] ASC 
         `)
         
     return result.recordset
 }
 
-module.exports.getCompletedQAReports = async () => {
-    const result = await localDB()
+module.exports.getCompletedQAReports = async (offset, limit) => {
+    const result = await ( await localDB())
         .request()
+        .input("offset", mssql.Int, offset)
+        .input("limit", mssql.Int, limit)
         .query(`
-            Select * from QAReport WHERE status = 1;
+            Select * from QAReport WHERE status = 1
+            ORDER BY productionOrder ASC 
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
     return result.recordset
 }
 
 module.exports.setQaReportStatusToFinished = async (itemId) => {
-    const result = await localDB()
+    const result = await ( await localDB())
         .request()
         .input("itemId", mssql.NVarChar, itemId)
         .query(`

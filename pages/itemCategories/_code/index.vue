@@ -31,12 +31,12 @@
 <script>
 import Frequency from "../../../components/Frequency.vue";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
-
+import {header} from "../../../mixins/header";
 
 export default {
 	name: "index",
 	components: {Frequency},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	data: () => ({
 		modalAlertShowSubmit: false,
 		modalAlertShowError: false,
@@ -109,6 +109,7 @@ export default {
 				}
 			}
 
+
 			let failedId;
 			tempFrequencies.Code = parseInt(this.$route.params.code)
 			let existsNegVal = 	Object.entries(tempFrequencies).every(isGreaterThan0)
@@ -133,6 +134,7 @@ export default {
 					return false
 				}
 			}
+
 
 			let localNotification;
 			if (!existsNegVal || !existsOverInt) {

@@ -32,6 +32,7 @@ describe('Completed orders', () => {
         cy.contains('Deadline').should('be.visible')
         cy.contains('Location').should('be.visible')
         cy.contains('Status').should('be.visible')
+        cy.contains('Completed date').should('be.visible')
 
         cy.contains('1111').should('be.visible')
         cy.contains('Filterfilter 390x300x47').should('be.visible')
@@ -39,6 +40,8 @@ describe('Completed orders', () => {
         cy.contains('2022-06-12').should('be.visible')
         cy.contains('DK').should('be.visible')
         cy.contains('completed').should('be.visible')
+        cy.contains('2022-05-24').should('be.visible')
+
         // Check if the qa form contains all the elements it needs to 
 
         {
@@ -52,7 +55,7 @@ describe('Completed orders', () => {
             cy.get('#oneTimeMeasurements').children().contains("Answer").should('be.visible')
 
             // Row one no tolerance
-            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("This is a description").should('be.visible')
+            cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("Descirption of the control point 1").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("Show guide").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("mm").should('be.visible')
             cy.get('#oneTimeMeasurements').children('tbody').children('#customTableInput0').contains("301.00").should('be.visible')
@@ -116,5 +119,25 @@ describe('Completed orders', () => {
 
 
         }
+    })
+
+    it('ERROR user with wrong role', () => {
+        cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({force: true})
+		cy.contains("DK").click()
+		cy.get('#submitLogin').click()
+		
+		cy.visit('http://localhost:3000/completedOrders/4144123sda')
+
+        // Should see notification and failed
+        cy.contains('Failed').should('be.visible')
+	})
+
+    it('ERROR non authorized user', () => {
+		cy.visit('http://localhost:3000/completedOrders/4144123sda')
+
+        // Should see login screen
+        cy.contains('English').should('be.visible')
+        cy.contains('All').should('be.visible')
     })
 })

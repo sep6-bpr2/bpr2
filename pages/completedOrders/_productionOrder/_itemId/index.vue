@@ -23,7 +23,9 @@
 			/>
 
 			<div id="completedOrderInformation" class="information">
-				<h2>Information</h2>
+                <h2><Translate :text="'Order information'"/></h2>
+
+                <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
 				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
 				<DataDisplay
 					:name="'Description'"
@@ -40,13 +42,15 @@
 					:name="'Completed date'"
 					:data="currentOrder.completionDate"
 				/>
+                <DataDisplay :name="'Quantity'" :data="currentOrder.quantity" />
+
 			</div>
 
 			<div
 				id="completedOrderOneTimeMeasurements"
 				class="oneTimeMeasurements"
 			>
-				<h2>One time measurements</h2>
+                <h2><Translate :text="'One time measurements'"/></h2>
 
 				<CustomTableInput
 					id="oneTimeMeasurements"
@@ -59,7 +63,7 @@
 			</div>
 
 			<div>
-				<h2>Multiple time measurements</h2>
+                <h2><Translate :text="'Multiple time measurements'"/></h2>
 
 				<!-- This table has the input column removed -->
 				<CustomTableInput
@@ -89,16 +93,17 @@
 </template>
 
 <script>
-import CustomTable from "../../../components/CustomTable.vue";
-import Translate from "../../../components/Translate.vue";
-import CustomTableInput from "../../../components/CustomTableInput.vue";
-import ImageModal from "../../../components/ImageModal.vue";
-import MultipleTimeTable from "../../../components/MultipleTimeTable.vue";
-import DataDisplay from "../../../components/DataDisplay.vue";
-import AlertModal from "../../../components/AlertModal.vue";
-import { authorizeUser } from "../../../mixins/authorizeUser.js";
+import CustomTable from "../../../../components/CustomTable.vue";
+import Translate from "../../../../components/Translate.vue";
+import CustomTableInput from "../../../../components/CustomTableInput.vue";
+import ImageModal from "../../../../components/ImageModal.vue";
+import MultipleTimeTable from "../../../../components/MultipleTimeTable.vue";
+import DataDisplay from "../../../../components/DataDisplay.vue";
+import AlertModal from "../../../../components/AlertModal.vue";
+import { authorizeUser } from "../../../../mixins/authorizeUser.js";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import {header} from "../../../../mixins/header";
 
 export default {
 	components: {
@@ -110,7 +115,7 @@ export default {
 		DataDisplay,
 		AlertModal,
 	},
-	mixins: [authorizeUser],
+	mixins: [authorizeUser,header],
 	data() {
 		return {
 			currentOrder: null,
@@ -179,7 +184,7 @@ export default {
 		this.$store
 			.dispatch(
 				"completedOrder/loadCompletedOrderFull",
-				this.$route.params.id
+				{itemId: this.$route.params.itemId, productionOrder: this.$route.params.productionOrder}
 			)
 			.then((result) => {
 				if (result && result.response != null) {
@@ -351,6 +356,8 @@ export default {
 					// Determine which scale would fit the page best
 					if (scaleWidth > scaleHeight) scale = scaleWidth;
 					else scale = scaleHeight;
+
+					pdf.text(20, pdf.lastAutoTable.finalY, "Hello!")
 
 					// Add the image to pdf as png with adjusted size
 					pdf.addImage(

@@ -32,10 +32,11 @@ import ControlPoint from "../../../components/ControlPoint";
 import Translate from "../../../components/Translate";
 import {translate} from "../../../mixins/translate";
 import {authorizeUser} from "../../../mixins/authorizeUser.js"
+import {header} from "../../../mixins/header";
 
 export default {
 	components: {Translate, ControlPoint},
-	mixins: [translate, authorizeUser],
+	mixins: [translate, authorizeUser,header],
 	data: () => ({
 		cpData: null
 	}),
@@ -65,7 +66,7 @@ export default {
 				this.cpData.controlPointId = this.$route.params.id
 				this.$store.dispatch('controlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {
-						showAlert('success', this.translateText('control point has been created'))
+						showAlert('success', this.translateText('control point has been changed'))
 					} else {
 						showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
 					}

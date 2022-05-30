@@ -99,12 +99,14 @@
 					>
 						<Translate :text="'Lower Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
+							id="lowerTolerance"
 							:error="cpData.lowerTolerance < 0 && cpData.lowerTolerance"
 							v-model="cpData.lowerTolerance"
 							type="number"
 						/>
 						<Translate :text="'Upper Tolerance'"/>&nbsp:&nbsp
 						<v-text-field
+							id="upperTolerance"
 							:error="cpData.upperTolerance < 0 && cpData.upperTolerance"
 							v-model="cpData.upperTolerance"
 							type="number"
@@ -129,6 +131,7 @@
 								<Translate :text="'Name'"/>
 								&nbsp:&nbsp
 								<v-autocomplete
+									id="attributeName"
 									:items="attributesNames"
 									:item-text="item=>item.name"
 									:item-value="item=>item"
@@ -139,9 +142,11 @@
 								<div v-show="attribute.type==1" class="valueEntry">
 									<Translate :text="'Min value'"/>
 									<v-text-field
+
 												  :error="(attribute.minValue <= 0 && attribute.minValue)"
 												  :value="attribute.minValue"
 												  v-on:input="attributeMinValueChange($event, index,)"
+												  id="attributeMinVal"
 									/>
 									<p>
 										<Translate :text="'Max value'"/>
@@ -150,6 +155,7 @@
 										:error="(attribute.maxValue <= 0 && attribute.maxValue)"
 										:value="attribute.maxValue"
 										v-on:input="attributeMaxValueChange($event, index)"
+										id="attributeMaxVal"
 									/>
 								</div>
 								</div>
@@ -327,7 +333,7 @@ import Translate from "./Translate";
 import {translate} from "../mixins/translate";
 import {alerts} from "../mixins/alerts";
 import colors from "../styles/colors";
-import {validateEmpty, validateNegativeAndInt, validateNonPositiveAndInt} from "../shared/validateInput";
+import {validateEmpty, validateNonNegativeAndInt, validatePositiveAndInt} from "../shared/validateInput";
 
 export default {
 	name: "ControlPoint",
@@ -445,8 +451,8 @@ export default {
 				this.showAlert('warning', this.translateText('control point must have at least one description'));
 				valid = false
 			}
-
-			if (this.validate([{value: this.cpData.measurementType}], this.translateText('measurement type con not be empty')) === false) valid = false
+			console.log("AAAAAAAAAA")
+			if (this.validate([{value: this.cpData.measurementType}], this.translateText('measurement type can not be empty')) === false) valid = false
 
 			if (this.validate([{value: this.cpData.type}], this.translateText('value type can not be empty')) === false) valid = false
 			if (this.cpData.type === 'options') {
@@ -454,12 +460,13 @@ export default {
 			} else if (this.cpData.type === 'number') {
 				if (this.validate([{value: this.cpData.lowerTolerance}], this.translateText('lower tolerance can not be empty')) === false) valid = false
 				if (this.validate([{value: this.cpData.upperTolerance}], this.translateText('upper tolerance can not be empty')) === false) valid = false
-				if (!validateNonPositiveAndInt(this.cpData.lowerTolerance)) {
-					this.showAlert('warning', this.translateText("lower tolerance needs to be grater than 0 and smaller than 2147483647"))
+				console.log(!validateNonNegativeAndInt(this.cpData.lowerTolerance))
+				if (!validateNonNegativeAndInt(this.cpData.lowerTolerance)) {
+					this.showAlert('warning', this.translateText("lower tolerance needs to be grater or equal to 0 and smaller than 2147483647"))
 					valid = false
 				}
-				if (!validateNonPositiveAndInt(this.cpData.upperTolerance)) {
-					this.showAlert('warning', this.translateText("upper tolerance needs to be grater than 0 and smaller than 2147483647"))
+				if (!validateNonNegativeAndInt(this.cpData.upperTolerance)) {
+					this.showAlert('warning', this.translateText("upper tolerance needs to be grater or equal to 0 and smaller than 2147483647"))
 					valid = false
 				}
 			}
@@ -470,16 +477,16 @@ export default {
 						valid = false
 					}
 					if(att.type == 1){
-						if(validateEmpty(att.minValue) || validateEmpty(att.maxValue)){
-							this.showAlert('warning', this.translateText("numeric attributes must have minimum and maximum value"))
+						if(att.minValue >= att.maxValue){
+							this.showAlert('warning', this.translateText("attribute minimum value can not be greater or equal to the maximum value"))
 							valid = false
 						}
-						if(!validateNegativeAndInt(att.minValue) || !validateNegativeAndInt(att.maxValue)){
+						if(!validatePositiveAndInt(att.minValue) || !validatePositiveAndInt(att.maxValue)){
 							this.showAlert('warning', this.translateText("attribute minimum and maximum value needs to be positive value"))
 							valid = false
 						}
-						if(att.minValue >= att.maxValue){
-							this.showAlert('warning', this.translateText("attribute minimum value can not be greater or equal to the maximum value"))
+						if(validateEmpty(att.minValue) || validateEmpty(att.maxValue)){
+							this.showAlert('warning', this.translateText("attribute minimum and maximum value can not be empty"))
 							valid = false
 						}
 					}
@@ -500,7 +507,7 @@ export default {
 			return true
 		},
 		handleFrequencies() {
-			if (typeof this.$refs.frequencyChild === 'undefined' || !this.cpData.measurementType==0) {
+			if (typeof this.$refs.frequencyChild === 'undefined' || this.cpData.measurementType != 0) {
 				this.cpData.frequencies = null
 				return true
 			}
