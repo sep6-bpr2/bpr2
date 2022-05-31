@@ -358,7 +358,7 @@ function saveImage(baseImage) {
     /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
     let path = __dirname.split('\\')
     let localPath = ""
-    
+
     if(process.env.PICTURE_STORAGE_LOCATION == null) {
         for (let i = 0; i < path.length - 1; i++) {
             localPath += path[i] + "\\"
