@@ -84,7 +84,7 @@ module.exports.getReleasedOrderControlPoints = async (id, language, date) => {
             MAX(connection.value) as answer,
             MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
-            FROM [QAReportControlPointValue] connection
+            FROM [QAFormControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
             INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
             WHERE 
@@ -121,7 +121,7 @@ module.exports.getReleasedOrderControlPointsAuthors = async (id, language, date)
             MAX(connection.value) as answer,
             MAX(connection.timestamp) as timestamp,
             MAX(description.description) as description
-            FROM [QAReportControlPointValue] connection
+            FROM [QAFormControlPointValue] connection
             INNER JOIN [ControlPoint] point ON connection.[controlPointId] = point.[id]
             INNER JOIN [Description] description ON connection.[controlPointId] = description.[controlPointId]
             WHERE 
@@ -200,7 +200,7 @@ module.exports.getReleasedOrderReport = async (id, productionOrder) => {
         .input("id", mssql.NVarChar, id)
         .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
-            SELECT * FROM [QAReport]
+            SELECT * FROM [QAForm]
             WHERE itemId = @id AND productionOrder = @productionOrder
         `)
     return result.recordset
@@ -319,14 +319,14 @@ module.exports.createQAReport = async (id, productionOrder) => {
         .input("id", mssql.NVarChar, id)
         .input("productionOrder", mssql.NVarChar, productionOrder)
         .query(`
-            INSERT INTO QAReport (itemId, productionOrder, status, createdDate) VALUES (@id, @productionOrder, 0, GETDATE())
+            INSERT INTO QAForm (itemId, productionOrder, status, createdDate) VALUES (@id, @productionOrder, 0, GETDATE())
         `)
 
     const result = await ( await localDB())
         .request()
         .input("id", mssql.Int, id)
         .query(`
-            SELECT * FROM QAReport WHERE itemId = @id
+            SELECT * FROM QAForm WHERE itemId = @id
         `)
     return result.recordset
 }
@@ -337,7 +337,7 @@ module.exports.insertControlPointConnection = async (controlPointId, qaReportId)
         .input("controlPointId", mssql.Int, controlPointId)
         .input("qaReportId", mssql.Int, qaReportId)
         .query(`
-            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value) values(@qaReportId, @controlPointId, '')
+            INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value) values(@qaReportId, @controlPointId, '')
         `)
     return result.recordset
 }
@@ -377,7 +377,7 @@ module.exports.insertMultipleTimeMeasurement = async (controlPointId, value, qaR
         .input("value", mssql.NVarChar, value)
         .input("author", mssql.NVarChar, author)
         .query(`
-            INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author);
+            INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author) values(@qaReportId, @controlPointId, @value, @author);
             SELECT SCOPE_IDENTITY() AS id
         `)
     return result.recordset
@@ -392,7 +392,7 @@ module.exports.alterMeasurement = async (connectionId, controlPointId, value, qa
         .input("value", mssql.NVarChar, value)
         .input("author", mssql.NVarChar, author)
         .query(`
-            UPDATE [QAReportControlPointValue]
+            UPDATE [QAFormControlPointValue]
             SET [value] = @value, [author] = @author, timestamp = GETDATE()
             WHERE qaReportId = @qaReportId AND controlPointId = @controlPointId AND id = @id; 
         `)
@@ -404,7 +404,7 @@ module.exports.deleteQAReportConnection = async (connectionId) => {
         .request()
         .input("connectionId", mssql.Int, connectionId)
         .query(`
-            DELETE FROM QAReportControlPointValue WHERE id = @connectionId
+            DELETE FROM QAFormControlPointValue WHERE id = @connectionId
         `)
     return result.recordset
 }
@@ -421,7 +421,7 @@ module.exports.qaReportControlPointResults = async (qaReportId, listOfControlPoi
             connection.qaReportId,
             (CASE WHEN connection.author = null or connection.author = '' THEN '' ELSE 'taken' END) as author,
             connection.timestamp
-            FROM [QAReportControlPointValue] connection
+            FROM [QAFormControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
     return result.recordset
@@ -439,7 +439,7 @@ module.exports.qaReportControlPointResultsAuthors = async (qaReportId, listOfCon
             connection.qaReportId,
             connection.author,
             connection.timestamp
-            FROM [QAReportControlPointValue] connection
+            FROM [QAFormControlPointValue] connection
             WHERE connection.[qaReportId] = @qaReportId AND connection.[controlPointId] in (${listOfControlPointIds})
         `)
     return result.recordset
@@ -450,7 +450,7 @@ module.exports.getMultipleQAReports = async (stringList) => {
     const result = await ( await localDB())
         .request()
         .query(`
-            Select * from QAReport WHERE itemId in (${stringList});
+            Select * from QAForm WHERE itemId in (${stringList});
         `)
     return result.recordset
 }
@@ -502,7 +502,7 @@ module.exports.getCompletedQAReports = async (offset, limit) => {
         .input("offset", mssql.Int, offset)
         .input("limit", mssql.Int, limit)
         .query(`
-            Select * from QAReport WHERE status = 1
+            Select * from QAForm WHERE status = 1
             ORDER BY productionOrder ASC 
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
         `)
@@ -514,7 +514,7 @@ module.exports.setQaReportStatusToFinished = async (itemId) => {
         .request()
         .input("itemId", mssql.NVarChar, itemId)
         .query(`
-            UPDATE [QAReport]
+            UPDATE [QAForm]
             SET status = 1, completionDate = GETDATE()
             WHERE itemId = @itemId; 
         `)

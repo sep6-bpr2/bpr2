@@ -23,7 +23,7 @@ module.exports.releasedOrders = async (location, offset, limit) => {
     }
 
     // Get our database qa reports that are related to these released orders
-    let qaReports = await model.getMultipleQAReports(listToCommaStringOfStrings(orders, 'id'))
+    let qaReports = await model.getMultipleQAReports(exports.module.listToCommaStringOfStrings(orders, 'id'))
 
     let uncompletedOrders = []
 
@@ -71,14 +71,14 @@ module.exports.completedOrders = async (location, offset, limit) => {
 
     if (location.toLocaleLowerCase() == "all") {
         orders = await model.getOrdersByIdListAllLocations(
-            listToCommaStringOfStrings(qaReports, 'itemId'), 
-            listToCommaStringOfStrings(qaReports, 'productionOrder')
+            exports.module.listToCommaStringOfStrings(qaReports, 'itemId'), 
+            exports.module.listToCommaStringOfStrings(qaReports, 'productionOrder')
         )
     } else {
         orders = await model.getOrdersByIdList(
             location, 
-            listToCommaStringOfStrings(qaReports, 'itemId'), 
-            listToCommaStringOfStrings(qaReports, 'productionOrder')
+            exports.module.listToCommaStringOfStrings(qaReports, 'itemId'), 
+            exports.module.listToCommaStringOfStrings(qaReports, 'productionOrder')
         )
     }
 
@@ -106,7 +106,7 @@ module.exports.completedOrders = async (location, offset, limit) => {
  * @param {string} key - key that is in all of the objects
  * @returns string EX: "1,2,4,5,7"
  */
-function listToCommaString(list, key) {
+module.exports.listToCommaString = (list, key) => {
     let stringList = ""
     for (let i = 0; i < list.length; i++) {
         if ((list.length - 1) == i) {
@@ -118,7 +118,7 @@ function listToCommaString(list, key) {
     return stringList
 }
 
-function listToCommaStringOfStrings(list, key) {
+module.exports.listToCommaStringOfStrings = (list, key) => {
     let stringList = ""
     for (let i = 0; i < list.length; i++) {
         try{
@@ -186,7 +186,7 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
 
 
             // Get control points that connect to these attributes and are for this categoryCode
-            controlPoints = await model.getSpecificControlPoints(listToCommaString(attributes, 'id'), itemData.categoryCode)
+            controlPoints = await model.getSpecificControlPoints(exports.module.listToCommaString(attributes, 'id'), itemData.categoryCode)
 
             let controlPointsWithCategory = await model.getControlPointsCategoryNoAtrributes(itemData.categoryCode)
 
@@ -411,7 +411,7 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
 
         // Get the list of connections for the multiple time control points
         // These have the answers and the authors to those answers
-        let mIdList = listToCommaString(itemData.multipleTimeControlPoints, 'id')
+        let mIdList = exports.module.listToCommaString(itemData.multipleTimeControlPoints, 'id')
         let mResults = []
         if (mIdList != '') {
             if (showAuthors) {

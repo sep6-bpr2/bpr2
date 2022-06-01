@@ -4124,6 +4124,26 @@ describe("Orders service testing", () => {
             assertEquals(test1.response, 0)
         })
     })
+
+    describe("listToCommaString", () => {
+        it("OK", async () => {
+
+            const listOfObjects = [
+                {someId: 34},
+                {someId: 44},
+                {someId: 3},
+                {someId: 2},
+                {someId: 75},
+                {someId: 6},
+                {someId: 23},
+                {someId: 9},
+                {someId: 31},
+
+            ]
+            const response = await ordersService.listToCommaString(listOfObjects, "someId")
+            assertEquals(response, "34,44,3,2,75,6,23,9,31")
+        })
+    })
 })
 
 function assertEquals(value1, value2) {
