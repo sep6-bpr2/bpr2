@@ -20,7 +20,7 @@ describe('Performance test', () => {
 			}
 		})
 			.its('performance').then((performance) => {
-			cy.contains("Information").should("be.visible")
+			cy.contains("Order information").should("be.visible")
 				.then(() => performance.mark('end-loading'))
 				.then(() => {
 					performance.measure('pageLoad', 'start-loading', 'end-loading');
