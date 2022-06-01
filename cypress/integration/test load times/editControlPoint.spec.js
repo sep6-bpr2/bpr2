@@ -7,19 +7,19 @@ describe('Performance tests', () => {
 		cy.clearLocalStorage()
 	})
 
-	it('Create control point', () => {
+	it('Edit control point', () => {
 		cy.get('#enterUsername').type('admin')
 		cy.get('#selectLocation').click({force: true})
 		cy.contains("DK").click({force: true})
 		cy.get('#submitLogin').click()
 
-		cy.visit('http://localhost:3000/controlPoints/createControlPoint', {
+		cy.visit('http://localhost:3000/controlPoints/10', {
 			onBeforeLoad: (win) => {
 				win.performance.mark('start-loading');
 			}
 		})
 			.its('performance').then((performance) => {
-			cy.get('.pageHeader').should('contain.text', 'Create control point')
+			cy.get('.pageHeader').should('contain.text', 'Edit control point')
 				.then(() => performance.mark('end-loading'))
 				.then(() => {
 					performance.measure('pageLoad', 'start-loading', 'end-loading');
