@@ -14,16 +14,17 @@ describe("ItemCategory service testing", () => {
 		it("get Frequency Of Item OK", async () => {
 			const defaultFrequencyValue = [{"id":0,"to25":2,"to50":3,"to100":4,"to200":7,"to300":10,"to500":16,"to700":22,"to1000":30,"to1500":40,"to2000":50,"to3000":60,"to4000":65,"to5000":70}]
 
-			sinon.stub(itemCategoryModel, "getFrequenciesOfItem").returns(defaultFrequencyValue)
+			sinon.stub(itemCategoryModel, "getFrequenciesOfCategory").returns(defaultFrequencyValue)
 
-			const data = await itemCategoryService.getFrequenciesOfItem(193345)
+			const data = await itemCategoryService.getFrequenciesOfCategory(193345)
 
 			assertEquals(data, defaultFrequencyValue)
 			assertEquals(data[0]["to25"],2)
 		})
 
 		it("set frequencyOfItem", async ()=>{
-			sinon.stub(itemCategoryModel, "setFrequenciesWithIdWhenIdNotZero").returns("result ok")
+			sinon.stub(itemCategoryModel, "insertFrequency").returns("result ok")
+			sinon.stub(itemCategoryModel, "expireOldFrequency").returns("result ok")
 
 			const data = await itemCategoryService.setFrequenciesWithId("random Item Value")
 

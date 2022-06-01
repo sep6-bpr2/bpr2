@@ -22,7 +22,7 @@ describe("itemCategory Api testing", () => {
 
 			sinon.stub(itemCategoryService, "getItemCatCodes").returns("Test worked")
 
-			const response = await request.get("/itemCategory/getCodes/admin/DK")
+			const response = await request.get("/itemCategory/getCodes/admin/DK/2/4")
 
 			assertEquals(response.text, "Test worked")
 		})
@@ -32,7 +32,7 @@ describe("itemCategory Api testing", () => {
 		it("get Item Frequencies OK", async () => {
 			sinon.stub(userModel, "getUserByUsername").returns([{ "role": "admin" }])
 
-			sinon.stub(itemCategoryService, "getFrequenciesOfItem").returns("Test worked")
+			sinon.stub(itemCategoryService, "getFrequenciesOfCategory").returns("Test worked")
 
 			const response = await request.get("/itemCategory/getFrequenciesOfCode/admin/193345")
 
@@ -46,7 +46,7 @@ describe("itemCategory Api testing", () => {
 
 			sinon.stub(itemCategoryService, "setFrequenciesWithId").returns("Test worked")
 
-			const response = await request.post("/itemCategory/setFrequencies/admin").send({"id":12,"to25":233457,"to50":3676,"to100":4,"to200":7,"to300":10,"to500":16,"to700":22,"to1000":30,"to1500":40,"to2000":50,"to3000":6079,"to4000":65,"to5000":70,"Code":193345})
+			const response = await request.post("/itemCategory/setFrequencies/admin").send({"id":12,"to25":233457,"to50":3676,"to100":4,"to200":7,"to300":10,"to500":16,"to700":22,"to1000":30,"to1500":40,"to2000":50,"to3000":6079,"to4000":65,"to5000":70,"Code":193345,"frequencyNumber":2})
 
 			assertEquals(response.text, "Test worked")
 		})
