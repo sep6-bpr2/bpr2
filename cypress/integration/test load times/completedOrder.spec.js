@@ -13,8 +13,8 @@ describe('Performance test', () => {
 		cy.contains("DK").click({force: true})
 		cy.get('#submitLogin').click()
 
-        cy.visit('http://localhost:3000/completedOrders/1111')
+        cy.visit('http://localhost:3000/completedOrders/464646/1111')
 
-        cy.contains("Information").should("be.visible")
+        cy.contains("Order information").should("be.visible")
 	})
 })

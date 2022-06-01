@@ -83,12 +83,12 @@ module.exports.getControlPointOptionValues = async (controlPointNumber) => {
 module.exports.getControlPointAttributes = async (controlPointNumber) => {
 	const result = await (await localDB())
 		.request()
-		.input('controlPointNumber', mssql.Int, controlPointNumber)
+		.input('controlPointNumber', mssql.Int, parseInt(controlPointNumber))
 		.query(`
             SELECT attributeId, minValue, maxValue
             FROM [dbo].[AttributeControlPoint]
             WHERE controlPointId = @controlPointNumber AND validFrom < GETDATE() AND validTo IS NULL
-            `)
+        `)
 
 	return result.recordset
 }
@@ -451,3 +451,15 @@ module.exports.expireOldFrequency = async (controlPointNumber) => {
             where controlPointNumber = @controlPointNumber and validTo IS NULL
         `)
 }
+
+module.exports.getAttributeType = async (attributeId) => {
+    const result =await (await konfairDB())
+        .request()
+        .input("attributeId", mssql.Int, attributeId)
+        .query(`
+            Select type from [KonfAir DRIFT$Item Attribute]
+            where ID = @attributeId
+        `)
+    return result.recordset
+}
+

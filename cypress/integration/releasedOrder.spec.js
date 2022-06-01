@@ -88,7 +88,7 @@ describe('released order', () => {
         // Check order that is ok
         cy.get('#customTable1').click()
 
-        cy.contains('Order Information').should('be.visible')
+        cy.contains('Order information').should('be.visible')
         cy.contains('Item number').should('be.visible')
         cy.contains('Description').should('be.visible')
         cy.contains('Item category code').should('be.visible')
@@ -238,7 +238,7 @@ describe('released order', () => {
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Order Information').should('be.visible')
+        cy.contains('Order information').should('be.visible')
 
         // One time measurements
         {
@@ -356,7 +356,7 @@ describe('released order', () => {
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Order Information').should('be.visible')
+        cy.contains('Order information').should('be.visible')
 
         // One time control points
         {
@@ -581,7 +581,7 @@ describe('released order', () => {
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Order Information').should('be.visible')
+        cy.contains('Order information').should('be.visible')
 
         cy.get('#completeButton').click()
         cy.contains('Failed').should('be.visible')

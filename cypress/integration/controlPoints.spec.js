@@ -42,6 +42,8 @@ describe('Control points page', () => {
 
     it('ERROR user with wrong role', () => {
         cy.get('#enterUsername').type('worker')
+        cy.get('#selectLocation').click({force: true})
+		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 
 		cy.visit('http://localhost:3000/controlPoints')

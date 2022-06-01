@@ -387,7 +387,7 @@ const translations = {
 	},
 
 	"control point must have at least one description": {
-		"English": "control point must have at least one DESCRIPTION",
+		"English": "control point must have at least one description",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},"upper tolerance can not be empty": {

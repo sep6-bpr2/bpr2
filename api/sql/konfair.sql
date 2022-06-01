@@ -44,10 +44,10 @@ INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Me
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (110, 'Number example', null, 3, 'mm');
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (111, 'Text example', null, 0, null);
 INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (112, 'Option example', null, 0, null);
-INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (1, 'height mm', null, 1, 'mm');
-INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (2, 'height cm', null, 1, 'cm');
-INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (5, 'color', null, 2, 'text');
-INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (6, 'label', null, 3, 0);
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (1, 'height mm', null, 3, 'mm');
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (2, 'height cm', null, 3, 'cm');
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (5, 'color', null, 1, 'text');
+INSERT INTO [KonfAir DRIFT$Item Attribute] (ID, Name, Blocked, Type, [Unit of Measure]) VALUES (6, 'label', null, 0, 0);
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Item Attribute Value];
 CREATE TABLE [KonfAir DRIFT$Item Attribute Value] (

@@ -72,7 +72,7 @@ module.exports.deleteControlPoint = async (controlPointNumber) => {
 }
 
 module.exports.getControlPointData = async (controlPointNumber, username) => {
-    let mainInformation = await controlPointModel.getControlMainInformation(controlPointNumber)
+    let mainInformation = await controlPointModel.getControlMainInformation(parseInt(controlPointNumber))
     if (mainInformation.length === 0) {
         return { message: `control point with id: ${controlPointNumber} does not exist in database` }
     }
@@ -80,12 +80,16 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     mainInformation = mainInformation[0]
 		mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
-    const descriptions = await controlPointModel.getControlPointDescriptions(controlPointNumber)
-    const attributes = await controlPointModel.getControlPointAttributes(controlPointNumber)
-    const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(controlPointNumber)
-    const optionValues = await controlPointModel.getControlPointOptionValues(controlPointNumber)
-    const frequencies = await controlPointModel.getFrequenciesOfControlPoint(controlPointNumber)
+    const descriptions = await controlPointModel.getControlPointDescriptions(parseInt(controlPointNumber))
+    let attributes = await controlPointModel.getControlPointAttributes(parseInt(controlPointNumber))
+    const categoryCodes = await controlPointModel.getControlPointItemCategoryCodes(parseInt(controlPointNumber))
+    const optionValues = await controlPointModel.getControlPointOptionValues(parseInt(controlPointNumber))
+    const frequencies = await controlPointModel.getFrequenciesOfControlPoint(parseInt(controlPointNumber))
 
+    for(let i = 0; i< attributes.length; i++){
+        let date = await controlPointModel.getAttributeType(attributes[i].attributeId)
+        attributes[i].type = date[0].type
+    }
 
 	let cpData = {
 		allMeasurementTypes: [{name: "one time", value: 1}, {name: "multiple times", value: 0}],
@@ -143,11 +147,12 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 			cpData.attributes[i].id = att[i].attributeId
 			cpData.attributes[i].minValue = att[i].minValue
 			cpData.attributes[i].maxValue = att[i].maxValue
+			cpData.attributes[i].type = att[i].type
 		}
 	}
 	console.log(cpData.attributes)
 	//codes
-	categoryCodes.forEach(o => cpData.codes.push({value: JSON.stringify(o.itemCategoryCode)}))
+	categoryCodes.forEach(o => cpData.codes.push({value: o.itemCategoryCode}))
 
 	return cpData
 }

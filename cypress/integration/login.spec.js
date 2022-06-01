@@ -1,6 +1,8 @@
 describe('login', () => {
 	beforeEach(() => {
+        cy.clearLocalStorage()
 		cy.visit('http://localhost:3000/login')
+        cy.clearLocalStorage()
 	})
 
 	it('shouldnt login non-existent user',()=>{
@@ -25,7 +27,6 @@ describe('login', () => {
 		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 		cy.get('h1').should('contain.text','Control point management')
-		cy.get('header > button').click();
 	})
 
 	it('logs in proper qa worker user',()=>{
