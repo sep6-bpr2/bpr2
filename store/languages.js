@@ -90,7 +90,7 @@ const translations = {
         "Danish": "",
     },
     "Quantity": {
-        "English": "default",
+        "English": "Quantity",
         "Lithuanian": "",
         "Danish": "",
     },

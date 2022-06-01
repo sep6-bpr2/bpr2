@@ -19,14 +19,14 @@ describe('Completed orders', () => {
         cy.get('#nav1').click({force: true})
 
         // Released orders validation
-        cy.contains('This is the completed orders page').should('be.visible')
+        cy.contains('Completed orders').should('be.visible')
         // Check that there are 1 rows in the table
         cy.get('#completedOrderList').children().get('tbody').children().should('have.length', 1); 
 
         cy.get('#customTable0').click()
 
-        cy.contains('Information').should('be.visible')
-        cy.contains('Item ID').should('be.visible')
+        cy.contains('Item number').should('be.visible')
+        cy.contains('Order information').should('be.visible')
         cy.contains('Description').should('be.visible')
         cy.contains('Item category code').should('be.visible')
         cy.contains('Deadline').should('be.visible')
@@ -40,7 +40,9 @@ describe('Completed orders', () => {
         cy.contains('2022-06-12').should('be.visible')
         cy.contains('DK').should('be.visible')
         cy.contains('completed').should('be.visible')
-        cy.contains('2022-05-24').should('be.visible')
+
+        // This always changes
+        // cy.contains('2022-05-24').should('be.visible')
 
         // Check if the qa form contains all the elements it needs to 
 
@@ -127,14 +129,14 @@ describe('Completed orders', () => {
 		cy.contains("DK").click()
 		cy.get('#submitLogin').click()
 		
-		cy.visit('http://localhost:3000/completedOrders/4144123sda')
+		cy.visit('http://localhost:3000/completedOrders/4144123sda/545')
 
         // Should see notification and failed
         cy.contains('Failed').should('be.visible')
 	})
 
     it('ERROR non authorized user', () => {
-		cy.visit('http://localhost:3000/completedOrders/4144123sda')
+		cy.visit('http://localhost:3000/completedOrders/4144123sda/545')
 
         // Should see login screen
         cy.contains('English').should('be.visible')

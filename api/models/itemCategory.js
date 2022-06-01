@@ -167,7 +167,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 }
 
 module.exports.insertFrequency = async (frequency) => {
-    await ( await localDB())
+    const result = await ( await localDB())
         .request()
 		.input('frequencyNumber',mssql.Int,frequency.frequencyNumber)
 		.input('to25', mssql.Int, frequency.to25)
