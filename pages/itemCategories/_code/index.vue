@@ -108,15 +108,37 @@ export default {
 					tempFrequencies[x] = localFrequencies[x].val
 				}
 			}
-			tempFrequencies.Code = 1
-			let text = "Are you sure you want to update frequency for this item Category?"
-			let existsNegVal = 	Object.entries(tempFrequencies).every(v => v[1] >= 0)
-			let existsOverInt = 	Object.entries(tempFrequencies).every(v => v[1] <= 2147483647)
-			tempFrequencies.Code = this.$route.params.code
+
+
+			let failedId;
+			tempFrequencies.Code = parseInt(this.$route.params.code)
+			let existsNegVal = 	Object.entries(tempFrequencies).every(isGreaterThan0)
+			let existsOverInt = 	Object.entries(tempFrequencies).every(isLessThanMaxInteger)
+
+			function isGreaterThan0(el){
+				if(el[1] >= 0){
+					return true
+				}
+				else{
+					failedId = el[0]
+					return false
+				}
+			}
+
+			function isLessThanMaxInteger(el){
+				if(el[1] <= 2147483647){
+					return true
+				}
+				else{
+					failedId = el[0]
+					return false
+				}
+			}
+
 
 			let localNotification;
 			if (!existsNegVal || !existsOverInt) {
-				localNotification = { response: 0, message: "There is an invalid input"}
+				localNotification = { response: 0, message: "There is an invalid input at input: " + failedId }
 			}
 			else{
                     tempFrequencies.frequencyNumber = this.$store.state.itemCategory.frequencies[0].frequencyNumber

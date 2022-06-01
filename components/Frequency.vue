@@ -15,6 +15,7 @@
 											<v-text-field
 												:id="key"
 												class="freqEntry"
+												:rules="positiveValueRule"
 												:value=value
 												type="number"
 												v-on:input="updateFreq($event,key)"
@@ -81,6 +82,7 @@ export default {
 	data: () => ({
 		shouldConfirm: false,
 		isConfirmed: "",
+		positiveValueRule:[(v) => v >= 0 || "Has to be greater than 0"],
 		modalAlertShowSubmit: false,
 		modalAlertShowError: false,
 		notification:null,

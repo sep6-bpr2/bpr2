@@ -134,7 +134,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		cpData.upperTolerance = mainInformation.uppertolerance
 		cpData.lowerTolerance = mainInformation.lowertolerance
 	}
-
+	console.log(attributes)
 	//attributes
 	let att = attributes
 	if (att.length > 0) {
@@ -145,6 +145,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 			cpData.attributes[i].maxValue = att[i].maxValue
 		}
 	}
+	console.log(cpData.attributes)
 	//codes
 	categoryCodes.forEach(o => cpData.codes.push({value: JSON.stringify(o.itemCategoryCode)}))
 
@@ -181,7 +182,6 @@ module.exports.updateControlPoint = async (data) => {
     let oldControlPoint = await controlPointModel.getControlMainInformation(data.controlPointNumber)
     oldControlPoint = oldControlPoint[0]
 
-	console.log(data)
     if(data.frequencies == null && oldControlPoint.frequencyId != null){
         await itemCategoryModel.expireOldFrequency(oldControlPoint.frequencyId)
     }else if(data.frequencies != null && oldControlPoint.frequencyId != null && oldControlPoint.frequencyId == data.frequencyId) {
@@ -358,7 +358,7 @@ function saveImage(baseImage) {
     /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
     let path = __dirname.split('\\')
     let localPath = ""
-    
+
     if(process.env.PICTURE_STORAGE_LOCATION == null) {
         for (let i = 0; i < path.length - 1; i++) {
             localPath += path[i] + "\\"

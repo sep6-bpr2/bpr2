@@ -66,7 +66,7 @@ export default {
 				this.cpData.controlPointId = this.$route.params.id
 				this.$store.dispatch('controlPoint/submitEditControlPoint', this.cpData).then(result => {
 					if (result) {
-						showAlert('success', this.translateText('control point has been created'))
+						showAlert('success', this.translateText('control point has been changed'))
 					} else {
 						showAlert('warning', this.translateText('something went wrong, control point has not been inserted'))
 					}

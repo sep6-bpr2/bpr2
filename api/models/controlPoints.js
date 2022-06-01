@@ -339,17 +339,6 @@ module.exports.insertDescription = async (controlPointId, language, description)
 	return result.recordset
 }
 
-module.exports.deleteControlPointOptionValues = async (cpId) => {
-	const result = await (await localDB())
-		.request()
-		.input('cpId', mssql.Int, cpId)
-		.query(`DELETE
-				FROM [Option]
-				WHERE controlPointId = @cpId`)
-
-	return result.recordset
-}
-
 module.exports.insertOption = async (controlPointId, value) => {
 	const result = await (await localDB())
 		.request()
@@ -361,17 +350,6 @@ module.exports.insertOption = async (controlPointId, value) => {
             VALUES
             (@controlPointId, @value, GETDATE())
         `)
-
-	return result.recordset
-}
-
-module.exports.deleteControlPointAttributes = async (cpId) => {
-	const result = await (await localDB())
-		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`DELETE
-				FROM [dbo].[AttributeControlPoint]
-				WHERE controlPointId = @CpId`)
 
 	return result.recordset
 }
@@ -389,50 +367,6 @@ module.exports.insertControlPointAttribute = async (controlPointId, attributeId,
             VALUES
             (@attributeId, @controlPointId, @minValue, @maxValue, GETDATE())
         `)
-
-	return result.recordset
-}
-
-module.exports.deleteControlPointItemCategoryCodes = async (cpId) => {
-	const result = await (await localDB())
-		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`DELETE
-				FROM [dbo].[ItemCategoryControlPoint]
-				WHERE controlPointId = @CpId`)
-
-	return result.recordset
-}
-
-module.exports.deleteControlPoint = async (cpId) => {
-	const result = await (await localDB())
-		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`DELETE
-				FROM [dbo].[ControlPoint]
-				WHERE id = @CpId`)
-
-	return result.recordset
-}
-
-module.exports.deleteControlPointDescriptions = async (cpId) => {
-	const result = await (await localDB())
-		.request()
-		.input('CpId', mssql.Int, cpId)
-		.query(`DELETE
-				FROM [dbo].[Description]
-				WHERE controlPointId = @CpId`)
-
-	return result.recordset
-}
-
-module.exports.deleteFrequency = async (id) => {
-	const result = await (await localDB())
-		.request()
-		.input('id', mssql.Int, id)
-		.query(`DELETE
-				FROM [dbo].[Frequency]
-				WHERE id = @id`)
 
 	return result.recordset
 }
