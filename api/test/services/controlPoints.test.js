@@ -46,25 +46,17 @@ describe("Control points service testing", () => {
 
     describe("get control points minimal", () => {
         it("get control points minimal OK", async () => {
-            sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", }, { id: "2" }])
-            sinon.stub(controlPointsModel, "getDescriptionsByControlPointId").returns([
-                { language: "danish", description: "sdasdasfafaffad" },
-                { language: "english", description: "sdasdasd" }
-            ]);
+            sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", language: "danish", description: "sdasdasfafaffad"}, { id: "2",language: "english", description: "sdasdasd" }])
 
             const data = await controlPointsService.controlPointsMinimal("english")
-
+			console.log(JSON.stringify(data))
             assertEquals(data.length, 2)
             assertEquals(data[1].id, "2")
             assertEquals(data[1].description, "sdasdasd")
         })
 
         it("get control points minimal NOT found specified language", async () => {
-            sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", }, { id: "2" }])
-            sinon.stub(controlPointsModel, "getDescriptionsByControlPointId").returns([
-                { language: "danish", description: "sdasdasfafaffad" },
-                { language: "english", description: "sdasdasd" }
-            ]);
+            sinon.stub(controlPointsModel, "getControlPointsMinimal").returns([{ id: "1", language: "danish", description: "sdasdasfafaffad"}, { id: "2",language: "english", description: "sdasdasd" }])
 
             const data = await controlPointsService.controlPointsMinimal("lithuanian")
 

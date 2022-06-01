@@ -141,7 +141,7 @@ describe("Control points api testing", () => {
 
             sinon.stub(controlPointsService, "controlPointsMinimal").returns("Test worked")
 
-            const response = await request.get("/controlPoints/listMinimal/rokas/gb")
+            const response = await request.get("/controlPoints/listMinimal/rokas/gb/0/3")
 
             assertEquals(response.text, "Test worked")
         })

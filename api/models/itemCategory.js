@@ -167,7 +167,7 @@ module.exports.setFrequenciesWithIdWhenIdNotZero = async (item) => {
 }
 
 module.exports.insertFrequency = async (frequency) => {
-    await ( await localDB())
+    const result =await ( await localDB())
         .request()
 		.input('frequencyNumber',mssql.Int,frequency.frequencyNumber)
 		.input('to25', mssql.Int, frequency.to25)
@@ -203,11 +203,11 @@ module.exports.checkCodeExists = async (itemCode) => {
 		.request()
 		.input("itemCode", mssql.NVarChar, itemCode)
 		.query(`
-            select DISTINCT 
-            Code 
-            from [KonfAir DRIFT$Item] 
-            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_] 
-            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code 
+            select DISTINCT
+            Code
+            from [KonfAir DRIFT$Item]
+            join [KonfAir DRIFT$Production Order] [KA D$P O] on [KonfAir DRIFT$Item].No_ = [KA D$P O].[Source No_]
+            JOIN [KonfAir DRIFT$Item Category] [KA D$I C] on [KonfAir DRIFT$Item].[Item Category Code] = [KA D$I C].Code
             where Code = @itemCode`)
 
 	return result.recordset
