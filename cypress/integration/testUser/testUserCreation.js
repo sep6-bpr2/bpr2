@@ -33,8 +33,8 @@ describe('testCreationOfUser', () => {
 		cy.get('#usernameInput').clear();
 		cy.get('#usernameInput').type(val);
 		cy.get('#roles').parent().click()
-		cy.get('.v-menu__content').contains("admin").click();
-		cy.get('.v-btn:nth-child(4) > .v-btn__content').click();
+		cy.get('.v-menu__content').contains("admin").click();		
+        cy.get('.v-btn:nth-child(4) > .v-btn__content').click();
 	})
 
 	it('should check created user',()=>{
