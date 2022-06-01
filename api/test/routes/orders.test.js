@@ -25,7 +25,7 @@ describe("Orders api testing", () => {
 
             sinon.stub(ordersService, "releasedOrders").returns("Test worked")
 
-            const response = await request.get("/orders/releasedList/minimal/rokas/denmark")
+            const response = await request.get("/orders/releasedList/minimal/rokas/denmark/0/5")
 
             assertEquals(response.text, "Test worked")
         })
@@ -37,7 +37,7 @@ describe("Orders api testing", () => {
 
             sinon.stub(ordersService, "completedOrders").returns("Test worked")
 
-            const response = await request.get("/orders/completedList/minimal/rokas/denmark")
+            const response = await request.get("/orders/completedList/minimal/rokas/denmark/0/5")
 
             assertEquals(response.text, "Test worked")
         })
@@ -49,7 +49,7 @@ describe("Orders api testing", () => {
 
             sinon.stub(ordersService, "getQAReport").returns("Test worked")
 
-            const response = await request.get("/orders/released/full/worker/47827/gb")
+            const response = await request.get("/orders/released/full/worker/47827/53455/gb")
 
             assertEquals(response.text, "Test worked")
         })
@@ -61,7 +61,7 @@ describe("Orders api testing", () => {
 
             sinon.stub(ordersService, "getQAReport").returns("Test worked")
 
-            const response = await request.get("/orders/completed/full/worker/47827/gb")
+            const response = await request.get("/orders/completed/full/worker/47827/24244/gb")
 
             assertEquals(response.text, "Test worked")
         })

@@ -16,7 +16,7 @@ describe('login', () => {
 
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2); 
 

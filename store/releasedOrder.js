@@ -32,7 +32,7 @@ export const mutations = {
 }
 
 export const actions = {
-    loadReleasedOrderFull({ commit, rootState }, parameters) {
+    loadReleasedOrderFull({ rootState }, parameters) {
         const user = rootState.login.user
         if (user && user.role == "qa employee") {
             const language = rootState.login.chosenLanguage.name

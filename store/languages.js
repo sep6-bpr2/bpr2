@@ -90,7 +90,7 @@ const translations = {
         "Danish": "",
     },
     "Quantity": {
-        "English": "default",
+        "English": "Quantity",
         "Lithuanian": "",
         "Danish": "",
     },
@@ -391,11 +391,11 @@ const translations = {
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},"upper tolerance can not be empty": {
-		"English": "UPPER TOLERANCE can not be empty",
+		"English": "upper tolerance can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},"lower tolerance can not be empty": {
-		"English": "LOWER TOLERANCE can not be empty",
+		"English": "lower tolerance can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},
@@ -405,12 +405,12 @@ const translations = {
 		"danish": "bla bla"
 	},
 	"value type can not be empty": {
-		"English": "VALUE TYPE can not be empty",
+		"English": "value type can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},
 	"option can not be empty": {
-		"English": "OPTION can not be empty",
+		"English": "option can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},
@@ -420,7 +420,7 @@ const translations = {
 		"Danish": "bla bla"
 	},
 	"code can not be empty": {
-		"English": "CODE can not be empty",
+		"English": "code can not be empty",
 		"Lithuanian": "bla bla",
 		"Danish": "bla bla"
 	},

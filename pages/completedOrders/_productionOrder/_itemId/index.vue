@@ -26,7 +26,7 @@
                 <h2><Translate :text="'Order information'"/></h2>
 
                 <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
-				<DataDisplay :name="'Item ID'" :data="currentOrder.id" />
+				<DataDisplay :name="'Item number'" :data="currentOrder.id" />
 				<DataDisplay
 					:name="'Description'"
 					:data="currentOrder.description"
@@ -357,7 +357,6 @@ export default {
 					if (scaleWidth > scaleHeight) scale = scaleWidth;
 					else scale = scaleHeight;
 
-					pdf.text(20, pdf.lastAutoTable.finalY, "Hello!")
 
 					// Add the image to pdf as png with adjusted size
 					pdf.addImage(
@@ -371,6 +370,8 @@ export default {
 							"Multiple",
 						"FAST"
 					);
+                    pdf.text(20, image.height + 10, "Hello!")
+
 					if (
 						i != 0 &&
 						i !=

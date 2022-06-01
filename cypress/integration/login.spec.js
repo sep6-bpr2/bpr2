@@ -33,6 +33,6 @@ describe('login', () => {
 		cy.get('#selectLocation').parent().click()
 		cy.get('.v-menu__content').contains("DK").click();
 		cy.get('#submitLogin').click()
-		cy.get('h1').should('contain.text','This is the released orders page')
+		cy.get('h1').should('contain.text','Released orders')
 	})
 })

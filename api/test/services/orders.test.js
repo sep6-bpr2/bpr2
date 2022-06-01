@@ -7,1375 +7,1455 @@ const sinon = require('sinon')
 
 
 let finishedOrder = {
-	"id": "47827",
-	"description": "Panelfilter 390x300x47",
-	"categoryCode": "32110",
-	"status": "completed",
-	"deadline": "2022-06-12",
+    "id": "47827",
+    "description": "Panelfilter 390x300x47",
+    "categoryCode": "32110",
+    "status": "completed",
+    "deadline": "2022-06-12",
     "completionDate": "2022-05-12",
-	"location": "DK",
-	"quantity": 240,
-	"qaReportId": 2,
-	"oneTimeControlPoints": [
-		{
-			"id": 1,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 9,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "300.00",
-			"units": "mm",
-			"toleranceText": ""
-		},
-		{
-			"id": 2,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 1,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 10,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "390.00",
-			"units": "mm",
-			"toleranceText": "+/-1mm"
-		},
-		{
-			"id": 3,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 11,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "47",
-			"units": "mm",
-			"toleranceText": "+6/-1mm"
-		},
-		{
-			"id": 4,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 12,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO ePM10 50%",
-			"units": "Text",
-			"toleranceText": ""
-		},
-		{
-			"id": 5,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 13,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 1, "controlPointId": 5, "value": "Yes" },
-				{ "id": 2, "controlPointId": 5, "value": "No" }
-			],
-			"expectedValue": "Ja",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 6,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 14,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
-			],
-			"expectedValue": "Z-line",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 7,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 15,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
-			],
-			"expectedValue": "Fiber",
-			"units": "Yes/No",
-			"toleranceText": ""
-		}
-	],
-	"multipleTimeControlPoints": [
-		{
-			"id": 8,
-			"image": "File1652206892425298.png",
-			"frequencyId": null,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 25,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "340.00",
-			"units": "mm",
-			"toleranceText": "+6/-1mm",
-			"letter": "A"
-		},
-		{
-			"id": 9,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 29,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO e",
-			"units": "Text",
-			"toleranceText": "",
-			"letter": "B"
-		},
-		{
-			"id": 10,
-			"image": "File1652206892425298.png",
-			"frequencyId": 2,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 35,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
-			],
-			"expectedValue": "Fiber glass",
-			"units": "Yes/No",
-			"toleranceText": "",
-			"letter": "C"
-		}
-	],
-	"multipleTimeAnswers": [
-		[
-			{
-				"connectionId": 16,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 19,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 20,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 21,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 22,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 23,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 24,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 25,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 17,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 26,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 27,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 28,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 29,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 18,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 30,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 31,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 32,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 33,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 34,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 35,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			}
-		]
-	]
+    "location": "DK",
+    "quantity": 240,
+    "qaReportId": 2,
+    "oneTimeControlPoints": [
+        {
+            "id": 1,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 9,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "300.00",
+            "units": "mm",
+            "toleranceText": ""
+        },
+        {
+            "id": 2,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 1,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 10,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "390.00",
+            "units": "mm",
+            "toleranceText": "+/-1mm"
+        },
+        {
+            "id": 3,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 11,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "47",
+            "units": "mm",
+            "toleranceText": "+6/-1mm"
+        },
+        {
+            "id": 4,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 12,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO ePM10 50%",
+            "units": "Text",
+            "toleranceText": ""
+        },
+        {
+            "id": 5,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 13,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 1, "controlPointId": 5, "value": "Yes" },
+                { "id": 2, "controlPointId": 5, "value": "No" }
+            ],
+            "expectedValue": "Ja",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 6,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 14,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 3, "controlPointId": 6, "value": "Yes" },
+                { "id": 4, "controlPointId": 6, "value": "No" }
+            ],
+            "expectedValue": "Z-line",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 7,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 15,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 5, "controlPointId": 7, "value": "Yes" },
+                { "id": 6, "controlPointId": 7, "value": "No" }
+            ],
+            "expectedValue": "Fiber",
+            "units": "Yes/No",
+            "toleranceText": ""
+        }
+    ],
+    "multipleTimeControlPoints": [
+        {
+            "id": 8,
+            "image": "File1652206892425298.png",
+            "frequencyId": null,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 25,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "340.00",
+            "units": "mm",
+            "toleranceText": "+6/-1mm",
+            "letter": "A"
+        },
+        {
+            "id": 9,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 29,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO e",
+            "units": "Text",
+            "toleranceText": "",
+            "letter": "B"
+        },
+        {
+            "id": 10,
+            "image": "File1652206892425298.png",
+            "frequencyId": 2,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 35,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 7, "controlPointId": 10, "value": "Yes" },
+                { "id": 8, "controlPointId": 10, "value": "No" }
+            ],
+            "expectedValue": "Fiber glass",
+            "units": "Yes/No",
+            "toleranceText": "",
+            "letter": "C"
+        }
+    ],
+    "multipleTimeAnswers": [
+        [
+            {
+                "connectionId": 16,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 19,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 20,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 21,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 22,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 23,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 24,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 25,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 17,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 26,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 27,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 28,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 29,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 18,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 30,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 31,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 32,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 33,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 34,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 35,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ]
+    ]
 }
 
 let unfinishedOrderWithAllInputs = {
-	"id": "47827",
-	"description": "Panelfilter 390x300x47",
-	"categoryCode": "32110",
-	"status": "incomplete",
-	"deadline": "2022-06-12",
+    "id": "47827",
+    "description": "Panelfilter 390x300x47",
+    "categoryCode": "32110",
+    "status": "incomplete",
+    "deadline": "2022-06-12",
     "completionDate": null,
-	"location": "DK",
-	"quantity": 240,
-	"qaReportId": 2,
-	"oneTimeControlPoints": [
-		{
-			"id": 1,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 9,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "300.00",
-			"units": "mm",
-			"toleranceText": ""
-		},
-		{
-			"id": 2,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 1,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 10,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "390.00",
-			"units": "mm",
-			"toleranceText": "+/-1mm"
-		},
-		{
-			"id": 3,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 11,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "47",
-			"units": "mm",
-			"toleranceText": "+6/-1mm"
-		},
-		{
-			"id": 4,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 12,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO ePM10 50%",
-			"units": "Text",
-			"toleranceText": ""
-		},
-		{
-			"id": 5,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 13,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 1, "controlPointId": 5, "value": "Yes" },
-				{ "id": 2, "controlPointId": 5, "value": "No" }
-			],
-			"expectedValue": "Ja",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 6,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 14,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
-			],
-			"expectedValue": "Z-line",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 7,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "taken",
-			"connectionId": 15,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
-			],
-			"expectedValue": "Fiber",
-			"units": "Yes/No",
-			"toleranceText": ""
-		}
-	],
-	"multipleTimeControlPoints": [
-		{
-			"id": 8,
-			"image": "File1652206892425298.png",
-			"frequencyId": null,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 25,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "340.00",
-			"units": "mm",
-			"toleranceText": "+6/-1mm",
-			"letter": "A"
-		},
-		{
-			"id": 9,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 29,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO e",
-			"units": "Text",
-			"toleranceText": "",
-			"letter": "B"
-		},
-		{
-			"id": 10,
-			"image": "File1652206892425298.png",
-			"frequencyId": 2,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "taken",
-			"connectionId": 35,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
-			],
-			"expectedValue": "Fiber glass",
-			"units": "Yes/No",
-			"toleranceText": "",
-			"letter": "C"
-		}
-	],
-	"multipleTimeAnswers": [
-		[
-			{
-				"connectionId": 16,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 19,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 20,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 21,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 22,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 23,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 24,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 25,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 17,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 26,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 27,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 28,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 29,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 18,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 30,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 31,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 32,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 33,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 34,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 35,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			}
-		]
-	]
+    "location": "DK",
+    "quantity": 240,
+    "qaReportId": 2,
+    "oneTimeControlPoints": [
+        {
+            "id": 1,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 9,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "300.00",
+            "units": "mm",
+            "toleranceText": ""
+        },
+        {
+            "id": 2,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 1,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 10,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "390.00",
+            "units": "mm",
+            "toleranceText": "+/-1mm"
+        },
+        {
+            "id": 3,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 11,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "47",
+            "units": "mm",
+            "toleranceText": "+6/-1mm"
+        },
+        {
+            "id": 4,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 12,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO ePM10 50%",
+            "units": "Text",
+            "toleranceText": ""
+        },
+        {
+            "id": 5,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 13,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 1, "controlPointId": 5, "value": "Yes" },
+                { "id": 2, "controlPointId": 5, "value": "No" }
+            ],
+            "expectedValue": "Ja",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 6,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 14,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 3, "controlPointId": 6, "value": "Yes" },
+                { "id": 4, "controlPointId": 6, "value": "No" }
+            ],
+            "expectedValue": "Z-line",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 7,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "taken",
+            "connectionId": 15,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 5, "controlPointId": 7, "value": "Yes" },
+                { "id": 6, "controlPointId": 7, "value": "No" }
+            ],
+            "expectedValue": "Fiber",
+            "units": "Yes/No",
+            "toleranceText": ""
+        }
+    ],
+    "multipleTimeControlPoints": [
+        {
+            "id": 8,
+            "image": "File1652206892425298.png",
+            "frequencyId": null,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 25,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "340.00",
+            "units": "mm",
+            "toleranceText": "+6/-1mm",
+            "letter": "A"
+        },
+        {
+            "id": 9,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 29,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO e",
+            "units": "Text",
+            "toleranceText": "",
+            "letter": "B"
+        },
+        {
+            "id": 10,
+            "image": "File1652206892425298.png",
+            "frequencyId": 2,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "taken",
+            "connectionId": 35,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 7, "controlPointId": 10, "value": "Yes" },
+                { "id": 8, "controlPointId": 10, "value": "No" }
+            ],
+            "expectedValue": "Fiber glass",
+            "units": "Yes/No",
+            "toleranceText": "",
+            "letter": "C"
+        }
+    ],
+    "multipleTimeAnswers": [
+        [
+            {
+                "connectionId": 16,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 19,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 20,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 21,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 22,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 23,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 24,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 25,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 17,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 26,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 27,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 28,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 29,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 18,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 30,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 31,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 32,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 33,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 34,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 35,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ]
+    ]
 }
 
 let unfinishedOrderAuthorMain = {
-	"id": "47827",
-	"description": "Panelfilter 390x300x47",
-	"categoryCode": "32110",
-	"status": "incomplete",
-	"deadline": "2022-06-12",
+    "id": "47827",
+    "description": "Panelfilter 390x300x47",
+    "categoryCode": "32110",
+    "status": "incomplete",
+    "deadline": "2022-06-12",
     "completionDate": null,
-	"location": "DK",
-	"quantity": 240,
-	"qaReportId": 2,
-	"oneTimeControlPoints": [
-		{
-			"id": 1,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 9,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "300.00",
-			"units": "mm",
-			"toleranceText": ""
-		},
-		{
-			"id": 2,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 1,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 10,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "390.00",
-			"units": "mm",
-			"toleranceText": "+/-1mm"
-		},
-		{
-			"id": 3,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 11,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "47",
-			"units": "mm",
-			"toleranceText": "+6/-1mm"
-		},
-		{
-			"id": 4,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 12,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO ePM10 50%",
-			"units": "Text",
-			"toleranceText": ""
-		},
-		{
-			"id": 5,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 13,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 1, "controlPointId": 5, "value": "Yes" },
-				{ "id": 2, "controlPointId": 5, "value": "No" }
-			],
-			"expectedValue": "Ja",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 6,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 14,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
-			],
-			"expectedValue": "Z-line",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 7,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "worker",
-			"connectionId": 15,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
-			],
-			"expectedValue": "Fiber",
-			"units": "Yes/No",
-			"toleranceText": ""
-		}
-	],
-	"multipleTimeControlPoints": [
-		{
-			"id": 8,
-			"image": "File1652206892425298.png",
-			"frequencyId": null,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 0,
-			"author": "worker",
-			"connectionId": 25,
-			"answer": "31231",
-			"description": "This is a description",
-			"expectedValue": "340.00",
-			"units": "mm",
-			"toleranceText": "+6/-1mm",
-			"letter": "A"
-		},
-		{
-			"id": 9,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "worker",
-			"connectionId": 29,
-			"answer": "afdaff",
-			"description": "This is a description",
-			"expectedValue": "ISO e",
-			"units": "Text",
-			"toleranceText": "",
-			"letter": "B"
-		},
-		{
-			"id": 10,
-			"image": "File1652206892425298.png",
-			"frequencyId": 2,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "worker",
-			"connectionId": 35,
-			"answer": "Yes",
-			"description": "This is a description",
-			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
-			],
-			"expectedValue": "Fiber glass",
-			"units": "Yes/No",
-			"toleranceText": "",
-			"letter": "C"
-		}
-	],
-	"multipleTimeAnswers": [
-		[
-			{
-				"connectionId": 16,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 19,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 20,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 21,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 22,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 23,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 24,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			},
-			{
-				"connectionId": 25,
-				"id": 8,
-				"answer": "31231",
-				"inputType": 3,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 17,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 26,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 27,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 28,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			},
-			{
-				"connectionId": 29,
-				"id": 9,
-				"answer": "afdaff",
-				"inputType": 1,
-				"author": "taken"
-			}
-		],
-		[
-			{
-				"connectionId": 18,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 30,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 31,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 32,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 33,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 34,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			},
-			{
-				"connectionId": 35,
-				"id": 10,
-				"answer": "Yes",
-				"inputType": 0,
-				"author": "taken"
-			}
-		]
-	]
+    "location": "DK",
+    "quantity": 240,
+    "qaReportId": 2,
+    "oneTimeControlPoints": [
+        {
+            "id": 1,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 9,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "300.00",
+            "units": "mm",
+            "toleranceText": ""
+        },
+        {
+            "id": 2,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 1,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 10,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "390.00",
+            "units": "mm",
+            "toleranceText": "+/-1mm"
+        },
+        {
+            "id": 3,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 11,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "47",
+            "units": "mm",
+            "toleranceText": "+6/-1mm"
+        },
+        {
+            "id": 4,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 12,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO ePM10 50%",
+            "units": "Text",
+            "toleranceText": ""
+        },
+        {
+            "id": 5,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 13,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 1, "controlPointId": 5, "value": "Yes" },
+                { "id": 2, "controlPointId": 5, "value": "No" }
+            ],
+            "expectedValue": "Ja",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 6,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 14,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 3, "controlPointId": 6, "value": "Yes" },
+                { "id": 4, "controlPointId": 6, "value": "No" }
+            ],
+            "expectedValue": "Z-line",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 7,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "worker",
+            "connectionId": 15,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 5, "controlPointId": 7, "value": "Yes" },
+                { "id": 6, "controlPointId": 7, "value": "No" }
+            ],
+            "expectedValue": "Fiber",
+            "units": "Yes/No",
+            "toleranceText": ""
+        }
+    ],
+    "multipleTimeControlPoints": [
+        {
+            "id": 8,
+            "image": "File1652206892425298.png",
+            "frequencyId": null,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 0,
+            "author": "worker",
+            "connectionId": 25,
+            "answer": "31231",
+            "description": "This is a description",
+            "expectedValue": "340.00",
+            "units": "mm",
+            "toleranceText": "+6/-1mm",
+            "letter": "A"
+        },
+        {
+            "id": 9,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "worker",
+            "connectionId": 29,
+            "answer": "afdaff",
+            "description": "This is a description",
+            "expectedValue": "ISO e",
+            "units": "Text",
+            "toleranceText": "",
+            "letter": "B"
+        },
+        {
+            "id": 10,
+            "image": "File1652206892425298.png",
+            "frequencyId": 2,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "worker",
+            "connectionId": 35,
+            "answer": "Yes",
+            "description": "This is a description",
+            "options": [
+                { "id": 7, "controlPointId": 10, "value": "Yes" },
+                { "id": 8, "controlPointId": 10, "value": "No" }
+            ],
+            "expectedValue": "Fiber glass",
+            "units": "Yes/No",
+            "toleranceText": "",
+            "letter": "C"
+        }
+    ],
+    "multipleTimeAnswers": [
+        [
+            {
+                "connectionId": 16,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 19,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 20,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 21,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 22,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 23,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 24,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 25,
+                "id": 8,
+                "answer": "31231",
+                "inputType": 3,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 17,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 26,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 27,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 28,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 29,
+                "id": 9,
+                "answer": "afdaff",
+                "inputType": 1,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ],
+        [
+            {
+                "connectionId": 18,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 30,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 31,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 32,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 33,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 34,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            },
+            {
+                "connectionId": 35,
+                "id": 10,
+                "answer": "Yes",
+                "inputType": 0,
+                "author": "taken",
+                "timestamp": "2022-05-25 10:20"
+            }
+        ]
+    ]
 }
 
 let unfinishedOrderMain = {
-	"id": "47827",
-	"description": "Panelfilter 390x300x47",
-	"categoryCode": "32110",
-	"status": "incomplete",
-	"deadline": "2022-06-12",
+    "id": "47827",
+    "description": "Panelfilter 390x300x47",
+    "categoryCode": "32110",
+    "status": "incomplete",
+    "deadline": "2022-06-12",
     "completionDate": null,
-	"location": "DK",
-	"quantity": 240,
-	"qaReportId": 2,
-	"oneTimeControlPoints": [
-		{
-			"id": 1,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 9,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "300.00",
-			"units": "mm",
-			"toleranceText": ""
-		},
-		{
-			"id": 2,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 1,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 10,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "390.00",
-			"units": "mm",
-			"toleranceText": "+/-1mm"
-		},
-		{
-			"id": 3,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 11,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "47",
-			"units": "mm",
-			"toleranceText": "+6/-1mm"
-		},
-		{
-			"id": 4,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 12,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "ISO ePM10 50%",
-			"units": "Text",
-			"toleranceText": ""
-		},
-		{
-			"id": 5,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 13,
-			"answer": "",
-			"description": "This is a description",
-			"options": [
-				{ "id": 1, "controlPointId": 5, "value": "Yes" },
-				{ "id": 2, "controlPointId": 5, "value": "No" }
-			],
-			"expectedValue": "Ja",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 6,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 14,
-			"answer": "",
-			"description": "This is a description",
-			"options": [
-				{ "id": 3, "controlPointId": 6, "value": "Yes" },
-				{ "id": 4, "controlPointId": 6, "value": "No" }
-			],
-			"expectedValue": "Z-line",
-			"units": "Yes/No",
-			"toleranceText": ""
-		},
-		{
-			"id": 7,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 1,
-			"author": "",
-			"connectionId": 15,
-			"answer": "",
-			"description": "This is a description",
-			"options": [
-				{ "id": 5, "controlPointId": 7, "value": "Yes" },
-				{ "id": 6, "controlPointId": 7, "value": "No" }
-			],
-			"expectedValue": "Fiber",
-			"units": "Yes/No",
-			"toleranceText": ""
-		}
-	],
-	"multipleTimeControlPoints": [
-		{
-			"id": 8,
-			"image": "File1652206892425298.png",
-			"frequencyId": null,
-			"inputType": 3,
-			"lowerTolerance": 1,
-			"upperTolerance": 6,
-			"measurementType": 0,
-			"author": "",
-			"connectionId": 25,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "340.00",
-			"units": "mm",
-			"toleranceText": "+6/-1mm",
-			"letter": "A"
-		},
-		{
-			"id": 9,
-			"image": "File1652206892425298.png",
-			"frequencyId": 1,
-			"inputType": 1,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "",
-			"connectionId": 29,
-			"answer": "",
-			"description": "This is a description",
-			"expectedValue": "ISO e",
-			"units": "Text",
-			"toleranceText": "",
-			"letter": "B"
-		},
-		{
-			"id": 10,
-			"image": "File1652206892425298.png",
-			"frequencyId": 2,
-			"inputType": 0,
-			"lowerTolerance": null,
-			"upperTolerance": null,
-			"measurementType": 0,
-			"author": "",
-			"connectionId": 35,
-			"answer": "",
-			"description": "This is a description",
-			"options": [
-				{ "id": 7, "controlPointId": 10, "value": "Yes" },
-				{ "id": 8, "controlPointId": 10, "value": "No" }
-			],
-			"expectedValue": "Fiber glass",
-			"units": "Yes/No",
-			"toleranceText": "",
-			"letter": "C"
-		}
-	],
-	"multipleTimeAnswers": [
-		[
-			{
-				"connectionId": 16,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 19,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 20,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 21,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 22,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 23,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 24,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			},
-			{
-				"connectionId": 25,
-				"id": 8,
-				"answer": "",
-				"inputType": 3,
-				"author": ""
-			}
-		],
-		[
-			{
-				"connectionId": 17,
-				"id": 9,
-				"answer": "",
-				"inputType": 1,
-				"author": ""
-			},
-			{
-				"connectionId": 26,
-				"id": 9,
-				"answer": "",
-				"inputType": 1,
-				"author": ""
-			},
-			{
-				"connectionId": 27,
-				"id": 9,
-				"answer": "",
-				"inputType": 1,
-				"author": ""
-			},
-			{
-				"connectionId": 28,
-				"id": 9,
-				"answer": "",
-				"inputType": 1,
-				"author": ""
-			},
-			{
-				"connectionId": 29,
-				"id": 9,
-				"answer": "",
-				"inputType": 1,
-				"author": ""
-			}
-		],
-		[
-			{
-				"connectionId": 18,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 30,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 31,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 32,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 33,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 34,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			},
-			{
-				"connectionId": 35,
-				"id": 10,
-				"answer": "",
-				"inputType": 0,
-				"author": ""
-			}
-		]
-	]
+    "location": "DK",
+    "quantity": 240,
+    "qaReportId": 2,
+    "oneTimeControlPoints": [
+        {
+            "id": 1,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 9,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "300.00",
+            "units": "mm",
+            "toleranceText": ""
+        },
+        {
+            "id": 2,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 1,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 10,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "390.00",
+            "units": "mm",
+            "toleranceText": "+/-1mm"
+        },
+        {
+            "id": 3,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 11,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "47",
+            "units": "mm",
+            "toleranceText": "+6/-1mm"
+        },
+        {
+            "id": 4,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 12,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "ISO ePM10 50%",
+            "units": "Text",
+            "toleranceText": ""
+        },
+        {
+            "id": 5,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 13,
+            "answer": "",
+            "description": "This is a description",
+            "options": [
+                { "id": 1, "controlPointId": 5, "value": "Yes" },
+                { "id": 2, "controlPointId": 5, "value": "No" }
+            ],
+            "expectedValue": "Ja",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 6,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 14,
+            "answer": "",
+            "description": "This is a description",
+            "options": [
+                { "id": 3, "controlPointId": 6, "value": "Yes" },
+                { "id": 4, "controlPointId": 6, "value": "No" }
+            ],
+            "expectedValue": "Z-line",
+            "units": "Yes/No",
+            "toleranceText": ""
+        },
+        {
+            "id": 7,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 1,
+            "author": "",
+            "connectionId": 15,
+            "answer": "",
+            "description": "This is a description",
+            "options": [
+                { "id": 5, "controlPointId": 7, "value": "Yes" },
+                { "id": 6, "controlPointId": 7, "value": "No" }
+            ],
+            "expectedValue": "Fiber",
+            "units": "Yes/No",
+            "toleranceText": ""
+        }
+    ],
+    "multipleTimeControlPoints": [
+        {
+            "id": 8,
+            "image": "File1652206892425298.png",
+            "frequencyId": null,
+            "inputType": 3,
+            "lowerTolerance": 1,
+            "upperTolerance": 6,
+            "measurementType": 0,
+            "author": "",
+            "connectionId": 25,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "340.00",
+            "units": "mm",
+            "toleranceText": "+6/-1mm",
+            "letter": "A"
+        },
+        {
+            "id": 9,
+            "image": "File1652206892425298.png",
+            "frequencyId": 1,
+            "inputType": 1,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "",
+            "connectionId": 29,
+            "answer": "",
+            "description": "This is a description",
+            "expectedValue": "ISO e",
+            "units": "Text",
+            "toleranceText": "",
+            "letter": "B"
+        },
+        {
+            "id": 10,
+            "image": "File1652206892425298.png",
+            "frequencyId": 2,
+            "inputType": 0,
+            "lowerTolerance": null,
+            "upperTolerance": null,
+            "measurementType": 0,
+            "author": "",
+            "connectionId": 35,
+            "answer": "",
+            "description": "This is a description",
+            "options": [
+                { "id": 7, "controlPointId": 10, "value": "Yes" },
+                { "id": 8, "controlPointId": 10, "value": "No" }
+            ],
+            "expectedValue": "Fiber glass",
+            "units": "Yes/No",
+            "toleranceText": "",
+            "letter": "C"
+        }
+    ],
+    "multipleTimeAnswers": [
+        [
+            {
+                "connectionId": 16,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 19,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 20,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 21,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 22,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 23,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 24,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 25,
+                "id": 8,
+                "answer": "",
+                "inputType": 3,
+                "author": "",
+                "timestamp": null
+            }
+        ],
+        [
+            {
+                "connectionId": 17,
+                "id": 9,
+                "answer": "",
+                "inputType": 1,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 26,
+                "id": 9,
+                "answer": "",
+                "inputType": 1,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 27,
+                "id": 9,
+                "answer": "",
+                "inputType": 1,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 28,
+                "id": 9,
+                "answer": "",
+                "inputType": 1,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 29,
+                "id": 9,
+                "answer": "",
+                "inputType": 1,
+                "author": "",
+                "timestamp": null
+            }
+        ],
+        [
+            {
+                "connectionId": 18,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 30,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 31,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 32,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 33,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 34,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            },
+            {
+                "connectionId": 35,
+                "id": 10,
+                "answer": "",
+                "inputType": 0,
+                "author": "",
+                "timestamp": null
+            }
+        ]
+    ]
 }
 
 
@@ -1445,7 +1525,7 @@ describe("Orders service testing", () => {
             assertEquals(data.length, 0)
         })
 
-        
+
         it("OK all location", async () => {
 
             sinon.stub(ordersModel, "getCompletedQAReports").returns([{ itemId: "1", }, { itemId: "2" }])
@@ -1752,7 +1832,7 @@ describe("Orders service testing", () => {
 
             sinon.stub(ordersModel, "getOrderInformation").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1770,7 +1850,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ status: 1 }])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1788,7 +1868,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ status: 0 }])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, true)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, true)
             assertEquals(test1.response, 0)
         })
 
@@ -1806,7 +1886,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, true)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, true)
             assertEquals(test1.response, 0)
         })
 
@@ -1824,7 +1904,7 @@ describe("Orders service testing", () => {
             }])
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1843,7 +1923,7 @@ describe("Orders service testing", () => {
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns([])
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
             assertEquals(test1.response, 0)
         })
 
@@ -1928,13 +2008,14 @@ describe("Orders service testing", () => {
                     }
                 ]
             )
+            sinon.stub(ordersModel, "getControlPointsCategoryNoAtrributes").returns([])
 
             sinon.stub(ordersModel, "getSpecificControlPoints").returns([])
-    
+
             const test1 = await ordersService.getQAReport("12213", "english", false, false)
             assertEquals(test1.response, 0)
         })
-        
+
         // Qa report has not been yet created
         it("OK Qa report has not been yet created", async () => {
             sinon.stub(ordersModel, "getOrderInformation").returns([
@@ -1948,6 +2029,8 @@ describe("Orders service testing", () => {
                     status: 3
                 }
             ])
+
+            sinon.stub(ordersModel, "getControlPointsCategoryNoAtrributes").returns([])
 
             sinon.stub(ordersModel, "getReleasedOrderReport").returns([])
 
@@ -2008,6 +2091,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2016,6 +2100,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": 1,
                         "upperTolerance": 1
                     },
@@ -2024,6 +2109,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": 1,
                         "upperTolerance": 6
                     },
@@ -2032,6 +2118,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 1,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2040,6 +2127,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2048,6 +2136,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2056,6 +2145,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2064,6 +2154,7 @@ describe("Orders service testing", () => {
                         "frequencyId": null,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": 1,
                         "upperTolerance": 6
                     },
@@ -2072,6 +2163,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 1,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2080,6 +2172,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 2,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     }
@@ -2108,10 +2201,10 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
-                {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
+                { "id": [1, 3], "code": "32110", "frequencyId": 3, "to25": 63, "to50": 2, "to100": 343, "to200": 3, "to300": 8, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }
             ])
 
             sinon.stub(ordersModel, "getReleasedOrderControlPoints").returns(
@@ -2126,7 +2219,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 9,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 2,
@@ -2138,7 +2232,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 10,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 3,
@@ -2150,7 +2245,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 11,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 4,
@@ -2162,7 +2258,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 12,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 5,
@@ -2174,7 +2271,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 13,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 6,
@@ -2186,7 +2284,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 14,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 7,
@@ -2198,7 +2297,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 15,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 8,
@@ -2210,7 +2310,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 25,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 9,
@@ -2222,7 +2323,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 29,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 10,
@@ -2234,7 +2336,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 35,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     }
                 ]
             )
@@ -2267,7 +2370,32 @@ describe("Orders service testing", () => {
 
 
             sinon.stub(ordersModel, "qaReportControlPointResults").returns(
-                [{"answer":"","connectionId":16,"controlPointId":8,"qaReportId":2,"author":""},{"answer":"","connectionId":17,"controlPointId":9,"qaReportId":2,"author":""},{"answer":"","connectionId":18,"controlPointId":10,"qaReportId":2,"author":""}]
+                [
+                    {
+                        "answer": "",
+                        "connectionId": 16,
+                        "controlPointId": 8,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    },
+                    {
+                        "answer": "",
+                        "connectionId": 17,
+                        "controlPointId": 9,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    },
+                    {
+                        "answer": "",
+                        "connectionId": 18,
+                        "controlPointId": 10,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    }
+                ]
             )
 
             let insertMultipleTimeMeasurement = sinon.stub(ordersModel, "insertMultipleTimeMeasurement").returns([])
@@ -2275,7 +2403,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -2306,7 +2434,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -2365,6 +2493,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2373,6 +2502,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": 1,
                         "upperTolerance": 1
                     },
@@ -2381,6 +2511,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 3,
+                        "description": "This is a description",
                         "lowerTolerance": 1,
                         "upperTolerance": 6
                     },
@@ -2389,6 +2520,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 1,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2397,6 +2529,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2405,6 +2538,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2413,6 +2547,7 @@ describe("Orders service testing", () => {
                         "frequencyId": 1,
                         "image": "File1652206892425298.png",
                         "inputType": 0,
+                        "description": "This is a description",
                         "lowerTolerance": null,
                         "upperTolerance": null
                     },
@@ -2465,10 +2600,10 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
-                {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
+                { "id": [1, 3], "code": "32110", "frequencyId": 3, "to25": 63, "to50": 2, "to100": 343, "to200": 3, "to300": 8, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }
             ])
 
             sinon.stub(ordersModel, "getReleasedOrderControlPoints").returns(
@@ -2483,7 +2618,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 9,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 2,
@@ -2495,7 +2631,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 10,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 3,
@@ -2507,7 +2644,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 11,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 4,
@@ -2519,7 +2657,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 12,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 5,
@@ -2531,7 +2670,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 13,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 6,
@@ -2543,7 +2683,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 14,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 7,
@@ -2555,7 +2696,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "",
                         "connectionId": 15,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 8,
@@ -2567,7 +2709,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 25,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 9,
@@ -2579,7 +2722,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 29,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     },
                     {
                         "id": 10,
@@ -2591,7 +2735,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "",
                         "connectionId": 35,
-                        "answer": ""
+                        "answer": "",
+                        "description": "This is a description",
                     }
                 ]
             )
@@ -2624,7 +2769,32 @@ describe("Orders service testing", () => {
 
 
             sinon.stub(ordersModel, "qaReportControlPointResults").returns(
-                [{"answer":"","connectionId":16,"controlPointId":8,"qaReportId":2,"author":""},{"answer":"","connectionId":17,"controlPointId":9,"qaReportId":2,"author":""},{"answer":"","connectionId":18,"controlPointId":10,"qaReportId":2,"author":""}]
+                [
+                    {
+                        "answer": "",
+                        "connectionId": 16,
+                        "controlPointId": 8,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    },
+                    {
+                        "answer": "",
+                        "connectionId": 17,
+                        "controlPointId": 9,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    },
+                    {
+                        "answer": "",
+                        "connectionId": 18,
+                        "controlPointId": 10,
+                        "qaReportId": 2,
+                        "author": "",
+                        "timestamp": null
+                    }
+                ]
             )
 
             let insertMultipleTimeMeasurement = sinon.stub(ordersModel, "insertMultipleTimeMeasurement").returns([])
@@ -2632,7 +2802,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -2663,7 +2833,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -2822,10 +2992,10 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
-                {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
+                { "id": [1, 3], "code": "32110", "frequencyId": 3, "to25": 63, "to50": 2, "to100": 343, "to200": 3, "to300": 8, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }
             ])
 
             sinon.stub(ordersModel, "getReleasedOrderControlPoints").returns(
@@ -2840,7 +3010,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 9,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 2,
@@ -2852,7 +3023,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 10,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 3,
@@ -2864,7 +3036,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 11,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 4,
@@ -2876,7 +3049,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 12,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 5,
@@ -2888,7 +3062,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 13,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 6,
@@ -2900,7 +3075,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 14,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 7,
@@ -2912,7 +3088,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "taken",
                         "connectionId": 15,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 8,
@@ -2924,7 +3101,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "taken",
                         "connectionId": 25,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 9,
@@ -2936,7 +3114,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "taken",
                         "connectionId": 29,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 10,
@@ -2948,7 +3127,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "taken",
                         "connectionId": 35,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     }
                 ]
             )
@@ -2987,140 +3167,160 @@ describe("Orders service testing", () => {
                         "connectionId": 16,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 17,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 18,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 19,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 20,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 21,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 22,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 23,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 24,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 25,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 26,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 27,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 28,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 29,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 30,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 31,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 32,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 33,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 34,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 35,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     }
                 ]
             )
@@ -3130,7 +3330,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "english", false, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", false, false)
 
             // This key bounces around and disrupts the string  
 
@@ -3160,7 +3360,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -3319,10 +3519,10 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
-                {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
+                { "id": [1, 3], "code": "32110", "frequencyId": 3, "to25": 63, "to50": 2, "to100": 343, "to200": 3, "to300": 8, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }
             ])
 
             sinon.stub(ordersModel, "getReleasedOrderControlPointsAuthors").returns(
@@ -3337,7 +3537,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 9,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 2,
@@ -3349,7 +3550,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 10,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 3,
@@ -3361,7 +3563,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 11,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 4,
@@ -3373,7 +3576,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 12,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 5,
@@ -3385,7 +3589,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 13,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 6,
@@ -3397,7 +3602,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 14,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 7,
@@ -3409,7 +3615,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 15,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 8,
@@ -3421,7 +3628,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 25,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 9,
@@ -3433,7 +3641,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 29,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 10,
@@ -3445,7 +3654,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 35,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     }
                 ]
             )
@@ -3484,140 +3694,160 @@ describe("Orders service testing", () => {
                         "connectionId": 16,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 17,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 18,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 19,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 20,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 21,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 22,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 23,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 24,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 25,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 26,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 27,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 28,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 29,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 30,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 31,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 32,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 33,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 34,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 35,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     }
                 ]
             )
@@ -3627,7 +3857,7 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "english", true, false)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", true, false)
 
             // This key bounces around and disrupts the string  
 
@@ -3657,7 +3887,7 @@ describe("Orders service testing", () => {
                 }
             ])
 
-            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": "Sun May 12 2022 19:00:00 GMT+0200"}])
+            sinon.stub(ordersModel, "getReleasedOrderReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": "Sun May 12 2022 19:00:00 GMT+0200" }])
 
             sinon.stub(ordersModel, "getReleasedOrderAttributes").returns(
                 [
@@ -3816,10 +4046,10 @@ describe("Orders service testing", () => {
             getControlPointAttributes.onCall(18).returns([{ "id": 111, "maxValue": null, "minValue": null }]);
             getControlPointAttributes.onCall(19).returns([{ "id": 112, "maxValue": null, "minValue": null }]);
 
-            sinon.stub(ordersModel, "createQAReport").returns([{"id":2,"itemId":47827,"status":false, "completionDate": null}])
+            sinon.stub(ordersModel, "createQAReport").returns([{ "id": 2, "itemId": 47827, "status": false, "completionDate": null }])
             sinon.stub(ordersModel, "insertControlPointConnection").returns("Success")
             sinon.stub(ordersModel, "getFrequenciesForCategory").returns([
-                {"id":[1,3],"code":"32110","frequencyId":3,"to25":63,"to50":2,"to100":343,"to200":3,"to300":8,"to500":6,"to700":66,"to1000":7,"to1500":5,"to2000":76,"to3000":76,"to4000":766,"to5000":69}
+                { "id": [1, 3], "code": "32110", "frequencyId": 3, "to25": 63, "to50": 2, "to100": 343, "to200": 3, "to300": 8, "to500": 6, "to700": 66, "to1000": 7, "to1500": 5, "to2000": 76, "to3000": 76, "to4000": 766, "to5000": 69 }
             ])
 
             sinon.stub(ordersModel, "getReleasedOrderControlPointsAuthors").returns(
@@ -3834,7 +4064,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 9,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 2,
@@ -3846,7 +4077,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 10,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 3,
@@ -3858,7 +4090,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 11,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 4,
@@ -3870,7 +4103,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 12,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 5,
@@ -3882,7 +4116,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 13,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 6,
@@ -3894,7 +4129,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 14,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 7,
@@ -3906,7 +4142,8 @@ describe("Orders service testing", () => {
                         "measurementType": 1,
                         "author": "worker",
                         "connectionId": 15,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     },
                     {
                         "id": 8,
@@ -3918,7 +4155,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 25,
-                        "answer": "31231"
+                        "answer": "31231",
+                        "description": "This is a description",
                     },
                     {
                         "id": 9,
@@ -3930,7 +4168,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 29,
-                        "answer": "afdaff"
+                        "answer": "afdaff",
+                        "description": "This is a description",
                     },
                     {
                         "id": 10,
@@ -3942,7 +4181,8 @@ describe("Orders service testing", () => {
                         "measurementType": 0,
                         "author": "worker",
                         "connectionId": 35,
-                        "answer": "Yes"
+                        "answer": "Yes",
+                        "description": "This is a description",
                     }
                 ]
             )
@@ -3981,133 +4221,152 @@ describe("Orders service testing", () => {
                         "connectionId": 17,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 18,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 19,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 20,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 21,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 22,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 23,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 24,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "31231",
                         "connectionId": 25,
                         "controlPointId": 8,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 26,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 27,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 28,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "afdaff",
                         "connectionId": 29,
                         "controlPointId": 9,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 30,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 31,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 32,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 33,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 34,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     },
                     {
                         "answer": "Yes",
                         "connectionId": 35,
                         "controlPointId": 10,
                         "qaReportId": 2,
-                        "author": "taken"
+                        "author": "taken",
+                        "timestamp": "2022-05-25 10:20"
                     }
                 ]
             )
@@ -4117,11 +4376,31 @@ describe("Orders service testing", () => {
                 insertMultipleTimeMeasurement.onCall(i).returns([{ id: i + 19 }]);
             }
 
-            const test1 = await ordersService.getQAReport("12213", "english", true, true)
+            const test1 = await ordersService.getQAReport("12213", "111414", "english", true, true)
 
             // This key bounces around and disrupts the string  
 
             assertEquals(test1.response, 0)
+        })
+    })
+
+    describe("listToCommaString", () => {
+        it("OK", async () => {
+
+            const listOfObjects = [
+                { someId: 34 },
+                { someId: 44 },
+                { someId: 3 },
+                { someId: 2 },
+                { someId: 75 },
+                { someId: 6 },
+                { someId: 23 },
+                { someId: 9 },
+                { someId: 31 },
+
+            ]
+            const response = await ordersService.listToCommaString(listOfObjects, "someId")
+            assertEquals(response, "34,44,3,2,75,6,23,9,31")
         })
     })
 })
