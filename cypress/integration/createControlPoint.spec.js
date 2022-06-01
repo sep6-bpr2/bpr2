@@ -41,7 +41,7 @@ describe('create control point', () => {
 		it('sunny scenarios', () => {
 			cy.get('#description').type('this is a description')
 			cy.get('#measurementType').click({force: true})
-			cy.contains('one time').click()
+			cy.contains('one time').click({force: true})
 			cy.get('#type').click({force: true})
 			cy.contains('text').click()
 			cy.get('#categoryItemCode').type('32110')
@@ -54,7 +54,7 @@ describe('create control point', () => {
 
 			it('User submits control point form without any description specified', ()=>{
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
@@ -76,7 +76,7 @@ describe('create control point', () => {
 			it('User submits control point with no input type specified', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#categoryItemCode').type('32110')
 				cy.contains('32110').click()
 				cy.get('#submit').click()
@@ -86,7 +86,7 @@ describe('create control point', () => {
 			it('User submits control point with input type options while no values for options has been specified', ()=> {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('options').click()
 				cy.get('#newOption').click()
@@ -99,7 +99,7 @@ describe('create control point', () => {
 			it('User submits control point with input type number while no value for upper tolerance has been specified', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('number').click()
 				cy.get('#lowerTolerance').type('1.2')
@@ -112,7 +112,7 @@ describe('create control point', () => {
 			it('User submits control point with input type number while no value for lower tolerance has been specified', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('number').click()
 				cy.get('#upperTolerance').type('1.2')
@@ -125,7 +125,7 @@ describe('create control point', () => {
 			it('User submits control point with no value for item category specified', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#submit').click()
@@ -135,7 +135,7 @@ describe('create control point', () => {
 			it('User submits control point while he specified attributes without the names', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
@@ -148,7 +148,7 @@ describe('create control point', () => {
 			it('User submits control point with negative lower tolerance', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('number').click()
 				cy.get('#lowerTolerance').type('-1.2')
@@ -162,7 +162,7 @@ describe('create control point', () => {
 			it('User submits control point with negative upper tolerance', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('number').click()
 				cy.get('#lowerTolerance').type('1.2')
@@ -178,7 +178,7 @@ describe('create control point', () => {
 					'molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\n' +
 					'numquam blanditiis harum quisquam eius sed odit fugia')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
@@ -190,7 +190,7 @@ describe('create control point', () => {
 			it('User submits control point with non positive minimum value for an attribute', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
@@ -208,7 +208,7 @@ describe('create control point', () => {
 			it('User submits control point with non positive maximum value for an attribute', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
@@ -226,7 +226,7 @@ describe('create control point', () => {
 			it('User submits control point with attribute minimum value greater then maximum value', () => {
 				cy.get('#description').type('this is a description')
 				cy.get('#measurementType').click({force: true})
-				cy.contains('one time').click()
+				cy.contains('one time').click({force: true})
 				cy.get('#type').click({force: true})
 				cy.contains('text').click()
 				cy.get('#categoryItemCode').type('32110')
