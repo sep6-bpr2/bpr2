@@ -49,8 +49,8 @@ CREATE TABLE [dbo].[Option](
     [validTo] DATETIME,
 );
 
-DROP TABLE IF EXISTS [dbo].[QAReport];
-CREATE TABLE [dbo].[QAReport](
+DROP TABLE IF EXISTS [dbo].[QAForm];
+CREATE TABLE [dbo].[QAForm](
     [id] int IDENTITY(1, 1),
     [itemId] nvarchar(80) NOT NULL,
     [productionOrder] nvarchar(80) NOT NULL,
@@ -59,8 +59,8 @@ CREATE TABLE [dbo].[QAReport](
     [createdDate] DATETIME NOT NULL,
 );
 
-DROP TABLE IF EXISTS [dbo].[QAReportControlPointValue];
-CREATE TABLE [dbo].[QAReportControlPointValue](
+DROP TABLE IF EXISTS [dbo].[QAFormControlPointValue];
+CREATE TABLE [dbo].[QAFormControlPointValue](
     [id] int IDENTITY(1, 1),
     [qaReportId] int NOT NULL,
     [controlPointId] int NOT NULL,
@@ -224,14 +224,14 @@ insert into [Option] (controlPointId, value, validFrom) values (10, 'No', GETDAT
 
 
 --- Completed order 
-INSERT INTO QAReport (itemId, productionOrder, status, completionDate, createdDate) VALUES ('1111', '464646', 1, GETDATE(), GETDATE())
+INSERT INTO QAForm (itemId, productionOrder, status, completionDate, createdDate) VALUES ('1111', '464646', 1, GETDATE(), GETDATE())
 
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 1, '32323', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
-INSERT INTO QAReportControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 1, '32323', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'Yes', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
+INSERT INTO QAFormControlPointValue (qaReportId, controlPointId, value, author, timestamp) values(1, 10, 'No', 'worker', GETDATE());
 

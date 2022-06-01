@@ -70,7 +70,6 @@ export default {
 	methods: {
 		clickList(row) {
 			if (this.callback)this.callback(row)
-
 		},
 		deleteRow(row){
 			if(this.deleteRowCallback){

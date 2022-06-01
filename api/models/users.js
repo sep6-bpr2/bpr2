@@ -41,7 +41,7 @@ module.exports.getAllUsersWithUser = async (user) => {
 module.exports.getAllQAUsers = async () => {
 	const result = await ( await localDB())
 		.request()
-		.query('SELECT DISTINCT author FROM QAReportControlPointValue')
+		.query('SELECT DISTINCT author FROM QAFormControlPointValue')
 
 	return result.recordset
 }

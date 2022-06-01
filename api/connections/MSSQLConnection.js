@@ -33,8 +33,6 @@ const get = (name, config, useNormalMssql) => {
 
 module.exports.getConnectionsOwn = async () => {
     if (process.env.environment != "testing") {
-        // localDB = await get("Own", "Server=172.16.1.38,50259;Database=Own;User Id=rafal;Password=uogauoga123*;Encrypt=true;trustServerCertificate=true;", true)
-
         if (process.env.DATABASE == "konfairProduction" || process.env.DATABASE == "konfairTesting") {
             localDB = await get("Own", {
                 database: "Own",

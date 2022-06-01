@@ -17,7 +17,7 @@ describe('released order', () => {
 
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
@@ -34,7 +34,7 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Check order without logging in or 
-        cy.visit('http://localhost:3000/releasedOrders/4345')
+        cy.visit('http://localhost:3000/releasedOrders/4345/31331rff')
 
         // Check order that has no attributes
         cy.contains('Failed').should('be.visible')
@@ -48,14 +48,14 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Check order without logging in or 
-        cy.visit('http://localhost:3000/releasedOrders/1111')
+        cy.visit('http://localhost:3000/releasedOrders/464646/1111')
 
         // Check order that has no attributes
         cy.contains('Failed').should('be.visible')
     })
 
     it('Released order ERROR non authorized user', () => {
-		cy.visit('http://localhost:3000/releasedOrders/53323')
+		cy.visit('http://localhost:3000/releasedOrders/464646/53323')
 
        cy.contains('English').should('be.visible')
        cy.contains('All').should('be.visible')
@@ -67,7 +67,7 @@ describe('released order', () => {
         cy.get('#enterUsername').type('admin')
 		cy.get('#submitLogin').click()
 
-		cy.visit('http://localhost:3000/releasedOrders/53323')
+		cy.visit('http://localhost:3000/releasedOrders/464646/53323')
 
         cy.contains('Failed').should('be.visible')
         cy.contains('Information').should('not.exist');
@@ -81,15 +81,15 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
 
-        cy.contains('Information').should('be.visible')
-        cy.contains('Item ID').should('be.visible')
+        cy.contains('Order Information').should('be.visible')
+        cy.contains('Item number').should('be.visible')
         cy.contains('Description').should('be.visible')
         cy.contains('Item category code').should('be.visible')
         cy.contains('Deadline').should('be.visible')
@@ -232,13 +232,13 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Information').should('be.visible')
+        cy.contains('Order Information').should('be.visible')
 
         // One time measurements
         {
@@ -350,13 +350,13 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Information').should('be.visible')
+        cy.contains('Order Information').should('be.visible')
 
         // One time control points
         {
@@ -575,13 +575,13 @@ describe('released order', () => {
         cy.get('#submitLogin').click()
 
         // Released orders validation
-        cy.contains('This is the released orders page').should('be.visible')
+        cy.contains('Released orders').should('be.visible')
         // Check that there are 2 rows in the table
         cy.get('#releasedOrderList').children().get('tbody').children().should('have.length', 2);
 
         // Check order that is ok
         cy.get('#customTable1').click()
-        cy.contains('Information').should('be.visible')
+        cy.contains('Order Information').should('be.visible')
 
         cy.get('#completeButton').click()
         cy.contains('Failed').should('be.visible')

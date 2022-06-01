@@ -23,7 +23,7 @@
 			/>
 
 			<div class="information">
-				<h2>Information</h2>
+                <h2><Translate :text="'Order information'"/></h2>
                 <DataDisplay :name="'Production order'" :data="currentOrder.productionOrder" />
 				<DataDisplay :name="'Item number'" :data="currentOrder.id" />
 				<DataDisplay
@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="oneTimeMeasurements">
-				<h2>One time measurements</h2>
+                <h2><Translate :text="'One time measurements'"/></h2>
 
 				<CustomTableInput
 					id="oneTimeMeasurements"
@@ -55,7 +55,7 @@
 			</div>
 
 			<div class="multipleTimeMeasurements">
-				<h2>Multiple time measurements</h2>
+                <h2><Translate :text="'Multiple time measurements'"/></h2>
 
 				<!-- This table has the input column removed -->
 				<CustomTableInput
@@ -126,7 +126,8 @@ export default {
 			notification: null,
 			modalAlertShowSubmit: false,
 			modalAlertShowError: false,
-            warnUserOfTolerance: false
+            warnUserOfTolerance: false,
+            warningAfterAction: ""
 		};
 	},
 	computed: {
@@ -258,6 +259,11 @@ export default {
 			this.currentOrder.multipleTimeAnswers[indexColumn][indexCell].validated = inputValidated;
 		},
 		handleSave() {
+            if(this.warningAfterAction == "complete"){
+                console.log("HERE IT IS ")
+                this.warnUserOfTolerance = false
+                return this.handleComplete()
+            }
             let badInputs = false
             let outOfToleranceInputs = false
 
@@ -289,6 +295,7 @@ export default {
                     "releasedOrder/saveContent",
                     this.currentOrder
                 );
+                this.warningAfterAction = ''
                 this.warnUserOfTolerance = false
             }else if (badInputs){
                 this.$store.dispatch(
@@ -301,10 +308,14 @@ export default {
                     { response: 2, message: "There are inputs that are out of tolerance. Are you sure you want to save them?" }
                 );
                 this.warnUserOfTolerance = true
+                this.warningAfterAction = 'save'
+
             }
 		},
 		handleComplete() {
-            if( !this.warnUserOfTolerance ){
+            console.log(this.warnUserOfTolerance)
+            if( !this.warnUserOfTolerance  ){
+                console.log("WERE IN")
                 let badInputs = false
                 let completed = true
                 let outOfToleranceInputs = false
@@ -313,21 +324,22 @@ export default {
                     if (this.currentOrder.oneTimeControlPoints[i].validated != null && this.currentOrder.oneTimeControlPoints[i].validated == 0) {
                         badInputs = true
                         break;
-                    } else if (this.currentOrder.oneTimeControlPoints[i].validated != null && this.currentOrder.oneTimeControlPoints[i].answer == '') {
+                    } else if (this.currentOrder.oneTimeControlPoints[i].answer == '') {
                         completed = false
                     } else if(this.currentOrder.oneTimeControlPoints[i].validated != null && this.currentOrder.oneTimeControlPoints[i].validated == 2){
                         outOfToleranceInputs = true
                     } 
+
                 }
 
-                if (!badInputs && completed) {
+                if (!badInputs) {
                     multipleTimeCheck:
                     for (let i = 0; i < this.currentOrder.multipleTimeAnswers.length; i++) {
                         for (let j = 0; j < this.currentOrder.multipleTimeAnswers[i].length; j++) {
                             if (this.currentOrder.multipleTimeAnswers[i][j].validated != null && this.currentOrder.multipleTimeAnswers[i][j].validated == 0) {
                                 badInputs = true
                                 break multipleTimeCheck
-                            } else if (this.currentOrder.multipleTimeAnswers[i][j].validated != null && this.currentOrder.multipleTimeAnswers[i][j].answer == '') {
+                            } else if (this.currentOrder.multipleTimeAnswers[i][j].answer == '') {
                                 completed = false
                             } else if(this.currentOrder.multipleTimeAnswers[i][j].validated != null && this.currentOrder.multipleTimeAnswers[i][j].validated == 2){
                                 outOfToleranceInputs = true
@@ -336,13 +348,15 @@ export default {
                     }
                 }
 
-                if (!badInputs && completed && (!outOfToleranceInputs || this.warnUserOfTolerance)) {
+                if (!badInputs && completed && (!outOfToleranceInputs || this.warnUserOfTolerance || this.warningAfterAction == 'complete')) {
                     this.$store.dispatch(
                         "releasedOrder/completeContent",
                         this.currentOrder
                     );
                     this.warnUserOfTolerance = false
-                }else if (badInputs && !completed){
+                    this.warningAfterAction = ''
+
+                }else if (badInputs || !completed){
                     if (badInputs) {
                         this.$store.dispatch(
                             "releasedOrder/setNotification",
@@ -360,9 +374,11 @@ export default {
                         { response: 2, message: "There are inputs that are out of tolerance. Are you sure you want to save them?" }
                     );
                     this.warnUserOfTolerance = true
+                    this.warningAfterAction = 'complete'
                 }
             }else{
                 this.warnUserOfTolerance = false
+                this.warningAfterAction = ''
                 this.notification = null
             }
 		},

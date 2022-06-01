@@ -39,7 +39,7 @@ describe('edit control point', () => {
 			cy.visit('http://localhost:3000/controlPoints/createControlPoint')
 			cy.get('#description').type('this is a description')
 			cy.get('#measurementType').click({force: true})
-			cy.contains('one time').click()
+			cy.contains('one time').click({force: true})
 			cy.get('#type').click({force: true})
 			cy.contains('text').click()
 			cy.get('#categoryItemCode').type('32110')
