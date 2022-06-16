@@ -138,7 +138,6 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 		cpData.upperTolerance = mainInformation.uppertolerance
 		cpData.lowerTolerance = mainInformation.lowertolerance
 	}
-	console.log(attributes)
 	//attributes
 	let att = attributes
 	if (att.length > 0) {
@@ -150,7 +149,6 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 			cpData.attributes[i].type = att[i].type
 		}
 	}
-	console.log(cpData.attributes)
 	//codes
 	categoryCodes.forEach(o => cpData.codes.push({value: o.itemCategoryCode}))
 
@@ -251,10 +249,14 @@ module.exports.updateControlPoint = async (data) => {
     //options
     // expire all options
     await controlPointModel.expireOptionsForControlPoint(data.controlPointNumber)
-    // insert new options
-    data.optionValues.forEach(async obj => {
-        await controlPointModel.insertOption(data.controlPointId, obj.value)
-    })
+    if(data.type == 0){
+
+        // insert new options
+        data.optionValues.forEach(async obj => {
+            await controlPointModel.insertOption(data.controlPointId, obj.value)
+        })
+    }
+
 
     //attributes
     //Epxire all attributes

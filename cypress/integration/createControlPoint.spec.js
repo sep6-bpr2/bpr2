@@ -202,7 +202,7 @@ describe('create control point', () => {
 				cy.get("#attributeMinVal").type('0')
 				cy.get("#attributeMaxVal").type('1.2')
 				cy.get('#submit').click()
-				cy.contains('attribute minimum and maximum value needs to be positive value')
+				cy.contains('control point has been created')
 			})
 
 			it('User submits control point with non positive maximum value for an attribute', () => {

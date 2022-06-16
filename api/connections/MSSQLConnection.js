@@ -68,7 +68,6 @@ module.exports.getConnectionsKonfair = async () => {
                   trustedConnection: true
                 }}, false)
         } else if (process.env.DATABASE == "local") {
-            console.log("Getting the connection")
             konfairDB = await get("Konfair", "Server=localhost,1433;Database=konfair;User Id=sa;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
         } else {
             konfairDB = await get("konfair", "Server=bpr2.database.windows.net,1433;Database=konfair;User Id=rafal;Password=Microsoft4zure;Encrypt=true;trustServerCertificate=true;", true)

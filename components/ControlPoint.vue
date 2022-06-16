@@ -8,6 +8,7 @@
 					</h3>
 					<div
 						v-for="(description, index) in this.cpData.descriptions"
+                        :key="index"
 					>
 						<div class="innerElement row">
 							{{ description.lang }}&nbsp
@@ -50,7 +51,7 @@
 					</div>
 
 					<div v-if="cpData.type === 'options'" id="options">
-						<div v-for="(option, index) in cpData.optionValues">
+						<div v-for="(option, index) in cpData.optionValues" :key="index">
 							<v-card class="valueEntry" elevation="5">
 								<Translate :text="'Option'" />
 								&nbsp
@@ -118,7 +119,7 @@
 						<div
 							class="attributes"
 							v-for="(attribute, index) in cpData.attributes"
-							:key="idnex + attribute.showRange"
+							:key="index"
 						>
 							<v-card class="valueEntry" elevation="5">
 								<div class="valueEntry">
@@ -195,7 +196,7 @@
 
 					<div class="innerElement multiValueCard" id="codes">
 						<Translate :text="'Item category code'" />
-						<div v-for="(code, index) in cpData.codes">
+						<div v-for="(code, index) in cpData.codes" :key="index">
 							<v-card class="valueEntry" elevation="5">
 								<Translate :text="'Code'" />
 								&nbsp:&nbsp
@@ -426,26 +427,6 @@ export default {
 					this.cpData.attributes[index].showRange = true;
 				}
 			}
-			// let attribute = this.cpData.[index]
-			// if(this.isEdit){
-			//     let attribute = this.cpData.[index]
-			//     this.cpData.attributes[index].id = attribute.id
-			//     this.cpData.attributes[index].type = attribute.type
-			//     this.cpData.attributes[index].minValue = null
-			//     this.cpData.attributes[index].maxValue = null
-			// }else{
-			//     this.cpData.attributes[index].id = att.id
-			//     this.cpData.attributes[index].type = att.type
-			//     this.cpData.attributes[index].minValue = null
-			//     this.cpData.attributes[index].maxValue = null
-			// }
-
-			// console.log(this.attributesNames)
-			// // console.log("!!!!!!!!!!!!"+JSON.stringify(att))
-			// this.cpData.attributes[index].id = attribute.id
-			// this.cpData.attributes[index].type = attribute.type
-			// this.cpData.attributes[index].minValue = null
-			// this.cpData.attributes[index].maxValue = null
 		},
 		attributeMinValueChange(minVal, index) {
 			this.cpData.attributes[index].minValue = minVal;
@@ -539,7 +520,6 @@ export default {
 				);
 				valid = false;
 			}
-			console.log("AAAAAAAAAA");
 			if (
 				this.validate(
 					[{ value: this.cpData.measurementType }],
@@ -578,9 +558,7 @@ export default {
 					) === false
 				)
 					valid = false;
-				console.log(
-					!validateNonNegativeAndInt(this.cpData.lowerTolerance)
-				);
+
 				if (!validateNonNegativeAndInt(this.cpData.lowerTolerance)) {
 					this.showAlert(
 						"warning",
@@ -602,6 +580,7 @@ export default {
 			}
 			if (this.cpData.attributes.length != 0) {
 				this.cpData.attributes.forEach((att) => {
+
 					if (validateEmpty(att.id)) {
 						this.showAlert(
 							"warning",
@@ -609,19 +588,16 @@ export default {
 						);
 						valid = false;
 					}
+                    console.log(JSON.stringify(att))
+
 					if (att.type == 3) {
-						if (att.minVal != null && att.maxVal != null) {
-							if (att.minValue >= att.maxValue) {
-								this.showAlert(
-									"warning",
-									this.translateText(
-										"attribute minimum value can not be greater or equal to the maximum value"
-									)
-								);
-								valid = false;
-								console.log("INVALID");
-							}
-							if (
+                        // Attribute ranges can be false or zero
+
+                        console.log(parseFloat(att.minValue))
+                        console.log(parseFloat(att.maxValue))
+						if (att.minValue != null && att.maxValue != null && (parseInt(att.minValue) != 0 || parseInt(att.maxValue) != 0)) {
+                            
+                            if (
 								!validatePositiveAndInt(att.minValue) ||
 								!validatePositiveAndInt(att.maxValue)
 							) {
@@ -632,15 +608,11 @@ export default {
 									)
 								);
 								valid = false;
-							}
-							if (
-								validateEmpty(att.minValue) ||
-								validateEmpty(att.maxValue)
-							) {
+							}else if (parseFloat(att.minValue) >= parseFloat(att.maxValue)) {
 								this.showAlert(
 									"warning",
 									this.translateText(
-										"attribute minimum and maximum value can not be empty"
+										"attribute minimum value can not be greater or equal to the maximum value"
 									)
 								);
 								valid = false;

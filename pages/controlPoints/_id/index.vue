@@ -45,14 +45,15 @@ export default {
 		this.$store.dispatch("controlPoint/getAllAttributesNames")
 		this.$store.dispatch("controlPoint/loadItemCategoryCodes")
 		this.$store
-			.dispatch("controlPoint/getControlPointData", this.$route.params.id).then(result =>{
-			if(result){
-				this.cpData = result
-				if(!this.cpData.frequencies){
-					this.$set(this.cpData,'frequencies',null)
-				}
-			}
-		})
+        .dispatch("controlPoint/getControlPointData", this.$route.params.id).then(result =>{
+            console.log(JSON.stringify(result))
+            if(result){
+                this.cpData = result
+                if(!this.cpData.frequencies){
+                    this.$set(this.cpData,'frequencies',null)
+                }
+            }
+        })
 	},
 	computed: {
 		alert() {

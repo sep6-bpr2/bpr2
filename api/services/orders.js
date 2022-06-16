@@ -652,7 +652,7 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
                         return { response: 1, message: "Data saved successfully" }
                     }
                 } else {
-                    return { response: 2, message: "No changes were made to the data, because no values were updated" }
+                    return { response: 1, message: "No changes were made to the data, because no values were updated" }
                 }
             } else {
                 return { response: 0, message: "Qa report data data does not match database data" }

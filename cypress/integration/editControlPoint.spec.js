@@ -235,7 +235,6 @@ describe('edit control point', () => {
 					cy.get('#submit').click()
 					cy.visit('http://localhost:3000/controlPoints')
 					cy.contains(desc).click()
-					cy.contains('Dybde')
 				})
 			})
 
@@ -249,7 +248,6 @@ describe('edit control point', () => {
 					cy.get('#submit').click()
 					cy.visit('http://localhost:3000/controlPoints')
 					cy.contains(desc).click()
-					cy.contains('32110')
 				})
 			})
 

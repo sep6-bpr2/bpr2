@@ -41,7 +41,7 @@ module.exports.validateStringLength = (value, maxLength) =>{
 }
 
 module.exports.validatePositiveAndInt = (value) => {
-	return value > 0 && value <= 2147483647
+	return value >= 0 && value <= 2147483647
 }
 
 module.exports.validateNonNegativeAndInt = (value) => {
