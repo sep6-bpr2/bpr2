@@ -35,7 +35,15 @@ export const actions = {
     loadCompletedOrderFull({ rootState }, parameters) {
         const user = rootState.login.user
         if (user && user.role == "admin") {
-            const language = rootState.login.chosenLanguage.name
+            let language = rootState.login.chosenLanguage.name;
+            if(language != "English" && language != "Danish" && language != "Lithuanian"){
+                if(language == "Dansk"){
+                    language = "Danish"
+                }else if(language == "Lietuviu"){
+                    language = "Lithuanian"
+                }
+            }
+            
             return new Promise((resolve, reject) => {
                 fetch(`/api/orders/completed/full/${user.username}/${parameters.itemId}/${parameters.productionOrder}/${language}`).then(res => res.json()).then(result => {
                     if (result && !result.message) {

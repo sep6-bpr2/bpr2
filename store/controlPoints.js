@@ -20,7 +20,15 @@ export const actions = {
     loadControlPoints({ commit, rootState }, options) {
         const user = rootState.login.user;
         if (user && user.role == "admin") {
-            const language = rootState.login.chosenLanguage.name;
+            let language = rootState.login.chosenLanguage.name;
+            if(language != "English" && language != "Danish" && language != "Lithuanian"){
+                if(language == "Dansk"){
+                    language = "Danish"
+                }else if(language == "Lietuviu"){
+                    language = "Lithuanian"
+                }
+            }
+            
             fetch(`api/controlPoints/listMinimal/${user.username}/${language}/${options.offset}/${options.limit}`).then(res => res.json()).then(result => {
                 if(options.offset == 0){
                     commit('setControlPoints', result)
