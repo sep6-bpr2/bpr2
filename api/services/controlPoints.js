@@ -78,7 +78,7 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
     }
 
     mainInformation = mainInformation[0]
-		mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
+    mainInformation.inputtype = typeSwitchToText(mainInformation.inputtype)
 
     const descriptions = await controlPointModel.getControlPointDescriptions(parseInt(controlPointNumber))
     let attributes = await controlPointModel.getControlPointAttributes(parseInt(controlPointNumber))
@@ -88,7 +88,11 @@ module.exports.getControlPointData = async (controlPointNumber, username) => {
 
     for(let i = 0; i< attributes.length; i++){
         let date = await controlPointModel.getAttributeType(attributes[i].attributeId)
-        attributes[i].type = date[0].type
+        if(date.length != 0){
+            attributes[i].type = date[0].type
+        }else{
+            attributes[i].type = -1
+        }
     }
 
 	let cpData = {

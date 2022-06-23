@@ -2,6 +2,7 @@ const moment = require("moment")
 const model = require("../models/orders")
 const inputValidation = require("../../shared/validateInput")
 const itemCategoryService = require("./itemCategory")
+const defaultFrequencyShared = require("../../shared/frequency")
 
 /**
  * get a list of orders that are released in the system. All of them
@@ -214,7 +215,8 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
                         if (attributes[k].id == controlPoints[i].attributes[j].id) {
                             // Control point without a range
 
-                            if (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) {
+                            if ( (controlPoints[i].attributes[j].maxValue == null && controlPoints[i].attributes[j].minValue == null) ||
+                                (controlPoints[i].attributes[j].maxValue == 0 && controlPoints[i].attributes[j].minValue == 0) ) {
                                 added.push(controlPoints[i])
                                 // Break out of both loops using the label
                                 break attributes;
@@ -261,7 +263,7 @@ module.exports.getQAReport = async (id, productionOrder, language, showAuthors, 
         if (itemData.frequency && itemData.frequency.length != 0)
             itemData.frequency = itemData.frequency[0]
         else
-            itemData.frequency = itemCategoryService.defaultFrequency
+            itemData.frequency = defaultFrequencyShared.defaultFrequency()
 
 
         // Fetch all the control points that relate to this qa report. With author anonymity or not

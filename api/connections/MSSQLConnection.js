@@ -47,7 +47,14 @@ module.exports.getConnectionsOwn = async () => {
             // localDB = await get("Own", "Server=172.16.1.38,50259;Database=own;User Id=serviceAcount;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
             
             // login with the server domain name.
-            localDB = await get("Own", "Server=SRVAPP3,50259;Database=own;User Id=serviceAcount;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
+            localDB = await get("Own", 
+                "Server=" + process.env.EXPRESS_DB_SERVER_NAME +
+                ";Database=" + process.env.EXPRESS_DB_DATABASE_NAME +
+                ";User Id=" + process.env.EXPRESS_DB_USER_NAME +
+                ";Password=" + process.env.EXPRESS_DB_USER_PASSWORD +
+                ";Encrypt=true;trustServerCertificate=true;", true)
+
+            // localDB = await get("Own", "Server=SRVAPP3,50259;Database=own;User Id=serviceAcount;Password=konf123!proj;Encrypt=true;trustServerCertificate=true;", true)
 
             // login with the windows authentication
             // localDB = await get("Own", {
