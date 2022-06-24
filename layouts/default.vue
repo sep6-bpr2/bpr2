@@ -8,7 +8,7 @@
             :show="modalState"
             :status="modalStatus"
         />
-		<v-main v-show="!modalState">
+		<v-main v-show="!modalState" style="overflow-x:auto; white-space: nowrap;">
 			<Nuxt  />
 		</v-main>
 	</v-app>
