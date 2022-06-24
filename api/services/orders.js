@@ -674,13 +674,10 @@ module.exports.saveQAReport = async (editedQAReport, username) => {
  * @returns {Promise} result of the operation {response, message}
  */
 module.exports.completeQAReport = async (editedQAReport, username) => {
-
     if (
         editedQAReport &&
         editedQAReport.oneTimeControlPoints &&
-        editedQAReport.oneTimeControlPoints.length != 0 &&
-        editedQAReport.multipleTimeAnswers &&
-        editedQAReport.multipleTimeAnswers.length != 0
+        editedQAReport.multipleTimeAnswers
     ) {
 
         let qaReportIsFinished = true;
