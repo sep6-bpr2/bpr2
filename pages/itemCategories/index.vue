@@ -13,7 +13,7 @@
 			:timing="3000"
 			:closeCallback="closeAlertModal"
 		/>
-		<h1><Translate :text="'Item Category'" /></h1>
+		<h1><Translate :text="'Item Categories'" /></h1>
 
 		<custom-table
 			:allowedHeaders="allowedHeaders"

@@ -408,7 +408,22 @@ const translations = {
 		"english": "control point has been changed",
 		"lithuanian": "kontroles taškas buvo pakeistas",
 		"danish": "kontrolpunktet er blevet ændret"
-	}
+	},
+    "Deadline": {
+		"English": "Deadline",
+		"Lithuanian": "Terminas",
+		"Danish": "Deadline",
+	},
+    "Completed orders": {
+		"English": "Completed orders",
+		"Lithuanian": "Baigti užsakymai",
+		"Danish": "Afsluttede ordrer",
+	},
+    "Item Code": {
+		"English": "Item Code",
+		"Lithuanian": "Prekių Kodas",
+		"Danish": "Kategori Varenumre"
+	},
 }
 
 const translateFunction = (text, language) => {

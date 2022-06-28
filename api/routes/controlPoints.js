@@ -196,8 +196,6 @@ router.get("/picture/:username/:pictureName",
     validateAllVerifiedUsers,
     async (req, res) => {
         res.sendFile(path.join(process.env.PICTURE_STORAGE_LOCATION, "\\\\" + req.params.pictureName));
-
-        // res.sendFile(path.join(__dirname, "../pictures/" + req.params.pictureName));
     }
 )
 
