@@ -88,11 +88,6 @@ CREATE TABLE [KonfAir DRIFT$Item Category] (
     [Last Modified Date Time] datetime,
     [Id] INT
 );
-INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('1', '234', 'DK', N'2022-05-03 20:38:59.000', 240, 3);
-INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('2', '345', 'DK', N'2022-05-05 09:53:58.000', 56, 3);
-INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('3', '239', 'LIT', N'2022-05-05 09:54:26.000', 2000, 3);
-INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('4', '534', 'DK', N'2022-05-05 09:55:10.000', 98, 2);
-INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('5', '16', N'DK', N'2022-05-09 22:31:05.000', 50, 3);
 
 DROP TABLE IF EXISTS [KonfAir DRIFT$Production Order];
 CREATE TABLE [KonfAir DRIFT$Production Order] (
@@ -103,6 +98,14 @@ CREATE TABLE [KonfAir DRIFT$Production Order] (
     [Quantity] decimal(17),
     [status] int
 );
+
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('1', '234', 'DK', N'2022-05-03 20:38:59.000', 240, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('2', '345', 'DK', N'2022-05-05 09:53:58.000', 56, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('3', '239', 'LIT', N'2022-05-05 09:54:26.000', 2000, 3);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('4', '534', 'DK', N'2022-05-05 09:55:10.000', 98, 2);
+INSERT INTO [KonfAir DRIFT$Production Order] (No_, [Source No_], [Location Code], [Due Date], Quantity, status) VALUES ('5', '16', N'DK', N'2022-05-09 22:31:05.000', 50, 3);
+
+
 -- This is not a real one 
 INSERT INTO [KonfAir DRIFT$Production Order] ([No_], [Source No_], [Location Code], [Due Date], [Quantity], [status]) VALUES ('464646', '123456789', 'DK', '2022-06-12 17:00:00', 240, 3);
 
